@@ -14,6 +14,17 @@
 - Updated Program.cs to show assessment selector before main form
 - Made PDF generation more flexible with template selection
 
+## [2025-02-07]
+### Added
+- Extended AssessmentTemplate.html to include all sections from OralCareReferenceData
+  - Added Risk Factors section
+  - Added Protective Factors section
+  - Added Clinical Findings section
+  - Added Assessment Plan section
+  - Added Self Management Goals section
+  - Added Nursing Recommendations section
+- Updated PdfGeneratorService to handle all new data fields from the JSON reference data
+
 ## [2025-02-05]
 ### Added
 - Initial project setup
