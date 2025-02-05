@@ -1,0 +1,38 @@
+# Change Log
+
+## [2025-02-05]
+### Added
+- Initial project setup
+- Created basic project structure
+- Added data models for oral care reference data
+- Implemented JSON data loading functionality
+- Created main Windows Forms interface
+- Added iText7 integration for PDF generation
+- Created PdfGeneratorService for handling PDF creation
+- Added "Generate PDF" button to each data row
+- Implemented PDF generation with formatted assessment report
+
+### Changed
+- Replaced QuestPDF with iText7 for PDF generation
+- Implemented HTML template-based PDF generation
+- Created basic HTML template for assessment reports
+- Simplified PDF generation to only include title and date for now
+- Added automatic Templates directory creation
+- Fixed PDF generation to use child's name in title
+
+### Fixed
+- Fixed property name mismatch between JSON and model for RN completing assessment field
+- Fixed casing issues in property references
+- Improved PDF generation error handling and resource disposal
+- Added proper null checks and empty value handling in PDF generation
+- Added directory creation for PDF output if needed
+- Simplified PDF generation to test basic functionality
+- Fixed string formatting issue in HTML template by using custom placeholders
+
+## [2024-02-05]
+### Added
+- Added detailed logging in PdfGeneratorService for better error tracking
+- Added template file existence checks and content verification
+- Added more informative error messages in MainForm for PDF generation
+- Added proper error handling and user feedback for PDF generation process
+- Fixed template file path handling to ensure consistent file location

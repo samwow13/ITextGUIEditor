@@ -1,0 +1,8 @@
+[2025-02-05 10:37]
+- Initial project setup
+- Created DeveloperLog.txt and ChangeLog.txt
+- Planning to create:
+  * Models/ReferenceDataItem.cs - Data model for JSON entries
+  * Services/JsonManager.cs - JSON file handling
+  * Forms/MainForm.cs - Main application window
+  * Program.cs - Application entry point
