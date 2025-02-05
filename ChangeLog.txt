@@ -1,5 +1,19 @@
 # Change Log
 
+## [2025-02-06]
+### Added
+- Added assessment type selection system
+- Created IAssessment interface for different assessment types
+- Added OralCareAssessment implementation
+- Created AssessmentTypeSelector form
+- Updated MainForm to work with different assessment types
+- Modified PdfGeneratorService to use assessment-specific templates
+
+### Changed
+- Refactored MainForm to use assessment type configuration
+- Updated Program.cs to show assessment selector before main form
+- Made PDF generation more flexible with template selection
+
 ## [2025-02-05]
 ### Added
 - Initial project setup
@@ -36,3 +50,7 @@
 - Added more informative error messages in MainForm for PDF generation
 - Added proper error handling and user feedback for PDF generation process
 - Fixed template file path handling to ensure consistent file location
+
+## [2025-02-06]
+### Removed
+- Removed redundant PDF generation success message since the PDF opens automatically

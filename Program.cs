@@ -14,7 +14,14 @@ namespace OralCareReference
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+
+            var selector = new AssessmentTypeSelector();
+            selector.ShowDialog();
+
+            if (!selector.WasCancelled)
+            {
+                Application.Run(new MainForm(selector.SelectedType));
+            }
         }
     }
 }

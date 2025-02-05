@@ -13,8 +13,6 @@ namespace OralCareReference.Services
     /// </summary>
     public class PdfGeneratorService
     {
-        private readonly string _templatePath;
-
         public PdfGeneratorService()
         {
             try
@@ -26,27 +24,12 @@ namespace OralCareReference.Services
                     throw new InvalidOperationException("Could not determine application directory");
                 }
 
-                _templatePath = Path.Combine(exePath, "Templates", "AssessmentTemplate.html");
-                Debug.WriteLine($"Template path: {_templatePath}");
-
                 // Create Templates directory if it doesn't exist
-                var templateDir = Path.GetDirectoryName(_templatePath);
+                var templateDir = Path.Combine(exePath, "Templates");
                 if (!string.IsNullOrEmpty(templateDir) && !Directory.Exists(templateDir))
                 {
                     Directory.CreateDirectory(templateDir);
                     Debug.WriteLine($"Created template directory: {templateDir}");
-                }
-
-                // Check if template exists
-                if (!File.Exists(_templatePath))
-                {
-                    Debug.WriteLine($"Template file not found at: {_templatePath}");
-                    throw new FileNotFoundException($"Template file not found at: {_templatePath}");
-                }
-                else
-                {
-                    Debug.WriteLine($"Template file found at: {_templatePath}");
-                    Debug.WriteLine($"Template content: {File.ReadAllText(_templatePath)}");
                 }
             }
             catch (Exception ex)
@@ -60,19 +43,28 @@ namespace OralCareReference.Services
         /// Generates a PDF document for a given reference data item using HTML template
         /// </summary>
         /// <param name="data">The reference data item to generate PDF from</param>
+        /// <param name="templateFileName">The name of the template file to use</param>
         /// <returns>The generated PDF as a byte array</returns>
-        public byte[] GeneratePdf(ReferenceDataItem data)
+        public byte[] GeneratePdf(ReferenceDataItem data, string templateFileName)
         {
             try
             {
                 if (data == null)
                     throw new ArgumentNullException(nameof(data), "Reference data cannot be null");
 
-                if (!File.Exists(_templatePath))
-                    throw new FileNotFoundException($"Template file not found at: {_templatePath}");
+                // Create Templates directory if it doesn't exist
+                var templatesDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates");
+                if (!Directory.Exists(templatesDir))
+                {
+                    Directory.CreateDirectory(templatesDir);
+                }
+
+                var templatePath = Path.Combine(templatesDir, templateFileName);
+                if (!File.Exists(templatePath))
+                    throw new FileNotFoundException($"Template file not found at: {templatePath}");
 
                 // Read and populate the HTML template
-                var htmlTemplate = File.ReadAllText(_templatePath);
+                var htmlTemplate = File.ReadAllText(templatePath);
                 Debug.WriteLine($"Read template content: {htmlTemplate}");
 
                 var title = $"Oral Care Assessment - {data.ChildInfo?.ChildName ?? "Unnamed Child"}";

@@ -13,14 +13,25 @@ namespace OralCareReference.Forms
         private readonly JsonManager _jsonManager;
         private List<ReferenceDataItem> _referenceData;
         private readonly PdfGeneratorService _pdfGenerator;
+        private readonly IAssessment _assessment;
 
-        public MainForm()
+        public MainForm(AssessmentType assessmentType)
         {
             InitializeComponent();
-            string jsonPath = "OralCareReferenceData.json";
-            _jsonManager = new JsonManager(jsonPath);
+            _assessment = CreateAssessment(assessmentType);
+            _jsonManager = new JsonManager(_assessment.JsonDataPath);
             _pdfGenerator = new PdfGeneratorService();
+            this.Text = _assessment.DisplayName;
             InitializeAsync();
+        }
+
+        private IAssessment CreateAssessment(AssessmentType type)
+        {
+            return type switch
+            {
+                AssessmentType.OralCare => new OralCareAssessment(),
+                _ => throw new ArgumentException($"Unsupported assessment type: {type}")
+            };
         }
 
         private async void InitializeAsync()
@@ -104,20 +115,19 @@ namespace OralCareReference.Forms
         {
             if (e.RowIndex >= 0 && e.ColumnIndex == dataGridView.Columns["GeneratePdf"].Index)
             {
+                var item = _referenceData[e.RowIndex];
                 try
                 {
                     Debug.WriteLine($"Generating PDF for row {e.RowIndex}");
-                    var selectedItem = _referenceData[e.RowIndex];
-                    Debug.WriteLine($"Data for PDF: ChildName={selectedItem.ChildInfo?.ChildName}, AssessmentDate={selectedItem.ChildInfo.AssessmentDate}");
+                    Debug.WriteLine($"Data for PDF: ChildName={item.ChildInfo?.ChildName}, AssessmentDate={item.ChildInfo.AssessmentDate}");
 
-                    var pdfBytes = _pdfGenerator.GeneratePdf(selectedItem);
+                    var pdfBytes = _pdfGenerator.GeneratePdf(item, _assessment.TemplateFileName);
                     Debug.WriteLine($"PDF generated, size: {pdfBytes.Length} bytes");
 
                     var tempPath = Path.GetTempFileName() + ".pdf";
                     File.WriteAllBytes(tempPath, pdfBytes);
                     Debug.WriteLine($"PDF saved to: {tempPath}");
                     System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(tempPath) { UseShellExecute = true });
-                    MessageBox.Show("PDF generated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {
@@ -144,7 +154,6 @@ namespace OralCareReference.Forms
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.dataGridView);
             this.Name = "MainForm";
-            this.Text = "Oral Care Reference Data Viewer";
             this.ResumeLayout(false);
         }
     }
