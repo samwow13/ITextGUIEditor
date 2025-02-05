@@ -72,7 +72,15 @@ namespace OralCareReference.Services
                 
                 var populatedHtml = htmlTemplate
                     .Replace("[[TITLE]]", title)
-                    .Replace("[[DATE]]", date);
+                    .Replace("[[DATE]]", date)
+                    .Replace("[[CHILD_NAME]]", data.ChildInfo?.ChildName ?? "N/A")
+                    .Replace("[[CASE_NUMBER]]", data.ChildInfo?.CaseNumber ?? "N/A")
+                    .Replace("[[ASSESSMENT_DATE]]", data.ChildInfo?.AssessmentDate ?? "N/A")
+                    .Replace("[[DATE_OF_BIRTH]]", data.ChildInfo?.DateOfBirth ?? "N/A")
+                    .Replace("[[DENTAL_APPTS]]", data.ChildInfo?.RecentOrUpcomingDentalAppts ?? "N/A")
+                    .Replace("[[NURSING_NOTE]]", data.ChildInfo?.NursingNote ?? "N/A")
+                    .Replace("[[REQUIRED_COMMENT]]", data.ChildInfo?.RequiredComment ?? "N/A")
+                    .Replace("[[RN_COMPLETING_ASSESSMENT]]", data.ChildInfo?.RNCompletingAssessment ?? "N/A");
                 Debug.WriteLine($"Populated HTML: {populatedHtml}");
 
                 using (var memoryStream = new MemoryStream())
