@@ -3,86 +3,335 @@
 <head>
     <title>RN Task Delegation Form</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .section { margin: 20px 0; }
-        .header { text-align: center; margin-bottom: 30px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .checkbox-item { margin: 5px 0; }
+     /* Base Styles */
+     body {
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #FFF;
+        color: #000;
+        font-size: 14px;
+        margin: 20px;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      
+      /* Header with Title and Graphic */
+      header {
+        border-bottom: 1px solid #000;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        overflow: hidden;
+      }
+      header .title {
+        float: left;
+        font-size: 40px; /* Increased 2x from 20px */
+        font-weight: bold;
+      }
+      header .graphic {
+        float: right;
+      }
+      header .graphic img {
+        height: 120px; /* Increased 2x from 60px */
+      }
+      
+      /* Clean and modern look for section headings */
+      h2 {
+        font-size: 16px;
+        font-weight: bold;
+        margin: 0 0 10px 0;   /* Remove top margin, add bottom spacing */
+        padding: 8px 12px;    /* Increased padding for better readability */
+        background-color: #000;
+        color: #FFF;
+        border-radius: 8px;   /* Rounded corners on the black background */
+      }
+      
+      /* Full Width Table (Child Information) */
+      .full-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      .full-table, .full-table th, .full-table td {
+        border: 1px solid #000;
+      }
+      .full-table th, .full-table td {
+        padding: 8px;
+        text-align: left;
+      }
+      .full-table th {
+        background-color: #F4F4F4;
+      }
+      .full-table tr.tall th,
+      .full-table tr.tall td {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+      
+      /* Flex Row Container for Side-by-Side Tables */
+      .flex-row {
+        display: flex;
+        gap: 20px; /* Consistent gap between paired tables */
+        margin-bottom: 20px;
+      }
+
+      /* Container for each side-by-side table with a neat border and rounded corners */
+      .half-table-container {
+        flex: 1;  /* Each container takes equal width */
+        border: 2px solid #000;
+        border-radius: 8px;  /* Rounded corners for the container */
+        padding: 8px;       /* Extra padding for better spacing */
+        box-sizing: border-box;
+        background-color: #FCFCFC;
+      }
+      
+      /* Single Table Container for Self Management Goals (aligned left) */
+      .single-half-table-container {
+        width: calc(50% - 10px);
+        margin-bottom: 20px;
+      }
+      
+      /* Half Width Tables */
+      .half-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .half-table, .half-table th, .half-table td {
+        border: 1px solid #000;
+        padding: 2px;  /* Reduced padding for a lower row height */
+      }
+      .half-table th, .half-table td {
+        text-align: left;
+      }
+      .half-table th {
+        background-color: #F4F4F4;
+      }
+      /* Adjust columns: label column ~91%, checkbox column ~9% */
+      .half-table th:first-child,
+      .half-table td:first-child {
+        width: 91%;
+      }
+      .half-table th:last-child,
+      .half-table td:last-child {
+        width: 9%;
+      }
+
+      .half-table tr.tall th,
+      .half-table tr.tall td {
+        padding-top: 7px;
+        padding-bottom: 7px;
+      }
+      
+      /* Checkbox Styles */
+      .checkbox-container {
+        display: inline-block;
+        vertical-align: middle;
+      }
+      .checkbox-container input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        border: 2px solid #000;
+        border-radius: 3px;
+        -webkit-appearance: none;
+           -moz-appearance: none;
+                appearance: none;
+        cursor: default;
+      }
+      .checkbox-container input[type="checkbox"].checked {
+        background-color: #000;
+      }
+      .checkbox-container input[type="checkbox"].unknown {
+        background-color: #F0F0F0;
+        position: relative;
+      }
+      .checkbox-container input[type="checkbox"].unknown:after {
+        content: "?";
+        position: absolute;
+        left: 4px;
+        top: -2px;
+        color: #666;
+        font-weight: bold;
+        font-size: 12px;
+      }
+      
+      /* Nursing Recommendations Textarea */
+      .nursing-recommendations {
+        width: 100%;
+        height: 40px;
+        border: 1px solid #000;
+        padding: 3px;
+        font-size: 14px;
+        resize: none;
+      }
+      
+      /* Footer */
+      footer {
+        border-top: 1px solid #000;
+        text-align: right;
+        font-size: 12px;
+        margin-top: 20px;
+        padding-top: 10px;
+      }
+      
+      /* Print Optimization */
+      @media print {
+        body {
+          margin: 10mm;
+        }
+      }
+
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Registered Nurse Task Delegation Form</h1>
-    </div>
+    <div class="container">
+        <header>
+            <div class="title">RN Task Delegation Form</div>
+            <div class="graphic">
+                <!-- Add logo if needed -->
+            </div>
+        </header>
 
-    <div class="section">
+        <!-- Child Information Section -->
         <h2>Child Information</h2>
-        <div class="grid">
-            <p><strong>Name:</strong> {{child_info.name}}</p>
-            <p><strong>Date of Birth:</strong> {{child_info.date_of_birth}}</p>
-            <p><strong>Person Number:</strong> {{child_info.person_number}}</p>
-        </div>
-    </div>
+        <table class="full-table">
+            <tr class="tall">
+                <th>Name</th>
+                <td>{{child_info.name}}</td>
+                <th>Date of Birth</th>
+                <td>{{child_info.date_of_birth}}</td>
+                <th>Person Number</th>
+                <td>{{child_info.person_number}}</td>
+            </tr>
+        </table>
 
-    <div class="section">
+        <!-- Caregiver Information Section -->
         <h2>Caregiver Information</h2>
-        <div class="grid">
-            <p><strong>Delegation Name:</strong> {{caregiver_info.delegation_name}}</p>
-            <p><strong>Delegation Date:</strong> {{caregiver_info.delegation_date}}</p>
-            <p><strong>Type:</strong> {{caregiver_info.delegation_or_assignment ? "Delegation" : "Assignment"}}</p>
-            <p><strong>Visit Type:</strong> 
-                {{caregiver_info.supervisory_visit ? "Supervisory Visit" : ""}}
-                {{caregiver_info.ongoing_supervisory_visit ? "Ongoing Supervisory Visit" : ""}}
-            </p>
-        </div>
-    </div>
+        <table class="full-table">
+            <tr class="tall">
+                <th>Delegation Name</th>
+                <td>{{caregiver_info.delegation_name}}</td>
+                <th>Delegation Date</th>
+                <td>{{caregiver_info.delegation_date}}</td>
+            </tr>
+            <tr class="tall">
+                <th>Type</th>
+                <td>{{caregiver_info.delegation_or_assignment ? "Delegation" : "Assignment"}}</td>
+                <th>Visit Type</th>
+                <td>
+                    {{caregiver_info.supervisory_visit ? "Supervisory Visit" : ""}}
+                    {{caregiver_info.ongoing_supervisory_visit ? "Ongoing Supervisory Visit" : ""}}
+                </td>
+            </tr>
+        </table>
 
-    <div class="section">
+        <!-- Delegated Tasks Section -->
         <h2>Delegated Tasks</h2>
-        <div class="checkbox-item">
-            {{delegated_tasks.gastric_tube_feeding_and_care ? "☒" : "☐"}} Gastric Tube Feeding and Care
+        <div class="flex-row">
+            <div class="half-table-container">
+                <table class="half-table">
+                    <tr>
+                        <td>Gastric Tube Feeding and Care</td>
+                        <td class="checkbox-container">
+                            <input type="checkbox" disabled class="[[GASTRIC_TUBE_FEEDING_CLASS]]">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Gastric Tube Feeding Pump</td>
+                        <td class="checkbox-container">
+                            <input type="checkbox" disabled class="[[GASTRIC_TUBE_PUMP_CLASS]]">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Nasogastric Feeding and Care</td>
+                        <td class="checkbox-container">
+                            <input type="checkbox" disabled class="[[NASOGASTRIC_FEEDING_CLASS]]">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Jejunostomy Feeding and Care</td>
+                        <td class="checkbox-container">
+                            <input type="checkbox" disabled class="[[JEJUNOSTOMY_FEEDING_CLASS]]">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Ostomy Care</td>
+                        <td class="checkbox-container">
+                            <input type="checkbox" disabled class="[[OSTOMY_CARE_CLASS]]">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="half-table-container">
+                <table class="half-table">
+                    <tr>
+                        <td>Dressing Changes</td>
+                        <td class="checkbox-container">
+                            <input type="checkbox" disabled class="[[DRESSING_CHANGES_CLASS]]">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Oxygen Administration</td>
+                        <td class="checkbox-container">
+                            <input type="checkbox" disabled class="[[OXYGEN_ADMIN_CLASS]]">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Oxygen Administration with Changes</td>
+                        <td class="checkbox-container">
+                            <input type="checkbox" disabled class="[[OXYGEN_ADMIN_CHANGES_CLASS]]">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Pulse Oximeter</td>
+                        <td class="checkbox-container">
+                            <input type="checkbox" disabled class="[[PULSE_OXIMETER_CLASS]]">
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
-        <div class="checkbox-item">
-            {{delegated_tasks.gastric_tube_feeding_pump ? "☒" : "☐"}} Gastric Tube Feeding Pump
-        </div>
-        <div class="checkbox-item">
-            {{delegated_tasks.nasogastric_feeding_and_care ? "☒" : "☐"}} Nasogastric Feeding and Care
-        </div>
-        <div class="checkbox-item">
-            {{delegated_tasks.jejunostomy_feeding_and_care ? "☒" : "☐"}} Jejunostomy Feeding and Care
-        </div>
-        <div class="checkbox-item">
-            {{delegated_tasks.ostomy_care ? "☒" : "☐"}} Ostomy Care
-        </div>
-        <div class="checkbox-item">
-            {{delegated_tasks.dressing_changes ? "☒" : "☐"}} Dressing Changes
-        </div>
-        <div class="checkbox-item">
-            {{delegated_tasks.oxygen_administration ? "☒" : "☐"}} Oxygen Administration
-        </div>
-        <div class="checkbox-item">
-            {{delegated_tasks.oxygen_administration_with_changes ? "☒" : "☐"}} Oxygen Administration with Changes
-        </div>
-        <div class="checkbox-item">
-            {{delegated_tasks.pulse_oximeter ? "☒" : "☐"}} Pulse Oximeter
-        </div>
-    </div>
 
-    <div class="section">
+        <!-- Training Details Section -->
         <h2>Training Details</h2>
-        <p><strong>Instructions Given:</strong> {{instructions_given}}</p>
-        <p><strong>Supervisory Visit Notes:</strong> {{supervisory_visit_notes}}</p>
-        <p><strong>Continue Delegation:</strong> {{continue_delegation ? "Yes" : "No"}}</p>
-    </div>
+        <table class="full-table">
+            <tr class="tall">
+                <th>Instructions Given</th>
+                <td>{{instructions_given}}</td>
+            </tr>
+            <tr class="tall">
+                <th>Supervisory Visit Notes</th>
+                <td>{{supervisory_visit_notes}}</td>
+            </tr>
+            <tr class="tall">
+                <th>Continue Delegation</th>
+                <td>
+                    <div class="checkbox-container">
+                        <input type="checkbox" disabled class="[[CONTINUE_DELEGATION_CLASS]]">
+                    </div>
+                </td>
+            </tr>
+        </table>
 
-    <div class="section">
+        <!-- Signatures Section -->
         <h2>Signatures</h2>
-        <div class="grid">
-            <p><strong>RN Signature:</strong> {{signatures.rn_signature}}</p>
-            <p><strong>RN Date:</strong> {{signatures.rn_date}}</p>
-            <p><strong>Caregiver Signature:</strong> {{signatures.caregiver_signature}}</p>
-            <p><strong>Caregiver Date:</strong> {{signatures.caregiver_date}}</p>
-        </div>
+        <table class="full-table">
+            <tr class="tall">
+                <th>RN Signature</th>
+                <td>{{signatures.rn_signature}}</td>
+                <th>RN Date</th>
+                <td>{{signatures.rn_date}}</td>
+            </tr>
+            <tr class="tall">
+                <th>Caregiver Signature</th>
+                <td>{{signatures.caregiver_signature}}</td>
+                <th>Caregiver Date</th>
+                <td>{{signatures.caregiver_date}}</td>
+            </tr>
+        </table>
+
+        <footer>
+            Generated on {{current_date}}
+        </footer>
     </div>
 </body>
 </html>

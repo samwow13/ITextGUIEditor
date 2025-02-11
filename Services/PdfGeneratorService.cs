@@ -177,21 +177,21 @@ namespace iTextDesignerWithGUI.Services
                 .Replace("{{caregiver_info.supervisory_visit}}", data.CaregiverInfo?.SupervisoryVisit.ToString().ToLower() ?? "false")
                 .Replace("{{caregiver_info.ongoing_supervisory_visit}}", data.CaregiverInfo?.OngoingSupervisoryVisit.ToString().ToLower() ?? "false")
 
-                // Delegated Tasks
-                .Replace("{{delegated_tasks.gastric_tube_feeding_and_care}}", data.DelegatedTasks?.GastricTubeFeedingAndCare.ToString().ToLower() ?? "false")
-                .Replace("{{delegated_tasks.gastric_tube_feeding_pump}}", data.DelegatedTasks?.GastricTubeFeedingPump.ToString().ToLower() ?? "false")
-                .Replace("{{delegated_tasks.nasogastric_feeding_and_care}}", data.DelegatedTasks?.NasogastricFeedingAndCare.ToString().ToLower() ?? "false")
-                .Replace("{{delegated_tasks.jejunostomy_feeding_and_care}}", data.DelegatedTasks?.JejunostomyFeedingAndCare.ToString().ToLower() ?? "false")
-                .Replace("{{delegated_tasks.ostomy_care}}", data.DelegatedTasks?.OstomyCare.ToString().ToLower() ?? "false")
-                .Replace("{{delegated_tasks.dressing_changes}}", data.DelegatedTasks?.DressingChanges.ToString().ToLower() ?? "false")
-                .Replace("{{delegated_tasks.oxygen_administration}}", data.DelegatedTasks?.OxygenAdministration.ToString().ToLower() ?? "false")
-                .Replace("{{delegated_tasks.oxygen_administration_with_changes}}", data.DelegatedTasks?.OxygenAdministrationWithChanges.ToString().ToLower() ?? "false")
-                .Replace("{{delegated_tasks.pulse_oximeter}}", data.DelegatedTasks?.PulseOximeter.ToString().ToLower() ?? "false")
+                // Delegated Tasks - Checkbox Classes
+                .Replace("[[GASTRIC_TUBE_FEEDING_CLASS]]", GetCheckboxClass(data.DelegatedTasks?.GastricTubeFeedingAndCare))
+                .Replace("[[GASTRIC_TUBE_PUMP_CLASS]]", GetCheckboxClass(data.DelegatedTasks?.GastricTubeFeedingPump))
+                .Replace("[[NASOGASTRIC_FEEDING_CLASS]]", GetCheckboxClass(data.DelegatedTasks?.NasogastricFeedingAndCare))
+                .Replace("[[JEJUNOSTOMY_FEEDING_CLASS]]", GetCheckboxClass(data.DelegatedTasks?.JejunostomyFeedingAndCare))
+                .Replace("[[OSTOMY_CARE_CLASS]]", GetCheckboxClass(data.DelegatedTasks?.OstomyCare))
+                .Replace("[[DRESSING_CHANGES_CLASS]]", GetCheckboxClass(data.DelegatedTasks?.DressingChanges))
+                .Replace("[[OXYGEN_ADMIN_CLASS]]", GetCheckboxClass(data.DelegatedTasks?.OxygenAdministration))
+                .Replace("[[OXYGEN_ADMIN_CHANGES_CLASS]]", GetCheckboxClass(data.DelegatedTasks?.OxygenAdministrationWithChanges))
+                .Replace("[[PULSE_OXIMETER_CLASS]]", GetCheckboxClass(data.DelegatedTasks?.PulseOximeter))
 
                 // Training Details
                 .Replace("{{instructions_given}}", data.InstructionsGiven ?? "")
                 .Replace("{{supervisory_visit_notes}}", data.SupervisoryVisitNotes ?? "")
-                .Replace("{{continue_delegation}}", data.ContinueDelegation.ToString().ToLower() ?? "false")
+                .Replace("[[CONTINUE_DELEGATION_CLASS]]", GetCheckboxClass(data.ContinueDelegation))
 
                 // Signatures
                 .Replace("{{signatures.rn_signature}}", data.Signatures?.RegisteredNurseSignature ?? "")
