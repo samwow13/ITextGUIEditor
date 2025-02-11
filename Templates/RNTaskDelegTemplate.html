@@ -209,17 +209,34 @@
         <table class="full-table">
             <tr class="tall">
                 <th>Delegation Name</th>
-                <td>{{caregiver_info.delegation_name}}</td>
-                <th>Delegation Date</th>
-                <td>{{caregiver_info.delegation_date}}</td>
+                <td colspan="3">{{caregiver_info.delegation_name}}</td>
             </tr>
             <tr class="tall">
-                <th>Type</th>
-                <td>{{caregiver_info.delegation_or_assignment ? "Delegation" : "Assignment"}}</td>
-                <th>Visit Type</th>
-                <td>
-                    {{caregiver_info.supervisory_visit ? "Supervisory Visit" : ""}}
-                    {{caregiver_info.ongoing_supervisory_visit ? "Ongoing Supervisory Visit" : ""}}
+                <th>Delegation Date</th>
+                <td colspan="3">{{caregiver_info.delegation_date}}</td>
+            </tr>
+            <tr class="tall">
+                <th>Initial Delegation/Assignment</th>
+                <td colspan="3">
+                    <div class="checkbox-container">
+                        <input type="checkbox" disabled class="[[INITIAL_DELEGATION_CLASS]]">
+                    </div>
+                </td>
+            </tr>
+            <tr class="tall">
+                <th>Supervisory Visit</th>
+                <td colspan="3">
+                    <div class="checkbox-container">
+                        <input type="checkbox" disabled class="[[SUPERVISORY_VISIT_CLASS]]">
+                    </div>
+                </td>
+            </tr>
+            <tr class="tall">
+                <th>Ongoing Supervisory Visit</th>
+                <td colspan="3">
+                    <div class="checkbox-container">
+                        <input type="checkbox" disabled class="[[ONGOING_SUPERVISORY_VISIT_CLASS]]">
+                    </div>
                 </td>
             </tr>
         </table>

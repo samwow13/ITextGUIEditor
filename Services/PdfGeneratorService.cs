@@ -173,9 +173,9 @@ namespace iTextDesignerWithGUI.Services
                 // Caregiver Info
                 .Replace("{{caregiver_info.delegation_name}}", data.CaregiverInfo?.DelegationName ?? "")
                 .Replace("{{caregiver_info.delegation_date}}", data.CaregiverInfo?.DelegationDate ?? "")
-                .Replace("{{caregiver_info.delegation_or_assignment}}", data.CaregiverInfo?.DelegationOrAssignment.ToString().ToLower() ?? "false")
-                .Replace("{{caregiver_info.supervisory_visit}}", data.CaregiverInfo?.SupervisoryVisit.ToString().ToLower() ?? "false")
-                .Replace("{{caregiver_info.ongoing_supervisory_visit}}", data.CaregiverInfo?.OngoingSupervisoryVisit.ToString().ToLower() ?? "false")
+                .Replace("[[INITIAL_DELEGATION_CLASS]]", GetCheckboxClass(data.CaregiverInfo?.DelegationOrAssignment))
+                .Replace("[[SUPERVISORY_VISIT_CLASS]]", GetCheckboxClass(data.CaregiverInfo?.SupervisoryVisit))
+                .Replace("[[ONGOING_SUPERVISORY_VISIT_CLASS]]", GetCheckboxClass(data.CaregiverInfo?.OngoingSupervisoryVisit))
 
                 // Delegated Tasks - Checkbox Classes
                 .Replace("[[GASTRIC_TUBE_FEEDING_CLASS]]", GetCheckboxClass(data.DelegatedTasks?.GastricTubeFeedingAndCare))
