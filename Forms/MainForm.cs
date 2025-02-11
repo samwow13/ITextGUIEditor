@@ -5,6 +5,7 @@ using iTextDesignerWithGUI.Models;
 using iTextDesignerWithGUI.Services;
 using System.IO;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace iTextDesignerWithGUI.Forms
 {
@@ -126,6 +127,17 @@ namespace iTextDesignerWithGUI.Forms
                 _referenceData = data;
                 PopulateDataGrid();
                 InitializeDataGridView();
+
+                // Add Back to Selection button
+                Button backButton = new Button
+                {
+                    Text = "Back to Selection",
+                    Dock = DockStyle.Top,
+                    Height = 30,
+                    Margin = new Padding(5)
+                };
+                backButton.Click += BackToSelection_Click;
+                this.Controls.Add(backButton);
             }
             catch (Exception ex)
             {
@@ -264,6 +276,23 @@ namespace iTextDesignerWithGUI.Forms
             _referenceData = null;
             dataGridView.DataSource = null;
             InitializeAsync();
+        }
+
+        private void BackToSelection_Click(object sender, EventArgs e)
+        {
+            var selector = new AssessmentTypeSelector();
+            var result = selector.ShowDialog();
+            
+            if (result == DialogResult.OK && !selector.WasCancelled)
+            {
+                // Hide this form while showing the new one
+                this.Hide();
+                
+                // Create and show the new form
+                var newForm = new MainForm(selector.SelectedType);
+                newForm.FormClosed += (s, args) => this.Close(); // Close this form when new form closes
+                newForm.Show();
+            }
         }
     }
 }

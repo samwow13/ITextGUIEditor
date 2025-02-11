@@ -7,6 +7,15 @@ namespace iTextDesignerWithGUI
 {
     static class Program
     {
+        public static void ShowSelectorAndRunMainForm()
+        {
+            var selector = new AssessmentTypeSelector();
+            if (selector.ShowDialog() == DialogResult.OK && !selector.WasCancelled)
+            {
+                Application.Run(new MainForm(selector.SelectedType));
+            }
+        }
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -15,14 +24,7 @@ namespace iTextDesignerWithGUI
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
-            var selector = new AssessmentTypeSelector();
-            selector.ShowDialog();
-
-            if (!selector.WasCancelled)
-            {
-                Application.Run(new MainForm(selector.SelectedType));
-            }
+            ShowSelectorAndRunMainForm();
         }
     }
 }
