@@ -1,6 +1,6 @@
 using System;
 
-namespace OralCareReference.Models
+namespace iTextDesignerWithGUI.Models
 {
     /// <summary>
     /// Base interface for all assessment types

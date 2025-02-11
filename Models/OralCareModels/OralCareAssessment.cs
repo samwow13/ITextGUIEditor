@@ -1,4 +1,4 @@
-namespace OralCareReference.Models
+namespace iTextDesignerWithGUI.Models
 {
     /// <summary>
     /// Implementation of IAssessment for Oral Care assessments

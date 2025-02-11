@@ -1,4 +1,5 @@
-{
+[
+  {
     "child_info": {
       "name": "John Doe",
       "date_of_birth": "2015-06-12",
@@ -62,5 +63,136 @@
       "registered_nurse_signature": "Maria Gonzalez",
       "registered_nurse_signature_date": "2025-02-11"
     }
+  },
+  {
+    "child_info": {
+      "name": "Alice Johnson",
+      "date_of_birth": "2017-03-05",
+      "person_number": "654321"
+    },
+    "caregiver_info": {
+      "delegation_name": "Bob Brown",
+      "delegation_date": "2025-02-10",
+      "delegation_or_assignment": false,
+      "supervisory_visit": false,
+      "ongoing_supervisory_visit": true
+    },
+    "delegated_tasks": {
+      "gastric_tube_feeding_and_care": false,
+      "gastric_tube_feeding_pump": true,
+      "nasogastric_feeding_and_care": true,
+      "jejunostomy_feeding_and_care": false,
+      "ostomy_care": true,
+      "dressing_changes": false,
+      "oxygen_administration": false,
+      "oxygen_administration_with_changes": true,
+      "pulse_oximeter": false,
+      "apnea_monitor": true,
+      "tracheotomy_care": true,
+      "oral_pharyngeal_suctioning": true,
+      "tracheal_suctioning": false,
+      "cpap_bipap": true,
+      "injections": false,
+      "blood_glucose_testing": false,
+      "urinary_catheter_care": true,
+      "emergent_medications": true,
+      "specialized_infection_control": true,
+      "other_bool": true,
+      "other_string": "Additional delegated task notes."
+    },
+    "training_details": {
+      "explanation_given": false,
+      "discussion_occurred": true,
+      "demonstration_performed": false,
+      "time_for_questions": false,
+      "return_demonstration": true,
+      "additional_information": "Provided a quick briefing on catheter care procedures."
+    },
+    "non_delegated_tasks": {
+      "ventilator_care": true,
+      "central_line_care": true,
+      "other_bool": true,
+      "other_string": "Non-delegated emergency procedures."
+    },
+    "nursing_rules": {
+      "delegated_per_OSBN": false,
+      "assigned_and_supervised": true,
+      "caregiver_OSBN_license": 987654
+    },
+    "instructions_given": "Verbal instructions provided with follow-up demonstration.",
+    "supervisory_visit_notes": "No supervisory visit conducted as tasks delegated are low-risk.",
+    "continue_delegation": false,
+    "signatures": {
+      "caregiver_signature": "Bob Brown",
+      "caregiver_signature_date": "2025-02-10",
+      "registered_nurse_signature": "Laura White",
+      "registered_nurse_signature_date": "2025-02-10"
+    }
+  },
+  {
+    "child_info": {
+      "name": "Michael Thompson",
+      "date_of_birth": "2018-09-21",
+      "person_number": "789012"
+    },
+    "caregiver_info": {
+      "delegation_name": "Sarah Green",
+      "delegation_date": "2025-02-12",
+      "delegation_or_assignment": true,
+      "supervisory_visit": true,
+      "ongoing_supervisory_visit": true
+    },
+    "delegated_tasks": {
+      "gastric_tube_feeding_and_care": true,
+      "gastric_tube_feeding_pump": true,
+      "nasogastric_feeding_and_care": false,
+      "jejunostomy_feeding_and_care": false,
+      "ostomy_care": false,
+      "dressing_changes": true,
+      "oxygen_administration": false,
+      "oxygen_administration_with_changes": false,
+      "pulse_oximeter": true,
+      "apnea_monitor": false,
+      "tracheotomy_care": false,
+      "oral_pharyngeal_suctioning": true,
+      "tracheal_suctioning": false,
+      "cpap_bipap": false,
+      "injections": true,
+      "blood_glucose_testing": true,
+      "urinary_catheter_care": false,
+      "emergent_medications": false,
+      "specialized_infection_control": true,
+      "other_bool": false,
+      "other_string": "None"
+    },
+    "training_details": {
+      "explanation_given": true,
+      "discussion_occurred": false,
+      "demonstration_performed": true,
+      "time_for_questions": true,
+      "return_demonstration": false,
+      "additional_information": "Brief demonstration on suctioning techniques."
+    },
+    "non_delegated_tasks": {
+      "ventilator_care": false,
+      "central_line_care": false,
+      "other_bool": false,
+      "other_string": "No additional tasks."
+    },
+    "nursing_rules": {
+      "delegated_per_OSBN": true,
+      "assigned_and_supervised": true,
+      "caregiver_OSBN_license": 112233
+    },
+    "instructions_given": "Written instructions and video tutorials provided.",
+    "supervisory_visit_notes": "Supervisory visit confirmed compliance with all procedures.",
+    "continue_delegation": true,
+    "signatures": {
+      "caregiver_signature": "Sarah Green",
+      "caregiver_signature_date": "2025-02-12",
+      "registered_nurse_signature": "James Black",
+      "registered_nurse_signature_date": "2025-02-12"
+    }
   }
+]
   

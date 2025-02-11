@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
-using OralCareReference.Models;
+using iTextDesignerWithGUI.Models;
 
-namespace OralCareReference.Services
+namespace iTextDesignerWithGUI.Services
 {
     /// <summary>
-    /// Manages JSON file operations for oral care reference data
+    /// Manages JSON file operations for reference data
     /// </summary>
     public class JsonManager
     {

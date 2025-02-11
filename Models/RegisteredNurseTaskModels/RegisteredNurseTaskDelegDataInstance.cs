@@ -1,7 +1,7 @@
 using System;
 using System.Text.Json.Serialization;
 
-namespace OralCareReference.Models
+namespace iTextDesignerWithGUI.Models
 {
     /// <summary>
     /// Represents a registered nurse task delegation data entry.

@@ -1,9 +1,9 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using OralCareReference.Models;
+using iTextDesignerWithGUI.Models;
 
-namespace OralCareReference.Forms
+namespace iTextDesignerWithGUI.Forms
 {
     public partial class AssessmentTypeSelector : Form
     {

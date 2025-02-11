@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "eNASCs2XBPICBXi6ay1Uab5cHvrLXFPG5EisOn09Y/cQyn4OdZCWpXEw48IhZm0ZgYMnKIMx+2UhDREovL0b4A==",
+  "dgSpecHash": "2+buQeMA2rAjwNxIVOBw0GZdeBoJj+uyVc2J/oEAxU3eWwdBi6/MRHNVBUVOlURrQYSKFOnQwhFbuuU7LfArUw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\PythonGUIForPDFGeneration\\OralCareReference.csproj",
+  "projectFilePath": "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\iTextDesignerWithGUI\\iTextDesignerWithGUI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\samwo\\.nuget\\packages\\bouncycastle.cryptography\\2.2.1\\bouncycastle.cryptography.2.2.1.nupkg.sha512",
     "C:\\Users\\samwo\\.nuget\\packages\\itext\\8.0.2\\itext.8.0.2.nupkg.sha512",

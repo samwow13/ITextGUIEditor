@@ -1,4 +1,4 @@
-namespace OralCareReference.Forms
+namespace iTextDesignerWithGUI.Forms
 {
     partial class AssessmentTypeSelector
     {

@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using OralCareReference.Models;
-using OralCareReference.Services;
+using iTextDesignerWithGUI.Models;
+using iTextDesignerWithGUI.Services;
 using System.IO;
 using System.Diagnostics;
 
-namespace OralCareReference.Forms
+namespace iTextDesignerWithGUI.Forms
 {
     public partial class MainForm : Form
     {

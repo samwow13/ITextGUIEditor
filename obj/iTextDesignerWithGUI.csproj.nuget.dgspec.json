@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\PythonGUIForPDFGeneration\\OralCareReference.csproj": {}
+    "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\iTextDesignerWithGUI\\iTextDesignerWithGUI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\PythonGUIForPDFGeneration\\OralCareReference.csproj": {
+    "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\iTextDesignerWithGUI\\iTextDesignerWithGUI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\PythonGUIForPDFGeneration\\OralCareReference.csproj",
-        "projectName": "OralCareReference",
-        "projectPath": "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\PythonGUIForPDFGeneration\\OralCareReference.csproj",
+        "projectUniqueName": "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\iTextDesignerWithGUI\\iTextDesignerWithGUI.csproj",
+        "projectName": "iTextDesignerWithGUI",
+        "projectPath": "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\iTextDesignerWithGUI\\iTextDesignerWithGUI.csproj",
         "packagesPath": "C:\\Users\\samwo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\PythonGUIForPDFGeneration\\obj\\",
+        "outputPath": "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\iTextDesignerWithGUI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\samwo\\AppData\\Roaming\\NuGet\\NuGet.Config"

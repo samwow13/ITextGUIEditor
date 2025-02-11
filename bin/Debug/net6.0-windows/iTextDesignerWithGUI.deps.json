@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v6.0": {
-      "OralCareReference/1.0.0": {
+      "iTextDesignerWithGUI/1.0.0": {
         "dependencies": {
           "System.Text.Encoding.CodePages": "7.0.0",
           "itext7": "8.0.2",
@@ -14,7 +14,7 @@
           "itext7.pdfhtml": "5.0.2"
         },
         "runtime": {
-          "OralCareReference.dll": {}
+          "iTextDesignerWithGUI.dll": {}
         }
       },
       "BouncyCastle.Cryptography/2.2.1": {
@@ -774,7 +774,7 @@
     }
   },
   "libraries": {
-    "OralCareReference/1.0.0": {
+    "iTextDesignerWithGUI/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

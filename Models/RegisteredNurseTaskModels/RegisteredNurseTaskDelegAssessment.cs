@@ -1,7 +1,7 @@
-namespace OralCareReference.Models
+namespace iTextDesignerWithGUI.Models
 {
     /// <summary>
-    /// Implementation of IAssessment for Oral Care assessments
+    /// Implementation of IAssessment for Registered Nurse Task Delegation and Assignment assessments
     /// </summary>
     public class RegisteredNurseTaskDelegAssessment : IAssessment
     {

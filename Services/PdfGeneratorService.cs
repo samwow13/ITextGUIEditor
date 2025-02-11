@@ -1,12 +1,12 @@
 using iText.Html2pdf;
 using iText.Kernel.Pdf;
-using OralCareReference.Models;
+using iTextDesignerWithGUI.Models;
 using System;
 using System.IO;
 using System.Reflection;
 using System.Diagnostics;
 
-namespace OralCareReference.Services
+namespace iTextDesignerWithGUI.Services
 {
     /// <summary>
     /// Service responsible for generating PDF documents from reference data using HTML templates

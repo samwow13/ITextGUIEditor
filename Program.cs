@@ -1,8 +1,9 @@
 using System;
 using System.Windows.Forms;
-using OralCareReference.Forms;
+using iTextDesignerWithGUI.Forms;
+using iTextDesignerWithGUI.Models;
 
-namespace OralCareReference
+namespace iTextDesignerWithGUI
 {
     static class Program
     {
