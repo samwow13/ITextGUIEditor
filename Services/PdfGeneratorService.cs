@@ -165,18 +165,39 @@ namespace iTextDesignerWithGUI.Services
         private string ReplacePlaceholders(string template, RegisteredNurseTaskDelegDataInstance data)
         {
             return template
-                .Replace("{{Name}}", data.ChildInfo?.Name ?? "")
-                .Replace("{{DateOfBirth}}", data.ChildInfo?.DateOfBirth ?? "")
-                .Replace("{{PersonNumber}}", data.ChildInfo?.PersonNumber ?? "")
-                .Replace("{{DelegationName}}", data.CaregiverInfo?.DelegationName ?? "")
-                .Replace("{{DelegationDate}}", data.CaregiverInfo?.DelegationDate ?? "")
-                .Replace("{{DelegationOrAssignment}}", data.CaregiverInfo?.DelegationOrAssignment.ToString() ?? "")
-                .Replace("{{SupervisoryVisit}}", data.CaregiverInfo?.SupervisoryVisit.ToString() ?? "")
-                .Replace("{{OngoingSupervisoryVisit}}", data.CaregiverInfo?.OngoingSupervisoryVisit.ToString() ?? "")
-                .Replace("{{InstructionsGiven}}", data.InstructionsGiven ?? "")
-                .Replace("{{SupervisoryVisitNotes}}", data.SupervisoryVisitNotes ?? "")
-                .Replace("{{ContinueDelegation}}", data.ContinueDelegation.ToString() ?? "")
-                ;
+                // Child Info
+                .Replace("{{child_info.name}}", data.ChildInfo?.Name ?? "")
+                .Replace("{{child_info.date_of_birth}}", data.ChildInfo?.DateOfBirth ?? "")
+                .Replace("{{child_info.person_number}}", data.ChildInfo?.PersonNumber ?? "")
+
+                // Caregiver Info
+                .Replace("{{caregiver_info.delegation_name}}", data.CaregiverInfo?.DelegationName ?? "")
+                .Replace("{{caregiver_info.delegation_date}}", data.CaregiverInfo?.DelegationDate ?? "")
+                .Replace("{{caregiver_info.delegation_or_assignment}}", data.CaregiverInfo?.DelegationOrAssignment.ToString().ToLower() ?? "false")
+                .Replace("{{caregiver_info.supervisory_visit}}", data.CaregiverInfo?.SupervisoryVisit.ToString().ToLower() ?? "false")
+                .Replace("{{caregiver_info.ongoing_supervisory_visit}}", data.CaregiverInfo?.OngoingSupervisoryVisit.ToString().ToLower() ?? "false")
+
+                // Delegated Tasks
+                .Replace("{{delegated_tasks.gastric_tube_feeding_and_care}}", data.DelegatedTasks?.GastricTubeFeedingAndCare.ToString().ToLower() ?? "false")
+                .Replace("{{delegated_tasks.gastric_tube_feeding_pump}}", data.DelegatedTasks?.GastricTubeFeedingPump.ToString().ToLower() ?? "false")
+                .Replace("{{delegated_tasks.nasogastric_feeding_and_care}}", data.DelegatedTasks?.NasogastricFeedingAndCare.ToString().ToLower() ?? "false")
+                .Replace("{{delegated_tasks.jejunostomy_feeding_and_care}}", data.DelegatedTasks?.JejunostomyFeedingAndCare.ToString().ToLower() ?? "false")
+                .Replace("{{delegated_tasks.ostomy_care}}", data.DelegatedTasks?.OstomyCare.ToString().ToLower() ?? "false")
+                .Replace("{{delegated_tasks.dressing_changes}}", data.DelegatedTasks?.DressingChanges.ToString().ToLower() ?? "false")
+                .Replace("{{delegated_tasks.oxygen_administration}}", data.DelegatedTasks?.OxygenAdministration.ToString().ToLower() ?? "false")
+                .Replace("{{delegated_tasks.oxygen_administration_with_changes}}", data.DelegatedTasks?.OxygenAdministrationWithChanges.ToString().ToLower() ?? "false")
+                .Replace("{{delegated_tasks.pulse_oximeter}}", data.DelegatedTasks?.PulseOximeter.ToString().ToLower() ?? "false")
+
+                // Training Details
+                .Replace("{{instructions_given}}", data.InstructionsGiven ?? "")
+                .Replace("{{supervisory_visit_notes}}", data.SupervisoryVisitNotes ?? "")
+                .Replace("{{continue_delegation}}", data.ContinueDelegation.ToString().ToLower() ?? "false")
+
+                // Signatures
+                .Replace("{{signatures.rn_signature}}", data.Signatures?.RegisteredNurseSignature ?? "")
+                .Replace("{{signatures.rn_date}}", data.Signatures?.RegisteredNurseSignatureDate ?? "")
+                .Replace("{{signatures.caregiver_signature}}", data.Signatures?.CaregiverSignature ?? "")
+                .Replace("{{signatures.caregiver_date}}", data.Signatures?.CaregiverSignatureDate ?? "");
         }
 
         private string GetCheckboxClass(object value)

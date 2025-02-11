@@ -1,1 +1,88 @@
-We did it coach
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RN Task Delegation Form</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .section { margin: 20px 0; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .checkbox-item { margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Registered Nurse Task Delegation Form</h1>
+    </div>
+
+    <div class="section">
+        <h2>Child Information</h2>
+        <div class="grid">
+            <p><strong>Name:</strong> {{child_info.name}}</p>
+            <p><strong>Date of Birth:</strong> {{child_info.date_of_birth}}</p>
+            <p><strong>Person Number:</strong> {{child_info.person_number}}</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Caregiver Information</h2>
+        <div class="grid">
+            <p><strong>Delegation Name:</strong> {{caregiver_info.delegation_name}}</p>
+            <p><strong>Delegation Date:</strong> {{caregiver_info.delegation_date}}</p>
+            <p><strong>Type:</strong> {{caregiver_info.delegation_or_assignment ? "Delegation" : "Assignment"}}</p>
+            <p><strong>Visit Type:</strong> 
+                {{caregiver_info.supervisory_visit ? "Supervisory Visit" : ""}}
+                {{caregiver_info.ongoing_supervisory_visit ? "Ongoing Supervisory Visit" : ""}}
+            </p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Delegated Tasks</h2>
+        <div class="checkbox-item">
+            {{delegated_tasks.gastric_tube_feeding_and_care ? "☒" : "☐"}} Gastric Tube Feeding and Care
+        </div>
+        <div class="checkbox-item">
+            {{delegated_tasks.gastric_tube_feeding_pump ? "☒" : "☐"}} Gastric Tube Feeding Pump
+        </div>
+        <div class="checkbox-item">
+            {{delegated_tasks.nasogastric_feeding_and_care ? "☒" : "☐"}} Nasogastric Feeding and Care
+        </div>
+        <div class="checkbox-item">
+            {{delegated_tasks.jejunostomy_feeding_and_care ? "☒" : "☐"}} Jejunostomy Feeding and Care
+        </div>
+        <div class="checkbox-item">
+            {{delegated_tasks.ostomy_care ? "☒" : "☐"}} Ostomy Care
+        </div>
+        <div class="checkbox-item">
+            {{delegated_tasks.dressing_changes ? "☒" : "☐"}} Dressing Changes
+        </div>
+        <div class="checkbox-item">
+            {{delegated_tasks.oxygen_administration ? "☒" : "☐"}} Oxygen Administration
+        </div>
+        <div class="checkbox-item">
+            {{delegated_tasks.oxygen_administration_with_changes ? "☒" : "☐"}} Oxygen Administration with Changes
+        </div>
+        <div class="checkbox-item">
+            {{delegated_tasks.pulse_oximeter ? "☒" : "☐"}} Pulse Oximeter
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Training Details</h2>
+        <p><strong>Instructions Given:</strong> {{instructions_given}}</p>
+        <p><strong>Supervisory Visit Notes:</strong> {{supervisory_visit_notes}}</p>
+        <p><strong>Continue Delegation:</strong> {{continue_delegation ? "Yes" : "No"}}</p>
+    </div>
+
+    <div class="section">
+        <h2>Signatures</h2>
+        <div class="grid">
+            <p><strong>RN Signature:</strong> {{signatures.rn_signature}}</p>
+            <p><strong>RN Date:</strong> {{signatures.rn_date}}</p>
+            <p><strong>Caregiver Signature:</strong> {{signatures.caregiver_signature}}</p>
+            <p><strong>Caregiver Date:</strong> {{signatures.caregiver_date}}</p>
+        </div>
+    </div>
+</body>
+</html>
