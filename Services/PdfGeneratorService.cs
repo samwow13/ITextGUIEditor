@@ -36,6 +36,29 @@ namespace iTextDesignerWithGUI.Services
                     Debug.WriteLine($"Created template directory: {templateDir}");
                 }
 
+                // Create images directory if it doesn't exist
+                var imagesDir = Path.Combine(exePath, "images");
+                if (!string.IsNullOrEmpty(imagesDir) && !Directory.Exists(imagesDir))
+                {
+                    Directory.CreateDirectory(imagesDir);
+                    Debug.WriteLine($"Created images directory: {imagesDir}");
+
+                    // Copy images from source to output if they don't exist
+                    var sourceImagesDir = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(exePath)), "images");
+                    if (Directory.Exists(sourceImagesDir))
+                    {
+                        foreach (var file in Directory.GetFiles(sourceImagesDir))
+                        {
+                            var destFile = Path.Combine(imagesDir, Path.GetFileName(file));
+                            if (!File.Exists(destFile))
+                            {
+                                File.Copy(file, destFile);
+                                Debug.WriteLine($"Copied image file: {destFile}");
+                            }
+                        }
+                    }
+                }
+
                 // Set up consistent temporary file path
                 _tempPdfPath = Path.Combine(exePath, "temp_assessment.pdf");
             }
@@ -91,7 +114,14 @@ namespace iTextDesignerWithGUI.Services
                 {
                     var writer = new PdfWriter(stream);
                     var pdf = new PdfDocument(writer);
-                    HtmlConverter.ConvertToPdf(templateContent, pdf, new ConverterProperties());
+                    
+                    // Create converter properties with base URI for image resolution
+                    var props = new ConverterProperties();
+                    var projectRoot = Path.GetDirectoryName(Path.GetDirectoryName(exePath)); // Go up one level to project root
+                    var baseUri = new Uri(projectRoot + Path.DirectorySeparatorChar);
+                    props.SetBaseUri(baseUri.AbsoluteUri);
+                    
+                    HtmlConverter.ConvertToPdf(templateContent, pdf, props);
                     return stream.ToArray();
                 }
             }
