@@ -3,64 +3,92 @@
 This application allows users to generate multiple types of PDFs using iText7 for .NET, with support for multiple data sets and templates. Helping the user quickly update 
 a html & CSS template and view the generated PDF.
 
-## Adding a New Form Type
+## 🏗️ Project Structure
 
-To add a new form type to the application, follow these steps:
+```
+iTextDesignerWithGUI/
+├── 📂 Forms/
+│   ├── MainForm.cs              # Main application window
+│   └── AssessmentTypeSelector.cs # Form type selection dialog
+├── 📂 Models/
+│   └── [Assessment-specific models] # Data models for each form type
+├── 📂 Services/
+│   ├── PdfGeneratorService.cs   # Core PDF generation logic
+│   └── JsonManager.cs           # JSON data handling
+├── 📂 Templates/
+│   └── [HTML templates]         # HTML/CSS templates for PDFs
+└── 📂 ReferenceDataJsons/
+    └── [JSON data files]        # Reference data for forms
+```
 
-1. Add Reference Data (find out the requirements for the PDF to generate, then build a json model for it.)
-   - Create a JSON file in `ReferenceDataJsons` folder
-   - Follow the existing JSON structure pattern
+## 🔄 Process Flow
 
-2. Create the Data Models
-   - Create a new directory under `Models` for your form-specific models
-   - Create a model class for your assessment (model for the assessment, you can copy other similar model layouts)
-   - Create a model class for your reference data (model for the json you created in step 1)
-   - Implement the necessary interfaces (IAssessment)
+```mermaid
+graph TD
+    A[Select Form Type] -->|Using AssessmentTypeSelector| B[Load Reference Data]
+    B -->|JsonManager Service| C[Configure Form]
+    C -->|MainForm| D[Edit Data]
+    D -->|User Input| E[Generate PDF]
+    E -->|PdfGeneratorService| F[View Result]
+    F -->|Success| G[Save PDF]
+    F -->|Modify| D
+```
 
-3. Update GUI Components and JSON Manager
-   - In `Forms/AssessmentTypeSelector.cs`:
-     - Add your new form type to the `AssessmentType` enum in the Models folder
-     - Update the type selector dropdown to include the new assessment type
-     - Ensure proper handling in the selection changed event
-   
-   - In `Services/JsonManager.cs`:
-     - Add support for your new assessment type in the JSON loading logic
-     - Implement proper deserialization for your reference data model
-     - Ensure proper file path handling for your JSON data file
-     - Add appropriate error handling for file operations
-   
-   - In `Forms/MainForm.cs`:
-     - Add UI controls for your new assessment type's data entry
-     - Set up data grid view columns if your form type requires tabular data
-     - Implement template handling for your new assessment type
-     - Add proper data validation and error handling
-     - Ensure the "Back to Selection" functionality works with your new form type
+## 📝 Adding a New Form Type
 
-4. Update PdfGeneratorService
-   - In `Services/PdfGeneratorService.cs`:
-     - Implement dynamic JSON data loading for your assessment type
-     - Add methods to process and validate the model data
-     - Create functions to map the model data to template placeholders
-     - Implement type-specific placeholder replacement methods
-     - Add proper image resource handling and base URI configuration (for adding images to the template)
-     - Ensure proper error handling for data processing
-     - Add support for template regeneration if needed
+### 1. Reference Data Setup
+```mermaid
+graph LR
+    A[Create JSON Schema] -->|Save in| B[ReferenceDataJsons/]
+    B --> C[Define Data Structure]
+```
 
-5. Create and Configure HTML Template
-   - Add your template file to the `Templates` folder
-   - Begin with a basic HTML structure and simple placeholders
-   - Link to the shared `globalStyles.css` for consistent styling
-   - Test the template with sample data to verify functionality
-   - Gradually incorporate the full model data from step 4
-   - Add CSS styling following Bootstrap conventions
-   - Implement dynamic data binding for complex data structures
-   - Ensure proper handling of checkboxes and form elements
-   - Test image resource paths and rendering
+### 2. Data Model Creation
+```mermaid
+graph TD
+    A[Create Model Directory] -->|Under Models/| B[Assessment Model]
+    A -->|Under Models/| C[Reference Data Model]
+    B --> D[Implement IAssessment]
+    C --> E[JSON Serialization]
+```
 
-## Project Structure
+### 3. GUI Integration
+- In `AssessmentTypeSelector.cs`:
+  - Add to `AssessmentType` enum
+  - Update dropdown menu
+  - Handle selection events
 
-- `Forms/` - Contains the GUI forms
-- `Models/` - Contains data models for each form type
-- `Services/` - Contains core services like PDF generation
-- `Templates/` - Contains HTML templates for each form type
-- `ReferenceDataJsons/` - Contains JSON data files for each form type
+- In `JsonManager.cs`:
+  - Implement data loading
+  - Add deserialization support
+  - Handle file operations
+
+- In `MainForm.cs`:
+  - Add UI controls
+  - Setup data validation
+  - Configure template handling
+
+### 4. PDF Generation Setup
+- In `PdfGeneratorService.cs`:
+  ```
+  ┌─────────────────────┐
+  │ 1. Load JSON Data   │
+  ├─────────────────────┤
+  │ 2. Process Model    │
+  ├─────────────────────┤
+  │ 3. Map Data         │
+  ├─────────────────────┤
+  │ 4. Replace Content  │
+  ├─────────────────────┤
+  │ 5. Generate PDF     │
+  └─────────────────────┘
+  ```
+
+### 5. Template Configuration
+- Create HTML template in `Templates/`
+- Link to `globalStyles.css`
+- Test with sample data
+- Implement data bindings
+- Add Bootstrap styling
+
+
