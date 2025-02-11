@@ -132,9 +132,16 @@ namespace iTextDesignerWithGUI.Forms
                 Button backButton = new Button
                 {
                     Text = "Back to Selection",
-                    Dock = DockStyle.Top,
-                    Height = 30,
-                    Margin = new Padding(5)
+                    Dock = DockStyle.Bottom,
+                    Height = 40,
+                    Width = 150,
+                    Margin = new Padding(10),
+                    Padding = new Padding(5),
+                    FlatStyle = FlatStyle.Flat,
+                    BackColor = System.Drawing.Color.FromArgb(0, 123, 255),  // Bootstrap primary blue
+                    ForeColor = System.Drawing.Color.White,
+                    Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular),
+                    Cursor = Cursors.Hand
                 };
                 backButton.Click += BackToSelection_Click;
                 this.Controls.Add(backButton);
@@ -183,13 +190,17 @@ namespace iTextDesignerWithGUI.Forms
             this.dataGridView.MultiSelect = false;
             this.dataGridView.ReadOnly = true;
             this.dataGridView.AutoGenerateColumns = false;
+            this.dataGridView.RowHeadersVisible = false;  // Remove the empty first column
+            this.dataGridView.AllowUserToAddRows = false; // Remove empty row at bottom
+            this.dataGridView.BorderStyle = BorderStyle.None;
+            this.dataGridView.BackgroundColor = System.Drawing.SystemColors.Window;
 
             // Add Name column
             var nameColumn = new DataGridViewTextBoxColumn
             {
                 HeaderText = "Name",
                 DataPropertyName = "Name",
-                FillWeight = 85
+                FillWeight = 70
             };
             dataGridView.Columns.Add(nameColumn);
 
@@ -200,8 +211,8 @@ namespace iTextDesignerWithGUI.Forms
                 Text = "Generate PDF",
                 Name = "GeneratePdf",
                 UseColumnTextForButtonValue = true,
-                FillWeight = 15,
-                MinimumWidth = 100
+                FillWeight = 30,
+                MinimumWidth = 120
             };
             dataGridView.Columns.Add(generatePdfColumn);
 
@@ -264,7 +275,7 @@ namespace iTextDesignerWithGUI.Forms
             // MainForm
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(400, 250);
             this.Controls.Add(this.dataGridView);
             this.Name = "MainForm";
             this.ResumeLayout(false);
