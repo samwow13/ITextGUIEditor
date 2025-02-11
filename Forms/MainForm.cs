@@ -23,6 +23,9 @@ namespace OralCareReference.Forms
             _jsonManager = new JsonManager(_assessment.JsonDataPath);
             _pdfGenerator = new PdfGeneratorService();
             
+            // Set the form to appear in center screen
+            this.StartPosition = FormStartPosition.CenterScreen;
+            
             // Initialize template watcher
             var templateDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates");
             

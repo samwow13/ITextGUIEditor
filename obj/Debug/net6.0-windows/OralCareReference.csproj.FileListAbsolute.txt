@@ -40,3 +40,4 @@ C:\Users\samwo\OneDrive\Desktop\Python Code\PythonGUIForPDFGeneration\bin\Debug\
 C:\Users\samwo\OneDrive\Desktop\Python Code\PythonGUIForPDFGeneration\bin\Debug\net6.0-windows\Microsoft.Extensions.Primitives.dll
 C:\Users\samwo\OneDrive\Desktop\Python Code\PythonGUIForPDFGeneration\bin\Debug\net6.0-windows\Newtonsoft.Json.dll
 C:\Users\samwo\OneDrive\Desktop\Python Code\PythonGUIForPDFGeneration\bin\Debug\net6.0-windows\Templates\AssessmentTemplate.html
+C:\Users\samwo\OneDrive\Desktop\Python Code\PythonGUIForPDFGeneration\bin\Debug\net6.0-windows\Templates\RNTaskDelegTemplate.html
