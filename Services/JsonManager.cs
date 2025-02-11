@@ -23,7 +23,7 @@ namespace OralCareReference.Services
         /// Loads reference data items from the JSON file
         /// </summary>
         /// <returns>List of reference data items</returns>
-        public async Task<List<ReferenceDataItem>> LoadReferenceDataAsync()
+        public async Task<List<OralCareDataInstance>> LoadReferenceDataAsync()
         {
             try
             {
@@ -32,7 +32,7 @@ namespace OralCareReference.Services
                 {
                     PropertyNameCaseInsensitive = true
                 };
-                return JsonSerializer.Deserialize<List<ReferenceDataItem>>(jsonContent, options);
+                return JsonSerializer.Deserialize<List<OralCareDataInstance>>(jsonContent, options);
             }
             catch (Exception ex)
             {

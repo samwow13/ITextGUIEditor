@@ -1,0 +1,66 @@
+{
+    "child_info": {
+      "name": "John Doe",
+      "date_of_birth": "2015-06-12",
+      "person_number": "123456"
+    },
+    "caregiver_info": {
+      "delegation_name": "Jane Smith",
+      "delegation_date": "2025-02-11",
+      "delegation_or_assignment": true,
+      "supervisory_visit": true,
+      "ongoing_supervisory_visit": false
+    },
+    "delegated_tasks": {
+      "gastric_tube_feeding_and_care": true,
+      "gastric_tube_feeding_pump": false,
+      "nasogastric_feeding_and_care": false,
+      "jejunostomy_feeding_and_care": true,
+      "ostomy_care": false,
+      "dressing_changes": true,
+      "oxygen_administration": true,
+      "oxygen_administration_with_changes": false,
+      "pulse_oximeter": true,
+      "apnea_monitor": false,
+      "tracheotomy_care": false,
+      "oral_pharyngeal_suctioning": false,
+      "tracheal_suctioning": false,
+      "cpap_bipap": false,
+      "injections": true,
+      "blood_glucose_testing": true,
+      "urinary_catheter_care": false,
+      "emergent_medications": false,
+      "specialized_infection_control": false,
+      "other_bool": false,
+      "other_string": "test input."
+    },
+    "training_details": {
+      "explanation_given": true,
+      "discussion_occurred": true,
+      "demonstration_performed": true,
+      "time_for_questions": true,
+      "return_demonstration": true,
+      "additional_information": "Caregiver was provided with a step-by-step guide for injections."
+    },
+    "non_delegated_tasks": {
+      "ventilator_care": false,
+      "central_line_care": false,
+      "other_bool": false,
+      "other_string": "test input."
+    },
+    "nursing_rules": {
+      "delegated_per_OSBN": true,
+      "assigned_and_supervised": false,
+      "caregiver_OSBN_license": 2377327
+    },
+    "instructions_given": "Written instructions attached.",
+    "supervisory_visit_notes": "Observed caregiver successfully performing injections and glucose testing.",
+    "continue_delegation": true,
+    "signatures": {
+      "caregiver_signature": "Jane Smith",
+      "caregiver_signature_date": "2025-02-11",
+      "registered_nurse_signature": "Maria Gonzalez",
+      "registered_nurse_signature_date": "2025-02-11"
+    }
+  }
+  

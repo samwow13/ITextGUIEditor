@@ -14,7 +14,7 @@ namespace OralCareReference.Services
     public class PdfGeneratorService
     {
         private readonly string _tempPdfPath;
-        private ReferenceDataItem _lastUsedData;
+        private OralCareDataInstance _lastUsedData;
         private string _lastUsedTemplate;
 
         public PdfGeneratorService()
@@ -105,7 +105,7 @@ namespace OralCareReference.Services
         /// <param name="data">The reference data item to generate PDF from</param>
         /// <param name="templateFileName">The name of the template file to use</param>
         /// <returns>The generated PDF as a byte array</returns>
-        public byte[] GeneratePdf(ReferenceDataItem data, string templateFileName)
+        public byte[] GeneratePdf(OralCareDataInstance data, string templateFileName)
         {
             try
             {

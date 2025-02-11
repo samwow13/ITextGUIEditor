@@ -6,7 +6,7 @@ namespace OralCareReference.Models
     /// <summary>
     /// Represents a child's oral care reference data entry
     /// </summary>
-    public class ReferenceDataItem
+    public class OralCareDataInstance
     {
         [JsonPropertyName("child_info")]
         public ChildInfo ChildInfo { get; set; }

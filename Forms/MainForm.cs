@@ -11,7 +11,7 @@ namespace OralCareReference.Forms
     public partial class MainForm : Form
     {
         private readonly JsonManager _jsonManager;
-        private List<ReferenceDataItem> _referenceData;
+        private List<OralCareDataInstance> _referenceData;
         private readonly PdfGeneratorService _pdfGenerator;
         private readonly IAssessment _assessment;
         private string _currentPdfPath;
