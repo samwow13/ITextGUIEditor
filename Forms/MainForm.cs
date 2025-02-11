@@ -8,6 +8,20 @@ using System.Diagnostics;
 
 namespace iTextDesignerWithGUI.Forms
 {
+    // Static class for string extensions
+    public static class StringExtensions
+    {
+        // Helper method to add spaces between camel case words
+        public static string SplitCamelCase(this string str)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(
+                str,
+                "([A-Z])",
+                " $1",
+                System.Text.RegularExpressions.RegexOptions.Compiled).Trim();
+        }
+    }
+
     public partial class MainForm : Form
     {
         private readonly IAssessment _assessment;
@@ -25,6 +39,9 @@ namespace iTextDesignerWithGUI.Forms
             
             // Set the form to appear in center screen
             this.StartPosition = FormStartPosition.CenterScreen;
+            
+            // Update the window title to show the selected assessment type
+            this.Text = $"iText Designer - {assessmentType.ToString().SplitCamelCase()}";
             
             InitializeAsync();
         }
