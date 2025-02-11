@@ -1,104 +1,152 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <title>Oral Health Risk Assessment Tool</title>
     <style>
-      body { 
-        padding: 20px;
-        color: #333;
-        line-height: 1.6;
+      /* Base Styles */
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #FFF;
+        color: #000;
+        font-size: 14px;
+        margin: 20px;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
       }
       
-      h1, h2 { 
-        margin-bottom: 1.5rem;
-        color: #2c3e50;
-        font-weight: 600;
-      }
-      
-      h1 {
-        border-bottom: 2px solid #3498db;
-        padding-bottom: 0.5rem;
-      }
-      
-      h2 {
-        font-size: 1.5rem;
-        margin-top: 2rem;
-        color: #2980b9;
-      }
-      
-      .table {
-        margin-top: 1rem;
-        margin-bottom: 2rem;
-        background-color: white;
-        border-radius: 8px;
+      /* Header with Title and Graphic */
+      header {
+        border-bottom: 1px solid #000;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
         overflow: hidden;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      }
+      header .title {
+        float: left;
+        font-size: 40px; /* Increased 2x from 20px */
+        font-weight: bold;
+      }
+      header .graphic {
+        float: right;
+      }
+      header .graphic img {
+        height: 120px; /* Increased 2x from 60px */
       }
       
-      .table-bordered {
-        border: 1px solid #dee2e6;
+      /* Clean and modern look for section headings */
+      h2 {
+        font-size: 16px;
+        font-weight: bold;
+        margin: 0 0 10px 0;   /* Remove top margin, add bottom spacing */
+        padding: 8px 12px;    /* Increased padding for better readability */
+        background-color: #000;
+        color: #FFF;
+        border-radius: 8px;   /* Rounded corners on the black background */
       }
       
-      .table th {
-        background-color: #f8f9fa;
-        color: #2c3e50;
-        font-weight: 600;
-        border-bottom: 2px solid #dee2e6;
-        padding: 12px 15px;
-        width: 30%;
+      /* Full Width Table (Child Information) */
+      .full-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      .full-table, .full-table th, .full-table td {
+        border: 1px solid #000;
+      }
+      .full-table th, .full-table td {
+        padding: 8px;
+        text-align: left;
+      }
+      .full-table th {
+        background-color: #F4F4F4;
+      }
+      .full-table tr.tall th,
+      .full-table tr.tall td {
+        padding-top: 16px;
+        padding-bottom: 16px;
       }
       
-      .table td {
-        padding: 12px 15px;
-        vertical-align: middle;
+      /* Flex Row Container for Side-by-Side Tables */
+      .flex-row {
+        display: flex;
+        gap: 20px; /* Consistent gap between paired tables */
+        margin-bottom: 20px;
+      }
+
+      /* Container for each side-by-side table with a neat border and rounded corners */
+      .half-table-container {
+        flex: 1;  /* Each container takes equal width */
+        border: 2px solid #000;
+        border-radius: 8px;  /* Rounded corners for the container */
+        padding: 8px;       /* Extra padding for better spacing */
+        box-sizing: border-box;
+        background-color: #FCFCFC;
       }
       
-      .table tr:nth-child(even) {
-        background-color: #f8f9fa;
+      /* Single Table Container for Self Management Goals (aligned left) */
+      .single-half-table-container {
+        width: calc(50% - 10px);
+        margin-bottom: 20px;
       }
       
-      .table tr:hover {
-        background-color: #f5f6f7;
+      /* Half Width Tables */
+      .half-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .half-table, .half-table th, .half-table td {
+        border: 1px solid #000;
+        padding: 2px;  /* Reduced padding for a lower row height */
+      }
+      .half-table th, .half-table td {
+        text-align: left;
+      }
+      .half-table th {
+        background-color: #F4F4F4;
+      }
+      /* Adjust columns: label column ~91%, checkbox column ~9% */
+      .half-table th:first-child,
+      .half-table td:first-child {
+        width: 91%;
+      }
+      .half-table th:last-child,
+      .half-table td:last-child {
+        width: 9%;
+      }
+
+      .half-table tr.tall th,
+      .half-table tr.tall td {
+        padding-top: 7px;
+        padding-bottom: 7px;
       }
       
-      .section-container {
-        background-color: white;
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 2rem;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      }
-      
-      .meta-info {
-        color: #666;
-        margin-bottom: 2rem;
-        font-style: italic;
-      }
-      
+      /* Checkbox Styles */
       .checkbox-container {
         display: inline-block;
+        vertical-align: middle;
       }
-      
-      .checkbox {
+      .checkbox-container input[type="checkbox"] {
         width: 16px;
         height: 16px;
-        border: 2px solid #2c3e50;
+        border: 2px solid #000;
         border-radius: 3px;
-        display: inline-block;
+        -webkit-appearance: none;
+           -moz-appearance: none;
+                appearance: none;
+        cursor: default;
+      }
+      .checkbox-container input[type="checkbox"].checked {
+        background-color: #000;
+      }
+      .checkbox-container input[type="checkbox"].unknown {
+        background-color: #F0F0F0;
         position: relative;
-        background-color: white;
       }
-      
-      .checkbox.checked {
-        background-color: #2c3e50;
-        border-color: #2c3e50;
-      }
-      
-      .checkbox.unknown {
-        background-color: #f0f0f0;
-      }
-      
-      .checkbox.unknown:after {
-        content: '?';
+      .checkbox-container input[type="checkbox"].unknown:after {
+        content: "?";
         position: absolute;
         left: 4px;
         top: -2px;
@@ -107,351 +155,402 @@
         font-size: 12px;
       }
       
-      .checkbox-label {
-        font-size: 0.9rem;
-        color: #666;
-        margin-left: 8px;
+      /* Nursing Recommendations Textarea */
+      .nursing-recommendations {
+        width: 100%;
+        height: 40px;
+        border: 1px solid #000;
+        padding: 3px;
+        font-size: 14px;
+        resize: none;
+      }
+      
+      /* Footer */
+      footer {
+        border-top: 1px solid #000;
+        text-align: right;
+        font-size: 12px;
+        margin-top: 20px;
+        padding-top: 10px;
+      }
+      
+      /* Print Optimization */
+      @media print {
+        body {
+          margin: 10mm;
+        }
       }
     </style>
   </head>
-  <body class="container">
-    <div class="section-container">
-      <h1>Oral Health Risk<br>Assessment Tool</h1>
-      <p>The American Academy of Pediatrics (AAP) has developed this tool to aid in the implementation of 
-        oral health risk assessment during health supervision visits. This tool has been subsequently reviewed 
-        and endorsed by the National Interprofessional Initiative on Oral Health.
-        <strong>Instructions for Use</strong>
-        <br>
-        This tool is intended for documenting caries risk of the child, however, two risk factors are based on the
-        mother or primary caregiver’s oral health. All other factors and findings should be documented based 
-        on the child.
+  <body>
+    <div class="container">
+      <!-- Header with Title and Graphic -->
+      <header>
+        <div class="title">
+          Oral Health Risk<br>
+          Assessment Tool
+        </div>
+        <div class="graphic">
+          <img src="images/ODHSgraphic.PNG" alt="ODHS Graphic">
+        </div>
+      </header>
+      
+      <!-- Introductory Content -->
+      <div class="content">
+        <p>
+          The American Academy of Pediatrics (AAP) has developed this tool to aid in the implementation of oral health risk assessment during health supervision visits. This tool has been reviewed and endorsed by the National Interprofessional Initiative on Oral Health.
         </p>
+        <p>
+          <strong>Instructions for Use:</strong> This tool is intended for documenting caries risk of the child, though some risk factors are based on the caregiver’s oral health. All other factors and findings should be documented for the child.
+        </p>
+        
+        <!-- Child Information (Full Width) -->
         <h2>Child Information</h2>
-      <table class="table table-bordered">
-        <tr>
-          <th>Child Name</th>
-          <td>[[CHILD_NAME]]</td>
-        </tr>
-        <tr>
-          <th>Case Number</th>
-          <td>[[CASE_NUMBER]]</td>
-        </tr>
-        <tr>
-          <th>Assessment Date</th>
-          <td>[[ASSESSMENT_DATE]]</td>
-        </tr>
-        <tr>
-          <th>Date of Birth</th>
-          <td>[[DATE_OF_BIRTH]]</td>
-        </tr>
-        <tr>
-          <th>Dental Appointments</th>
-          <td>[[DENTAL_APPTS]]</td>
-        </tr>
-        <tr>
-          <th>Nursing Note</th>
-          <td>[[NURSING_NOTE]]</td>
-        </tr>
-        <tr>
-          <th>Required Comment</th>
-          <td>[[REQUIRED_COMMENT]]</td>
-        </tr>
-        <tr>
-          <th>RN Completing Assessment</th>
-          <td>[[RN_COMPLETING_ASSESSMENT]]</td>
-        </tr>
-      </table>
+        <table class="full-table">
+          <tr>
+            <th>Child Name</th>
+            <td>[[CHILD_NAME]]</td>
+          </tr>
+          <tr>
+            <th>Case Number</th>
+            <td>[[CASE_NUMBER]]</td>
+          </tr>
+          <tr>
+            <th>Assessment Date</th>
+            <td>[[ASSESSMENT_DATE]]</td>
+          </tr>
+          <tr>
+            <th>Date of Birth</th>
+            <td>[[DATE_OF_BIRTH]]</td>
+          </tr>
+          <tr class="tall">
+            <th>Dental Appointments</th>
+            <td>[[DENTAL_APPTS]]</td>
+          </tr>
+          <tr class="tall">
+            <th>Nursing Note</th>
+            <td>[[NURSING_NOTE]]</td>
+          </tr>
+          <tr class="tall">
+            <th>Required Comment</th>
+            <td>[[REQUIRED_COMMENT]]</td>
+          </tr>
+          <tr>
+            <th>RN Completing Assessment</th>
+            <td>[[RN_COMPLETING_ASSESSMENT]]</td>
+          </tr>
+        </table>
+        
+        <!-- Risk Factors and Protective Factors (Side-by-Side) -->
+        <div class="flex-row">
+          <div class="half-table-container">
+            <h2>Risk Factors</h2>
+            <table class="half-table">
+              <tr>
+                <th>Mother Active Decay</th>
+                <td>
+                  <div class="checkbox-container">
+                    <input type="checkbox" disabled class="[[MOTHER_ACTIVE_DECAY_CLASS]]">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>Mother No Dentist</th>
+                <td>
+                  <div class="checkbox-container">
+                    <input type="checkbox" disabled class="[[MOTHER_NO_DENTIST_CLASS]]">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>Bottle Usage</th>
+                <td>
+                  <div class="checkbox-container">
+                    <input type="checkbox" disabled class="[[BOTTLE_USAGE_CLASS]]">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>Frequent Snacking</th>
+                <td>
+                  <div class="checkbox-container">
+                    <input type="checkbox" disabled class="[[FREQUENT_SNACKING_CLASS]]">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>Special Health Care Needs</th>
+                <td>
+                  <div class="checkbox-container">
+                    <input type="checkbox" disabled class="[[SPECIAL_HEALTH_CARE_NEEDS_CLASS]]">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>Medicaid Eligible</th>
+                <td>
+                  <div class="checkbox-container">
+                    <input type="checkbox" disabled class="[[MEDICAID_ELIGIBLE_CLASS]]">
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="half-table-container">
+            <h2>Protective Factors</h2>
+            <table class="half-table">
+              <tr>
+                <th>Existing Dental Home</th>
+                <td>
+                  <div class="checkbox-container">
+                    <input type="checkbox" disabled class="[[EXISTING_DENTAL_HOME_CLASS]]">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>Fluoridated Water</th>
+                <td>
+                  <div class="checkbox-container">
+                    <input type="checkbox" disabled class="[[FLUORIDATED_WATER_CLASS]]">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>Fluoride Varnish</th>
+                <td>
+                  <div class="checkbox-container">
+                    <input type="checkbox" disabled class="[[FLUORIDE_VARNISH_CLASS]]">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>Brushing Twice Daily</th>
+                <td>
+                  <div class="checkbox-container">
+                    <input type="checkbox" disabled class="[[BRUSHING_TWICE_DAILY_CLASS]]">
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        
+        <br><br><!--Space added to push content down-->
 
-      <h2>Risk Factors</h2>
-      <table class="table table-bordered">
-        <tr>
-          <th>Mother Active Decay</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[MOTHER_ACTIVE_DECAY_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Mother No Dentist</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[MOTHER_NO_DENTIST_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Bottle Usage</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[BOTTLE_USAGE_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Frequent Snacking</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[FREQUENT_SNACKING_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Special Health Care Needs</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[SPECIAL_HEALTH_CARE_NEEDS_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Medicaid Eligible</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[MEDICAID_ELIGIBLE_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-      </table>
-
-      <h2>Protective Factors</h2>
-      <table class="table table-bordered">
-        <tr>
-          <th>Existing Dental Home</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[EXISTING_DENTAL_HOME_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Fluoridated Water</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[FLUORIDATED_WATER_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Fluoride Varnish</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[FLUORIDE_VARNISH_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Brushing Twice Daily</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[BRUSHING_TWICE_DAILY_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-      </table>
-
-      <h2>Clinical Findings</h2>
-      <table class="table table-bordered">
-        <tr>
-          <th>White Spots</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[WHITE_SPOTS_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Obvious Decay</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[OBVIOUS_DECAY_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Fillings Present</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[FILLINGS_PRESENT_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Plaque Accumulation</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[PLAQUE_ACCUMULATION_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Gingivitis</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[GINGIVITIS_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Teeth Present</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[TEETH_PRESENT_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Healthy Teeth</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[HEALTHY_TEETH_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-      </table>
-
-      <h2>Assessment Plan</h2>
-      <table class="table table-bordered">
-        <tr>
-          <th>Caries Risk</th>
-          <td>[[CARIES_RISK]]</td>
-        </tr>
-        <tr>
-          <th>Anticipatory Guidance</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[ANTICIPATORY_GUIDANCE_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Fluoride Varnish Completed</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[FLUORIDE_VARNISH_COMPLETED_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Dental Referral</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[DENTAL_REFERRAL_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-      </table>
-
-      <h2>Self Management Goals</h2>
-      <table class="table table-bordered">
-        <tr>
-          <th>Regular Dental Visits</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[REGULAR_DENTAL_VISITS_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Dental Treatment for Caregivers</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[DENTAL_TREATMENT_CAREGIVERS_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Brush Twice Daily</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[BRUSH_TWICE_DAILY_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Use Fluoride Toothpaste</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[USE_FLUORIDE_TOOTHPASTE_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Wean Bottle</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[WEAN_BOTTLE_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Less or No Juice</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[LESS_OR_NO_JUICE_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Water in Sippy</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[WATER_IN_SIPPY_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Drink Tap Water</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[DRINK_TAP_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Healthy Snacks</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[HEALTHY_SNACKS_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Less or No Junk Food</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[LESS_OR_NO_JUNKFOOD_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>No Soda</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[NO_SODA_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Xylitol</th>
-          <td>
-            <div class="checkbox-container">
-              <div class="checkbox [[XYLITOL_CLASS]]"></div>
-            </div>
-          </td>
-        </tr>
-      </table>
-
-      <h2>Nursing Recommendations</h2>
-      <div class="checkbox-container">
-        <p>[[NURSING_RECOMMENDATIONS]]</p>
+        <!-- Clinical Findings & Assessment Plan (Side-by-Side) -->
+        <div class="flex-row">
+          <div class="half-table-container">
+            <h2>Clinical Findings</h2>
+            <table class="half-table">
+              <tr>
+                <th>White Spots</th>
+                <td>
+                  <div class="checkbox-container">
+                    <input type="checkbox" disabled class="[[WHITE_SPOTS_CLASS]]">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>Obvious Decay</th>
+                <td>
+                  <div class="checkbox-container">
+                    <input type="checkbox" disabled class="[[OBVIOUS_DECAY_CLASS]]">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>Fillings Present</th>
+                <td>
+                  <div class="checkbox-container">
+                    <input type="checkbox" disabled class="[[FILLINGS_PRESENT_CLASS]]">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>Plaque Accumulation</th>
+                <td>
+                  <div class="checkbox-container">
+                    <input type="checkbox" disabled class="[[PLAQUE_ACCUMULATION_CLASS]]">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>Gingivitis</th>
+                <td>
+                  <div class="checkbox-container">
+                    <input type="checkbox" disabled class="[[GINGIVITIS_CLASS]]">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>Teeth Present</th>
+                <td>
+                  <div class="checkbox-container">
+                    <input type="checkbox" disabled class="[[TEETH_PRESENT_CLASS]]">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>Healthy Teeth</th>
+                <td>
+                  <div class="checkbox-container">
+                    <input type="checkbox" disabled class="[[HEALTHY_TEETH_CLASS]]">
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="half-table-container">
+            <h2>Assessment Plan</h2>
+            <table class="half-table">
+              <tr class="tall">
+                <th>Caries Risk</th>
+                <td>[[CARIES_RISK]]</td>
+              </tr>
+              <tr>
+                <th>Anticipatory Guidance</th>
+                <td>
+                  <div class="checkbox-container">
+                    <input type="checkbox" disabled class="[[ANTICIPATORY_GUIDANCE_CLASS]]">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>Fluoride Varnish Completed</th>
+                <td>
+                  <div class="checkbox-container">
+                    <input type="checkbox" disabled class="[[FLUORIDE_VARNISH_COMPLETED_CLASS]]">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>Dental Referral</th>
+                <td>
+                  <div class="checkbox-container">
+                    <input type="checkbox" disabled class="[[DENTAL_REFERRAL_CLASS]]">
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        
+        <!-- Self Management Goals (Single Table Aligned Left) -->
+        <div class="single-half-table-container">
+          <h2>Self Management Goals</h2>
+          <table class="half-table">
+            <tr>
+              <th>Regular Dental Visits</th>
+              <td>
+                <div class="checkbox-container">
+                  <input type="checkbox" disabled class="[[REGULAR_DENTAL_VISITS_CLASS]]">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>Dental Treatment for Caregivers</th>
+              <td>
+                <div class="checkbox-container">
+                  <input type="checkbox" disabled class="[[DENTAL_TREATMENT_CAREGIVERS_CLASS]]">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>Brush Twice Daily</th>
+              <td>
+                <div class="checkbox-container">
+                  <input type="checkbox" disabled class="[[BRUSH_TWICE_DAILY_CLASS]]">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>Use Fluoride Toothpaste</th>
+              <td>
+                <div class="checkbox-container">
+                  <input type="checkbox" disabled class="[[USE_FLUORIDE_TOOTHPASTE_CLASS]]">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>Wean Bottle</th>
+              <td>
+                <div class="checkbox-container">
+                  <input type="checkbox" disabled class="[[WEAN_BOTTLE_CLASS]]">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>Less or No Juice</th>
+              <td>
+                <div class="checkbox-container">
+                  <input type="checkbox" disabled class="[[LESS_OR_NO_JUICE_CLASS]]">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>Water in Sippy</th>
+              <td>
+                <div class="checkbox-container">
+                  <input type="checkbox" disabled class="[[WATER_IN_SIPPY_CLASS]]">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>Drink Tap Water</th>
+              <td>
+                <div class="checkbox-container">
+                  <input type="checkbox" disabled class="[[DRINK_TAP_CLASS]]">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>Healthy Snacks</th>
+              <td>
+                <div class="checkbox-container">
+                  <input type="checkbox" disabled class="[[HEALTHY_SNACKS_CLASS]]">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>Less or No Junk Food</th>
+              <td>
+                <div class="checkbox-container">
+                  <input type="checkbox" disabled class="[[LESS_OR_NO_JUNKFOOD_CLASS]]">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>No Soda</th>
+              <td>
+                <div class="checkbox-container">
+                  <input type="checkbox" disabled class="[[NO_SODA_CLASS]]">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>Xylitol</th>
+              <td>
+                <div class="checkbox-container">
+                  <input type="checkbox" disabled class="[[XYLITOL_CLASS]]">
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        
+        <!-- Nursing Recommendations -->
+        <h2>Nursing Recommendations</h2>
+        <textarea class="nursing-recommendations" readonly>[[NURSING_RECOMMENDATIONS]]</textarea>
+        <p>
+          <strong>Treatment of High Risk Children</strong><br>
+          If appropriate, high‑risk children should receive professionally applied fluoride varnish and have their teeth brushed twice daily with an age‑appropriate amount of fluoridated toothpaste. Referral to a pediatric dentist or a dentist comfortable caring for children should be made to ensure proper follow‑up.
+        </p>
       </div>
-
-      <p><strong>Treatment of High Risk Children</strong> <br>
-        If appropriate, high-risk children should receive professionally applied fluoride varnish and have their 
-        teeth brushed twice daily with an age-appropriate amount of fluoridated toothpaste. Referral to a 
-        pediatric dentist or a dentist comfortable caring for children should be made with follow-up to ensure 
-        that the child is being cared for in the dental home</p>
+      
+      <!-- Footer -->
+      <footer>
+        Smiles for Life/Oral Health Risk Assessment Tool
+      </footer>
     </div>
   </body>
 </html>

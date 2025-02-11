@@ -13,6 +13,10 @@ namespace OralCareReference.Services
     /// </summary>
     public class PdfGeneratorService
     {
+        private readonly string _tempPdfPath;
+        private ReferenceDataItem _lastUsedData;
+        private string _lastUsedTemplate;
+
         public PdfGeneratorService()
         {
             try
@@ -31,6 +35,9 @@ namespace OralCareReference.Services
                     Directory.CreateDirectory(templateDir);
                     Debug.WriteLine($"Created template directory: {templateDir}");
                 }
+
+                // Set up consistent temporary file path
+                _tempPdfPath = Path.Combine(exePath, "temp_assessment.pdf");
             }
             catch (Exception ex)
             {
@@ -38,6 +45,26 @@ namespace OralCareReference.Services
                 throw;
             }
         }
+
+        /// <summary>
+        /// Regenerates the PDF using the last used data and template
+        /// </summary>
+        /// <returns>The regenerated PDF as a byte array, or null if no previous data exists</returns>
+        public byte[] RegeneratePdf()
+        {
+            if (_lastUsedData == null || string.IsNullOrEmpty(_lastUsedTemplate))
+            {
+                Debug.WriteLine("Cannot regenerate PDF: No previous data or template available");
+                return null;
+            }
+
+            return GeneratePdf(_lastUsedData, _lastUsedTemplate);
+        }
+
+        /// <summary>
+        /// Gets the path to the last generated temporary PDF file
+        /// </summary>
+        public string TempPdfPath => _tempPdfPath;
 
         /// <summary>
         /// Converts a value to its corresponding checkbox class
@@ -82,6 +109,10 @@ namespace OralCareReference.Services
         {
             try
             {
+                // Store the data and template for potential regeneration
+                _lastUsedData = data;
+                _lastUsedTemplate = templateFileName;
+
                 if (data == null)
                     throw new ArgumentNullException(nameof(data), "Reference data cannot be null");
 
@@ -175,6 +206,14 @@ namespace OralCareReference.Services
                     {
                         ConverterProperties converterProperties = new ConverterProperties();
                         HtmlConverter.ConvertToPdf(populatedHtml, memoryStream, converterProperties);
+
+                        // Save to consistent temporary file location
+                        if (File.Exists(_tempPdfPath))
+                        {
+                            File.Delete(_tempPdfPath);
+                        }
+                        File.WriteAllBytes(_tempPdfPath, memoryStream.ToArray());
+                        
                         return memoryStream.ToArray();
                     }
                     catch (Exception ex)

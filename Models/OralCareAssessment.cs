@@ -6,7 +6,7 @@ namespace OralCareReference.Models
     public class OralCareAssessment : IAssessment
     {
         public string TemplateFileName => "AssessmentTemplate.html";
-        public string JsonDataPath => "OralCareReferenceData.json";
+        public string JsonDataPath => "ReferenceDataJsons/OralCareReferenceData.json";
         public string DisplayName => "Oral Care Assessment";
     }
 }

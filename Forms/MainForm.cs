@@ -14,6 +14,7 @@ namespace OralCareReference.Forms
         private List<ReferenceDataItem> _referenceData;
         private readonly PdfGeneratorService _pdfGenerator;
         private readonly IAssessment _assessment;
+        private string _currentPdfPath;
 
         public MainForm(AssessmentType assessmentType)
         {
@@ -21,8 +22,63 @@ namespace OralCareReference.Forms
             _assessment = CreateAssessment(assessmentType);
             _jsonManager = new JsonManager(_assessment.JsonDataPath);
             _pdfGenerator = new PdfGeneratorService();
+            
+            // Initialize template watcher
+            var templateDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates");
+            
             this.Text = _assessment.DisplayName;
             InitializeAsync();
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+        }
+
+        private void OnTemplateChanged(object sender, FileSystemEventArgs e)
+        {
+            Debug.WriteLine($"Template change detected: {e.FullPath}, ChangeType: {e.ChangeType}");
+            
+            // Ensure we're on the UI thread
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => OnTemplateChanged(sender, e)));
+                return;
+            }
+
+            try
+            {
+                // Only regenerate if we have a current PDF
+                if (!string.IsNullOrEmpty(_currentPdfPath))
+                {
+                    Debug.WriteLine($"Current PDF path: {_currentPdfPath}");
+                    Debug.WriteLine($"Template changed: {e.FullPath}. Regenerating PDF...");
+                    
+                    // Wait a brief moment to ensure the template file is not locked
+                    System.Threading.Thread.Sleep(500);
+                    
+                    var pdfBytes = _pdfGenerator.RegeneratePdf();
+                    if (pdfBytes != null)
+                    {
+                        // Save to the same location
+                        File.WriteAllBytes(_currentPdfPath, pdfBytes);
+                        Debug.WriteLine($"PDF regenerated and saved to: {_currentPdfPath}");
+                    }
+                    else
+                    {
+                        Debug.WriteLine("RegeneratePdf() returned null - no previous data available");
+                    }
+                }
+                else
+                {
+                    Debug.WriteLine("No current PDF path set - skipping regeneration");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error regenerating PDF: {ex}");
+                MessageBox.Show($"Error regenerating PDF: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private IAssessment CreateAssessment(AssessmentType type)
@@ -124,10 +180,16 @@ namespace OralCareReference.Forms
                     var pdfBytes = _pdfGenerator.GeneratePdf(item, _assessment.TemplateFileName);
                     Debug.WriteLine($"PDF generated, size: {pdfBytes.Length} bytes");
 
-                    var tempPath = Path.GetTempFileName() + ".pdf";
-                    File.WriteAllBytes(tempPath, pdfBytes);
-                    Debug.WriteLine($"PDF saved to: {tempPath}");
-                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(tempPath) { UseShellExecute = true });
+                    // Use a more meaningful filename
+                    var fileName = $"{item.ChildInfo?.ChildName}_{item.ChildInfo?.CaseNumber}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf"
+                        .Replace(" ", "_")
+                        .Replace("/", "_")
+                        .Replace("\\", "_");
+                    
+                    _currentPdfPath = Path.Combine(Path.GetTempPath(), fileName);
+                    File.WriteAllBytes(_currentPdfPath, pdfBytes);
+                    Debug.WriteLine($"PDF saved to: {_currentPdfPath}");
+                    Process.Start(new ProcessStartInfo(_currentPdfPath) { UseShellExecute = true });
                 }
                 catch (Exception ex)
                 {

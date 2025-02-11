@@ -25,6 +25,14 @@
   - Added Nursing Recommendations section
 - Updated PdfGeneratorService to handle all new data fields from the JSON reference data
 
+## [2025-02-10]
+### Added
+- Added TemplateWatcherService for monitoring template file changes
+- Enhanced PdfGeneratorService with last used data tracking and regeneration capabilities
+- Improved temporary file handling in PdfGeneratorService
+- Integrated template watching in MainForm with automatic PDF regeneration
+- Improved PDF file naming with meaningful names based on child info
+
 ## [2025-02-05]
 ### Added
 - Initial project setup
