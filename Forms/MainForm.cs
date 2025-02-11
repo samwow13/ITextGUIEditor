@@ -10,31 +10,38 @@ namespace iTextDesignerWithGUI.Forms
 {
     public partial class MainForm : Form
     {
-        private readonly JsonManager _jsonManager;
-        private List<OralCareDataInstance> _referenceData;
-        private readonly PdfGeneratorService _pdfGenerator;
         private readonly IAssessment _assessment;
+        private readonly JsonManager _jsonManager;
+        private readonly PdfGeneratorService _pdfGenerator;
+        private List<object> _referenceData;
         private string _currentPdfPath;
 
-        public MainForm(AssessmentType assessmentType)
+        public MainForm(AssessmentType assessmentType = AssessmentType.OralCare)
         {
             InitializeComponent();
             _assessment = CreateAssessment(assessmentType);
-            _jsonManager = new JsonManager(_assessment.JsonDataPath);
+            _jsonManager = new JsonManager(_assessment.JsonDataPath, assessmentType);
             _pdfGenerator = new PdfGeneratorService();
             
             // Set the form to appear in center screen
             this.StartPosition = FormStartPosition.CenterScreen;
             
-            // Initialize template watcher
-            var templateDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates");
-            
-            this.Text = _assessment.DisplayName;
             InitializeAsync();
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            if (!string.IsNullOrEmpty(_currentPdfPath) && File.Exists(_currentPdfPath))
+            {
+                try
+                {
+                    File.Delete(_currentPdfPath);
+                }
+                catch
+                {
+                    // Ignore deletion errors on closing
+                }
+            }
             base.OnFormClosing(e);
         }
 
@@ -89,6 +96,7 @@ namespace iTextDesignerWithGUI.Forms
             return type switch
             {
                 AssessmentType.OralCare => new OralCareAssessment(),
+                AssessmentType.RegisteredNurseTaskAndDelegation => new RegisteredNurseTaskDelegAssessment(),
                 _ => throw new ArgumentException($"Unsupported assessment type: {type}")
             };
         }
@@ -97,7 +105,8 @@ namespace iTextDesignerWithGUI.Forms
         {
             try
             {
-                _referenceData = await _jsonManager.LoadReferenceDataAsync();
+                var data = await _jsonManager.LoadReferenceDataAsync();
+                _referenceData = data;
                 PopulateDataGrid();
                 InitializeDataGridView();
             }
@@ -109,12 +118,28 @@ namespace iTextDesignerWithGUI.Forms
 
         private void PopulateDataGrid()
         {
-            dataGridView.DataSource = _referenceData.Select(item => new
+            var data = new List<object>();
+            
+            foreach (var item in _referenceData)
             {
-                ChildName = item.ChildInfo.ChildName,
-                CaseNumber = item.ChildInfo.CaseNumber,
-                AssessmentDate = item.ChildInfo.AssessmentDate
-            }).ToList();
+                string name;
+                if (item is OralCareDataInstance oralCare)
+                {
+                    name = oralCare.ChildInfo?.ChildName;
+                }
+                else if (item is RegisteredNurseTaskDelegDataInstance nurseTask)
+                {
+                    name = nurseTask.ChildInfo?.Name;
+                }
+                else
+                {
+                    continue;
+                }
+
+                data.Add(new { Name = name });
+            }
+            
+            dataGridView.DataSource = data;
         }
 
         private void InitializeDataGridView()
@@ -130,32 +155,16 @@ namespace iTextDesignerWithGUI.Forms
             this.dataGridView.ReadOnly = true;
             this.dataGridView.AutoGenerateColumns = false;
 
-            // Add columns
-            var childNameColumn = new DataGridViewTextBoxColumn
+            // Add Name column
+            var nameColumn = new DataGridViewTextBoxColumn
             {
-                HeaderText = "Child Name",
-                DataPropertyName = "ChildName",
-                FillWeight = 35
+                HeaderText = "Name",
+                DataPropertyName = "Name",
+                FillWeight = 85
             };
-            dataGridView.Columns.Add(childNameColumn);
+            dataGridView.Columns.Add(nameColumn);
 
-            var caseNumberColumn = new DataGridViewTextBoxColumn
-            {
-                HeaderText = "Case Number",
-                DataPropertyName = "CaseNumber",
-                FillWeight = 25
-            };
-            dataGridView.Columns.Add(caseNumberColumn);
-
-            var assessmentDateColumn = new DataGridViewTextBoxColumn
-            {
-                HeaderText = "Assessment Date",
-                DataPropertyName = "AssessmentDate",
-                FillWeight = 25
-            };
-            dataGridView.Columns.Add(assessmentDateColumn);
-
-            // Add Generate PDF button column with increased width
+            // Add Generate PDF button column
             var generatePdfColumn = new DataGridViewButtonColumn
             {
                 HeaderText = "Actions",
@@ -163,7 +172,7 @@ namespace iTextDesignerWithGUI.Forms
                 Name = "GeneratePdf",
                 UseColumnTextForButtonValue = true,
                 FillWeight = 15,
-                MinimumWidth = 100  // Ensure minimum width for the button
+                MinimumWidth = 100
             };
             dataGridView.Columns.Add(generatePdfColumn);
 
@@ -177,14 +186,28 @@ namespace iTextDesignerWithGUI.Forms
                 var item = _referenceData[e.RowIndex];
                 try
                 {
+                    string name;
+                    if (item is OralCareDataInstance oralCare)
+                    {
+                        name = oralCare.ChildInfo?.ChildName;
+                    }
+                    else if (item is RegisteredNurseTaskDelegDataInstance nurseTask)
+                    {
+                        name = nurseTask.ChildInfo?.Name;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Unknown data type");
+                    }
+
                     Debug.WriteLine($"Generating PDF for row {e.RowIndex}");
-                    Debug.WriteLine($"Data for PDF: ChildName={item.ChildInfo?.ChildName}, AssessmentDate={item.ChildInfo.AssessmentDate}");
+                    Debug.WriteLine($"Data for PDF: Name={name}");
 
                     var pdfBytes = _pdfGenerator.GeneratePdf(item, _assessment.TemplateFileName);
                     Debug.WriteLine($"PDF generated, size: {pdfBytes.Length} bytes");
 
-                    // Use a more meaningful filename
-                    var fileName = $"{item.ChildInfo?.ChildName}_{item.ChildInfo?.CaseNumber}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf"
+                    // Use a meaningful filename
+                    var fileName = $"{name}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf"
                         .Replace(" ", "_")
                         .Replace("/", "_")
                         .Replace("\\", "_");
@@ -197,11 +220,7 @@ namespace iTextDesignerWithGUI.Forms
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"Error generating PDF: {ex}");
-                    var errorMessage = ex.InnerException != null 
-                        ? $"Error generating PDF: {ex.Message}\nDetails: {ex.InnerException.Message}"
-                        : $"Error generating PDF: {ex.Message}";
-                    
-                    MessageBox.Show(errorMessage + "\n\nStack Trace:\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Error generating PDF: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -220,6 +239,14 @@ namespace iTextDesignerWithGUI.Forms
             this.Controls.Add(this.dataGridView);
             this.Name = "MainForm";
             this.ResumeLayout(false);
+        }
+
+        private void OnTemplateChanged(AssessmentType type)
+        {
+            var newAssessment = CreateAssessment(type);
+            _referenceData = null;
+            dataGridView.DataSource = null;
+            InitializeAsync();
         }
     }
 }

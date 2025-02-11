@@ -28,7 +28,8 @@ namespace iTextDesignerWithGUI.Models
     /// </summary>
     public enum AssessmentType
     {
-        OralCare
+        OralCare,
+        RegisteredNurseTaskAndDelegation
         // Add more assessment types here as needed
     }
 }

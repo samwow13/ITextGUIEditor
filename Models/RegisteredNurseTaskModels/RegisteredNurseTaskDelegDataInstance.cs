@@ -9,7 +9,7 @@ namespace iTextDesignerWithGUI.Models
     public class RegisteredNurseTaskDelegDataInstance
     {
         [JsonPropertyName("child_info")]
-        public ChildInfo ChildInfo { get; set; }
+        public ChildInfoRegisteredNurse ChildInfo { get; set; }
 
         [JsonPropertyName("caregiver_info")]
         public CaregiverInfo CaregiverInfo { get; set; }

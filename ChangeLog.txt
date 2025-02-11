@@ -33,6 +33,29 @@
 - Integrated template watching in MainForm with automatic PDF regeneration
 - Improved PDF file naming with meaningful names based on child info
 
+## [2025-02-11]
+### Added
+- Added RegisteredNurseTaskAndDelegation assessment type
+- Created RegisteredNurseTaskDelegAssessment and RegisteredNurseTaskDelegDataInstance models
+- Added RNTaskDelegTemplate.html template
+- Created README.md with documentation for adding new form types
+- Updated AssessmentType enum and CreateAssessment method to support new form type
+
+### Changed
+- Modified MainForm to handle different data types using dynamic data
+- Simplified grid view to show only Name column and Generate PDF button
+- Updated PDF filename generation to use Name field
+- Fixed ChildInfo type in RegisteredNurseTaskDelegDataInstance to use ChildInfoRegisteredNurse
+- Added additional placeholder replacements for nurse task data in PDF generation
+- Fixed placeholder format in PdfGeneratorService to use [[PLACEHOLDER]] instead of {{PLACEHOLDER}}
+- Updated JsonManager to handle multiple data types based on assessment type
+- Fixed MainForm to properly handle assessment changes and use correct property names
+- Improved cleanup of temporary PDF files on form closing
+
+### Fixed
+- Fixed compilation errors related to readonly fields and missing properties
+- Corrected JSON data path handling in MainForm and JsonManager
+
 ## [2025-02-05]
 ### Added
 - Initial project setup

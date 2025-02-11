@@ -13,17 +13,19 @@ namespace iTextDesignerWithGUI.Services
     public class JsonManager
     {
         private readonly string _jsonFilePath;
+        private readonly AssessmentType _assessmentType;
 
-        public JsonManager(string jsonFilePath)
+        public JsonManager(string jsonFilePath, AssessmentType assessmentType)
         {
             _jsonFilePath = jsonFilePath;
+            _assessmentType = assessmentType;
         }
 
         /// <summary>
-        /// Loads reference data items from the JSON file
+        /// Loads reference data items from the JSON file based on assessment type
         /// </summary>
         /// <returns>List of reference data items</returns>
-        public async Task<List<OralCareDataInstance>> LoadReferenceDataAsync()
+        public async Task<List<object>> LoadReferenceDataAsync()
         {
             try
             {
@@ -32,7 +34,13 @@ namespace iTextDesignerWithGUI.Services
                 {
                     PropertyNameCaseInsensitive = true
                 };
-                return JsonSerializer.Deserialize<List<OralCareDataInstance>>(jsonContent, options);
+
+                return _assessmentType switch
+                {
+                    AssessmentType.OralCare => JsonSerializer.Deserialize<List<OralCareDataInstance>>(jsonContent, options).Cast<object>().ToList(),
+                    AssessmentType.RegisteredNurseTaskAndDelegation => JsonSerializer.Deserialize<List<RegisteredNurseTaskDelegDataInstance>>(jsonContent, options).Cast<object>().ToList(),
+                    _ => throw new ArgumentException($"Unsupported assessment type: {_assessmentType}")
+                };
             }
             catch (Exception ex)
             {
