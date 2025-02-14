@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2+buQeMA2rAjwNxIVOBw0GZdeBoJj+uyVc2J/oEAxU3eWwdBi6/MRHNVBUVOlURrQYSKFOnQwhFbuuU7LfArUw==",
+  "dgSpecHash": "KaU8o11UlmjruRwQhkaH+4fTWEWpZfY1vES75gYtZMeYavCXqnduMRkDxwbpBDuk9gt+oVkOhF+dMtAo22TIZg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\iTextDesignerWithGUI\\iTextDesignerWithGUI.csproj",
+  "projectFilePath": "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\ITextGUIDesign2_12\\ITextGUIEditor\\iTextDesignerWithGUI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\samwo\\.nuget\\packages\\bouncycastle.cryptography\\2.2.1\\bouncycastle.cryptography.2.2.1.nupkg.sha512",
     "C:\\Users\\samwo\\.nuget\\packages\\itext\\8.0.2\\itext.8.0.2.nupkg.sha512",
