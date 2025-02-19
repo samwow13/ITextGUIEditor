@@ -63,8 +63,11 @@ namespace iTextDesignerWithGUI.Forms
             // Add assessment types
             foreach (AssessmentType type in Enum.GetValues(typeof(AssessmentType)))
             {
-                comboBox.Items.Add(type.ToString().SplitCamelCase());
+                var item = new { Display = type.ToString().SplitCamelCase(), Value = type };
+                comboBox.Items.Add(item);
             }
+            comboBox.DisplayMember = "Display";
+            comboBox.ValueMember = "Value";
             comboBox.SelectedIndex = 0;
             mainContainer.Controls.Add(comboBox, 0, 1);
 
@@ -102,7 +105,7 @@ namespace iTextDesignerWithGUI.Forms
             okButton.FlatAppearance.BorderSize = 0;
             okButton.Click += (s, e) =>
             {
-                SelectedType = (AssessmentType)Enum.Parse(typeof(AssessmentType), comboBox.SelectedItem.ToString().Replace(" ", ""));
+                SelectedType = ((dynamic)comboBox.SelectedItem).Value;
                 WasCancelled = false;
                 this.Close();
             };

@@ -29,7 +29,8 @@ namespace iTextDesignerWithGUI.Models
     public enum AssessmentType
     {
         OralCare,
-        RegisteredNurseTaskAndDelegation
+        RegisteredNurseTaskAndDelegation,
+        TestRazorDataInstance
         // Add more assessment types here as needed
     }
 }

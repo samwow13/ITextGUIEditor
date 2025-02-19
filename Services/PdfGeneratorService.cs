@@ -19,6 +19,11 @@ namespace iTextDesignerWithGUI.Services
 
         public PdfGeneratorService()
         {
+            // Inside PdfGeneratorService constructor:
+            Trace.Listeners.Add(new TextWriterTraceListener("service_debug.log"));
+            Trace.AutoFlush = true; // Ensures logs are written immediately
+
+            Trace.WriteLine($"PdfGeneratorService initialized at {DateTime.Now}");
             try
             {
                 // Get the directory where the application is running
@@ -33,7 +38,7 @@ namespace iTextDesignerWithGUI.Services
                 if (!string.IsNullOrEmpty(templateDir) && !Directory.Exists(templateDir))
                 {
                     Directory.CreateDirectory(templateDir);
-                    Debug.WriteLine($"Created template directory: {templateDir}");
+                    Trace.WriteLine($"Created template directory: {templateDir}");
                 }
 
                 // Create images directory if it doesn't exist
@@ -41,10 +46,11 @@ namespace iTextDesignerWithGUI.Services
                 if (!string.IsNullOrEmpty(imagesDir) && !Directory.Exists(imagesDir))
                 {
                     Directory.CreateDirectory(imagesDir);
-                    Debug.WriteLine($"Created images directory: {imagesDir}");
+                    Trace.WriteLine($"Created images directory: {imagesDir}");
 
                     // Copy images from source to output if they don't exist
                     var sourceImagesDir = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(exePath)), "images");
+                    MessageBox.Show($"Base URI: {sourceImagesDir}", "Debug Info");
                     if (Directory.Exists(sourceImagesDir))
                     {
                         foreach (var file in Directory.GetFiles(sourceImagesDir))
@@ -53,7 +59,7 @@ namespace iTextDesignerWithGUI.Services
                             if (!File.Exists(destFile))
                             {
                                 File.Copy(file, destFile);
-                                Debug.WriteLine($"Copied image file: {destFile}");
+                                Trace.WriteLine($"Copied image file: {destFile}");
                             }
                         }
                     }
@@ -64,7 +70,7 @@ namespace iTextDesignerWithGUI.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error in PdfGeneratorService constructor: {ex}");
+                Trace.WriteLine($"Error in PdfGeneratorService constructor: {ex}");
                 throw;
             }
         }
@@ -118,7 +124,8 @@ namespace iTextDesignerWithGUI.Services
                     // Create converter properties with base URI for image resolution
                     var props = new ConverterProperties();
                     var projectRoot = Path.GetDirectoryName(Path.GetDirectoryName(exePath)); // Go up one level to project root
-                    var baseUri = new Uri(projectRoot + Path.DirectorySeparatorChar);
+                    //var baseUri = new Uri(projectRoot + Path.DirectorySeparatorChar);
+                    var baseUri = new Uri(exePath + Path.DirectorySeparatorChar);
                     props.SetBaseUri(baseUri.AbsoluteUri);
                     
                     HtmlConverter.ConvertToPdf(templateContent, pdf, props);
@@ -127,7 +134,7 @@ namespace iTextDesignerWithGUI.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error generating PDF: {ex}");
+                Trace.WriteLine($"Error generating PDF: {ex}");
                 throw;
             }
         }

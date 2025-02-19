@@ -115,6 +115,7 @@ namespace iTextDesignerWithGUI.Forms
             {
                 AssessmentType.OralCare => new OralCareAssessment(),
                 AssessmentType.RegisteredNurseTaskAndDelegation => new RegisteredNurseTaskDelegAssessment(),
+                AssessmentType.TestRazorDataInstance => new TestRazorDataAssessment(),
                 _ => throw new ArgumentException($"Unsupported assessment type: {type}")
             };
         }
@@ -166,6 +167,10 @@ namespace iTextDesignerWithGUI.Forms
                 else if (item is RegisteredNurseTaskDelegDataInstance nurseTask)
                 {
                     name = nurseTask.ChildInfo?.Name;
+                }
+                else if (item is TestRazorDataInstance testRazor)
+                {
+                    name = testRazor.User?.Name;
                 }
                 else
                 {
@@ -234,6 +239,10 @@ namespace iTextDesignerWithGUI.Forms
                     else if (item is RegisteredNurseTaskDelegDataInstance nurseTask)
                     {
                         name = nurseTask.ChildInfo?.Name;
+                    }
+                    else if (item is TestRazorDataInstance testRazor)
+                    {
+                        name = testRazor.User?.Name;
                     }
                     else
                     {

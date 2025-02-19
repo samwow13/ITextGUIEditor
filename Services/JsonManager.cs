@@ -39,6 +39,7 @@ namespace iTextDesignerWithGUI.Services
                 {
                     AssessmentType.OralCare => JsonSerializer.Deserialize<List<OralCareDataInstance>>(jsonContent, options).Cast<object>().ToList(),
                     AssessmentType.RegisteredNurseTaskAndDelegation => JsonSerializer.Deserialize<List<RegisteredNurseTaskDelegDataInstance>>(jsonContent, options).Cast<object>().ToList(),
+                    AssessmentType.TestRazorDataInstance => JsonSerializer.Deserialize<List<TestRazorDataInstance>>(jsonContent, options).Cast<object>().ToList(),
                     _ => throw new ArgumentException($"Unsupported assessment type: {_assessmentType}")
                 };
             }
