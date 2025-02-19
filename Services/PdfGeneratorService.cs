@@ -1,86 +1,73 @@
 using iText.Html2pdf;
 using iText.Kernel.Pdf;
 using iTextDesignerWithGUI.Models;
+using iTextDesignerWithGUI.Models.TestRazorDataModels;
+using RazorLight;
+using RazorLight.Razor;
 using System;
 using System.IO;
 using System.Reflection;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace iTextDesignerWithGUI.Services
 {
+    public class RazorLightInMemoryProject : RazorLightProject
+    {
+        private readonly Dictionary<string, string> _templates = new Dictionary<string, string>();
+
+        public override Task<RazorLightProjectItem> GetItemAsync(string templateKey)
+        {
+            return Task.FromResult<RazorLightProjectItem>(new TextSourceRazorProjectItem(templateKey, _templates.TryGetValue(templateKey, out string template) ? template : string.Empty));
+        }
+
+        public override Task<IEnumerable<RazorLightProjectItem>> GetImportsAsync(string templateKey)
+        {
+            return Task.FromResult<IEnumerable<RazorLightProjectItem>>(Array.Empty<RazorLightProjectItem>());
+        }
+
+        public void AddTemplate(string key, string template)
+        {
+            _templates[key] = template;
+        }
+    }
+
     /// <summary>
     /// Service responsible for generating PDF documents from reference data using HTML templates
     /// </summary>
     public class PdfGeneratorService
     {
         private readonly string _tempPdfPath;
+        private readonly IRazorLightEngine _razorEngine;
+        private readonly RazorLightInMemoryProject _project;
         private object _lastUsedData;
         private string _lastUsedTemplate;
 
         public PdfGeneratorService()
         {
-            // Inside PdfGeneratorService constructor:
-            Trace.Listeners.Add(new TextWriterTraceListener("service_debug.log"));
-            Trace.AutoFlush = true; // Ensures logs are written immediately
-
-            Trace.WriteLine($"PdfGeneratorService initialized at {DateTime.Now}");
             try
             {
-                // Get the directory where the application is running
-                var exePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                if (string.IsNullOrEmpty(exePath))
-                {
-                    throw new InvalidOperationException("Could not determine application directory");
-                }
-
-                // Create Templates directory if it doesn't exist
-                var templateDir = Path.Combine(exePath, "Templates");
-                if (!string.IsNullOrEmpty(templateDir) && !Directory.Exists(templateDir))
-                {
-                    Directory.CreateDirectory(templateDir);
-                    Trace.WriteLine($"Created template directory: {templateDir}");
-                }
-
-                // Create images directory if it doesn't exist
-                var imagesDir = Path.Combine(exePath, "images");
-                if (!string.IsNullOrEmpty(imagesDir) && !Directory.Exists(imagesDir))
-                {
-                    Directory.CreateDirectory(imagesDir);
-                    Trace.WriteLine($"Created images directory: {imagesDir}");
-
-                    // Copy images from source to output if they don't exist
-                    var sourceImagesDir = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(exePath)), "images");
-                    MessageBox.Show($"Base URI: {sourceImagesDir}", "Debug Info");
-                    if (Directory.Exists(sourceImagesDir))
-                    {
-                        foreach (var file in Directory.GetFiles(sourceImagesDir))
-                        {
-                            var destFile = Path.Combine(imagesDir, Path.GetFileName(file));
-                            if (!File.Exists(destFile))
-                            {
-                                File.Copy(file, destFile);
-                                Trace.WriteLine($"Copied image file: {destFile}");
-                            }
-                        }
-                    }
-                }
-
-                // Set up consistent temporary file path
+                var exePath = AppDomain.CurrentDomain.BaseDirectory;
                 _tempPdfPath = Path.Combine(exePath, "temp_assessment.pdf");
+
+                // Initialize RazorLight engine
+                _project = new RazorLightInMemoryProject();
+                _razorEngine = new RazorLightEngineBuilder()
+                    .UseMemoryCachingProvider()
+                    .UseProject(_project)
+                    .Build();
             }
             catch (Exception ex)
             {
-                Trace.WriteLine($"Error in PdfGeneratorService constructor: {ex}");
+                Trace.WriteLine($"Error initializing PdfGeneratorService: {ex}");
                 throw;
             }
         }
 
         /// <summary>
-        /// Generates a PDF document for a given reference data item using HTML template
+        /// Generates a PDF document from a template file and data
         /// </summary>
-        /// <param name="data">The reference data item to generate PDF from</param>
-        /// <param name="templateFileName">The name of the template file to use</param>
-        /// <returns>The generated PDF as a byte array</returns>
         public byte[] GeneratePdf(object data, string templateFileName)
         {
             try
@@ -88,54 +75,68 @@ namespace iTextDesignerWithGUI.Services
                 _lastUsedData = data;
                 _lastUsedTemplate = templateFileName;
 
-                var exePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                if (string.IsNullOrEmpty(exePath))
-                {
-                    throw new InvalidOperationException("Could not determine application directory");
-                }
-
+                var exePath = AppDomain.CurrentDomain.BaseDirectory;
                 var templatePath = Path.Combine(exePath, "Templates", templateFileName);
+                string templateContent;
+
                 if (!File.Exists(templatePath))
                 {
                     throw new FileNotFoundException($"Template file not found: {templatePath}");
                 }
 
-                var templateContent = File.ReadAllText(templatePath);
+                if (templateFileName.EndsWith(".cshtml"))
+                {
+                    // Process Razor template
+                    templateContent = Task.Run(async () =>
+                    {
+                        var key = Path.GetFileNameWithoutExtension(templateFileName);
+                        var template = await File.ReadAllTextAsync(templatePath);
+                        
+                        // Add template to the project
+                        _project.AddTemplate(key, template);
 
-                // Replace placeholders based on data type
-                if (data is OralCareDataInstance oralCare)
-                {
-                    templateContent = ReplacePlaceholders(templateContent, oralCare);
-                }
-                else if (data is RegisteredNurseTaskDelegDataInstance nurseTask)
-                {
-                    templateContent = ReplacePlaceholders(templateContent, nurseTask);
-                }
-                else if (data is TestRazorDataInstance testRazor)//ADD FORMS HERE
-                {
-                    // For Razor templates, we don't need to replace placeholders
-                    // The Razor engine will handle the data binding
+                        try
+                        {
+                            return await _razorEngine.CompileRenderStringAsync(key, template, data);
+                        }
+                        catch (Exception ex)
+                        {
+                            Trace.WriteLine($"Error compiling Razor template: {ex}");
+                            throw;
+                        }
+                    }).Result;
                 }
                 else
                 {
-                    throw new ArgumentException("Unsupported data type");
+                    // Process regular HTML template
+                    templateContent = File.ReadAllText(templatePath);
+                    if (data is OralCareDataInstance oralCare)
+                    {
+                        templateContent = ReplacePlaceholders(templateContent, oralCare);
+                    }
+                    else if (data is RegisteredNurseTaskDelegDataInstance nurseTask)
+                    {
+                        templateContent = ReplacePlaceholders(templateContent, nurseTask);
+                    }
+                    else if (data is TestRazorDataInstance)
+                    {
+                        // For Razor templates, we don't need to replace placeholders
+                        // The Razor engine will handle the data binding
+                    }
+                    else
+                    {
+                        throw new ArgumentException("Unsupported data type");
+                    }
                 }
 
-                using (var stream = new MemoryStream())
-                {
-                    var writer = new PdfWriter(stream);
-                    var pdf = new PdfDocument(writer);
-                    
-                    // Create converter properties with base URI for image resolution
-                    var props = new ConverterProperties();
-                    var projectRoot = Path.GetDirectoryName(Path.GetDirectoryName(exePath)); // Go up one level to project root
-                    //var baseUri = new Uri(projectRoot + Path.DirectorySeparatorChar);
-                    var baseUri = new Uri(exePath + Path.DirectorySeparatorChar);
-                    props.SetBaseUri(baseUri.AbsoluteUri);
-                    
-                    HtmlConverter.ConvertToPdf(templateContent, pdf, props);
-                    return stream.ToArray();
-                }
+                using var stream = new MemoryStream();
+                var writer = new PdfWriter(stream);
+                var pdf = new PdfDocument(writer);
+                var converterProperties = new ConverterProperties();
+
+                HtmlConverter.ConvertToPdf(templateContent, pdf, converterProperties);
+
+                return stream.ToArray();
             }
             catch (Exception ex)
             {
