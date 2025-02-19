@@ -112,10 +112,10 @@ namespace iTextDesignerWithGUI.Forms
         private IAssessment CreateAssessment(AssessmentType type)
         {
             return type switch
-            {
+            {//ADD FORMS HERE
                 AssessmentType.OralCare => new OralCareAssessment(),
                 AssessmentType.RegisteredNurseTaskAndDelegation => new RegisteredNurseTaskDelegAssessment(),
-                AssessmentType.TestRazorDataInstance => new TestRazorDataAssessment(),
+                AssessmentType.TestRazorDataInstance => new TestRazorDataAssessment(),      
                 _ => throw new ArgumentException($"Unsupported assessment type: {type}")
             };
         }
@@ -160,6 +160,7 @@ namespace iTextDesignerWithGUI.Forms
             foreach (var item in _referenceData)
             {
                 string name;
+                //ADD FORMS HERE
                 if (item is OralCareDataInstance oralCare)
                 {
                     name = oralCare.ChildInfo?.ChildName;
@@ -231,6 +232,7 @@ namespace iTextDesignerWithGUI.Forms
                 var item = _referenceData[e.RowIndex];
                 try
                 {
+                    //ADD FORMS HERE
                     string name;
                     if (item is OralCareDataInstance oralCare)
                     {

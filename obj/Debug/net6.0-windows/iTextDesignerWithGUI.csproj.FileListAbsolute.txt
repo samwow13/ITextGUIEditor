@@ -84,3 +84,4 @@ C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\ob
 C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\obj\Debug\net6.0-windows\iTextDesignerWithGUI.pdb
 C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\obj\Debug\net6.0-windows\iTextDesignerWithGUI.genruntimeconfig.cache
 C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\obj\Debug\net6.0-windows\ref\iTextDesignerWithGUI.dll
+C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\bin\Debug\net6.0-windows\Templates\TestRazorDataAssessment.cshtml

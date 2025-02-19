@@ -36,7 +36,7 @@ namespace iTextDesignerWithGUI.Services
                 };
 
                 return _assessmentType switch
-                {
+                {//ADD FORMS HERE
                     AssessmentType.OralCare => JsonSerializer.Deserialize<List<OralCareDataInstance>>(jsonContent, options).Cast<object>().ToList(),
                     AssessmentType.RegisteredNurseTaskAndDelegation => JsonSerializer.Deserialize<List<RegisteredNurseTaskDelegDataInstance>>(jsonContent, options).Cast<object>().ToList(),
                     AssessmentType.TestRazorDataInstance => JsonSerializer.Deserialize<List<TestRazorDataInstance>>(jsonContent, options).Cast<object>().ToList(),

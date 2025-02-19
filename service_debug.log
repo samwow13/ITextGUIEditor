@@ -21,3 +21,21 @@ PdfGeneratorService initialized at 2/19/2025 9:19:38 AM
 PdfGeneratorService initialized at 2/19/2025 9:22:04 AM
 PdfGeneratorService initialized at 2/19/2025 9:23:52 AM
 PdfGeneratorService initialized at 2/19/2025 9:23:56 AM
+PdfGeneratorService initialized at 2/19/2025 9:32:20 AM
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+Error generating PDF: System.IO.FileNotFoundException: Template file not found: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\bin\Debug\net6.0-windows\Templates\TestRazorDataAssessment.cshtml
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 100
+Error generating PDF: System.IO.FileNotFoundException: Template file not found: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\bin\Debug\net6.0-windows\Templates\TestRazorDataAssessment.cshtml
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 100
+   at iTextDesignerWithGUI.Forms.MainForm.dataGridView_CellContentClick(Object sender, DataGridViewCellEventArgs e) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Forms\MainForm.cs:line 257
+PdfGeneratorService initialized at 2/19/2025 9:36:01 AM
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 28061 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250219_093604.pdf
+PdfGeneratorService initialized at 2/19/2025 9:36:09 AM
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 1286 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250219_093610.pdf

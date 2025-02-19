@@ -111,6 +111,11 @@ namespace iTextDesignerWithGUI.Services
                 {
                     templateContent = ReplacePlaceholders(templateContent, nurseTask);
                 }
+                else if (data is TestRazorDataInstance testRazor)//ADD FORMS HERE
+                {
+                    // For Razor templates, we don't need to replace placeholders
+                    // The Razor engine will handle the data binding
+                }
                 else
                 {
                     throw new ArgumentException("Unsupported data type");
@@ -135,6 +140,19 @@ namespace iTextDesignerWithGUI.Services
             catch (Exception ex)
             {
                 Trace.WriteLine($"Error generating PDF: {ex}");
+                throw;
+            }
+        }
+
+        public byte[] GenerateTestRazorDataPdf(object data)
+        {
+            try
+            {
+                return GeneratePdf(data, "TestRazorDataAssessment.cshtml");
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"Error generating Test Razor Data PDF: {ex}");
                 throw;
             }
         }
