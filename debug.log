@@ -160,3 +160,76 @@ Generating PDF for row 0
 Data for PDF: Name=John Doe
 PDF generated, size: 1791 bytes
 PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250219_100012.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+Error compiling Razor template: RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (171:43) 'Order' does not contain a definition for 'Id' and no accessible extension method 'Id' accepting a first argument of type 'Order' could be found (are you missing a using directive or an assembly reference?)
+- (172:43) 'Order' does not contain a definition for 'OrderDate' and no accessible extension method 'OrderDate' accepting a first argument of type 'Order' could be found (are you missing a using directive or an assembly reference?)
+- (173:44) 'Order' does not contain a definition for 'Total' and no accessible extension method 'Total' accepting a first argument of type 'Order' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmit(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+--- End of stack trace from previous location ---
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass6_1.<<GeneratePdf>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 100
+Error generating PDF: System.AggregateException: One or more errors occurred. (Failed to compile generated Razor template:
+- (171:43) 'Order' does not contain a definition for 'Id' and no accessible extension method 'Id' accepting a first argument of type 'Order' could be found (are you missing a using directive or an assembly reference?)
+- (172:43) 'Order' does not contain a definition for 'OrderDate' and no accessible extension method 'OrderDate' accepting a first argument of type 'Order' could be found (are you missing a using directive or an assembly reference?)
+- (173:44) 'Order' does not contain a definition for 'Total' and no accessible extension method 'Total' accepting a first argument of type 'Order' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+)
+ ---> RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (171:43) 'Order' does not contain a definition for 'Id' and no accessible extension method 'Id' accepting a first argument of type 'Order' could be found (are you missing a using directive or an assembly reference?)
+- (172:43) 'Order' does not contain a definition for 'OrderDate' and no accessible extension method 'OrderDate' accepting a first argument of type 'Order' could be found (are you missing a using directive or an assembly reference?)
+- (173:44) 'Order' does not contain a definition for 'Total' and no accessible extension method 'Total' accepting a first argument of type 'Order' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmit(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+--- End of stack trace from previous location ---
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass6_1.<<GeneratePdf>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 100
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 90
+Error generating PDF: System.AggregateException: One or more errors occurred. (Failed to compile generated Razor template:
+- (171:43) 'Order' does not contain a definition for 'Id' and no accessible extension method 'Id' accepting a first argument of type 'Order' could be found (are you missing a using directive or an assembly reference?)
+- (172:43) 'Order' does not contain a definition for 'OrderDate' and no accessible extension method 'OrderDate' accepting a first argument of type 'Order' could be found (are you missing a using directive or an assembly reference?)
+- (173:44) 'Order' does not contain a definition for 'Total' and no accessible extension method 'Total' accepting a first argument of type 'Order' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+)
+ ---> RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (171:43) 'Order' does not contain a definition for 'Id' and no accessible extension method 'Id' accepting a first argument of type 'Order' could be found (are you missing a using directive or an assembly reference?)
+- (172:43) 'Order' does not contain a definition for 'OrderDate' and no accessible extension method 'OrderDate' accepting a first argument of type 'Order' could be found (are you missing a using directive or an assembly reference?)
+- (173:44) 'Order' does not contain a definition for 'Total' and no accessible extension method 'Total' accepting a first argument of type 'Order' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmit(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+--- End of stack trace from previous location ---
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass6_1.<<GeneratePdf>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 100
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 90
+   at iTextDesignerWithGUI.Forms.MainForm.dataGridView_CellContentClick(Object sender, DataGridViewCellEventArgs e) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Forms\MainForm.cs:line 258
+Generating PDF for row 1
+Data for PDF: Name=Jane Smith
+PDF generated, size: 3667 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Jane_Smith_20250219_100655.pdf
