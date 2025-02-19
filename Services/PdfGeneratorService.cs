@@ -43,6 +43,7 @@ namespace iTextDesignerWithGUI.Services
         private readonly RazorLightInMemoryProject _project;
         private object _lastUsedData;
         private string _lastUsedTemplate;
+        private readonly string _globalStylesPath;
 
         public PdfGeneratorService()
         {
@@ -50,6 +51,7 @@ namespace iTextDesignerWithGUI.Services
             {
                 var exePath = AppDomain.CurrentDomain.BaseDirectory;
                 _tempPdfPath = Path.Combine(exePath, "temp_assessment.pdf");
+                _globalStylesPath = Path.Combine(exePath, "Templates", "globalStyles.css");
 
                 // Initialize RazorLight engine
                 _project = new RazorLightInMemoryProject();
@@ -62,6 +64,39 @@ namespace iTextDesignerWithGUI.Services
             {
                 Trace.WriteLine($"Error initializing PdfGeneratorService: {ex}");
                 throw;
+            }
+        }
+
+        private string InjectGlobalStyles(string htmlContent)
+        {
+            try
+            {
+                if (!File.Exists(_globalStylesPath))
+                {
+                    Trace.WriteLine($"Global styles file not found: {_globalStylesPath}");
+                    return htmlContent;
+                }
+
+                var cssContent = File.ReadAllText(_globalStylesPath);
+                
+                // Find the closing head tag
+                const string headEndTag = "</head>";
+                var headEndIndex = htmlContent.IndexOf(headEndTag, StringComparison.OrdinalIgnoreCase);
+                
+                if (headEndIndex == -1)
+                {
+                    Trace.WriteLine("No </head> tag found in HTML content");
+                    return htmlContent;
+                }
+
+                // Inject the CSS content within a style tag before the </head>
+                var styleTag = $"<style>{cssContent}</style>";
+                return htmlContent.Insert(headEndIndex, styleTag);
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"Error injecting global styles: {ex}");
+                return htmlContent;
             }
         }
 
@@ -97,7 +132,8 @@ namespace iTextDesignerWithGUI.Services
 
                         try
                         {
-                            return await _razorEngine.CompileRenderStringAsync(key, template, data);
+                            var renderedHtml = await _razorEngine.CompileRenderStringAsync(key, template, data);
+                            return InjectGlobalStyles(renderedHtml);
                         }
                         catch (Exception ex)
                         {
@@ -110,6 +146,8 @@ namespace iTextDesignerWithGUI.Services
                 {
                     // Process regular HTML template
                     templateContent = File.ReadAllText(templatePath);
+                    templateContent = InjectGlobalStyles(templateContent);
+                    
                     if (data is OralCareDataInstance oralCare)
                     {
                         templateContent = ReplacePlaceholders(templateContent, oralCare);

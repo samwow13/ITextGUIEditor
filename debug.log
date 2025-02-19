@@ -273,3 +273,98 @@ Generating PDF for row 2
 Data for PDF: Name=Alice Brown
 PDF generated, size: 3729 bytes
 PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Brown_20250219_101707.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 1763 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250219_102044.pdf
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250219_102233.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 1763 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250219_102242.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 1763 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250219_102321.pdf
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41046 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250219_102638.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3644 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250219_102647.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+Error compiling Razor template: RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (118:22) The name 'DateTime' does not exist in the current context
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmit(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+--- End of stack trace from previous location ---
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass8_1.<<GeneratePdf>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 135
+Error generating PDF: System.AggregateException: One or more errors occurred. (Failed to compile generated Razor template:
+- (118:22) The name 'DateTime' does not exist in the current context
+
+See CompilationErrors for detailed information
+)
+ ---> RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (118:22) The name 'DateTime' does not exist in the current context
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmit(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+--- End of stack trace from previous location ---
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass8_1.<<GeneratePdf>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 135
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 125
+Error generating PDF: System.AggregateException: One or more errors occurred. (Failed to compile generated Razor template:
+- (118:22) The name 'DateTime' does not exist in the current context
+
+See CompilationErrors for detailed information
+)
+ ---> RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (118:22) The name 'DateTime' does not exist in the current context
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmit(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+--- End of stack trace from previous location ---
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass8_1.<<GeneratePdf>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 135
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 125
+   at iTextDesignerWithGUI.Forms.MainForm.dataGridView_CellContentClick(Object sender, DataGridViewCellEventArgs e) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Forms\MainForm.cs:line 258
+Generating PDF for row 1
+Data for PDF: Name=Jane Smith
+PDF generated, size: 4000 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Jane_Smith_20250219_103227.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3322 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250219_103338.pdf
+Generating PDF for row 1
+Data for PDF: Name=Jane Smith
+PDF generated, size: 3263 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Jane_Smith_20250219_103346.pdf

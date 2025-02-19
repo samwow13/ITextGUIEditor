@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Templates\**\*.html;Templates\**\*.cshtml">
+    <Content Include="Templates\**\*.html;Templates\**\*.cshtml;Templates\**\*.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

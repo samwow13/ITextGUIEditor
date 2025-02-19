@@ -420,3 +420,4 @@ C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\bi
 C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\bin\Debug\net6.0-windows\refs\System.Xml.XPath.dll
 C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\bin\Debug\net6.0-windows\refs\System.Xml.XPath.XDocument.dll
 C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\bin\Debug\net6.0-windows\refs\WindowsBase.dll
+C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\bin\Debug\net6.0-windows\Templates\globalStyles.css
