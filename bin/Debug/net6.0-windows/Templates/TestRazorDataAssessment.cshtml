@@ -109,12 +109,15 @@
             </div>
             
             <div class="row">
-                <div class="col-md-4">
-                    <span class="info-label">Account Status:</span>
-                    <span class="badge @(Model.User.IsActive ? "bg-success" : "bg-danger")">
-                        @(Model.User.IsActive ? "Active" : "Inactive")
-                    </span>
-                </div>
+                @if (Model.User.Name != "John Doe")
+                {
+                    <div class="col-md-4">
+                        <span class="info-label">Account Status:</span>
+                        <span class="badge @(Model.User.IsActive ? "bg-success" : "bg-danger")">
+                            @(Model.User.IsActive ? "Active" : "Inactive")
+                        </span>
+                    </div>
+                }
                 <div class="col-md-4">
                     <span class="info-label">Created:</span>
                     <span>@Model.User.CreatedAt.ToString("MMM dd, yyyy")</span>
