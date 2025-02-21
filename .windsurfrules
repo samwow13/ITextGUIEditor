@@ -1,6 +1,0 @@
-- This project is a C# winforms GUI application. It's being created to generate multiple types of PDF's using iText7 for .net.
-- The goal is to allow a user to build out multiple types of PDFs using multiple data sets and templates.
-- The "Services" folder contains the PdfGeneratorService class which is responsible for generating PDFs.
-- The "Forms" folder contains a selector for assessments and a main UI form as MainForm.cs
-- The "Models" folder contains the data models used by the application.
-- The "Templates" folder is where the HTML templates are stored.
