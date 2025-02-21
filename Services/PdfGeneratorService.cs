@@ -263,6 +263,16 @@ namespace iTextDesignerWithGUI.Services
                         // For Razor templates, we don't need to replace placeholders
                         // The Razor engine will handle the data binding
                     }
+                    // ADD FORMS HERE:
+                    // For HTML/CSS templates:
+                    // 1. Add a new else if block for your form's data model
+                    // 2. Create a corresponding ReplacePlaceholders method for the new form type
+                    // 3. Implement placeholder replacements using [[PLACEHOLDER]] or {{placeholder}} syntax
+                    //
+                    // For Razor templates (.cshtml):
+                    // 1. Add a new else if block for your form's data model (e.g., TestRazorDataInstance)
+                    // 2. Create a .cshtml template in the Templates directory
+                    // 3. Use @Model to access your data model properties directly in the template
                     else
                     {
                         throw new ArgumentException("Unsupported data type");
