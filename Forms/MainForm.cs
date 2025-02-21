@@ -7,6 +7,7 @@ using iTextDesignerWithGUI.Services;
 using System.IO;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.Win32;
 
 namespace iTextDesignerWithGUI.Forms
 {
@@ -33,6 +34,9 @@ namespace iTextDesignerWithGUI.Forms
         private string _currentPdfPath;
         private AssessmentType _currentAssessmentType;
         private Label _statusLabel;
+        private const string RegistryPath = @"Software\ITextGUIDesigner";
+        private const string WindowPosXKey = "WindowPosX";
+        private const string WindowPosYKey = "WindowPosY";
 
         public MainForm(AssessmentType assessmentType = AssessmentType.OralCare)
         {
@@ -42,17 +46,77 @@ namespace iTextDesignerWithGUI.Forms
             _jsonManager = new JsonManager(_assessment.JsonDataPath, assessmentType);
             _pdfGenerator = new PdfGeneratorService();
             
-            // Set the form to appear in center screen
-            this.StartPosition = FormStartPosition.CenterScreen;
-            
             // Update the window title to show the selected assessment type
             this.Text = $"iText Designer - {assessmentType.ToString().SplitCamelCase()}";
+            
+            // Load the saved window position
+            LoadWindowPosition();
             
             InitializeAsync();
         }
 
+        private void LoadWindowPosition()
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.OpenSubKey(RegistryPath))
+                {
+                    if (key != null)
+                    {
+                        var x = (int?)key.GetValue(WindowPosXKey);
+                        var y = (int?)key.GetValue(WindowPosYKey);
+
+                        if (x.HasValue && y.HasValue)
+                        {
+                            // Ensure the window will be visible on the screen
+                            var screen = Screen.FromPoint(new Point(x.Value, y.Value));
+                            if (screen != null)
+                            {
+                                this.StartPosition = FormStartPosition.Manual;
+                                this.Location = new Point(
+                                    Math.Max(screen.WorkingArea.X, Math.Min(x.Value, screen.WorkingArea.Right - this.Width)),
+                                    Math.Max(screen.WorkingArea.Y, Math.Min(y.Value, screen.WorkingArea.Bottom - this.Height))
+                                );
+                                return;
+                            }
+                        }
+                    }
+                }
+                
+                // If no saved position or invalid, center on screen
+                this.StartPosition = FormStartPosition.CenterScreen;
+            }
+            catch
+            {
+                // If anything goes wrong, fall back to center screen
+                this.StartPosition = FormStartPosition.CenterScreen;
+            }
+        }
+
+        private void SaveWindowPosition()
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.CreateSubKey(RegistryPath))
+                {
+                    if (key != null)
+                    {
+                        key.SetValue(WindowPosXKey, this.Location.X, RegistryValueKind.DWord);
+                        key.SetValue(WindowPosYKey, this.Location.Y, RegistryValueKind.DWord);
+                    }
+                }
+            }
+            catch
+            {
+                // Ignore any errors saving position
+            }
+        }
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            // Save the window position before closing
+            SaveWindowPosition();
+
             if (!string.IsNullOrEmpty(_currentPdfPath) && File.Exists(_currentPdfPath))
             {
                 try
@@ -65,52 +129,6 @@ namespace iTextDesignerWithGUI.Forms
                 }
             }
             base.OnFormClosing(e);
-        }
-
-        private void OnTemplateChanged(object sender, FileSystemEventArgs e)
-        {
-            Debug.WriteLine($"Template change detected: {e.FullPath}, ChangeType: {e.ChangeType}");
-            
-            // Ensure we're on the UI thread
-            if (InvokeRequired)
-            {
-                Invoke(new Action(() => OnTemplateChanged(sender, e)));
-                return;
-            }
-
-            try
-            {
-                // Only regenerate if we have a current PDF
-                if (!string.IsNullOrEmpty(_currentPdfPath))
-                {
-                    Debug.WriteLine($"Current PDF path: {_currentPdfPath}");
-                    Debug.WriteLine($"Template changed: {e.FullPath}. Regenerating PDF...");
-                    
-                    // Wait a brief moment to ensure the template file is not locked
-                    System.Threading.Thread.Sleep(500);
-                    
-                    var pdfBytes = _pdfGenerator.RegeneratePdf();
-                    if (pdfBytes != null)
-                    {
-                        // Save to the same location
-                        File.WriteAllBytes(_currentPdfPath, pdfBytes);
-                        Debug.WriteLine($"PDF regenerated and saved to: {_currentPdfPath}");
-                    }
-                    else
-                    {
-                        Debug.WriteLine("RegeneratePdf() returned null - no previous data available");
-                    }
-                }
-                else
-                {
-                    Debug.WriteLine("No current PDF path set - skipping regeneration");
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error regenerating PDF: {ex}");
-                MessageBox.Show($"Error regenerating PDF: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         private IAssessment CreateAssessment(AssessmentType type)
@@ -376,20 +394,124 @@ namespace iTextDesignerWithGUI.Forms
 
         private async void ReloadTemplates_Click(object sender, EventArgs e)
         {
-            // Show the reloading message
-            _statusLabel.Text = "Reloading...";
-            _statusLabel.Visible = true;
-            
-            // Wait for 1 second to ensure message is visible
-            await Task.Delay(1000);
+            try
+            {
+                // Save current window position before doing anything else
+                SaveWindowPosition();
 
-            // Hide this form while showing the new one
-            this.Hide();
-            
-            // Create and show the new form with the same assessment type
-            var newForm = new MainForm(_currentAssessmentType);
-            newForm.FormClosed += (s, args) => this.Close(); // Close this form when new form closes
-            newForm.Show();
+                // Show the building message
+                _statusLabel.Text = "Building application...";
+                _statusLabel.ForeColor = System.Drawing.Color.FromArgb(255, 193, 7); // Bootstrap warning yellow
+                _statusLabel.Visible = true;
+
+                // Get the project directory path
+                var currentDir = Directory.GetCurrentDirectory();
+                var projectPath = Path.GetFullPath(Path.Combine(currentDir, "..", "ITextGUIEditor", "iTextDesignerWithGUI.csproj"));
+                
+                if (!File.Exists(projectPath))
+                {
+                    throw new FileNotFoundException($"Could not find project file at: {projectPath}");
+                }
+
+                // Try to kill any existing processes of our app (except the current one)
+                var currentProcess = Process.GetCurrentProcess();
+                foreach (var existingProcess in Process.GetProcessesByName(currentProcess.ProcessName))
+                {
+                    try
+                    {
+                        if (existingProcess.Id != currentProcess.Id)
+                        {
+                            existingProcess.Kill();
+                            await Task.Delay(500); // Give it some time to shut down
+                        }
+                    }
+                    catch
+                    {
+                        // Ignore errors trying to kill processes
+                    }
+                }
+
+                // Close any open Edge windows
+                foreach (var edgeProcess in Process.GetProcessesByName("msedge"))
+                {
+                    try
+                    {
+                        edgeProcess.Kill();
+                        await Task.Delay(100); // Give Edge some time to close
+                    }
+                    catch
+                    {
+                        // Ignore errors trying to kill Edge processes
+                    }
+                }
+
+                // Create process to run dotnet build
+                var buildProcess = new Process
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "dotnet",
+                        Arguments = $"build \"{projectPath}\"", // Specify the project file path
+                        WorkingDirectory = Path.GetDirectoryName(projectPath), // Use project directory as working directory
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    }
+                };
+
+                var output = new System.Text.StringBuilder();
+                var error = new System.Text.StringBuilder();
+
+                // Capture output and error streams
+                buildProcess.OutputDataReceived += (s, args) => { if (args.Data != null) output.AppendLine(args.Data); };
+                buildProcess.ErrorDataReceived += (s, args) => { if (args.Data != null) error.AppendLine(args.Data); };
+
+                // Start the build process
+                buildProcess.Start();
+                buildProcess.BeginOutputReadLine();
+                buildProcess.BeginErrorReadLine();
+                await buildProcess.WaitForExitAsync();
+
+                // Check if build was successful
+                if (buildProcess.ExitCode != 0)
+                {
+                    _statusLabel.Text = "Build failed!";
+                    _statusLabel.ForeColor = System.Drawing.Color.FromArgb(220, 53, 69); // Bootstrap danger red
+                    
+                    // Show the build output in a message box
+                    var errorMessage = "Build failed with the following output:\n\n";
+                    if (output.Length > 0) errorMessage += "Output:\n" + output.ToString() + "\n";
+                    if (error.Length > 0) errorMessage += "Errors:\n" + error.ToString();
+                    
+                    MessageBox.Show(errorMessage, "Build Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    await Task.Delay(2000); // Show error for 2 seconds
+                    _statusLabel.Visible = false;
+                    return;
+                }
+
+                // Show reloading message
+                _statusLabel.Text = "Build successful! Reloading...";
+                _statusLabel.ForeColor = System.Drawing.Color.FromArgb(40, 167, 69); // Bootstrap success green
+                await Task.Delay(1000);
+
+                // Hide this form while showing the new one
+                this.Hide();
+                
+                // Create and show the new form with the same assessment type
+                var newForm = new MainForm(_currentAssessmentType);
+                newForm.FormClosed += (s, args) => this.Close(); // Close this form when new form closes
+                newForm.Show();
+            }
+            catch (Exception ex)
+            {
+                _statusLabel.Text = "Error during reload!";
+                _statusLabel.ForeColor = System.Drawing.Color.FromArgb(220, 53, 69); // Bootstrap danger red
+                _statusLabel.Visible = true;
+                MessageBox.Show($"Error during reload: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                await Task.Delay(2000);
+                _statusLabel.Visible = false;
+            }
         }
     }
 }
