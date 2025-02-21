@@ -42,10 +42,6 @@
               "target": "Package",
               "version": "[2.3.1, )"
             },
-            "RazorLight.NetCore3": {
-              "target": "Package",
-              "version": "[3.0.2, )"
-            },
             "System.Text.Encoding.CodePages": {
               "target": "Package",
               "version": "[7.0.0, )"
