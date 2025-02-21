@@ -1,20 +1,4 @@
-How to add new pdfs for development.
-
-## Process Overview
-
-```mermaid
-graph TD
-    A[1. Create JSON Data File] -->|ReferenceDataJsons/| B[2. Create Data Model]
-    B -->|Models/| C[3. Create Template]
-    C -->|Templates/*.cshtml| D[4. Update IAssessment Interface]
-    D -->|Interface/IAssessment.cs| E[5. Implement Template References]
-    E --> F[6. Test Template]
-    F -->|Add Hello World| G[7. Load Data]
-    G -->|Final Testing| H[Complete]
-```
-
-## Detailed Steps
-
+## Detailed Steps for adding a new PDF
 1. **Create JSON Data Files**
    - Location: `ReferenceDataJsons/`
    - Purpose: Define the data structure for your new PDF
@@ -50,11 +34,17 @@ graph TD
 4. **Update IAssessment Interface**
    - Location: `Interface/IAssessment.cs`
    - Add your new template type
+   ```csharp
+   public enum AssessmentType
+   {
+       NewTemplate,
+       //ADD FORMS HERE
+   }
+   ```
 
 5. **Implement Template References**
    - Search for `//ADD FORMS HERE` comments
-   - Update all necessary locations
-   - Ensure proper implementation of IAssessment interface
+   - Update all necessary locations with your new template type
 
 6. **Project Structure**
    ```
@@ -74,6 +64,9 @@ graph TD
    - Verify JSON data mapping
    - Check PDF generation
 
+8. **Reusable Components**
+  - You can now refer to other templates to see how to pull in your global styles and images.
+  
 ## Common Issues and Solutions
 
 - If template doesn't appear in dropdown: Check IAssessment interface implementation
