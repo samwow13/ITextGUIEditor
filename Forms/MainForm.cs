@@ -37,6 +37,9 @@ namespace iTextDesignerWithGUI.Forms
         private const string RegistryPath = @"Software\ITextGUIDesigner";
         private const string WindowPosXKey = "WindowPosX";
         private const string WindowPosYKey = "WindowPosY";
+        private const string LastSelectedRowKey = "LastSelectedRow";
+
+        private int? _lastSelectedRow;
 
         public MainForm(AssessmentType assessmentType = AssessmentType.OralCare)
         {
@@ -304,6 +307,24 @@ namespace iTextDesignerWithGUI.Forms
         {
             if (e.RowIndex >= 0 && e.ColumnIndex == dataGridView.Columns["GeneratePdf"].Index)
             {
+                _lastSelectedRow = e.RowIndex;
+                
+                // Save the selected row index to registry
+                try
+                {
+                    using (var key = Registry.CurrentUser.CreateSubKey(RegistryPath))
+                    {
+                        if (key != null)
+                        {
+                            key.SetValue(LastSelectedRowKey, e.RowIndex, RegistryValueKind.DWord);
+                        }
+                    }
+                }
+                catch
+                {
+                    // Ignore errors saving row index
+                }
+
                 var item = _referenceData[e.RowIndex];
                 try
                 {
@@ -341,6 +362,7 @@ namespace iTextDesignerWithGUI.Forms
                     _currentPdfPath = Path.Combine(Path.GetTempPath(), fileName);
                     File.WriteAllBytes(_currentPdfPath, pdfBytes);
                     Debug.WriteLine($"PDF saved to: {_currentPdfPath}");
+
                     Process.Start(new ProcessStartInfo(_currentPdfPath) { UseShellExecute = true });
                 }
                 catch (Exception ex)
@@ -502,6 +524,36 @@ namespace iTextDesignerWithGUI.Forms
                 var newForm = new MainForm(_currentAssessmentType);
                 newForm.FormClosed += (s, args) => this.Close(); // Close this form when new form closes
                 newForm.Show();
+
+                // Regenerate the last PDF if we have a saved row index
+                try
+                {
+                    using (var key = Registry.CurrentUser.OpenSubKey(RegistryPath))
+                    {
+                        if (key != null)
+                        {
+                            var lastRowIndex = key.GetValue(LastSelectedRowKey) as int?;
+                            if (lastRowIndex.HasValue)
+                            {
+                                await Task.Delay(1000); // Give the form a moment to load and data to populate
+                                
+                                // Simulate clicking the Generate PDF button for the last selected row
+                                if (newForm.dataGridView.Rows.Count > lastRowIndex.Value)
+                                {
+                                    var cellEventArgs = new DataGridViewCellEventArgs(
+                                        newForm.dataGridView.Columns["GeneratePdf"].Index,
+                                        lastRowIndex.Value
+                                    );
+                                    newForm.dataGridView_CellContentClick(newForm.dataGridView, cellEventArgs);
+                                }
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+                    // Ignore errors trying to regenerate PDF
+                }
             }
             catch (Exception ex)
             {
