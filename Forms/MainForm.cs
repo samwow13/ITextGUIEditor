@@ -31,10 +31,13 @@ namespace iTextDesignerWithGUI.Forms
         private readonly PdfGeneratorService _pdfGenerator;
         private List<object> _referenceData;
         private string _currentPdfPath;
+        private AssessmentType _currentAssessmentType;
+        private Label _statusLabel;
 
         public MainForm(AssessmentType assessmentType = AssessmentType.OralCare)
         {
             InitializeComponent();
+            _currentAssessmentType = assessmentType;
             _assessment = CreateAssessment(assessmentType);
             _jsonManager = new JsonManager(_assessment.JsonDataPath, assessmentType);
             _pdfGenerator = new PdfGeneratorService();
@@ -134,7 +137,7 @@ namespace iTextDesignerWithGUI.Forms
                 Button backButton = new Button
                 {
                     Text = "Back to Selection",
-                    Dock = DockStyle.Bottom,
+                    Dock = DockStyle.None,  // Changed from Bottom to None for side-by-side layout
                     Height = 40,
                     Width = 150,
                     Margin = new Padding(10),
@@ -146,7 +149,60 @@ namespace iTextDesignerWithGUI.Forms
                     Cursor = Cursors.Hand
                 };
                 backButton.Click += BackToSelection_Click;
-                this.Controls.Add(backButton);
+
+                // Add Reload Templates button
+                Button reloadButton = new Button
+                {
+                    Text = "Reload Templates",
+                    Dock = DockStyle.None,
+                    Height = 40,
+                    Width = 150,
+                    Margin = new Padding(10),
+                    Padding = new Padding(5),
+                    FlatStyle = FlatStyle.Flat,
+                    BackColor = System.Drawing.Color.FromArgb(40, 167, 69),  // Bootstrap success green
+                    ForeColor = System.Drawing.Color.White,
+                    Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular),
+                    Cursor = Cursors.Hand
+                };
+                reloadButton.Click += ReloadTemplates_Click;
+
+                // Create a panel for the buttons
+                TableLayoutPanel buttonPanel = new TableLayoutPanel
+                {
+                    Dock = DockStyle.Bottom,
+                    Height = 80, // Increased height to accommodate status label
+                    Padding = new Padding(10),
+                    ColumnCount = 3,
+                    RowCount = 2 // Added another row for the status label
+                };
+
+                // Configure columns: Left spacing (auto) | Back button | Reload button
+                buttonPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F)); // Left spacing
+                buttonPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize)); // Back button
+                buttonPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize)); // Reload button
+
+                // Configure rows
+                buttonPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize)); // Status label row
+                buttonPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize)); // Buttons row
+
+                // Create status label
+                _statusLabel = new Label
+                {
+                    Text = "",
+                    AutoSize = true,
+                    TextAlign = ContentAlignment.MiddleRight,
+                    Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold),
+                    ForeColor = System.Drawing.Color.FromArgb(40, 167, 69), // Bootstrap success green
+                    Visible = false
+                };
+
+                // Add controls to the panel
+                buttonPanel.Controls.Add(_statusLabel, 2, 0); // Status label in first row, right column
+                buttonPanel.Controls.Add(backButton, 1, 1); // Back button in second row
+                buttonPanel.Controls.Add(reloadButton, 2, 1); // Reload button in second row
+                
+                this.Controls.Add(buttonPanel);
             }
             catch (Exception ex)
             {
@@ -316,6 +372,24 @@ namespace iTextDesignerWithGUI.Forms
                 newForm.FormClosed += (s, args) => this.Close(); // Close this form when new form closes
                 newForm.Show();
             }
+        }
+
+        private async void ReloadTemplates_Click(object sender, EventArgs e)
+        {
+            // Show the reloading message
+            _statusLabel.Text = "Reloading...";
+            _statusLabel.Visible = true;
+            
+            // Wait for 1 second to ensure message is visible
+            await Task.Delay(1000);
+
+            // Hide this form while showing the new one
+            this.Hide();
+            
+            // Create and show the new form with the same assessment type
+            var newForm = new MainForm(_currentAssessmentType);
+            newForm.FormClosed += (s, args) => this.Close(); // Close this form when new form closes
+            newForm.Show();
         }
     }
 }
