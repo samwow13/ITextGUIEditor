@@ -56,7 +56,7 @@ namespace iTextDesignerWithGUI.Forms
         private static bool _isReloading = false; // Add static flag to prevent multiple reloads
         
         // Constant for Task.Delay duration in milliseconds
-        private const int TASK_DELAY_MS = 100;
+        private const int TASK_DELAY_MS = 5;
 
         private int? _lastSelectedRow;
         private Process _currentEdgeProcess;
@@ -77,6 +77,9 @@ namespace iTextDesignerWithGUI.Forms
                 () => ReloadTemplates_Click(this, EventArgs.Empty),
                 this);
             // Don't start watching by default since automatic saving starts disabled
+
+            // Load saved preferences
+            _closeEdgeOnChange = LoadCloseEdgePreference();
             
             // Update the window title to show the selected assessment type
             this.Text = $"iText Designer - {assessmentType.ToString().SplitCamelCase()}";

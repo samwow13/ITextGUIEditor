@@ -1597,3 +1597,318 @@ File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITex
 Handling file change - Resetting timer
 Debounce timer elapsed - Triggering template reload
 Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41034 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_143426.pdf
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41034 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_143532.pdf
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41034 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_143615.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41035 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_143627.pdf
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3327 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250222_143645.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\TestRazorDataAssessment.cshtml
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\TestRazorDataAssessment.cshtml
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\TestRazorDataAssessment.cshtml
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Debounce timer elapsed - Triggering template reload
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3327 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250222_143656.pdf
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41035 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_143728.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41028 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_143742.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41034 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_143800.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41034 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_143810.pdf
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41034 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_143926.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41028 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_143942.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41028 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_143953.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41029 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_144005.pdf
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Debounce timer elapsed - Triggering template reload
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3327 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250222_144019.pdf
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41030 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_144445.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41028 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_144818.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Disposing TemplateWatcherService
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41028 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_144942.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Build output: MSBuild version 17.3.2+561848881 for .NET
+Build output:   Determining projects to restore...
+Build output:   All projects are up-to-date for restore.
+Build output:   iTextDesignerWithGUI -> C:\Users\samwo\AppData\Local\Temp\iTextBuild_20250222144947\iTextDesignerWithGUI.dll
+Build output: 
+Build output: Build succeeded.
+Build output:     0 Warning(s)
+Build output:     0 Error(s)
+Build output: 
+Build output: Time Elapsed 00:00:01.01
+Disposing TemplateWatcherService
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41028 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_145004.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Build output: MSBuild version 17.3.2+561848881 for .NET
+Build output:   Determining projects to restore...
+Build output:   All projects are up-to-date for restore.
+Build output:   iTextDesignerWithGUI -> C:\Users\samwo\AppData\Local\Temp\iTextBuild_20250222145010\iTextDesignerWithGUI.dll
+Build output: 
+Build output: Build succeeded.
+Build output:     0 Warning(s)
+Build output:     0 Error(s)
+Build output: 
+Build output: Time Elapsed 00:00:00.98
+Disposing TemplateWatcherService
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41029 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_145225.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41026 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_145231.pdf

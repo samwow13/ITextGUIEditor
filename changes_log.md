@@ -26,3 +26,6 @@
 
 ## 2025-02-22
 - Added persistence for "Close Edge on change" setting in Windows Registry
+
+## 2025-02-22
+- Fixed "Close Edge on change" setting to properly load the saved preference when the application starts

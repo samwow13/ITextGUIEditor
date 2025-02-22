@@ -7,7 +7,8 @@
     "ChildInfo.required_comment": false,
     "ChildInfo": false,
     "SelfManagementGoals.use_fluoride_toothpaste": true,
-    "SelfManagementGoals.brush_twice_daily": true
+    "SelfManagementGoals.brush_twice_daily": true,
+    "ChildInfo.assessment_date": true
   },
-  "LastModified": "2025-02-22T09:35:56.354844-08:00"
+  "LastModified": "2025-02-22T14:35:22.664474-08:00"
 }
