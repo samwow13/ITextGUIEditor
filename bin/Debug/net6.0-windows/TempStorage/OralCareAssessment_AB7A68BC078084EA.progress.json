@@ -2,12 +2,12 @@
   "DocumentId": "OralCareAssessment_AB7A68BC078084EA",
   "DocumentType": "OralCareAssessment",
   "CheckStates": {
-    "ChildInfo.child_name": false,
-    "ChildInfo.case_number": false,
+    "ChildInfo.child_name": true,
+    "ChildInfo.case_number": true,
     "ChildInfo.required_comment": false,
     "ChildInfo": false,
     "SelfManagementGoals.use_fluoride_toothpaste": true,
     "SelfManagementGoals.brush_twice_daily": true
   },
-  "LastModified": "2025-02-22T07:45:11.6433857-08:00"
+  "LastModified": "2025-02-22T09:35:56.354844-08:00"
 }

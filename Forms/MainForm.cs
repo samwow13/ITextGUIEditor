@@ -8,6 +8,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Win32;
+using System.Runtime.InteropServices;
 
 namespace iTextDesignerWithGUI.Forms
 {
@@ -27,6 +28,17 @@ namespace iTextDesignerWithGUI.Forms
 
     public partial class MainForm : Form
     {
+        // Add Win32 API declarations
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+        
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+        
+        private const uint SWP_NOSIZE = 0x0001;
+        private const uint SWP_NOZORDER = 0x0004;
+        private const int EDGE_WINDOW_OFFSET = 20; // Pixels to offset Edge window from MainForm
+
         private readonly IAssessment _assessment;
         private readonly JsonManager _jsonManager;
         private readonly PdfGeneratorService _pdfGenerator;
@@ -304,7 +316,7 @@ namespace iTextDesignerWithGUI.Forms
             dataGridView.CellContentClick += dataGridView_CellContentClick;
         }
 
-        private void dataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private async void dataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex == dataGridView.Columns["GeneratePdf"].Index)
             {
@@ -370,6 +382,19 @@ namespace iTextDesignerWithGUI.Forms
                         UseShellExecute = true
                     };
                     _currentEdgeProcess = Process.Start(startInfo);
+
+                    // Wait briefly for Edge window to open
+                    await Task.Delay(1000);
+
+                    // Find the Edge window by looking for the PDF filename in the title
+                    var edgeWindow = FindWindow(null, fileName);
+                    if (edgeWindow != IntPtr.Zero)
+                    {
+                        // Position Edge window to the right of the MainForm
+                        var mainFormRight = this.Location.X + this.Width;
+                        var mainFormTop = this.Location.Y;
+                        SetWindowPos(edgeWindow, IntPtr.Zero, mainFormRight + EDGE_WINDOW_OFFSET, mainFormTop, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+                    }
 
                     // Show the blank form below and update it with the data
                     var blankForm = new SecondaryForm(this);
@@ -466,13 +491,15 @@ namespace iTextDesignerWithGUI.Forms
                 _statusLabel.ForeColor = System.Drawing.Color.FromArgb(255, 193, 7); // Bootstrap warning yellow
                 _statusLabel.Visible = true;
 
-                // Get the project directory path
-                var currentDir = Directory.GetCurrentDirectory();
-                var projectPath = Path.GetFullPath(Path.Combine(currentDir, "..", "ITextGUIEditor", "iTextDesignerWithGUI.csproj"));
+                // Get the project directory path by going up from the bin directory
+                var binDir = AppDomain.CurrentDomain.BaseDirectory;
+                var projectDir = Path.GetFullPath(Path.Combine(binDir, "..\\..\\.."));
+                var projectPath = Directory.GetFiles(projectDir, "*.csproj", SearchOption.TopDirectoryOnly)
+                    .FirstOrDefault();
                 
-                if (!File.Exists(projectPath))
+                if (string.IsNullOrEmpty(projectPath))
                 {
-                    throw new FileNotFoundException($"Could not find project file at: {projectPath}");
+                    throw new FileNotFoundException($"Could not find .csproj file in the project directory: {projectDir}");
                 }
 
                 // Try to kill any existing processes of our app (except the current one)

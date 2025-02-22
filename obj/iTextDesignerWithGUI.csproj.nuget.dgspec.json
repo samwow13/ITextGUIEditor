@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\ITextGUIDesign2_12\\ITextGUIEditor\\iTextDesignerWithGUI.csproj": {}
+    "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\ITextGUIProject2_22\\iTextDesignerWithGUI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\ITextGUIDesign2_12\\ITextGUIEditor\\iTextDesignerWithGUI.csproj": {
+    "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\ITextGUIProject2_22\\iTextDesignerWithGUI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\ITextGUIDesign2_12\\ITextGUIEditor\\iTextDesignerWithGUI.csproj",
+        "projectUniqueName": "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\ITextGUIProject2_22\\iTextDesignerWithGUI.csproj",
         "projectName": "iTextDesignerWithGUI",
-        "projectPath": "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\ITextGUIDesign2_12\\ITextGUIEditor\\iTextDesignerWithGUI.csproj",
+        "projectPath": "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\ITextGUIProject2_22\\iTextDesignerWithGUI.csproj",
         "packagesPath": "C:\\Users\\samwo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\ITextGUIDesign2_12\\ITextGUIEditor\\obj\\",
+        "outputPath": "C:\\Users\\samwo\\OneDrive\\Desktop\\Python Code\\ITextGUIProject2_22\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\samwo\\AppData\\Roaming\\NuGet\\NuGet.Config"
