@@ -19,3 +19,10 @@
 
 ## 2025-02-22
 - Rewrote `TemplateWatcherService` to use separate watchers for each file type (`.html`, `.cshtml`, `.css`) to improve file change detection
+
+## 2025-02-22
+- Added "Close Edge on change" checkbox to MainForm next to the "Automatic Saving" checkbox
+- Added "Close Edge on change" checkbox functionality to automatically close Edge windows when templates are reloaded
+
+## 2025-02-22
+- Added persistence for "Close Edge on change" setting in Windows Registry

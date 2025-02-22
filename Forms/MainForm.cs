@@ -51,10 +51,16 @@ namespace iTextDesignerWithGUI.Forms
         private const string WindowPosXKey = "WindowPosX";
         private const string WindowPosYKey = "WindowPosY";
         private const string LastSelectedRowKey = "LastSelectedRow";
+        private const string AutoSavingEnabledKey = "AutoSavingEnabled";
+        private const string CloseEdgeOnChangeKey = "CloseEdgeOnChange";
         private static bool _isReloading = false; // Add static flag to prevent multiple reloads
+        
+        // Constant for Task.Delay duration in milliseconds
+        private const int TASK_DELAY_MS = 100;
 
         private int? _lastSelectedRow;
         private Process _currentEdgeProcess;
+        private bool _closeEdgeOnChange = false;
 
         public MainForm(AssessmentType assessmentType = AssessmentType.OralCare)
         {
@@ -70,7 +76,7 @@ namespace iTextDesignerWithGUI.Forms
                 Path.GetFullPath(templatesPath), 
                 () => ReloadTemplates_Click(this, EventArgs.Empty),
                 this);
-            _templateWatcher.StartWatching();
+            // Don't start watching by default since automatic saving starts disabled
             
             // Update the window title to show the selected assessment type
             this.Text = $"iText Designer - {assessmentType.ToString().SplitCamelCase()}";
@@ -135,6 +141,88 @@ namespace iTextDesignerWithGUI.Forms
             catch
             {
                 // Ignore any errors saving position
+            }
+        }
+
+        private bool LoadAutoSavingPreference()
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.OpenSubKey(RegistryPath))
+                {
+                    if (key != null)
+                    {
+                        var value = key.GetValue(AutoSavingEnabledKey);
+                        if (value != null)
+                        {
+                            return Convert.ToBoolean(value);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                Debug.WriteLine("Error loading auto-saving preference");
+            }
+            return false; // Default to disabled if not found or error
+        }
+
+        private void SaveAutoSavingPreference(bool enabled)
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.CreateSubKey(RegistryPath))
+                {
+                    if (key != null)
+                    {
+                        key.SetValue(AutoSavingEnabledKey, enabled ? 1 : 0, RegistryValueKind.DWord);
+                    }
+                }
+            }
+            catch
+            {
+                Debug.WriteLine("Error saving auto-saving preference");
+            }
+        }
+
+        private bool LoadCloseEdgePreference()
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.OpenSubKey(RegistryPath))
+                {
+                    if (key != null)
+                    {
+                        var value = key.GetValue(CloseEdgeOnChangeKey);
+                        if (value != null)
+                        {
+                            return Convert.ToBoolean(value);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                Debug.WriteLine("Error loading close-edge preference");
+            }
+            return false; // Default to disabled if not found or error
+        }
+
+        private void SaveCloseEdgePreference(bool enabled)
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.CreateSubKey(RegistryPath))
+                {
+                    if (key != null)
+                    {
+                        key.SetValue(CloseEdgeOnChangeKey, enabled ? 1 : 0, RegistryValueKind.DWord);
+                    }
+                }
+            }
+            catch
+            {
+                Debug.WriteLine("Error saving close-edge preference");
             }
         }
 
@@ -203,6 +291,34 @@ namespace iTextDesignerWithGUI.Forms
                 };
                 backButton.Click += BackToSelection_Click;
 
+                // Add Automatic Saving checkbox
+                CheckBox autoSaveCheckbox = new CheckBox
+                {
+                    Text = "Automatic Saving",
+                    AutoSize = true,
+                    Margin = new Padding(10),
+                    Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular),
+                    Cursor = Cursors.Hand,
+                    Checked = LoadAutoSavingPreference()  // Load saved preference
+                };
+
+                // Add Close Edge on change checkbox
+                CheckBox closeEdgeCheckbox = new CheckBox
+                {
+                    Text = "Close Edge on change",
+                    AutoSize = true,
+                    Margin = new Padding(10),
+                    Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular),
+                    Cursor = Cursors.Hand,
+                    Checked = LoadCloseEdgePreference()
+                };
+
+                closeEdgeCheckbox.CheckedChanged += (sender, e) =>
+                {
+                    _closeEdgeOnChange = closeEdgeCheckbox.Checked;
+                    SaveCloseEdgePreference(closeEdgeCheckbox.Checked);
+                };
+
                 // Add Reload Templates button
                 Button reloadButton = new Button
                 {
@@ -216,26 +332,61 @@ namespace iTextDesignerWithGUI.Forms
                     BackColor = System.Drawing.Color.FromArgb(40, 167, 69),  // Bootstrap success green
                     ForeColor = System.Drawing.Color.White,
                     Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular),
-                    Cursor = Cursors.Hand
+                    Cursor = Cursors.Hand,
+                    Enabled = !LoadAutoSavingPreference()  // Enable if auto-saving is disabled
                 };
+
+                // Add event handler for checkbox state change
+                autoSaveCheckbox.CheckedChanged += (sender, e) =>
+                {
+                    reloadButton.Enabled = !autoSaveCheckbox.Checked;
+                    // Update button appearance when disabled
+                    reloadButton.BackColor = autoSaveCheckbox.Checked ? 
+                        System.Drawing.Color.FromArgb(108, 117, 125) : // Bootstrap gray for disabled
+                        System.Drawing.Color.FromArgb(40, 167, 69);    // Bootstrap success green for enabled
+                    
+                    // Control the template watcher service
+                    if (autoSaveCheckbox.Checked)
+                    {
+                        _templateWatcher.StartWatching();
+                        Debug.WriteLine("Template watcher service started");
+                    }
+                    else
+                    {
+                        _templateWatcher.StopWatching();
+                        Debug.WriteLine("Template watcher service stopped");
+                    }
+
+                    // Save the preference
+                    SaveAutoSavingPreference(autoSaveCheckbox.Checked);
+                };
+
+                // Initialize template watcher based on saved preference
+                if (autoSaveCheckbox.Checked)
+                {
+                    _templateWatcher.StartWatching();
+                }
+
                 reloadButton.Click += ReloadTemplates_Click;
 
                 // Create a panel for the buttons
                 TableLayoutPanel buttonPanel = new TableLayoutPanel
                 {
                     Dock = DockStyle.Bottom,
-                    Height = 80, // Increased height to accommodate status label
+                    Height = 120,
                     Padding = new Padding(10),
-                    ColumnCount = 3,
-                    RowCount = 2 // Added another row for the status label
+                    ColumnCount = 4,
+                    RowCount = 3
                 };
 
-                // Configure columns: Left spacing (auto) | Back button | Reload button
+                // Configure columns: Left spacing (auto) | Back button | Reload button | Close Edge checkbox
                 buttonPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F)); // Left spacing
                 buttonPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize)); // Back button
                 buttonPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize)); // Reload button
+                buttonPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize)); // Close Edge checkbox
 
-                // Configure rows
+                // Configure rows: Checkboxes | Status Label | Buttons
+                buttonPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize)); // Checkbox row
                 buttonPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize)); // Status label row
                 buttonPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize)); // Buttons row
 
@@ -244,17 +395,20 @@ namespace iTextDesignerWithGUI.Forms
                 {
                     Text = "",
                     AutoSize = true,
-                    TextAlign = ContentAlignment.MiddleRight,
+                    TextAlign = ContentAlignment.MiddleCenter,
                     Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold),
                     ForeColor = System.Drawing.Color.FromArgb(40, 167, 69), // Bootstrap success green
-                    Visible = false
+                    Visible = false,
+                    Dock = DockStyle.Fill
                 };
 
                 // Add controls to the panel
-                buttonPanel.Controls.Add(_statusLabel, 2, 0); // Status label in first row, right column
-                buttonPanel.Controls.Add(backButton, 1, 1); // Back button in second row
-                buttonPanel.Controls.Add(reloadButton, 2, 1); // Reload button in second row
-                
+                buttonPanel.Controls.Add(closeEdgeCheckbox, 1, 0); // Close Edge checkbox
+                buttonPanel.Controls.Add(autoSaveCheckbox, 2, 0); // Auto Save checkbox
+                buttonPanel.Controls.Add(_statusLabel, 2, 1); // Status label centered in middle row
+                buttonPanel.Controls.Add(backButton, 1, 2); // Back button in bottom row
+                buttonPanel.Controls.Add(reloadButton, 2, 2); // Reload button in bottom row
+
                 this.Controls.Add(buttonPanel);
             }
             catch (Exception ex)
@@ -403,7 +557,7 @@ namespace iTextDesignerWithGUI.Forms
                     _currentEdgeProcess = Process.Start(startInfo);
 
                     // Wait briefly for Edge window to open
-                    await Task.Delay(1000);
+                    await Task.Delay(TASK_DELAY_MS);
 
                     // Find the Edge window by looking for the PDF filename in the title
                     var edgeWindow = FindWindow(null, fileName);
@@ -509,7 +663,10 @@ namespace iTextDesignerWithGUI.Forms
                 
                 // Stop watching while we reload
                 _templateWatcher?.StopWatching();
-                
+
+                // Close Edge windows if the option is enabled
+                CloseEdgeWindows();
+
                 // Save current window position before doing anything else
                 SaveWindowPosition();
 
@@ -558,7 +715,7 @@ namespace iTextDesignerWithGUI.Forms
                                 // If graceful close fails, try to kill
                                 existingProcess.Kill();
                             }
-                            await Task.Delay(500); // Give it some time to shut down
+                            await Task.Delay(TASK_DELAY_MS); // Give it some time to shut down
                         }
                         catch (Exception ex)
                         {
@@ -569,7 +726,7 @@ namespace iTextDesignerWithGUI.Forms
                     
                     attempts++;
                     if (attempts < maxAttempts)
-                        await Task.Delay(1000); // Wait before next attempt
+                        await Task.Delay(TASK_DELAY_MS); // Wait before next attempt
                 }
                 
                 // Check if we still have running processes
@@ -625,7 +782,7 @@ namespace iTextDesignerWithGUI.Forms
                     if (error.Length > 0) errorMessage += "Errors:\n" + error.ToString();
                     
                     MessageBox.Show(errorMessage, "Build Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    await Task.Delay(700); // Show error for 2 seconds
+                    await Task.Delay(TASK_DELAY_MS); // Show error for 2 seconds
                     _statusLabel.Visible = false;
                     return;
                 }
@@ -633,7 +790,7 @@ namespace iTextDesignerWithGUI.Forms
                 // Show reloading message
                 _statusLabel.Text = "Build successful! Reloading...";
                 _statusLabel.ForeColor = System.Drawing.Color.FromArgb(40, 167, 69); // Bootstrap success green
-                await Task.Delay(700);
+                await Task.Delay(TASK_DELAY_MS);
 
                 // Hide this form while showing the new one
                 this.Hide();
@@ -644,7 +801,7 @@ namespace iTextDesignerWithGUI.Forms
                 newForm.Show();
 
                 // Allow reloading again after a delay to ensure the new form is fully loaded
-                await Task.Delay(2000);
+                await Task.Delay(TASK_DELAY_MS);
                 _isReloading = false;
 
                 // Regenerate the last PDF if we have a saved row index
@@ -657,7 +814,7 @@ namespace iTextDesignerWithGUI.Forms
                             var lastRowIndex = key.GetValue(LastSelectedRowKey) as int?;
                             if (lastRowIndex.HasValue)
                             {
-                                await Task.Delay(1000); // Give the form a moment to load and data to populate
+                                await Task.Delay(TASK_DELAY_MS); // Give the form a moment to load and data to populate
                                 
                                 // Simulate clicking the Generate PDF button for the last selected row
                                 if (newForm.dataGridView.Rows.Count > lastRowIndex.Value)
@@ -669,7 +826,7 @@ namespace iTextDesignerWithGUI.Forms
                                     newForm.dataGridView_CellContentClick(newForm.dataGridView, cellEventArgs);
 
                                     // Delete the old PDF file after a delay to ensure the new one is opened
-                                    await Task.Delay(2000);
+                                    await Task.Delay(TASK_DELAY_MS);
                                     try
                                     {
                                         if (!string.IsNullOrEmpty(oldPdfPath) && File.Exists(oldPdfPath))
@@ -697,8 +854,45 @@ namespace iTextDesignerWithGUI.Forms
                 _statusLabel.ForeColor = System.Drawing.Color.FromArgb(220, 53, 69); // Bootstrap danger red
                 _statusLabel.Visible = true;
                 MessageBox.Show($"Error during reload: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                await Task.Delay(2000);
+                await Task.Delay(TASK_DELAY_MS);
                 _statusLabel.Visible = false;
+            }
+        }
+
+        private void CloseEdgeWindows()
+        {
+            if (!_closeEdgeOnChange) return;
+
+            try
+            {
+                var edgeProcesses = Process.GetProcessesByName("msedge");
+                foreach (var process in edgeProcesses)
+                {
+                    try
+                    {
+                        if (!process.HasExited)
+                        {
+                            process.CloseMainWindow();
+                            // Give it a moment to close gracefully
+                            if (!process.WaitForExit(1000))
+                            {
+                                process.Kill();
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Error closing Edge process {process.Id}: {ex.Message}");
+                    }
+                    finally
+                    {
+                        process.Dispose();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error in CloseEdgeWindows: {ex.Message}");
             }
         }
     }
