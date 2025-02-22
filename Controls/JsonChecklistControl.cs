@@ -13,7 +13,7 @@ namespace iTextDesignerWithGUI.Controls
     public class JsonChecklistControl : Panel
     {
         private Dictionary<string, bool> _checkStates = new Dictionary<string, bool>();
-        private FlowLayoutPanel _flowPanel;
+        private TableLayoutPanel _mainTable;
         private ChecklistProgressManager _progressManager;
         private string _currentDocumentId;
         private string _currentDocumentType;
@@ -32,14 +32,24 @@ namespace iTextDesignerWithGUI.Controls
 
         private void InitializeComponent()
         {
-            _flowPanel = new FlowLayoutPanel
+            _mainTable = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
                 AutoScroll = true,
-                FlowDirection = FlowDirection.TopDown,
-                WrapContents = false
+                ColumnCount = 2,
+                RowCount = 0,
+                AutoSize = true,
+                GrowStyle = TableLayoutPanelGrowStyle.AddRows,
+                Margin = new Padding(0),
+                Padding = new Padding(0),
+                BackColor = Color.White
             };
-            Controls.Add(_flowPanel);
+
+            // Set column styles
+            _mainTable.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 30F));  // Checkbox column
+            _mainTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));  // Content column
+
+            Controls.Add(_mainTable);
         }
 
         /// <summary>
@@ -71,14 +81,16 @@ namespace iTextDesignerWithGUI.Controls
                 string json = JsonSerializer.Serialize(data, options);
                 using JsonDocument doc = JsonDocument.Parse(json);
                 
-                _flowPanel.Controls.Clear();
+                _mainTable.Controls.Clear();
+                _mainTable.RowCount = 0;
                 AddJsonElement(doc.RootElement, "");
             }
             else
             {
                 _currentDocumentId = null;
                 _checkStates.Clear();
-                _flowPanel.Controls.Clear();
+                _mainTable.Controls.Clear();
+                _mainTable.RowCount = 0;
             }
         }
 
@@ -119,51 +131,115 @@ namespace iTextDesignerWithGUI.Controls
 
         private void AddPropertyElement(string name, JsonElement value, string path, int indent)
         {
-            if (value.ValueKind == JsonValueKind.Object || value.ValueKind == JsonValueKind.Array)
+            if (value.ValueKind == JsonValueKind.Object)
             {
-                // Add a header for objects and arrays
-                var header = new Label
-                {
-                    Text = $"{new string(' ', indent * 4)}{name}:",
-                    AutoSize = true,
-                    Font = new Font(Font.FontFamily, Font.Size, FontStyle.Bold),
-                    Margin = new Padding(3)
-                };
-                _flowPanel.Controls.Add(header);
+                // Add the object header row
+                AddContentRow($"\"{name}\": {{", path, indent, true);
+
+                // Add the object's properties
                 AddJsonElement(value, path, indent + 1);
+
+                // Add closing brace
+                AddContentRow("}", null, indent, false);
+            }
+            else if (value.ValueKind == JsonValueKind.Array)
+            {
+                // Add the array header row
+                AddContentRow($"\"{name}\": [", path, indent, true);
+
+                // Add the array items
+                AddJsonElement(value, path, indent + 1);
+
+                // Add closing bracket
+                AddContentRow("]", null, indent, false);
             }
             else
             {
-                AddLeafElement($"{name}: {value}", path, indent);
+                // For primitive values, show them inline
+                var content = value.ValueKind == JsonValueKind.String
+                    ? $"\"{name}\": \"{value}\""
+                    : $"\"{name}\": {value}";
+
+                AddContentRow(content, path, indent, true, value.ValueKind);
             }
         }
 
         private void AddLeafElement(string text, string path, int indent)
         {
-            var panel = new Panel
+            AddContentRow(text, path, indent, true);
+        }
+
+        private void AddContentRow(string content, string path, int indent, bool addCheckbox, JsonValueKind? valueKind = null)
+        {
+            // Create new row
+            _mainTable.RowCount++;
+            int rowIndex = _mainTable.RowCount - 1;
+
+            // Add checkbox if needed
+            if (addCheckbox)
+            {
+                var checkbox = new CheckBox
+                {
+                    AutoSize = true,
+                    Margin = new Padding(5, 3, 0, 0),
+                    Tag = path,
+                    Checked = _checkStates.ContainsKey(path) && _checkStates[path]
+                };
+
+                checkbox.CheckedChanged += (s, e) =>
+                {
+                    var cb = (CheckBox)s;
+                    _checkStates[cb.Tag.ToString()] = cb.Checked;
+                    SaveProgress();
+                };
+
+                _mainTable.Controls.Add(checkbox, 0, rowIndex);
+            }
+            else
+            {
+                // Add empty panel for spacing
+                var emptyPanel = new Panel
+                {
+                    Height = 20,
+                    Margin = new Padding(0)
+                };
+                _mainTable.Controls.Add(emptyPanel, 0, rowIndex);
+            }
+
+            // Add content
+            var contentPanel = new Panel
             {
                 AutoSize = true,
-                Margin = new Padding(3),
-                Padding = new Padding(indent * 20, 0, 0, 0)
+                Dock = DockStyle.Fill,
+                Padding = new Padding(indent * 4, 0, 0, 0),
+                Margin = new Padding(0),
+                BackColor = Color.White
             };
 
-            var checkbox = new CheckBox
+            var label = new Label
             {
+                Text = content,
                 AutoSize = true,
-                Text = text,
-                Tag = path,
-                Checked = _checkStates.ContainsKey(path) && _checkStates[path]
+                Font = new Font("Consolas", 9),
+                ForeColor = valueKind.HasValue ? GetJsonValueColor(valueKind.Value) : Color.Black,
+                Margin = new Padding(0),
+                UseMnemonic = false
             };
 
-            checkbox.CheckedChanged += (s, e) =>
+            contentPanel.Controls.Add(label);
+            _mainTable.Controls.Add(contentPanel, 1, rowIndex);
+        }
+
+        private Color GetJsonValueColor(JsonValueKind valueKind)
+        {
+            return valueKind switch
             {
-                var cb = (CheckBox)s;
-                _checkStates[cb.Tag.ToString()] = cb.Checked;
-                SaveProgress();
+                JsonValueKind.String => Color.FromArgb(34, 162, 201),    // Light blue for strings
+                JsonValueKind.Number => Color.FromArgb(247, 140, 108),   // Orange for numbers
+                JsonValueKind.True or JsonValueKind.False => Color.FromArgb(174, 129, 255),  // Purple for booleans
+                JsonValueKind.Null => Color.FromArgb(239, 83, 80),       // Red for null
+                _ => Color.FromArgb(152, 195, 121)                       // Green for property names
             };
-
-            panel.Controls.Add(checkbox);
-            _flowPanel.Controls.Add(panel);
         }
 
         private void SaveProgress()

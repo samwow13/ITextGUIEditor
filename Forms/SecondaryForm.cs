@@ -18,7 +18,6 @@ namespace iTextDesignerWithGUI.Forms
         private readonly MainForm _parentForm;
         private TabControl _tabControl;
         private TabPage _jsonViewTab;
-        private TabPage _csharpModelTab;
         private JsonChecklistControl _jsonChecklistControl;
         private object _currentData;
 
@@ -94,7 +93,7 @@ namespace iTextDesignerWithGUI.Forms
         private void InitializeComponent()
         {
             // Form properties
-            Text = "Secondary Form";
+            Text = "JSON Viewer";
             StartPosition = FormStartPosition.Manual;
             FormBorderStyle = FormBorderStyle.SizableToolWindow;
             ShowInTaskbar = false;
@@ -113,12 +112,8 @@ namespace iTextDesignerWithGUI.Forms
             };
             _jsonViewTab.Controls.Add(_jsonChecklistControl);
 
-            // C# Model Tab
-            _csharpModelTab = new TabPage("C# Model");
-
             // Add tabs to tab control
             _tabControl.TabPages.Add(_jsonViewTab);
-            _tabControl.TabPages.Add(_csharpModelTab);
 
             // Add tab control to form
             Controls.Add(_tabControl);
