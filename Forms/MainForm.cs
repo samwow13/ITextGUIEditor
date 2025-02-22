@@ -42,6 +42,7 @@ namespace iTextDesignerWithGUI.Forms
         private readonly IAssessment _assessment;
         private readonly JsonManager _jsonManager;
         private readonly PdfGeneratorService _pdfGenerator;
+        private readonly TemplateWatcherService _templateWatcher;
         private List<object> _referenceData;
         private string _currentPdfPath;
         private AssessmentType _currentAssessmentType;
@@ -50,6 +51,7 @@ namespace iTextDesignerWithGUI.Forms
         private const string WindowPosXKey = "WindowPosX";
         private const string WindowPosYKey = "WindowPosY";
         private const string LastSelectedRowKey = "LastSelectedRow";
+        private static bool _isReloading = false; // Add static flag to prevent multiple reloads
 
         private int? _lastSelectedRow;
         private Process _currentEdgeProcess;
@@ -61,6 +63,14 @@ namespace iTextDesignerWithGUI.Forms
             _assessment = CreateAssessment(assessmentType);
             _jsonManager = new JsonManager(_assessment.JsonDataPath, assessmentType);
             _pdfGenerator = new PdfGeneratorService();
+            
+            // Initialize template watcher
+            var templatesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\Templates");
+            _templateWatcher = new TemplateWatcherService(
+                Path.GetFullPath(templatesPath), 
+                () => ReloadTemplates_Click(this, EventArgs.Empty),
+                this);
+            _templateWatcher.StartWatching();
             
             // Update the window title to show the selected assessment type
             this.Text = $"iText Designer - {assessmentType.ToString().SplitCamelCase()}";
@@ -145,6 +155,15 @@ namespace iTextDesignerWithGUI.Forms
                 }
             }
             base.OnFormClosing(e);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _templateWatcher?.Dispose();
+            }
+            base.Dispose(disposing);
         }
 
         private IAssessment CreateAssessment(AssessmentType type)
@@ -481,8 +500,16 @@ namespace iTextDesignerWithGUI.Forms
 
         private async void ReloadTemplates_Click(object sender, EventArgs e)
         {
+            // Prevent multiple simultaneous reloads
+            if (_isReloading) return;
+            
             try
             {
+                _isReloading = true;
+                
+                // Stop watching while we reload
+                _templateWatcher?.StopWatching();
+                
                 // Save current window position before doing anything else
                 SaveWindowPosition();
 
@@ -615,6 +642,10 @@ namespace iTextDesignerWithGUI.Forms
                 var newForm = new MainForm(_currentAssessmentType);
                 newForm.FormClosed += (s, args) => this.Close(); // Close this form when new form closes
                 newForm.Show();
+
+                // Allow reloading again after a delay to ensure the new form is fully loaded
+                await Task.Delay(2000);
+                _isReloading = false;
 
                 // Regenerate the last PDF if we have a saved row index
                 try
