@@ -477,20 +477,55 @@ namespace iTextDesignerWithGUI.Forms
 
                 // Try to kill any existing processes of our app (except the current one)
                 var currentProcess = Process.GetCurrentProcess();
-                foreach (var existingProcess in Process.GetProcessesByName(currentProcess.ProcessName))
+                var processName = currentProcess.ProcessName;
+                var attempts = 0;
+                const int maxAttempts = 3;
+                
+                while (attempts < maxAttempts)
                 {
-                    try
+                    var existingProcesses = Process.GetProcessesByName(processName)
+                        .Where(p => p.Id != currentProcess.Id)
+                        .ToList();
+                        
+                    if (!existingProcesses.Any())
+                        break;
+                        
+                    foreach (var existingProcess in existingProcesses)
                     {
-                        if (existingProcess.Id != currentProcess.Id)
+                        try
                         {
-                            existingProcess.Kill();
+                            // Check if process has exited
+                            if (existingProcess.HasExited)
+                                continue;
+                                
+                            // Try to close the process gracefully first
+                            if (!existingProcess.CloseMainWindow())
+                            {
+                                // If graceful close fails, try to kill
+                                existingProcess.Kill();
+                            }
                             await Task.Delay(500); // Give it some time to shut down
                         }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine($"Failed to close process {existingProcess.Id}: {ex.Message}");
+                            // Continue with other processes
+                        }
                     }
-                    catch
-                    {
-                        // Ignore errors trying to kill processes
-                    }
+                    
+                    attempts++;
+                    if (attempts < maxAttempts)
+                        await Task.Delay(1000); // Wait before next attempt
+                }
+                
+                // Check if we still have running processes
+                var remainingProcesses = Process.GetProcessesByName(processName)
+                    .Where(p => p.Id != currentProcess.Id)
+                    .ToList();
+                    
+                if (remainingProcesses.Any())
+                {
+                    throw new InvalidOperationException("Unable to close all instances of the application. Please close them manually and try again.");
                 }
 
                 // Instead of killing Edge, we'll keep track of the old PDF file
