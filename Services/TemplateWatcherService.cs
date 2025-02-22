@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace iTextDesignerWithGUI.Services
 {
@@ -10,7 +11,7 @@ namespace iTextDesignerWithGUI.Services
     /// </summary>
     public class TemplateWatcherService : IDisposable
     {
-        private readonly FileSystemWatcher _watcher;
+        private readonly List<FileSystemWatcher> _watchers;
         private readonly Action _onTemplateChanged;
         private readonly Control _uiControl;
         private readonly System.Windows.Forms.Timer _debounceTimer;
@@ -24,6 +25,7 @@ namespace iTextDesignerWithGUI.Services
 
             _onTemplateChanged = onTemplateChanged ?? throw new ArgumentNullException(nameof(onTemplateChanged));
             _uiControl = uiControl ?? throw new ArgumentNullException(nameof(uiControl));
+            _watchers = new List<FileSystemWatcher>();
 
             Debug.WriteLine($"Initializing TemplateWatcherService for path: {templatesPath}");
 
@@ -33,41 +35,51 @@ namespace iTextDesignerWithGUI.Services
             _debounceTimer.Enabled = false; // Start disabled
             _debounceTimer.Tick += OnDebounceTimerTick;
 
-            // Initialize the FileSystemWatcher with more comprehensive notify filters
-            _watcher = new FileSystemWatcher
+            // Create watchers for different file types
+            string[] fileTypes = new[] { "*.html", "*.cshtml", "*.css" };
+            foreach (var fileType in fileTypes)
             {
-                Path = templatesPath,
-                NotifyFilter = NotifyFilters.LastWrite 
-                    | NotifyFilters.FileName 
-                    | NotifyFilters.DirectoryName 
-                    | NotifyFilters.Size 
-                    | NotifyFilters.LastAccess
-                    | NotifyFilters.CreationTime
-                    | NotifyFilters.Attributes,
-                Filter = "*.html", // Watch only HTML files
-                EnableRaisingEvents = false // Start disabled
-            };
+                var watcher = new FileSystemWatcher
+                {
+                    Path = templatesPath,
+                    NotifyFilter = NotifyFilters.LastWrite 
+                        | NotifyFilters.FileName 
+                        | NotifyFilters.DirectoryName 
+                        | NotifyFilters.Size 
+                        | NotifyFilters.LastAccess
+                        | NotifyFilters.CreationTime
+                        | NotifyFilters.Attributes,
+                    Filter = fileType,
+                    EnableRaisingEvents = false // Start disabled
+                };
 
-            // Attach event handlers
-            _watcher.Changed += OnTemplateFileChanged;
-            _watcher.Created += OnTemplateFileChanged;
-            _watcher.Deleted += OnTemplateFileChanged;
-            _watcher.Renamed += OnTemplateFileRenamed;
+                // Attach event handlers
+                watcher.Changed += OnTemplateFileChanged;
+                watcher.Created += OnTemplateFileChanged;
+                watcher.Deleted += OnTemplateFileChanged;
+                watcher.Renamed += OnTemplateFileRenamed;
+                watcher.Error += OnWatcherError;
 
-            // Enable error handling
-            _watcher.Error += OnWatcherError;
+                _watchers.Add(watcher);
+            }
         }
 
         public void StartWatching()
         {
-            Debug.WriteLine("Starting template watcher");
-            _watcher.EnableRaisingEvents = true;
+            Debug.WriteLine("Starting template watchers");
+            foreach (var watcher in _watchers)
+            {
+                watcher.EnableRaisingEvents = true;
+            }
         }
 
         public void StopWatching()
         {
-            Debug.WriteLine("Stopping template watcher");
-            _watcher.EnableRaisingEvents = false;
+            Debug.WriteLine("Stopping template watchers");
+            foreach (var watcher in _watchers)
+            {
+                watcher.EnableRaisingEvents = false;
+            }
         }
 
         private void OnTemplateFileChanged(object sender, FileSystemEventArgs e)
@@ -99,43 +111,30 @@ namespace iTextDesignerWithGUI.Services
 
         private void OnWatcherError(object sender, ErrorEventArgs e)
         {
-            Debug.WriteLine($"FileSystemWatcher error: {e.GetException()}");
+            Debug.WriteLine($"Watcher error: {e.GetException()}");
+            MessageBox.Show($"Error watching templates: {e.GetException().Message}", "Template Watcher Error",
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void OnDebounceTimerTick(object sender, EventArgs e)
         {
-            if (_isDisposed) return;
-
-            Debug.WriteLine("Timer elapsed - Triggering template reload");
+            Debug.WriteLine("Debounce timer elapsed - Triggering template reload");
             _debounceTimer.Stop();
-            _onTemplateChanged.Invoke();
+            _onTemplateChanged?.Invoke();
         }
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+            if (_isDisposed) return;
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!_isDisposed)
+            Debug.WriteLine("Disposing TemplateWatcherService");
+            foreach (var watcher in _watchers)
             {
-                if (disposing)
-                {
-                    Debug.WriteLine("Disposing TemplateWatcherService");
-                    StopWatching();
-                    _watcher.Changed -= OnTemplateFileChanged;
-                    _watcher.Created -= OnTemplateFileChanged;
-                    _watcher.Deleted -= OnTemplateFileChanged;
-                    _watcher.Renamed -= OnTemplateFileRenamed;
-                    _watcher.Error -= OnWatcherError;
-                    _watcher.Dispose();
-                    _debounceTimer.Tick -= OnDebounceTimerTick;
-                    _debounceTimer.Dispose();
-                }
-                _isDisposed = true;
+                watcher.EnableRaisingEvents = false;
+                watcher.Dispose();
             }
+            _debounceTimer.Dispose();
+            _isDisposed = true;
         }
     }
 }

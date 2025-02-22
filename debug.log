@@ -980,3 +980,65 @@ Disposing TemplateWatcherService
 Stopping template watcher
 Disposing TemplateWatcherService
 Stopping template watcher
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watcher
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watcher
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3329 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250222_111922.pdf
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watcher
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_111952.pdf
+Disposing TemplateWatcherService
+Stopping template watcher
+Disposing TemplateWatcherService
+Stopping template watcher
+Disposing TemplateWatcherService
+Stopping template watcher
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watcher
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3328 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250222_112121.pdf
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watcher
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41029 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_112145.pdf
+Disposing TemplateWatcherService
+Stopping template watcher
+Disposing TemplateWatcherService
+Stopping template watcher
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_112318.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\AssessmentTemplate.html
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41033 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_112333.pdf
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3329 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250222_112346.pdf
