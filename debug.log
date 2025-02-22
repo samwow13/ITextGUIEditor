@@ -1,0 +1,442 @@
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3322 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250221_091321.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3325 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250221_091335.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3322 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250221_091403.pdf
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250221_091606.pdf
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250221_091610.pdf
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250221_091711.pdf
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250221_091717.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3322 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250221_091821.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3324 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250221_091832.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3324 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250221_091837.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3329 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250221_091901.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3329 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250221_092357.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3326 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250221_095153.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3326 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250221_103310.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+Error compiling Razor template: RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (99:43) 'Order' does not contain a definition for 'Order_Id' and no accessible extension method 'Order_Id' accepting a first argument of type 'Order' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass10_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 221
+Error generating PDF: System.AggregateException: One or more errors occurred. (Failed to compile generated Razor template:
+- (99:43) 'Order' does not contain a definition for 'Order_Id' and no accessible extension method 'Order_Id' accepting a first argument of type 'Order' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+)
+ ---> RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (99:43) 'Order' does not contain a definition for 'Order_Id' and no accessible extension method 'Order_Id' accepting a first argument of type 'Order' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass10_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 221
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 211
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 201
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 314
+Error generating PDF: System.AggregateException: One or more errors occurred. (Failed to compile generated Razor template:
+- (99:43) 'Order' does not contain a definition for 'Order_Id' and no accessible extension method 'Order_Id' accepting a first argument of type 'Order' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+)
+ ---> RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (99:43) 'Order' does not contain a definition for 'Order_Id' and no accessible extension method 'Order_Id' accepting a first argument of type 'Order' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass10_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 221
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 211
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 201
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 314
+   at iTextDesignerWithGUI.Forms.MainForm.dataGridView_CellContentClick(Object sender, DataGridViewCellEventArgs e) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Forms\MainForm.cs:line 354
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3326 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250221_123124.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3326 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250221_124008.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3328 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250221_124337.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+Error compiling Razor template: RazorLight.Generation.TemplateGenerationException: Failed to generate Razor template. See "Diagnostics" property for more details
+- The "div" element was not closed.  All elements must be either self-closing or have a matching end tag.
+- Encountered end tag "tr" with no matching start tag.  Are your start/end tags properly balanced?
+- Encountered end tag "thead" with no matching start tag.  Are your start/end tags properly balanced?
+- Encountered end tag "table" with no matching start tag.  Are your start/end tags properly balanced?
+- Encountered end tag "div" with no matching start tag.  Are your start/end tags properly balanced?
+
+   at RazorLight.Generation.RazorSourceGenerator.GenerateCodeAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass10_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 221
+Error generating PDF: System.AggregateException: One or more errors occurred. (Failed to generate Razor template. See "Diagnostics" property for more details
+- The "div" element was not closed.  All elements must be either self-closing or have a matching end tag.
+- Encountered end tag "tr" with no matching start tag.  Are your start/end tags properly balanced?
+- Encountered end tag "thead" with no matching start tag.  Are your start/end tags properly balanced?
+- Encountered end tag "table" with no matching start tag.  Are your start/end tags properly balanced?
+- Encountered end tag "div" with no matching start tag.  Are your start/end tags properly balanced?
+)
+ ---> RazorLight.Generation.TemplateGenerationException: Failed to generate Razor template. See "Diagnostics" property for more details
+- The "div" element was not closed.  All elements must be either self-closing or have a matching end tag.
+- Encountered end tag "tr" with no matching start tag.  Are your start/end tags properly balanced?
+- Encountered end tag "thead" with no matching start tag.  Are your start/end tags properly balanced?
+- Encountered end tag "table" with no matching start tag.  Are your start/end tags properly balanced?
+- Encountered end tag "div" with no matching start tag.  Are your start/end tags properly balanced?
+
+   at RazorLight.Generation.RazorSourceGenerator.GenerateCodeAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass10_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 221
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 211
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 201
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 314
+Error generating PDF: System.AggregateException: One or more errors occurred. (Failed to generate Razor template. See "Diagnostics" property for more details
+- The "div" element was not closed.  All elements must be either self-closing or have a matching end tag.
+- Encountered end tag "tr" with no matching start tag.  Are your start/end tags properly balanced?
+- Encountered end tag "thead" with no matching start tag.  Are your start/end tags properly balanced?
+- Encountered end tag "table" with no matching start tag.  Are your start/end tags properly balanced?
+- Encountered end tag "div" with no matching start tag.  Are your start/end tags properly balanced?
+)
+ ---> RazorLight.Generation.TemplateGenerationException: Failed to generate Razor template. See "Diagnostics" property for more details
+- The "div" element was not closed.  All elements must be either self-closing or have a matching end tag.
+- Encountered end tag "tr" with no matching start tag.  Are your start/end tags properly balanced?
+- Encountered end tag "thead" with no matching start tag.  Are your start/end tags properly balanced?
+- Encountered end tag "table" with no matching start tag.  Are your start/end tags properly balanced?
+- Encountered end tag "div" with no matching start tag.  Are your start/end tags properly balanced?
+
+   at RazorLight.Generation.RazorSourceGenerator.GenerateCodeAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass10_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 221
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 211
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 201
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 314
+   at iTextDesignerWithGUI.Forms.MainForm.dataGridView_CellContentClick(Object sender, DataGridViewCellEventArgs e) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Forms\MainForm.cs:line 354
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3328 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250221_124418.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3326 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250221_124857.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+Error compiling Razor template: RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (96:53) 'TestRazorDataInstance' does not contain a definition for 'Orderszz' and no accessible extension method 'Orderszz' accepting a first argument of type 'TestRazorDataInstance' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass10_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 221
+Error generating PDF: System.AggregateException: One or more errors occurred. (Failed to compile generated Razor template:
+- (96:53) 'TestRazorDataInstance' does not contain a definition for 'Orderszz' and no accessible extension method 'Orderszz' accepting a first argument of type 'TestRazorDataInstance' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+)
+ ---> RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (96:53) 'TestRazorDataInstance' does not contain a definition for 'Orderszz' and no accessible extension method 'Orderszz' accepting a first argument of type 'TestRazorDataInstance' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass10_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 221
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 211
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 201
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 314
+Error generating PDF: System.AggregateException: One or more errors occurred. (Failed to compile generated Razor template:
+- (96:53) 'TestRazorDataInstance' does not contain a definition for 'Orderszz' and no accessible extension method 'Orderszz' accepting a first argument of type 'TestRazorDataInstance' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+)
+ ---> RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (96:53) 'TestRazorDataInstance' does not contain a definition for 'Orderszz' and no accessible extension method 'Orderszz' accepting a first argument of type 'TestRazorDataInstance' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass10_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 221
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 211
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 201
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 314
+   at iTextDesignerWithGUI.Forms.MainForm.dataGridView_CellContentClick(Object sender, DataGridViewCellEventArgs e) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Forms\MainForm.cs:line 354
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3326 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250221_124936.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3330 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250221_131905.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+Error compiling Razor template: RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (82:50) 'List<Order>' does not contain a definition for 'sdf' and no accessible extension method 'sdf' accepting a first argument of type 'List<Order>' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass10_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 221
+Error generating PDF: System.AggregateException: One or more errors occurred. (Failed to compile generated Razor template:
+- (82:50) 'List<Order>' does not contain a definition for 'sdf' and no accessible extension method 'sdf' accepting a first argument of type 'List<Order>' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+)
+ ---> RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (82:50) 'List<Order>' does not contain a definition for 'sdf' and no accessible extension method 'sdf' accepting a first argument of type 'List<Order>' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass10_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 221
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 211
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 201
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 314
+Error generating PDF: System.AggregateException: One or more errors occurred. (Failed to compile generated Razor template:
+- (82:50) 'List<Order>' does not contain a definition for 'sdf' and no accessible extension method 'sdf' accepting a first argument of type 'List<Order>' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+)
+ ---> RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (82:50) 'List<Order>' does not contain a definition for 'sdf' and no accessible extension method 'sdf' accepting a first argument of type 'List<Order>' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass10_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 221
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 211
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 201
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Services\PdfGeneratorService.cs:line 314
+   at iTextDesignerWithGUI.Forms.MainForm.dataGridView_CellContentClick(Object sender, DataGridViewCellEventArgs e) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\Forms\MainForm.cs:line 354
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3330 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250221_131946.pdf
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_064420.pdf
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_064549.pdf
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_064559.pdf
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_064732.pdf
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_065147.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3332 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250222_065228.pdf
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_065734.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 20110 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250222_065748.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3332 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250222_065807.pdf
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_070036.pdf
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_070207.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 20110 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250222_070219.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 20110 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250222_070220.pdf
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_070625.pdf
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_070736.pdf
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41026 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_071102.pdf
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_071144.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3332 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250222_071200.pdf
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_071449.pdf
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_071503.pdf
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_071512.pdf
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 20110 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250222_071525.pdf
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250222_071540.pdf

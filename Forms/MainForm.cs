@@ -40,6 +40,7 @@ namespace iTextDesignerWithGUI.Forms
         private const string LastSelectedRowKey = "LastSelectedRow";
 
         private int? _lastSelectedRow;
+        private Process _currentEdgeProcess;
 
         public MainForm(AssessmentType assessmentType = AssessmentType.OralCare)
         {
@@ -363,7 +364,17 @@ namespace iTextDesignerWithGUI.Forms
                     File.WriteAllBytes(_currentPdfPath, pdfBytes);
                     Debug.WriteLine($"PDF saved to: {_currentPdfPath}");
 
-                    Process.Start(new ProcessStartInfo(_currentPdfPath) { UseShellExecute = true });
+                    // Start Edge and store the process
+                    var startInfo = new ProcessStartInfo(_currentPdfPath)
+                    {
+                        UseShellExecute = true
+                    };
+                    _currentEdgeProcess = Process.Start(startInfo);
+
+                    // Show the blank form below and update it with the data
+                    var blankForm = new SecondaryForm(this);
+                    blankForm.Show();
+                    blankForm.UpdateData(item); // Pass the data object to the form
                 }
                 catch (Exception ex)
                 {
@@ -399,6 +410,35 @@ namespace iTextDesignerWithGUI.Forms
 
         private void BackToSelection_Click(object sender, EventArgs e)
         {
+            try
+            {
+                // Create a list to store forms to close to avoid modification during enumeration
+                var formsToClose = new List<Form>();
+                
+                // Find all SecondaryForm instances
+                foreach (Form form in Application.OpenForms)
+                {
+                    if (form is SecondaryForm)
+                    {
+                        formsToClose.Add(form);
+                    }
+                }
+                
+                // Close the forms
+                foreach (var form in formsToClose)
+                {
+                    if (!form.IsDisposed && form.Visible)
+                    {
+                        form.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error closing SecondaryForm: {ex}");
+                // Continue with form selection even if closing secondary form fails
+            }
+
             var selector = new AssessmentTypeSelector();
             var result = selector.ShowDialog();
             
@@ -453,19 +493,8 @@ namespace iTextDesignerWithGUI.Forms
                     }
                 }
 
-                // Close any open Edge windows
-                foreach (var edgeProcess in Process.GetProcessesByName("msedge"))
-                {
-                    try
-                    {
-                        edgeProcess.Kill();
-                        await Task.Delay(100); // Give Edge some time to close
-                    }
-                    catch
-                    {
-                        // Ignore errors trying to kill Edge processes
-                    }
-                }
+                // Instead of killing Edge, we'll keep track of the old PDF file
+                var oldPdfPath = _currentPdfPath;
 
                 // Create process to run dotnet build
                 var buildProcess = new Process
@@ -507,7 +536,7 @@ namespace iTextDesignerWithGUI.Forms
                     if (error.Length > 0) errorMessage += "Errors:\n" + error.ToString();
                     
                     MessageBox.Show(errorMessage, "Build Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    await Task.Delay(2000); // Show error for 2 seconds
+                    await Task.Delay(700); // Show error for 2 seconds
                     _statusLabel.Visible = false;
                     return;
                 }
@@ -515,7 +544,7 @@ namespace iTextDesignerWithGUI.Forms
                 // Show reloading message
                 _statusLabel.Text = "Build successful! Reloading...";
                 _statusLabel.ForeColor = System.Drawing.Color.FromArgb(40, 167, 69); // Bootstrap success green
-                await Task.Delay(1000);
+                await Task.Delay(700);
 
                 // Hide this form while showing the new one
                 this.Hide();
@@ -545,6 +574,20 @@ namespace iTextDesignerWithGUI.Forms
                                         lastRowIndex.Value
                                     );
                                     newForm.dataGridView_CellContentClick(newForm.dataGridView, cellEventArgs);
+
+                                    // Delete the old PDF file after a delay to ensure the new one is opened
+                                    await Task.Delay(2000);
+                                    try
+                                    {
+                                        if (!string.IsNullOrEmpty(oldPdfPath) && File.Exists(oldPdfPath))
+                                        {
+                                            File.Delete(oldPdfPath);
+                                        }
+                                    }
+                                    catch
+                                    {
+                                        // Ignore errors deleting old PDF
+                                    }
                                 }
                             }
                         }

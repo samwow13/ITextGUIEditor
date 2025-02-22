@@ -1,0 +1,10 @@
+{
+  "DocumentId": "OralCareAssessment_AB7A68BC078084EA",
+  "DocumentType": "OralCareAssessment",
+  "CheckStates": {
+    "ChildInfo.child_name": true,
+    "ChildInfo.case_number": true,
+    "ChildInfo.required_comment": true
+  },
+  "LastModified": "2025-02-22T07:15:05.6226044-08:00"
+}
