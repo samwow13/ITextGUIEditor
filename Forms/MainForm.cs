@@ -56,7 +56,7 @@ namespace iTextDesignerWithGUI.Forms
         private static bool _isReloading = false; // Add static flag to prevent multiple reloads
         
         // Constant for Task.Delay duration in milliseconds
-        private const int TASK_DELAY_MS = 5;
+        private const int TASK_DELAY_MS = 1;
 
         private int? _lastSelectedRow;
         private Process _currentEdgeProcess;
@@ -559,28 +559,40 @@ namespace iTextDesignerWithGUI.Forms
                     };
                     _currentEdgeProcess = Process.Start(startInfo);
 
-                    // Wait briefly for Edge window to open
-                    await Task.Delay(TASK_DELAY_MS);
-
-                    // Find the Edge window by looking for the PDF filename in the title
-                    var edgeWindow = FindWindow(null, fileName);
-                    if (edgeWindow != IntPtr.Zero)
+                    // Position Edge window relative to MainForm
+                    if (_currentEdgeProcess != null)
                     {
-                        // Position Edge window to the right of the MainForm
-                        var mainFormRight = this.Location.X + this.Width;
-                        var mainFormTop = this.Location.Y;
-                        SetWindowPos(edgeWindow, IntPtr.Zero, mainFormRight + EDGE_WINDOW_OFFSET, mainFormTop, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+                        await Task.Delay(500); // Give Edge time to open
+                        var edgeWindow = FindWindow(null, Path.GetFileName(_currentPdfPath) + " - Microsoft Edge");
+                        if (edgeWindow != IntPtr.Zero)
+                        {
+                            var x = this.Location.X + this.Width + EDGE_WINDOW_OFFSET;
+                            var y = this.Location.Y;
+                            SetWindowPos(edgeWindow, IntPtr.Zero, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+                        }
                     }
-
-                    // Show the blank form below and update it with the data
-                    var blankForm = new SecondaryForm(this);
-                    blankForm.Show();
-                    blankForm.UpdateData(item); // Pass the data object to the form
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"Error generating PDF: {ex}");
-                    MessageBox.Show($"Error generating PDF: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Debug.WriteLine($"Error generating PDF: {ex.Message}");
+                    Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+
+                    // Format the error message to be more user-friendly
+                    var errorMessage = new System.Text.StringBuilder();
+                    errorMessage.AppendLine("PDF Generation Error:");
+                    errorMessage.AppendLine(ex.Message);
+                    
+                    if (ex.InnerException != null)
+                    {
+                        errorMessage.AppendLine("\nDetailed Error:");
+                        errorMessage.AppendLine(ex.InnerException.Message);
+                    }
+
+                    // Show the custom error form
+                    using (var errorForm = new CustomErrorForm(errorMessage.ToString()))
+                    {
+                        errorForm.ShowDialog(this);
+                    }
                 }
             }
         }
@@ -657,25 +669,23 @@ namespace iTextDesignerWithGUI.Forms
 
         private async void ReloadTemplates_Click(object sender, EventArgs e)
         {
-            // Prevent multiple simultaneous reloads
             if (_isReloading) return;
-            
+            _isReloading = true;
+
             try
             {
-                _isReloading = true;
-                
                 // Stop watching while we reload
                 _templateWatcher?.StopWatching();
 
-                // Close Edge windows if the option is enabled
-                CloseEdgeWindows();
+                // Close Edge windows if the option is enabled - do this in parallel
+                var closeEdgeTask = Task.Run(() => CloseEdgeWindows());
 
-                // Save current window position before doing anything else
-                SaveWindowPosition();
+                // Save current window position before doing anything else - do this in parallel
+                var saveWindowTask = Task.Run(() => SaveWindowPosition());
 
                 // Show the building message
                 _statusLabel.Text = "Building application...";
-                _statusLabel.ForeColor = System.Drawing.Color.FromArgb(255, 193, 7); // Bootstrap warning yellow
+                _statusLabel.ForeColor = System.Drawing.Color.FromArgb(255, 193, 7);
                 _statusLabel.Visible = true;
 
                 // Get the project directory path by going up from the bin directory
@@ -689,70 +699,20 @@ namespace iTextDesignerWithGUI.Forms
                     throw new FileNotFoundException($"Could not find .csproj file in the project directory: {projectDir}");
                 }
 
-                // Try to kill any existing processes of our app (except the current one)
-                var currentProcess = Process.GetCurrentProcess();
-                var processName = currentProcess.ProcessName;
-                var attempts = 0;
-                const int maxAttempts = 3;
-                
-                while (attempts < maxAttempts)
-                {
-                    var existingProcesses = Process.GetProcessesByName(processName)
-                        .Where(p => p.Id != currentProcess.Id)
-                        .ToList();
-                        
-                    if (!existingProcesses.Any())
-                        break;
-                        
-                    foreach (var existingProcess in existingProcesses)
-                    {
-                        try
-                        {
-                            // Check if process has exited
-                            if (existingProcess.HasExited)
-                                continue;
-                                
-                            // Try to close the process gracefully first
-                            if (!existingProcess.CloseMainWindow())
-                            {
-                                // If graceful close fails, try to kill
-                                existingProcess.Kill();
-                            }
-                            await Task.Delay(TASK_DELAY_MS); // Give it some time to shut down
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.WriteLine($"Failed to close process {existingProcess.Id}: {ex.Message}");
-                            // Continue with other processes
-                        }
-                    }
-                    
-                    attempts++;
-                    if (attempts < maxAttempts)
-                        await Task.Delay(TASK_DELAY_MS); // Wait before next attempt
-                }
-                
-                // Check if we still have running processes
-                var remainingProcesses = Process.GetProcessesByName(processName)
-                    .Where(p => p.Id != currentProcess.Id)
-                    .ToList();
-                    
-                if (remainingProcesses.Any())
-                {
-                    throw new InvalidOperationException("Unable to close all instances of the application. Please close them manually and try again.");
-                }
+                // Wait for parallel tasks to complete
+                await Task.WhenAll(closeEdgeTask, saveWindowTask);
 
                 // Instead of killing Edge, we'll keep track of the old PDF file
                 var oldPdfPath = _currentPdfPath;
 
-                // Create process to run dotnet build
+                // Create process to run dotnet build with incremental build enabled
                 var buildProcess = new Process
                 {
                     StartInfo = new ProcessStartInfo
                     {
                         FileName = "dotnet",
-                        Arguments = $"build \"{projectPath}\"", // Specify the project file path
-                        WorkingDirectory = Path.GetDirectoryName(projectPath), // Use project directory as working directory
+                        Arguments = $"build \"{projectPath}\" --no-restore --no-dependencies",
+                        WorkingDirectory = Path.GetDirectoryName(projectPath),
                         RedirectStandardOutput = true,
                         RedirectStandardError = true,
                         UseShellExecute = false,
@@ -777,35 +737,63 @@ namespace iTextDesignerWithGUI.Forms
                 if (buildProcess.ExitCode != 0)
                 {
                     _statusLabel.Text = "Build failed!";
-                    _statusLabel.ForeColor = System.Drawing.Color.FromArgb(220, 53, 69); // Bootstrap danger red
-                    
-                    // Show the build output in a message box
-                    var errorMessage = "Build failed with the following output:\n\n";
-                    if (output.Length > 0) errorMessage += "Output:\n" + output.ToString() + "\n";
-                    if (error.Length > 0) errorMessage += "Errors:\n" + error.ToString();
-                    
-                    MessageBox.Show(errorMessage, "Build Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    await Task.Delay(TASK_DELAY_MS); // Show error for 2 seconds
+                    _statusLabel.ForeColor = System.Drawing.Color.FromArgb(220, 53, 69);
+
+                    // Format the error message to combine both output and error streams
+                    var errorMessage = new System.Text.StringBuilder();
+                    if (output.Length > 0) 
+                    {
+                        errorMessage.AppendLine("Build Output:");
+                        errorMessage.AppendLine(output.ToString());
+                    }
+                    if (error.Length > 0)
+                    {
+                        if (output.Length > 0) errorMessage.AppendLine("\n");
+                        errorMessage.AppendLine("Compilation Errors:");
+                        errorMessage.AppendLine(error.ToString());
+                    }
+
+                    // Show the custom error form
+                    using (var errorForm = new CustomErrorForm(errorMessage.ToString()))
+                    {
+                        errorForm.ShowDialog(this);
+                    }
+
+                    await Task.Delay(TASK_DELAY_MS);
                     _statusLabel.Visible = false;
                     return;
                 }
 
                 // Show reloading message
                 _statusLabel.Text = "Build successful! Reloading...";
-                _statusLabel.ForeColor = System.Drawing.Color.FromArgb(40, 167, 69); // Bootstrap success green
-                await Task.Delay(TASK_DELAY_MS);
+                _statusLabel.ForeColor = System.Drawing.Color.FromArgb(40, 167, 69);
 
                 // Hide this form while showing the new one
                 this.Hide();
                 
                 // Create and show the new form with the same assessment type
                 var newForm = new MainForm(_currentAssessmentType);
-                newForm.FormClosed += (s, args) => this.Close(); // Close this form when new form closes
+                newForm.FormClosed += (s, args) => this.Close();
                 newForm.Show();
 
-                // Allow reloading again after a delay to ensure the new form is fully loaded
-                await Task.Delay(TASK_DELAY_MS);
+                // Allow reloading again immediately
                 _isReloading = false;
+
+                // Delete old PDF file in parallel if it exists
+                if (!string.IsNullOrEmpty(oldPdfPath) && File.Exists(oldPdfPath))
+                {
+                    _ = Task.Run(() =>
+                    {
+                        try
+                        {
+                            File.Delete(oldPdfPath);
+                        }
+                        catch
+                        {
+                            // Ignore errors deleting old PDF
+                        }
+                    });
+                }
 
                 // Regenerate the last PDF if we have a saved row index
                 try
@@ -817,48 +805,50 @@ namespace iTextDesignerWithGUI.Forms
                             var lastRowIndex = key.GetValue(LastSelectedRowKey) as int?;
                             if (lastRowIndex.HasValue)
                             {
-                                await Task.Delay(TASK_DELAY_MS); // Give the form a moment to load and data to populate
-                                
-                                // Simulate clicking the Generate PDF button for the last selected row
+                                // Wait for the DataGridView to be populated
+                                int retryCount = 0;
+                                while (newForm.dataGridView.Rows.Count == 0 && retryCount < 50)
+                                {
+                                    await Task.Delay(10); // Short delay between checks
+                                    retryCount++;
+                                }
+
                                 if (newForm.dataGridView.Rows.Count > lastRowIndex.Value)
                                 {
+                                    // Give the form a moment to fully initialize
+                                    await Task.Delay(100);
+                                    
                                     var cellEventArgs = new DataGridViewCellEventArgs(
                                         newForm.dataGridView.Columns["GeneratePdf"].Index,
                                         lastRowIndex.Value
                                     );
                                     newForm.dataGridView_CellContentClick(newForm.dataGridView, cellEventArgs);
-
-                                    // Delete the old PDF file after a delay to ensure the new one is opened
-                                    await Task.Delay(TASK_DELAY_MS);
-                                    try
-                                    {
-                                        if (!string.IsNullOrEmpty(oldPdfPath) && File.Exists(oldPdfPath))
-                                        {
-                                            File.Delete(oldPdfPath);
-                                        }
-                                    }
-                                    catch
-                                    {
-                                        // Ignore errors deleting old PDF
-                                    }
                                 }
                             }
                         }
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Debug.WriteLine($"Error regenerating PDF: {ex.Message}");
                     // Ignore errors trying to regenerate PDF
                 }
             }
             catch (Exception ex)
             {
+                using (var errorForm = new CustomErrorForm(ex.Message))
+                {
+                    errorForm.ShowDialog(this);
+                }
                 _statusLabel.Text = "Error during reload!";
-                _statusLabel.ForeColor = System.Drawing.Color.FromArgb(220, 53, 69); // Bootstrap danger red
+                _statusLabel.ForeColor = System.Drawing.Color.FromArgb(220, 53, 69);
                 _statusLabel.Visible = true;
-                MessageBox.Show($"Error during reload: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 await Task.Delay(TASK_DELAY_MS);
                 _statusLabel.Visible = false;
+            }
+            finally
+            {
+                _isReloading = false;
             }
         }
 

@@ -30,6 +30,13 @@ namespace iTextDesignerWithGUI.Forms
 
         public void UpdateData(object data)
         {
+            // Clear previous data first
+            if (_currentData != null)
+            {
+                _currentData = null;
+                GC.Collect(); // Optional: Request garbage collection
+            }
+
             _currentData = data;
             if (data != null)
             {
