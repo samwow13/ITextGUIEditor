@@ -5,7 +5,7 @@ namespace iTextDesignerWithGUI.Models
     /// </summary>
     public class RegisteredNurseTaskDelegAssessment : IAssessment
     {
-        public string TemplateFileName => "RNTaskDelegTemplate.html";
+        public string TemplateFileName => "HealthAndWellness/RNTaskDelegTemplate.html";
         public string JsonDataPath => "ReferenceDataJsons/RegisteredNurseTaskDelegAndAssignData.json";
         public string DisplayName => "Registered Nurse Task Delegation and Assignment";
     }

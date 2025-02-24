@@ -422,9 +422,6 @@ C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\bi
 C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\bin\Debug\net6.0-windows\refs\WindowsBase.dll
 C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\bin\Debug\net6.0-windows\Templates\globalStyles.css
 C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIDesign2_12\ITextGUIEditor\bin\Debug\net6.0-windows\Templates\images\ODHSgraphic.PNG
-C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows\Templates\AssessmentTemplate.html
-C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows\Templates\RNTaskDelegTemplate.html
-C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows\Templates\TestRazorDataAssessment.cshtml
 C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows\Templates\globalStyles.css
 C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows\Templates\images\ODHSgraphic.PNG
 C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows\iTextDesignerWithGUI.exe
@@ -1760,3 +1757,6 @@ C:\Users\samwo\AppData\Local\Temp\iTextBuild_20250222145010\refs\System.Xml.XmlS
 C:\Users\samwo\AppData\Local\Temp\iTextBuild_20250222145010\refs\System.Xml.XPath.dll
 C:\Users\samwo\AppData\Local\Temp\iTextBuild_20250222145010\refs\System.Xml.XPath.XDocument.dll
 C:\Users\samwo\AppData\Local\Temp\iTextBuild_20250222145010\refs\WindowsBase.dll
+C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows\Templates\HealthAndWellness\RNTaskDelegTemplate.html
+C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows\Templates\HealthAndWellness\AssessmentTemplate.html
+C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml

@@ -4,7 +4,8 @@
   "CheckStates": {
     "User.Name": false,
     "Orders[0].Items[0].Quantity": false,
-    "Preferences.Notifications.Sms": false
+    "Preferences.Notifications.Sms": true,
+    "Orders[0].Amount": true
   },
-  "LastModified": "2025-02-22T14:40:35.9974364-08:00"
+  "LastModified": "2025-02-24T07:16:09.8923513-08:00"
 }

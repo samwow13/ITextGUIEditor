@@ -50,7 +50,8 @@ namespace iTextDesignerWithGUI.Services
                         | NotifyFilters.CreationTime
                         | NotifyFilters.Attributes,
                     Filter = fileType,
-                    EnableRaisingEvents = false // Start disabled
+                    EnableRaisingEvents = false, // Start disabled
+                    IncludeSubdirectories = true // Enable monitoring of subdirectories
                 };
 
                 // Attach event handlers

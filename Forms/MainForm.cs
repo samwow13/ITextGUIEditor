@@ -61,6 +61,7 @@ namespace iTextDesignerWithGUI.Forms
         private int? _lastSelectedRow;
         private Process _currentEdgeProcess;
         private bool _closeEdgeOnChange = false;
+        private SecondaryForm _secondaryForm;
 
         public MainForm(AssessmentType assessmentType = AssessmentType.OralCare)
         {
@@ -69,6 +70,9 @@ namespace iTextDesignerWithGUI.Forms
             _assessment = CreateAssessment(assessmentType);
             _jsonManager = new JsonManager(_assessment.JsonDataPath, assessmentType);
             _pdfGenerator = new PdfGeneratorService();
+            
+            // Initialize secondary form
+            _secondaryForm = new SecondaryForm(this);
             
             // Initialize template watcher
             var templatesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\Templates");
@@ -535,6 +539,10 @@ namespace iTextDesignerWithGUI.Forms
                     {
                         throw new InvalidOperationException("Unknown data type");
                     }
+
+                    // Show the secondary form with the current item's data
+                    _secondaryForm.UpdateData(item);
+                    _secondaryForm.Show();
 
                     Debug.WriteLine($"Generating PDF for row {e.RowIndex}");
                     Debug.WriteLine($"Data for PDF: Name={name}");

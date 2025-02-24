@@ -29,3 +29,16 @@
 
 ## 2025-02-22
 - Fixed "Close Edge on change" setting to properly load the saved preference when the application starts
+
+## 2025-02-22
+- Created CustomErrorForm.cs to provide a more user-friendly error display
+- Added animated unicorn and cat battle scene to error display
+- Fixed Timer ambiguity by explicitly using System.Windows.Forms.Timer
+- Improved error message readability:
+  - Increased font size to 12pt
+  - Made error message area larger and resizable
+  - Made form window bigger (800x600)
+- Enhanced button visibility:
+  - Added text shadow for better contrast
+  - Increased button size
+  - Fixed text rendering issues

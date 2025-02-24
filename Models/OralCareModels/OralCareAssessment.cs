@@ -5,7 +5,7 @@ namespace iTextDesignerWithGUI.Models
     /// </summary>
     public class OralCareAssessment : IAssessment
     {
-        public string TemplateFileName => "AssessmentTemplate.html";
+        public string TemplateFileName => "HealthAndWellness/AssessmentTemplate.html";
         public string JsonDataPath => "ReferenceDataJsons/OralCareReferenceData.json";
         public string DisplayName => "Oral Care Assessment";
     }
