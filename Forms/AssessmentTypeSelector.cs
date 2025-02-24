@@ -50,14 +50,24 @@ namespace iTextDesignerWithGUI.Forms
             };
             mainContainer.Controls.Add(label, 0, 0);
 
-            // Create and configure ComboBox
+            // Create combobox container
+            var comboBoxContainer = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                ColumnCount = 2,
+                AutoSize = true,
+                Margin = new Padding(0, 3, 0, 20)
+            };
+            comboBoxContainer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            comboBoxContainer.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+
+            // Add combobox
             var comboBox = new ComboBox
             {
-                Dock = DockStyle.Top,
+                Dock = DockStyle.Fill,
                 DropDownStyle = ComboBoxStyle.DropDownList,
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular),
-                Margin = new Padding(0, 0, 0, 20),
-                Height = 30
+                Height = 25
             };
 
             // Add assessment types
@@ -69,7 +79,27 @@ namespace iTextDesignerWithGUI.Forms
             comboBox.DisplayMember = "Display";
             comboBox.ValueMember = "Value";
             comboBox.SelectedIndex = 0;
-            mainContainer.Controls.Add(comboBox, 0, 1);
+            comboBoxContainer.Controls.Add(comboBox, 0, 0);
+
+            // Add new template button
+            var addTemplateButton = new Button
+            {
+                Text = "+",
+                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                Size = new Size(30, 25),
+                Margin = new Padding(5, 3, 0, 0),
+                BackColor = Color.FromArgb(0, 120, 215),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Padding = new Padding(0),
+                UseCompatibleTextRendering = true
+            };
+            addTemplateButton.Click += AddTemplateButton_Click;
+            addTemplateButton.FlatAppearance.BorderSize = 0;
+            comboBoxContainer.Controls.Add(addTemplateButton, 1, 0);
+
+            mainContainer.Controls.Add(comboBoxContainer, 0, 1);
 
             // Create button panel
             var buttonPanel = new FlowLayoutPanel
@@ -134,6 +164,14 @@ namespace iTextDesignerWithGUI.Forms
             this.Controls.Add(mainContainer);
             this.AcceptButton = okButton;
             this.CancelButton = cancelButton;
+        }
+
+        private void AddTemplateButton_Click(object sender, EventArgs e)
+        {
+            using (var templateForm = new PDFTemplateForm())
+            {
+                templateForm.ShowDialog();
+            }
         }
     }
 }

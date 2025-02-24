@@ -4189,3 +4189,697 @@ Generating PDF for row 0
 Data for PDF: Name=John Doe
 PDF generated, size: 3332 bytes
 PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250224_075647.pdf
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41033 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250224_080633.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\AssessmentTemplate.html
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\AssessmentTemplate.html
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250224_080703.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 42204 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250224_080721.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250224_080738.pdf
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3332 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250224_080847.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Debounce timer elapsed - Triggering template reload
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250224_080900.pdf
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+Error compiling Razor template: RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (25:36) 'User' does not contain a definition for 'Namez' and no accessible extension method 'Namez' accepting a first argument of type 'User' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass10_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 221
+Error generating PDF: System.AggregateException: One or more errors occurred. (Failed to compile generated Razor template:
+- (25:36) 'User' does not contain a definition for 'Namez' and no accessible extension method 'Namez' accepting a first argument of type 'User' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+)
+ ---> RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (25:36) 'User' does not contain a definition for 'Namez' and no accessible extension method 'Namez' accepting a first argument of type 'User' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass10_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 221
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 211
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 201
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 314
+Error generating PDF: One or more errors occurred. (Failed to compile generated Razor template:
+- (25:36) 'User' does not contain a definition for 'Namez' and no accessible extension method 'Namez' accepting a first argument of type 'User' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+)
+Stack trace:    at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 211
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 201
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 314
+   at iTextDesignerWithGUI.Forms.MainForm.dataGridView_CellContentClick(Object sender, DataGridViewCellEventArgs e) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Forms\MainForm.cs:line 550
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250224_081358.pdf
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250224_082322.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\AssessmentTemplate.html
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\AssessmentTemplate.html
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41033 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250224_082356.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 42209 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250224_082419.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41033 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250224_082437.pdf
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+Error compiling Razor template: RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (25:36) 'User' does not contain a definition for 'Namez' and no accessible extension method 'Namez' accepting a first argument of type 'User' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass10_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 221
+Error generating PDF: System.AggregateException: One or more errors occurred. (Failed to compile generated Razor template:
+- (25:36) 'User' does not contain a definition for 'Namez' and no accessible extension method 'Namez' accepting a first argument of type 'User' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+)
+ ---> RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (25:36) 'User' does not contain a definition for 'Namez' and no accessible extension method 'Namez' accepting a first argument of type 'User' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass10_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 221
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 211
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 201
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 314
+Error generating PDF: One or more errors occurred. (Failed to compile generated Razor template:
+- (25:36) 'User' does not contain a definition for 'Namez' and no accessible extension method 'Namez' accepting a first argument of type 'User' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+)
+Stack trace:    at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 211
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 201
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 314
+   at iTextDesignerWithGUI.Forms.MainForm.dataGridView_CellContentClick(Object sender, DataGridViewCellEventArgs e) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Forms\MainForm.cs:line 550
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3332 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250224_082809.pdf
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41033 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250224_083549.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\AssessmentTemplate.html
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\AssessmentTemplate.html
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250224_083631.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 42204 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250224_083651.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250224_083713.pdf
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+Error compiling Razor template: RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (25:36) 'User' does not contain a definition for 'Namez' and no accessible extension method 'Namez' accepting a first argument of type 'User' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass10_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 221
+Error generating PDF: System.AggregateException: One or more errors occurred. (Failed to compile generated Razor template:
+- (25:36) 'User' does not contain a definition for 'Namez' and no accessible extension method 'Namez' accepting a first argument of type 'User' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+)
+ ---> RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (25:36) 'User' does not contain a definition for 'Namez' and no accessible extension method 'Namez' accepting a first argument of type 'User' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass10_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 221
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 211
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 201
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 314
+Error generating PDF: One or more errors occurred. (Failed to compile generated Razor template:
+- (25:36) 'User' does not contain a definition for 'Namez' and no accessible extension method 'Namez' accepting a first argument of type 'User' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+)
+Stack trace:    at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 211
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 201
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 314
+   at iTextDesignerWithGUI.Forms.MainForm.dataGridView_CellContentClick(Object sender, DataGridViewCellEventArgs e) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Forms\MainForm.cs:line 550
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3385 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250224_083839.pdf
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+Error compiling Razor template: RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (25:36) 'User' does not contain a definition for 'Namez' and no accessible extension method 'Namez' accepting a first argument of type 'User' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass10_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 221
+Error generating PDF: System.AggregateException: One or more errors occurred. (Failed to compile generated Razor template:
+- (25:36) 'User' does not contain a definition for 'Namez' and no accessible extension method 'Namez' accepting a first argument of type 'User' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+)
+ ---> RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (25:36) 'User' does not contain a definition for 'Namez' and no accessible extension method 'Namez' accepting a first argument of type 'User' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass10_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 221
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 211
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 201
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 314
+Error generating PDF: One or more errors occurred. (Failed to compile generated Razor template:
+- (25:36) 'User' does not contain a definition for 'Namez' and no accessible extension method 'Namez' accepting a first argument of type 'User' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+)
+Stack trace:    at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 211
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 201
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 314
+   at iTextDesignerWithGUI.Forms.MainForm.dataGridView_CellContentClick(Object sender, DataGridViewCellEventArgs e) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Forms\MainForm.cs:line 550
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3332 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250224_083845.pdf
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250224_094911.pdf
+Disposing TemplateWatcherService
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250224_095617.pdf
+Disposing TemplateWatcherService
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41027 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250224_100055.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\AssessmentTemplate.html
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41033 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250224_100146.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 42210 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250224_100221.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41033 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250224_100238.pdf
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 20111 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250224_100302.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\RNTaskDelegTemplate.html
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\RNTaskDelegTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\RNTaskDelegTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\RNTaskDelegTemplate.html
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\RNTaskDelegTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\RNTaskDelegTemplate.html
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Debounce timer elapsed - Triggering template reload
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 41033 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250224_100316.pdf
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3332 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250224_101044.pdf
+Generating PDF for row 1
+Data for PDF: Name=Jane Smith
+PDF generated, size: 3269 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Jane_Smith_20250224_101050.pdf
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3332 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250224_101256.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Debounce timer elapsed - Triggering template reload
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+Error compiling Razor template: RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (35:32) 'User' does not contain a definition for 'Namez' and no accessible extension method 'Namez' accepting a first argument of type 'User' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass10_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 221
+Error generating PDF: System.AggregateException: One or more errors occurred. (Failed to compile generated Razor template:
+- (35:32) 'User' does not contain a definition for 'Namez' and no accessible extension method 'Namez' accepting a first argument of type 'User' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+)
+ ---> RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (35:32) 'User' does not contain a definition for 'Namez' and no accessible extension method 'Namez' accepting a first argument of type 'User' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass10_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 221
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 211
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 201
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 314
+Error generating PDF: One or more errors occurred. (Failed to compile generated Razor template:
+- (35:32) 'User' does not contain a definition for 'Namez' and no accessible extension method 'Namez' accepting a first argument of type 'User' could be found (are you missing a using directive or an assembly reference?)
+
+See CompilationErrors for detailed information
+)
+Stack trace:    at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 211
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 201
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 314
+   at iTextDesignerWithGUI.Forms.MainForm.dataGridView_CellContentClick(Object sender, DataGridViewCellEventArgs e) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Forms\MainForm.cs:line 550
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+Handling file change - Resetting timer
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\TestRazorDataAssessment.cshtml
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Handling file change - Resetting timer
+Debounce timer elapsed - Triggering template reload
+Stopping template watchers
+Debounce timer elapsed - Triggering template reload
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 3332 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250224_101345.pdf
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService

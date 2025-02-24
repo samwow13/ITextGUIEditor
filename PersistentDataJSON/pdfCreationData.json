@@ -1,0 +1,16 @@
+{
+    "projectDirectories": [
+        {
+            "name": "HealthAndWellness",
+            "path": "Templates/HealthAndWellness"
+        },
+        {
+            "name": "Hotline",
+            "path": "Templates/Hotline"
+        },
+        {
+            "name": "ORKids",
+            "path": "Templates/ORKids"
+        }
+    ]
+}
