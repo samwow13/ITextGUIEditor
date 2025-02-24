@@ -14,9 +14,10 @@ namespace iTextDesignerWithGUI.Services
         private readonly List<FileSystemWatcher> _watchers;
         private readonly Action _onTemplateChanged;
         private readonly Control _uiControl;
-        private readonly System.Windows.Forms.Timer _debounceTimer;
+        private readonly System.Windows.Forms.Timer _cooldownTimer;
         private bool _isDisposed;
-        private const int DEBOUNCE_INTERVAL = 500; // Half second debounce
+        private const int COOLDOWN_PERIOD = 2000; // 2 second cooldown
+        private bool _isInCooldown;
 
         public TemplateWatcherService(string templatesPath, Action onTemplateChanged, Control uiControl)
         {
@@ -26,14 +27,15 @@ namespace iTextDesignerWithGUI.Services
             _onTemplateChanged = onTemplateChanged ?? throw new ArgumentNullException(nameof(onTemplateChanged));
             _uiControl = uiControl ?? throw new ArgumentNullException(nameof(uiControl));
             _watchers = new List<FileSystemWatcher>();
+            _isInCooldown = false;
 
             Debug.WriteLine($"Initializing TemplateWatcherService for path: {templatesPath}");
 
-            // Initialize the debounce timer
-            _debounceTimer = new System.Windows.Forms.Timer();
-            _debounceTimer.Interval = DEBOUNCE_INTERVAL;
-            _debounceTimer.Enabled = false; // Start disabled
-            _debounceTimer.Tick += OnDebounceTimerTick;
+            // Initialize the cooldown timer
+            _cooldownTimer = new System.Windows.Forms.Timer();
+            _cooldownTimer.Interval = COOLDOWN_PERIOD;
+            _cooldownTimer.Enabled = false;
+            _cooldownTimer.Tick += OnCooldownComplete;
 
             // Create watchers for different file types
             string[] fileTypes = new[] { "*.html", "*.cshtml", "*.css" };
@@ -87,6 +89,12 @@ namespace iTextDesignerWithGUI.Services
         {
             Debug.WriteLine($"File change detected: {e.ChangeType} - {e.FullPath}");
             
+            if (_isInCooldown)
+            {
+                Debug.WriteLine("Change ignored - in cooldown period");
+                return;
+            }
+
             if (_uiControl.InvokeRequired)
             {
                 _uiControl.BeginInvoke(new Action(() => HandleFileChange()));
@@ -99,9 +107,12 @@ namespace iTextDesignerWithGUI.Services
 
         private void HandleFileChange()
         {
-            Debug.WriteLine("Handling file change - Resetting timer");
-            _debounceTimer.Stop();
-            _debounceTimer.Start();
+            // Trigger the change immediately
+            _onTemplateChanged?.Invoke();
+
+            // Enter cooldown period
+            _isInCooldown = true;
+            _cooldownTimer.Start();
         }
 
         private void OnTemplateFileRenamed(object sender, RenamedEventArgs e)
@@ -117,11 +128,11 @@ namespace iTextDesignerWithGUI.Services
                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
-        private void OnDebounceTimerTick(object sender, EventArgs e)
+        private void OnCooldownComplete(object sender, EventArgs e)
         {
-            Debug.WriteLine("Debounce timer elapsed - Triggering template reload");
-            _debounceTimer.Stop();
-            _onTemplateChanged?.Invoke();
+            _cooldownTimer.Stop();
+            _isInCooldown = false;
+            Debug.WriteLine("Cooldown period complete - resuming file watching");
         }
 
         public void Dispose()
@@ -134,7 +145,7 @@ namespace iTextDesignerWithGUI.Services
                 watcher.EnableRaisingEvents = false;
                 watcher.Dispose();
             }
-            _debounceTimer.Dispose();
+            _cooldownTimer.Dispose();
             _isDisposed = true;
         }
     }
