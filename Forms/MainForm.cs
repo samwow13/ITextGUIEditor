@@ -653,25 +653,58 @@ namespace iTextDesignerWithGUI.Forms
                         form.Close();
                     }
                 }
+
+                var selector = new AssessmentTypeSelector();
+                var result = selector.ShowDialog();
+                
+                if (result == DialogResult.OK && !selector.WasCancelled)
+                {
+                    try
+                    {
+                        // Stop the template watcher before switching forms
+                        _templateWatcher?.StopWatching();
+                        
+                        // Create the new form first to catch any initialization errors
+                        var newForm = new MainForm(selector.SelectedType);
+                        
+                        // Only hide this form if the new one was created successfully
+                        this.Hide();
+                        
+                        newForm.FormClosed += (s, args) => 
+                        {
+                            try 
+                            {
+                                this.Close();
+                            }
+                            catch (Exception ex)
+                            {
+                                Debug.WriteLine($"Error closing old form: {ex}");
+                            }
+                        };
+                        newForm.Show();
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Error creating new form: {ex}");
+                        MessageBox.Show("Error creating new form. Please try again.", "Error", 
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        
+                        // Show this form again since we failed to create the new one
+                        this.Show();
+                        
+                        // Restart the template watcher if it was enabled
+                        if (LoadAutoSavingPreference())
+                        {
+                            _templateWatcher?.StartWatching();
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error closing SecondaryForm: {ex}");
-                // Continue with form selection even if closing secondary form fails
-            }
-
-            var selector = new AssessmentTypeSelector();
-            var result = selector.ShowDialog();
-            
-            if (result == DialogResult.OK && !selector.WasCancelled)
-            {
-                // Hide this form while showing the new one
-                this.Hide();
-                
-                // Create and show the new form
-                var newForm = new MainForm(selector.SelectedType);
-                newForm.FormClosed += (s, args) => this.Close(); // Close this form when new form closes
-                newForm.Show();
+                Debug.WriteLine($"Error in BackToSelection_Click: {ex}");
+                MessageBox.Show("An error occurred. Please try again.", "Error", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

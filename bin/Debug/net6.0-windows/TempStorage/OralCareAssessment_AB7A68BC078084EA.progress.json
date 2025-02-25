@@ -18,7 +18,9 @@
     "RiskFactors.mother_no_dentist": true,
     "ChildInfo.nursing_note": true,
     "ClinicalFindings.fillings_present": true,
-    "RiskFactors.special_health_care_needs": true
+    "RiskFactors.special_health_care_needs": true,
+    "RiskFactors.bottle_usage": true,
+    "RiskFactors.frequent_snacking": true
   },
-  "LastModified": "2025-02-24T10:01:06.4962294-08:00"
+  "LastModified": "2025-02-24T10:48:32.3097985-08:00"
 }

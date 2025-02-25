@@ -3,177 +3,709 @@
 <head>
     <title>RNZ Task Delegation Form</title>
     <link href="globalStyles.css" rel="stylesheet">
+    <style>
+        /* Local style overrides to match PDF format */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #FFF;
+            color: #000;
+            font-size: 14px;
+            margin: 20px;
+            line-height: 1.3;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h2 {
+            margin: 0;
+            padding: 5px 10px;
+            background-color: #000;
+            color: #FFF;
+            text-align: left;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* Header with Title and Graphic */
+        header {
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+        }
+        
+        header .title {
+            float: left;
+            font-size: 24px;
+            line-height: 1.3;
+            font-weight: bold;
+            max-width: 60%;
+        }
+        
+        header .graphic {
+            float: right;
+            margin-top: 30px; /* Adjust this value to align properly */
+        }
+        
+        header .graphic img {
+            height: 50px;
+        }
+        
+        .clearfix:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /* Child Information Section - Updated for combined labels and values */
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+        
+        .info-table td {
+            border: 1px solid #000;
+            padding: 5px;
+            vertical-align: middle;
+            text-align: left;
+        }
+        
+        .field-label {
+            font-weight: bold;
+            display: inline;
+        }
+
+        /* Delegated tasks section - Updated to match image */
+        .delegated-tasks-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #FFF; /* White background */
+        }
+
+        .delegated-tasks-table td {
+            border: 1px solid #000;
+            padding: 5px;
+            vertical-align: middle;
+            font-size: 13px;
+        }
+
+        /* Layout for tasks tables to match image */
+        .tables-layout {
+            display: flex;
+            width: 100%;
+            margin-bottom: 0;
+        }
+        
+        .left-tables {
+            width: 48%; /* Slightly reduced to prevent stretching */
+            padding-right: 5px;
+        }
+        
+        .right-tables {
+            width: 52%;
+            padding-left: 5px;
+        }
+        
+        /* Make right-side tables stretch full width */
+        .right-tables .delegated-tasks-table,
+        .right-tables .section-heading,
+        .right-tables .other-tasks-heading,
+        .right-tables .nursing-tasks-heading {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        /* Section heading styling for all section headers - fixed width for left header */
+        .left-tables .section-heading {
+            margin: 0 0 0 0;
+            padding: 5px;
+            background-color: #000;
+            color: #FFF;
+            font-weight: bold;
+            font-size: 13px;
+            width: 100%;
+            box-sizing: border-box;
+            white-space: normal; /* Allow text to wrap */
+        }
+        
+        /* Right side headings */
+        .right-tables .section-heading,
+        .right-tables .other-tasks-heading,
+        .right-tables .nursing-tasks-heading {
+            margin: 0 0 0 0;
+            padding: 5px;
+            background-color: #000;
+            color: #FFF;
+            font-weight: bold;
+            font-size: 13px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        /* Tables for tasks */
+        .delegated-tasks-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 0;
+            table-layout: fixed;
+        }
+        
+        /* Left table row height adjustment to match right tables */
+        .left-tables .delegated-tasks-table tr {
+            height: 24px; /* Increased row height */
+        }
+        
+        /* Ensure tables remain at proper height */
+        .left-tables .delegated-tasks-table {
+            margin-bottom: 0;
+        }
+        
+        .delegated-tasks-table td {
+            border: 1px solid #000;
+            padding: 2px 5px;
+            vertical-align: middle;
+            font-size: 11px;
+            background-color: #FFF;
+        }
+        
+        /* Tasks wrapper */
+        .tasks-wrapper {
+            border: none;
+            margin-bottom: 0;
+        }
+        
+        /* White background for all sections */
+        .white-bg {
+            background-color: #FFF;
+        }
+        
+        .tasks-wrapper {
+            width: 100%;
+            border: 1px solid #000;
+            margin-bottom: 10px;
+            background-color: #FFF; /* White background */
+        }
+
+        /* Checkbox styling - Updated to match C# implementation */
+        .checkbox-container {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+        
+        .custom-checkbox {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 1px solid #000;
+            position: relative;
+            margin-right: 5px;
+            background-color: #FFF;
+            vertical-align: middle;
+        }
+        
+        .custom-checkbox.checked {
+            background-color: #888;
+        }
+        
+        /* Additional tasks sections */
+        .additional-info {
+            width: 100%;
+            border: 1px solid #000;
+            padding: 5px;
+            margin-top: 0;
+            min-height: 50px;
+        }
+        
+        /* Caregiver statement */
+        .caregiver-statement {
+            margin: 15px 0;
+            line-height: 1.4;
+        }
+        
+        /* Delegation statement */
+        .delegation-statement {
+            margin: 10px 0 15px 0;
+            line-height: 1.4;
+        }
+        
+        /* Next visit info */
+        .next-visit-info {
+            font-style: italic;
+            margin-top: 5px;
+        }
+        
+        /* Page footer */
+        .page-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        
+        .page-number {
+            font-size: 10px;
+        }
+        
+        .form-number {
+            font-size: 10px;
+        }
+        
+        /* Full width table for notes sections */
+        .full-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 5px;
+        }
+        
+        .full-table td {
+            border: 1px solid #000;
+            padding: 3px;
+            min-height: 50px;
+        }
+        
+        /* Right side specific styles */
+        .right-side-section {
+            margin-bottom: 0;
+        }
+        
+        .other-tasks-heading {
+            margin: 5px 0 0 0;
+            padding: 5px;
+            background-color: #000;
+            color: #FFF;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        
+        .nursing-tasks-heading {
+            margin: 0;
+            padding: 5px;
+            background-color: #000;
+            color: #FFF;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        
+        /* Table cell for license number */
+        .license-cell {
+            padding: 5px;
+            font-size: 11px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <header>
+        <header class="clearfix">
             <div class="title">
-                RNz Task <br> Delegation <br>
+                Registered Nursing<br>
+                Task Delegation<br>
                 and Assignment
             </div>
             <div class="graphic">
-              <img src="images/ODHSgraphic.PNG" alt="ODHS Graphic">
+              <img src="images/ODHSgraphic.PNG" alt="Oregon Department of Human Services">
             </div>
         </header>
+        
+        <!-- Ensure the horizontal rule appears correctly -->
+        <hr style="border-top: 1px solid #000; margin-bottom: 15px; clear: both;">
 
-        <!-- Child Information Section -->
-        <h2>Child Information</h2>
-        <table class="full-table">
+        <!-- Child Information Section - Updated to combine labels and values in single cells -->
+        <table class="info-table">
             <tr>
-                <th>Name</th>
-                <td>{{child_info.name}}</td>
-                <th>Date of Birth</th>
-                <td>{{child_info.date_of_birth}}</td>
-                <th>Person Number</th>
-                <td>{{child_info.person_number}}</td>
-            </tr>
-        </table>
-
-        <!-- Caregiver Information Section -->
-        <h2>Caregiver Information</h2>
-        <table class="full-table">
-            <tr>
-                <th>Delegation Name</th>
-                <td colspan="3">{{caregiver_info.delegation_name}}</td>
+                <td style="width: 33.33%"><span class="field-label">Child's name:</span> {{child_info.name}}</td>
+                <td style="width: 33.33%"><span class="field-label">Date of birth:</span> {{child_info.date_of_birth}}</td>
+                <td style="width: 33.33%"><span class="field-label">Person number:</span> {{child_info.person_number}}</td>
             </tr>
             <tr>
-                <th>Delegation Date</th>
-                <td colspan="3">{{caregiver_info.delegation_date}}</td>
+                <td colspan="2"><span class="field-label">Caregiver receiving delegation:</span> {{caregiver_info.delegation_name}}</td>
+                <td><span class="field-label">Date:</span> {{caregiver_info.delegation_date}}</td>
             </tr>
             <tr>
-                <th>Initial Delegation/Assignment</th>
-                <td colspan="3">
+                <td style="width: 33.33%">
                     <div class="checkbox-container">
-                        <input type="checkbox" disabled class="[[INITIAL_DELEGATION_CLASS]]">
+                        <div class="custom-checkbox {{INITIAL_DELEGATION_CLASS}}"></div>
                     </div>
+                    Initial delegation/assignment
                 </td>
-            </tr>
-            <tr>
-                <th>Supervisory Visit</th>
-                <td colspan="3">
+                <td style="width: 33.33%">
                     <div class="checkbox-container">
-                        <input type="checkbox" disabled class="[[SUPERVISORY_VISIT_CLASS]]">
+                        <div class="custom-checkbox {{SUPERVISORY_VISIT_CLASS}}"></div>
                     </div>
+                    Supervisory visit<br>(within 60 days)
                 </td>
-            </tr>
-            <tr>
-                <th>Ongoing Supervisory Visit</th>
-                <td colspan="3">
+                <td style="width: 33.33%">
                     <div class="checkbox-container">
-                        <input type="checkbox" disabled class="[[ONGOING_SUPERVISORY_VISIT_CLASS]]">
+                        <div class="custom-checkbox {{ONGOING_SUPERVISORY_VISIT_CLASS}}"></div>
                     </div>
+                    Ongoing Supervisory Visit<br>(at least every 180 days)
                 </td>
             </tr>
         </table>
 
-        <!-- Delegated Tasks Section -->
-        <h2>Delegated Tasks</h2>
-        <div class="flex-row">
-            <div class="half-table-container">
-                <table class="half-table">
+        <!-- Main Tasks Layout with proper stretching -->
+        <div class="tables-layout">
+            <!-- Left Table -->
+            <div class="left-tables">
+                <div class="section-heading">Delegated/assigned nursing tasks to be performed by caregiver</div>
+                <table class="delegated-tasks-table" style="width: 100%;">
+                    <table class="delegated-tasks-table">
                     <tr>
-                        <td>Gastric Tube Feeding and Care</td>
-                        <td class="checkbox-container">
-                            <input type="checkbox" disabled class="[[GASTRIC_TUBE_FEEDING_CLASS]]">
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{GASTRIC_TUBE_FEEDING_CLASS}}"></div>
+                            </div>
+                            Gastric tube feeding and care <i>(G-tube)</i>
                         </td>
                     </tr>
                     <tr>
-                        <td>Gastric Tube Feeding Pump</td>
-                        <td class="checkbox-container">
-                            <input type="checkbox" disabled class="[[GASTRIC_TUBE_PUMP_CLASS]]">
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{GASTRIC_TUBE_PUMP_CLASS}}"></div>
+                            </div>
+                            Gastric tube feeding pump
                         </td>
                     </tr>
                     <tr>
-                        <td>Nasogastric Feeding and Care</td>
-                        <td class="checkbox-container">
-                            <input type="checkbox" disabled class="[[NASOGASTRIC_FEEDING_CLASS]]">
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{NASOGASTRIC_FEEDING_CLASS}}"></div>
+                            </div>
+                            Nasogastric (NG) tube feeding and care
                         </td>
                     </tr>
                     <tr>
-                        <td>Jejunostomy Feeding and Care</td>
-                        <td class="checkbox-container">
-                            <input type="checkbox" disabled class="[[JEJUNOSTOMY_FEEDING_CLASS]]">
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{JEJUNOSTOMY_FEEDING_CLASS}}"></div>
+                            </div>
+                            Jejunostomy feeding and care <i>(J-tube)</i>
                         </td>
                     </tr>
                     <tr>
-                        <td>Ostomy Care</td>
-                        <td class="checkbox-container">
-                            <input type="checkbox" disabled class="[[OSTOMY_CARE_CLASS]]">
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{OSTOMY_CARE_CLASS}}"></div>
+                            </div>
+                            Ostomy care <i>(colostomy/ileostomy, etc)</i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{DRESSING_CHANGES_CLASS}}"></div>
+                            </div>
+                            Dressing changes <i>(sterile technique)</i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{OXYGEN_ADMIN_CLASS}}"></div>
+                            </div>
+                            Oxygen administration
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{OXYGEN_ADMIN_CHANGES_CLASS}}"></div>
+                            </div>
+                            Oxygen administration with daily<br>unplanned changes
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{PULSE_OXIMETER_CLASS}}"></div>
+                            </div>
+                            Pulse oximeter
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{APNEA_MONITOR_CLASS}}"></div>
+                            </div>
+                            Apnea monitor
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{TRACHEOSTOMY_CARE_CLASS}}"></div>
+                            </div>
+                            Tracheostomy care
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{ORAL_SUCTIONING_CLASS}}"></div>
+                            </div>
+                            Oral or pharyngeal suctioning <i>(not bulb<br>suctioning for NB)</i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{TRACHEAL_SUCTIONING_CLASS}}"></div>
+                            </div>
+                            Tracheal suctioning
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{CPAP_BIPAP_CLASS}}"></div>
+                            </div>
+                            Continuous positive airway pressure<br>(CPAP)/BiPAP
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{INJECTIONS_CLASS}}"></div>
+                            </div>
+                            Injections <i>(subcutaneous)</i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{BLOOD_GLUCOSE_CLASS}}"></div>
+                            </div>
+                            Blood glucose testing
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{URINARY_CATHETER_CLASS}}"></div>
+                            </div>
+                            Urinary catheter insertion and care
                         </td>
                     </tr>
                 </table>
             </div>
-            <div class="half-table-container">
-                <table class="half-table">
+            
+            <!-- Right Tables -->
+            <div class="right-tables">
+                <table class="delegated-tasks-table">
                     <tr>
-                        <td>Dressing Changes</td>
-                        <td class="checkbox-container">
-                            <input type="checkbox" disabled class="[[DRESSING_CHANGES_CLASS]]">
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{EMERGENT_MEDICATIONS_CLASS}}"></div>
+                            </div>
+                            Emergent medications (rectal Ativan/Epi-pen)
                         </td>
                     </tr>
                     <tr>
-                        <td>Oxygen Administration</td>
-                        <td class="checkbox-container">
-                            <input type="checkbox" disabled class="[[OXYGEN_ADMIN_CLASS]]">
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{INFECTION_CONTROL_CLASS}}"></div>
+                            </div>
+                            Specialized infection control practices<br>(MRSA/VRE/MD ordered precautions<br>beyond universal precautions)
                         </td>
                     </tr>
                     <tr>
-                        <td>Oxygen Administration with Changes</td>
-                        <td class="checkbox-container">
-                            <input type="checkbox" disabled class="[[OXYGEN_ADMIN_CHANGES_CLASS]]">
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{OTHER_TASK_CLASS}}"></div>
+                            </div>
+                            Other:
                         </td>
                     </tr>
                     <tr>
-                        <td>Pulse Oximeter</td>
-                        <td class="checkbox-container">
-                            <input type="checkbox" disabled class="[[PULSE_OXIMETER_CLASS]]">
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{EXPLANATION_GIVEN_CLASS}}"></div>
+                            </div>
+                            Explanation given
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{DISCUSSION_OCCURRED_CLASS}}"></div>
+                            </div>
+                            Discussion occurred
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{DEMO_PERFORMED_CLASS}}"></div>
+                            </div>
+                            Demonstration performed
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{QUESTIONS_ANSWERED_CLASS}}"></div>
+                            </div>
+                            Time for questions and answers given
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox {{RETURN_DEMO_RECEIVED_CLASS}}"></div>
+                            </div>
+                            Return demonstration received
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Additional information:<br>
+                            <div style="width: 95%; height: 60px; border: 1px solid #DDD; margin: 3px auto; padding: 3px;">{{additional_information}}</div>
                         </td>
                     </tr>
                 </table>
-            </div>
-        </div>
-
-        <!-- Training Details Section -->
-        <h2>Training Details</h2>
-        <table class="full-table">
-            <tr class="tall">
-                <th>Instructions Given</th>
-                <td>{{instructions_given}}</td>
-            </tr>
-            <tr class="tall">
-                <th>Supervisory Visit Notes</th>
-                <td>{{supervisory_visit_notes}}</td>
-            </tr>
-            <tr class="tall">
-                <th>Continue Delegation</th>
+                
+                <div class="other-tasks-heading" style="width: 100%;">Other Task(s) being performed by caregiver, but <u>not delegated</u> by DHS Resource Nurse</div>
+                <table class="delegated-tasks-table" style="width: 100%;">
+            <tr>
                 <td>
                     <div class="checkbox-container">
-                        <input type="checkbox" disabled class="[[CONTINUE_DELEGATION_CLASS]]">
+                        <div class="custom-checkbox {{VENTILATOR_CARE_CLASS}}"></div>
                     </div>
+                    Ventilator Care
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="checkbox-container">
+                        <div class="custom-checkbox {{CENTRAL_LINE_CLASS}}"></div>
+                    </div>
+                    Central Line (PICC)/Intravenous/IV
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="checkbox-container">
+                        <div class="custom-checkbox {{OTHER_NON_DELEGATED_CLASS}}"></div>
+                    </div>
+                    Other: {{other_non_delegated_text}}
+                </td>
+            </tr>
+                        </table>
+                
+                <div class="nursing-tasks-heading" style="width: 100%;">The above nursing task(s) are:</div>
+                <table class="delegated-tasks-table" style="width: 100%;">
+            <tr>
+                <td>
+                    <div class="checkbox-container">
+                        <div class="custom-checkbox {{DELEGATED_PER_RULES_CLASS}}"></div>
+                    </div>
+                    Delegated per Oregon State Board of Nursing Division 47 Delegation rules
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="checkbox-container">
+                        <div class="custom-checkbox {{ASSIGNED_SUPERVISED_CLASS}}"></div>
+                    </div>
+                    Assigned and supervised (for OSBN licensed caregivers or relatives)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    If applicable, caregiver's current OSBN License # {{osbn_license_number}}
+                </td>
+            </tr>
+        </table>
+            </div>
+        </div>
+        
+        <div class="section-heading">Instructions given: (please attach any written instructions or information sheets provided)</div>
+        <table class="full-table">
+            <tr>
+                <td style="min-height: 50px; padding: 3px;">{{instructions_given}}</td>
+            </tr>
+        </table>
+
+        <div class="section-heading">Supervisory visit: (notes, instructions given)</div>
+        <table class="full-table">
+            <tr>
+                <td style="min-height: 50px; padding: 3px;">{{supervisory_visit_notes}}</td>
+            </tr>
+        </table>
+
+        <div class="section-heading">Continue delegation/assignment:</div>
+        <table class="full-table">
+            <tr>
+                <td style="padding: 3px;">
+                    <div style="display: inline-block;">
+                        <div class="checkbox-container">
+                            <div class="custom-checkbox {{CONTINUE_DELEGATION_YES_CLASS}}"></div>
+                        </div>
+                        Yes
+                    </div>
+                    <div style="display: inline-block; margin-left: 20px;">
+                        <div class="checkbox-container">
+                            <div class="custom-checkbox {{CONTINUE_DELEGATION_NO_CLASS}}"></div>
+                        </div>
+                        No (If no, please explain)
+                    </div>
+                    <div style="margin-top: 3px;">{{continue_delegation_explanation}}</div>
                 </td>
             </tr>
         </table>
 
-        <!-- Signatures Section -->
-        <h2>Signatures</h2>
-        <table class="full-table">
-            <tr class="tall">
-                <th>RN Signature</th>
-                <td>{{signatures.rn_signature}}</td>
-                <th>RN Date</th>
-                <td>{{signatures.rn_date}}</td>
-            </tr>
-            <tr class="tall">
-                <th>Caregiver Signature</th>
-                <td>{{signatures.caregiver_signature}}</td>
-                <th>Caregiver Date</th>
-                <td>{{signatures.caregiver_date}}</td>
+        <div class="page-footer">
+            <div class="page-number">Page 1 of 2</div>
+            <div class="form-number">CF 0172 RNT (rev. 02/2023)</div>
+        </div>
+        
+        <!-- PAGE 2 -->
+        <div style="page-break-before: always;"></div>
+        
+        <div class="caregiver-statement" style="margin: 10px 0; line-height: 1.2; font-size: 13px;">
+            I have received the above information and understand the procedure(s) taught is specific to the above 
+            named child and is not transferable to another child, nor can I teach this to another person. I understand 
+            the risks involved in performing the task(s) and the RN and/or primary care provider is to be contacted 
+            should problems arise.
+        </div>
+        
+        <!-- Signatures Section for Caregiver -->
+        <table class="info-table">
+            <tr>
+                <td style="width: 75%"><span class="field-label">Caregiver's signature (original signatures must be kept on file):</span> {{signatures.caregiver_signature}}</td>
+                <td style="width: 25%"><span class="field-label">Date:</span> {{signatures.caregiver_date}}</td>
             </tr>
         </table>
-
-        <footer>
-            Generated on {{current_date}}
-        </footer>
+        
+        <h2>Delegation/Assignment of specific nursing tasks</h2>
+        <div class="delegation-statement" style="margin: 8px 0 10px 0; line-height: 1.2; font-size: 13px;">
+            Following an assessment of the above child and through conversation, instruction and observations
+            of the above caregiver(s), I have determined they are competent to perform the above nursing tasks
+            and have delegated/assigned those tasks.
+        </div>
+        
+        <!-- Signatures Section for RN -->
+        <table class="info-table">
+            <tr>
+                <td style="width: 75%"><span class="field-label">RN signature:</span> {{signatures.rn_signature}}</td>
+                <td style="width: 25%"><span class="field-label">Date:</span> {{signatures.rn_date}}</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <span class="field-label">Date of next supervisory visit:</span> {{next_visit_date}}
+                    <div class="next-visit-info">
+                        RN to schedule ongoing supervisory visits according to OSBN Division 47 rules and submit
+                        documentation to PERSONAL.CARE@odhsoha.oregon.gov.
+                    </div>
+                </td>
+            </tr>
+        </table>
+        
+        <div class="page-footer">
+            <div class="page-number">Page 2 of 2</div>
+            <div class="form-number">CF 0172 RNT (rev. 02/2023)</div>
+        </div>
     </div>
 </body>
 </html>

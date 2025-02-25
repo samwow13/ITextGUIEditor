@@ -11,6 +11,10 @@
         {
             "name": "ORKids",
             "path": "Templates/ORKids"
+        },
+        {
+            "name": "RFI",
+            "path": "Templates/RFI"
         }
     ]
 }
