@@ -6489,3 +6489,10 @@ PDF generated, size: 2834 bytes
 PDF saved to: C:\Users\samwo\AppData\Local\Temp\Entry_1_20250225_095308.pdf
 Disposing TemplateWatcherService
 Disposing TemplateWatcherService
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Entry 1
+PDF generated, size: 38428 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Entry_1_20250225_105103.pdf
+Disposing TemplateWatcherService
