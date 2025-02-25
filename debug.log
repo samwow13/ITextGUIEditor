@@ -6442,3 +6442,35 @@ Generating PDF for row 0
 Data for PDF: Name=Alice Smith
 PDF generated, size: 38428 bytes
 PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250225_093157.pdf
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=John Doe
+PDF generated, size: 22165 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\John_Doe_20250225_094737.pdf
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Alice Smith
+PDF generated, size: 38428 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Alice_Smith_20250225_094744.pdf
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService
+Disposing TemplateWatcherService

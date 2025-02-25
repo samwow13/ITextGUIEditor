@@ -428,28 +428,10 @@ namespace iTextDesignerWithGUI.Forms
         {
             var data = new List<object>();
             
-            foreach (var item in _referenceData)
+            // Create numbered entries for each item in the reference data
+            for (int i = 0; i < _referenceData.Count; i++)
             {
-                string name;
-                //ADD FORMS HERE
-                if (item is OralCareDataInstance oralCare)
-                {
-                    name = oralCare.ChildInfo?.ChildName;
-                }
-                else if (item is RegisteredNurseTaskDelegDataInstance nurseTask)
-                {
-                    name = nurseTask.ChildInfo?.Name;
-                }
-                else if (item is TestRazorDataInstance testRazor)
-                {
-                    name = testRazor.User?.Name;
-                }
-                else
-                {
-                    continue;
-                }
-
-                data.Add(new { Name = name });
+                data.Add(new { Entry = $"Entry {i + 1}" });
             }
             
             dataGridView.DataSource = data;
@@ -472,14 +454,14 @@ namespace iTextDesignerWithGUI.Forms
             this.dataGridView.BorderStyle = BorderStyle.None;
             this.dataGridView.BackgroundColor = System.Drawing.SystemColors.Window;
 
-            // Add Name column
-            var nameColumn = new DataGridViewTextBoxColumn
+            // Add Entry column
+            var entryColumn = new DataGridViewTextBoxColumn
             {
-                HeaderText = "Name",
-                DataPropertyName = "Name",
+                HeaderText = "Entry",
+                DataPropertyName = "Entry",
                 FillWeight = 70
             };
-            dataGridView.Columns.Add(nameColumn);
+            dataGridView.Columns.Add(entryColumn);
 
             // Add Generate PDF button column
             var generatePdfColumn = new DataGridViewButtonColumn
