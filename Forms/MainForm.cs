@@ -503,25 +503,9 @@ namespace iTextDesignerWithGUI.Forms
                 var item = _referenceData[e.RowIndex];
                 try
                 {
-                    //ADD FORMS HERE
-                    string name;
-                    if (item is OralCareDataInstance oralCare)
-                    {
-                        name = oralCare.ChildInfo?.ChildName;
-                    }
-                    else if (item is RegisteredNurseTaskDelegDataInstance nurseTask)
-                    {
-                        name = nurseTask.ChildInfo?.Name;
-                    }
-                    else if (item is TestRazorDataInstance testRazor)
-                    {
-                        name = testRazor.User?.Name;
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("Unknown data type");
-                    }
-
+                    // Use a simple "Entry X" naming scheme instead of extracting names from different data types
+                    string name = $"Entry {e.RowIndex + 1}";
+                    
                     // Show the secondary form with the current item's data
                     _secondaryForm.UpdateData(item);
                     _secondaryForm.Show();

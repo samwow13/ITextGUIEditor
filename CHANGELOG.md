@@ -1,5 +1,10 @@
 # Changelog
 
+## [2025-02-25]
+- Updated dataGridView_CellContentClick method to use simple "Entry X" naming scheme
+- Simplified PDF filename generation to match the entry naming in PopulateDataGrid
+- Removed type-specific name extraction logic from CellContentClick handler
+
 ## [2025-02-24]
 - Added "+" button to AssessmentTypeSelector form for creating new templates
 - Created new PDFTemplateForm for capturing template names
