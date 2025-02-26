@@ -106,34 +106,13 @@ namespace iTextDesignerWithGUI.Forms
             InitializeAsync();
         }
 
-        public MainForm(AssessmentType assessmentType = AssessmentType.OralCare)
+        /// <summary>
+        /// Constructor that takes an AssessmentType enum value and converts it to an AssessmentTypeWrapper
+        /// </summary>
+        /// <param name="assessmentType">The built-in assessment type</param>
+        public MainForm(AssessmentType assessmentType = AssessmentType.OralCare) 
+            : this(AssessmentTypeWrapper.FromBuiltIn(assessmentType))
         {
-            InitializeComponent();
-            _currentTypeWrapper = AssessmentTypeWrapper.FromBuiltIn(assessmentType);
-            _assessment = _currentTypeWrapper.GetAssessment();
-            _jsonManager = new JsonManager(_assessment.JsonDataPath, _currentTypeWrapper);
-            _pdfGenerator = new PdfGeneratorService();
-            
-            // Initialize secondary form
-            _secondaryForm = new SecondaryForm(this);
-            
-            // Initialize template watcher
-            var templatesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\Templates");
-            _templateWatcher = new TemplateWatcherService(
-                Path.GetFullPath(templatesPath), 
-                () => ReloadTemplates_Click(this, EventArgs.Empty),
-                this);
-            
-            // Load saved preferences
-            _closeEdgeOnChange = LoadCloseEdgePreference();
-            
-            // Update the window title to show the selected assessment type
-            this.Text = $"iText Designer - {assessmentType.ToString().SplitCamelCase()}";
-            
-            // Load the saved window position
-            LoadWindowPosition();
-            
-            InitializeAsync();
         }
 
         private void LoadWindowPosition()
@@ -303,10 +282,10 @@ namespace iTextDesignerWithGUI.Forms
             base.Dispose(disposing);
         }
 
-        private void OnTemplateChanged(AssessmentType type)
+        private void OnTemplateChanged(AssessmentTypeWrapper typeWrapper)
         {
-            var wrapper = AssessmentTypeWrapper.FromBuiltIn(type);
-            var newAssessment = wrapper.GetAssessment();
+            _currentTypeWrapper = typeWrapper;
+            var newAssessment = typeWrapper.GetAssessment();
             _referenceData = null;
             dataGridView.DataSource = null;
             InitializeAsync();
