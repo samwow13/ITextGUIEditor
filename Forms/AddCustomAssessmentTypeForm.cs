@@ -427,11 +427,70 @@ namespace iTextDesignerWithGUI.Forms
 
         private void GenerateFilesButton_Click(object sender, EventArgs e)
         {
-            // Show a message to confirm the button was clicked
-            MessageBox.Show("Generate Files feature will be implemented here.", 
-                            "Generate Files", 
-                            MessageBoxButtons.OK, 
-                            MessageBoxIcon.Information);
+            // Validate input
+            if (projectNameComboBox.SelectedIndex < 0)
+            {
+                MessageBox.Show("Please select a project.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            
+            if (string.IsNullOrWhiteSpace(displayNameTextBox.Text))
+            {
+                MessageBox.Show("Please enter a PDF name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            
+            // Get the selected project name and PDF name
+            string projectName = projectNameComboBox.SelectedItem.ToString();
+            string pdfName = displayNameTextBox.Text.Trim();
+            
+            try
+            {
+                // Get the project path from JSON
+                string projectRoot = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\.."));
+                string jsonPath = Path.Combine(projectRoot, "PersistentDataJSON", "pdfCreationData.json");
+                string jsonContent = File.ReadAllText(jsonPath);
+                
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                
+                var data = JsonSerializer.Deserialize<ProjectDirectoriesData>(jsonContent, options);
+                
+                // Find the selected project
+                var project = data?.ProjectDirectories?.FirstOrDefault(p => p.Name == projectName);
+                
+                if (project != null)
+                {
+                    // Get the template directory path from the project configuration
+                    // Using the relative path directly from the JSON file
+                    string templatePath = project.Path;
+                    
+                    // Show the confirmation modal with the PDF name and template directory
+                    using (var confirmModal = new PDFGenerationConfirmModal(pdfName, templatePath))
+                    {
+                        if (confirmModal.ShowDialog() == DialogResult.OK)
+                        {
+                            // User confirmed, you can proceed with PDF generation here
+                            MessageBox.Show($"PDF generation confirmed for '{pdfName}' using template at '{templatePath}'.",
+                                          "Generation Confirmed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            
+                            // Future implementation: Add code to generate the PDF
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show($"Could not find project '{projectName}' in configuration.", 
+                                   "Project Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error preparing PDF generation: {ex.Message}", 
+                               "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
