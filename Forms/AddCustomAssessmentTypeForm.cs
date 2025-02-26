@@ -77,21 +77,44 @@ namespace iTextDesignerWithGUI.Forms
             // Display name section
             var displayNameLabel = new Label
             {
-                Text = "Display Name:",
+                Text = "PDF Name:",
                 Font = new Font("Segoe UI", 10F, FontStyle.Regular),
                 AutoSize = true,
                 Margin = new Padding(0, 0, 0, 5)
             };
             mainContainer.Controls.Add(displayNameLabel, 0, 2);
 
+            var displayNameContainer = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                ColumnCount = 2,
+                AutoSize = true,
+                Margin = new Padding(0, 0, 0, 15)
+            };
+            displayNameContainer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80));
+            displayNameContainer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+
             displayNameTextBox = new TextBox
             {
                 Dock = DockStyle.Fill,
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular),
-                Margin = new Padding(0, 0, 0, 15),
                 Height = 25
             };
-            mainContainer.Controls.Add(displayNameTextBox, 0, 3);
+            displayNameContainer.Controls.Add(displayNameTextBox, 0, 0);
+
+            var generateFilesButton = new Button
+            {
+                Text = "Generate Files",
+                Dock = DockStyle.Fill,
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
+                Margin = new Padding(5, 0, 0, 0),
+                BackColor = Color.FromArgb(0, 120, 212),
+                ForeColor = Color.White
+            };
+            generateFilesButton.Click += GenerateFilesButton_Click;
+            displayNameContainer.Controls.Add(generateFilesButton, 1, 0);
+
+            mainContainer.Controls.Add(displayNameContainer, 0, 3);
 
             // Template file section
             var templateFileLabel = new Label
@@ -400,6 +423,15 @@ namespace iTextDesignerWithGUI.Forms
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.DialogResult = DialogResult.None;
             }
+        }
+
+        private void GenerateFilesButton_Click(object sender, EventArgs e)
+        {
+            // Show a message to confirm the button was clicked
+            MessageBox.Show("Generate Files feature will be implemented here.", 
+                            "Generate Files", 
+                            MessageBoxButtons.OK, 
+                            MessageBoxIcon.Information);
         }
     }
 }
