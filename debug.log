@@ -7090,3 +7090,57 @@ PDF saved to: C:\Users\samwo\AppData\Local\Temp\Entry_1_20250226_084540.pdf
 Disposing TemplateWatcherService
 Disposing TemplateWatcherService
 Disposing TemplateWatcherService
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Entry 1
+Using source template: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness/AssessmentTemplate.html
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\globalStyles.css
+PDF generated, size: 38430 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Entry_1_20250226_090726.pdf
+Stopping template watchers
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Entry 1
+Using source template: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness/AssessmentTemplate.html
+PDF generated, size: 38430 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Entry_1_20250226_090729.pdf
+Cooldown period complete - resuming file watching
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Entry 1
+Using source template: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness/AssessmentTemplate.html
+PDF generated, size: 38430 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Entry_1_20250226_090736.pdf
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Entry 1
+Using source template: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness/AssessmentTemplate.html
+PDF generated, size: 38430 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Entry_1_20250226_091122.pdf
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Entry 1
+Using source template: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness/AssessmentTemplate.html
+PDF generated, size: 38430 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Entry_1_20250226_092259.pdf
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Entry 1
+Using source template: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness/RNTaskDelegTemplate.html
+PDF generated, size: 22167 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Entry_1_20250226_092307.pdf
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Entry 1
+Using source template: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness/TestRazorDataAssessment.cshtml
+PDF generated, size: 2838 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Entry_1_20250226_092315.pdf

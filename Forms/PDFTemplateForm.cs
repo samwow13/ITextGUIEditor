@@ -14,6 +14,7 @@ namespace iTextDesignerWithGUI.Forms
         public string ProjectDirectory { get; private set; }
         public bool WasCancelled { get; private set; } = true;
         private ComboBox projectDirectoryComboBox;
+        private ComboBox projectNameComboBox;
 
         public PDFTemplateForm()
         {
@@ -44,9 +45,18 @@ namespace iTextDesignerWithGUI.Forms
                 
                 if (data?.ProjectDirectories != null && data.ProjectDirectories.Any())
                 {
+                    projectNameComboBox.Items.Clear();
+                    projectNameComboBox.Items.AddRange(data.ProjectDirectories.Select(d => d.Name).ToArray());
+                    if (projectNameComboBox.Items.Count > 0)
+                    {
+                        projectNameComboBox.SelectedIndex = 0;
+                    }
                     projectDirectoryComboBox.Items.Clear();
                     projectDirectoryComboBox.Items.AddRange(data.ProjectDirectories.Select(d => d.Name).ToArray());
-                    projectDirectoryComboBox.SelectedIndex = 0;
+                    if (projectDirectoryComboBox.Items.Count > 0)
+                    {
+                        projectDirectoryComboBox.SelectedIndex = 0;
+                    }
                 }
                 else
                 {
@@ -67,7 +77,7 @@ namespace iTextDesignerWithGUI.Forms
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.Size = new System.Drawing.Size(400, 300);
+            this.Size = new System.Drawing.Size(400, 400);
             this.Padding = new Padding(20);
             this.BackColor = Color.White;
 
@@ -75,7 +85,7 @@ namespace iTextDesignerWithGUI.Forms
             var mainContainer = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
-                RowCount = 5,
+                RowCount = 7,
                 ColumnCount = 1,
                 Padding = new Padding(10),
             };
@@ -83,7 +93,31 @@ namespace iTextDesignerWithGUI.Forms
             mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             mainContainer.RowStyles.Add(new RowStyle(SizeType.Absolute, 60));  
+
+            // Project name label
+            var projectNameLabel = new Label
+            {
+                Text = "Select project:",
+                Font = new Font("Segoe UI", 10F, FontStyle.Regular),
+                AutoSize = true,
+                Margin = new Padding(0, 0, 0, 10)
+            };
+            mainContainer.Controls.Add(projectNameLabel, 0, 0);
+
+            // Project name dropdown
+            projectNameComboBox = new ComboBox
+            {
+                Dock = DockStyle.Fill,
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                Margin = new Padding(0, 0, 0, 20),
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
+                Height = 25
+            };
+            projectNameComboBox.SelectedIndexChanged += ProjectNameComboBox_SelectedIndexChanged;
+            mainContainer.Controls.Add(projectNameComboBox, 0, 1);
 
             // Project directory label
             var directoryLabel = new Label
@@ -93,7 +127,7 @@ namespace iTextDesignerWithGUI.Forms
                 AutoSize = true,
                 Margin = new Padding(0, 0, 0, 10)
             };
-            mainContainer.Controls.Add(directoryLabel, 0, 0);
+            mainContainer.Controls.Add(directoryLabel, 0, 2);
 
             // Project directory dropdown
             projectDirectoryComboBox = new ComboBox
@@ -104,7 +138,7 @@ namespace iTextDesignerWithGUI.Forms
                 DropDownStyle = ComboBoxStyle.DropDownList,
                 Height = 25
             };
-            mainContainer.Controls.Add(projectDirectoryComboBox, 0, 1);
+            mainContainer.Controls.Add(projectDirectoryComboBox, 0, 3);
 
             // Template name label
             var templateLabel = new Label
@@ -114,7 +148,7 @@ namespace iTextDesignerWithGUI.Forms
                 AutoSize = true,
                 Margin = new Padding(0, 0, 0, 10)
             };
-            mainContainer.Controls.Add(templateLabel, 0, 2);
+            mainContainer.Controls.Add(templateLabel, 0, 4);
 
             // Template name input
             var textBox = new TextBox
@@ -124,17 +158,16 @@ namespace iTextDesignerWithGUI.Forms
                 Margin = new Padding(0, 0, 0, 20),
                 Height = 25
             };
-            mainContainer.Controls.Add(textBox, 0, 3);
+            mainContainer.Controls.Add(textBox, 0, 5);
 
             // Create button panel
             var buttonPanel = new FlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
                 FlowDirection = FlowDirection.RightToLeft,
-                Height = 40,
-                Margin = new Padding(0, 10, 0, 0),  
                 AutoSize = true,
-                Padding = new Padding(0)
+                Margin = new Padding(0, 10, 0, 0),
+                Height = 40
             };
 
             // Button base style
@@ -179,38 +212,122 @@ namespace iTextDesignerWithGUI.Forms
             buttonPanel.Controls.Add(cancelButton);
 
             // Add button panel to container
-            mainContainer.Controls.Add(buttonPanel, 0, 4);
+            mainContainer.Controls.Add(buttonPanel, 0, 6);
 
             // Add container to form
             this.Controls.Add(mainContainer);
 
             // Wire up events
-            okButton.Click += (s, e) =>
-            {
-                if (string.IsNullOrWhiteSpace(textBox.Text))
-                {
-                    MessageBox.Show("Please enter a template name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    this.DialogResult = DialogResult.None;
-                    return;
-                }
-
-                if (projectDirectoryComboBox.SelectedItem == null)
-                {
-                    MessageBox.Show("Please select a project directory.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    this.DialogResult = DialogResult.None;
-                    return;
-                }
-
-                TemplateName = textBox.Text;
-                ProjectDirectory = projectDirectoryComboBox.SelectedItem.ToString();
-                WasCancelled = false;
-            };
+            okButton.Click += CreateTemplate_Click;
 
             cancelButton.Click += (s, e) => WasCancelled = true;
 
             // Set accept button
             this.AcceptButton = okButton;
             this.CancelButton = cancelButton;
+        }
+
+        private void CreateTemplate_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Find the TextBox directly
+                TextBox textBox = null;
+                foreach (Control control in this.Controls[0].Controls)
+                {
+                    if (control is TextBox)
+                    {
+                        textBox = (TextBox)control;
+                        break;
+                    }
+                }
+
+                // Fallback in case we can't find it directly
+                if (textBox == null)
+                {
+                    textBox = (TextBox)this.Controls[0].Controls[5];
+                }
+
+                string templateName = textBox.Text;
+
+                // Validate input
+                if (string.IsNullOrWhiteSpace(templateName))
+                {
+                    MessageBox.Show("Please enter a template name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Get selected project
+                string selectedProject = projectNameComboBox.SelectedItem?.ToString();
+                if (string.IsNullOrWhiteSpace(selectedProject))
+                {
+                    MessageBox.Show("Please select a project.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Get selected directory
+                string selectedDirectory = projectDirectoryComboBox.SelectedItem?.ToString();
+                if (string.IsNullOrWhiteSpace(selectedDirectory))
+                {
+                    MessageBox.Show("Please select a project directory.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Set properties for return
+                this.TemplateName = templateName;
+                this.ProjectDirectory = selectedProject; // Use the selected project name
+                this.WasCancelled = false;
+
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error creating template: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ProjectNameComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // When a project is selected, update the projectDirectoryComboBox
+            if (projectNameComboBox.SelectedIndex >= 0)
+            {
+                string selectedProject = projectNameComboBox.SelectedItem.ToString();
+                
+                try
+                {
+                    // Get the project data from JSON
+                    string projectRoot = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\.."));
+                    string jsonPath = Path.Combine(projectRoot, "PersistentDataJSON", "pdfCreationData.json");
+                    string jsonContent = File.ReadAllText(jsonPath);
+                    
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+                    
+                    var data = JsonSerializer.Deserialize<ProjectDirectoriesData>(jsonContent, options);
+                    
+                    // Find the selected project
+                    var project = data?.ProjectDirectories?.FirstOrDefault(p => p.Name == selectedProject);
+                    
+                    if (project != null)
+                    {
+                        // Update the projectDirectoryComboBox with the selected project
+                        if (projectDirectoryComboBox.Items.Contains(project.Name))
+                        {
+                            projectDirectoryComboBox.SelectedItem = project.Name;
+                        }
+                        
+                        // Store the selected project
+                        ProjectDirectory = project.Name;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error updating project selection: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 
@@ -219,10 +336,17 @@ namespace iTextDesignerWithGUI.Forms
     {
         public string Name { get; set; }
         public string Path { get; set; }
+        public List<FormData> Forms { get; set; } = new List<FormData>();
+    }
+
+    public class FormData
+    {
+        public string Name { get; set; }
+        public Dictionary<string, string> Files { get; set; } = new Dictionary<string, string>();
     }
 
     public class ProjectDirectoriesData
     {
-        public List<ProjectDirectory> ProjectDirectories { get; set; }
+        public List<ProjectDirectory> ProjectDirectories { get; set; } = new List<ProjectDirectory>();
     }
 }

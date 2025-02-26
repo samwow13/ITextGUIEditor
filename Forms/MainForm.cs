@@ -254,32 +254,44 @@ namespace iTextDesignerWithGUI.Forms
             }
         }
 
-        protected override void OnFormClosing(FormClosingEventArgs e)
+        protected void OnFormClosing(FormClosingEventArgs e)
         {
-            // Save the window position before closing
-            SaveWindowPosition();
-
-            if (!string.IsNullOrEmpty(_currentPdfPath) && File.Exists(_currentPdfPath))
+            try
             {
-                try
+                // Save the window position before closing
+                SaveWindowPosition();
+
+                if (!string.IsNullOrEmpty(_currentPdfPath) && File.Exists(_currentPdfPath))
                 {
-                    File.Delete(_currentPdfPath);
-                }
-                catch
-                {
-                    // Ignore deletion errors on closing
+                    try
+                    {
+                        File.Delete(_currentPdfPath);
+                    }
+                    catch
+                    {
+                        // Ignore deletion errors on closing
+                    }
                 }
             }
-            base.OnFormClosing(e);
+            finally
+            {
+                base.OnFormClosing(e);
+            }
         }
 
-        protected override void Dispose(bool disposing)
+        protected void Dispose(bool disposing)
         {
-            if (disposing)
+            try
             {
-                _templateWatcher?.Dispose();
+                if (disposing)
+                {
+                    _templateWatcher?.Dispose();
+                }
             }
-            base.Dispose(disposing);
+            finally
+            {
+                base.Dispose(disposing);
+            }
         }
 
         private void OnTemplateChanged(AssessmentTypeWrapper typeWrapper)
@@ -401,15 +413,14 @@ namespace iTextDesignerWithGUI.Forms
                     Dock = DockStyle.Bottom,
                     Height = 120,
                     Padding = new Padding(10),
-                    ColumnCount = 4,
+                    ColumnCount = 3,
                     RowCount = 3
                 };
 
-                // Configure columns: Left spacing (auto) | Back button | Reload button | Close Edge checkbox
+                // Configure columns: Left spacing (auto) | Back button | Reload button 
                 buttonPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F)); // Left spacing
                 buttonPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize)); // Back button
                 buttonPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize)); // Reload button
-                buttonPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize)); // Close Edge checkbox
 
                 // Configure rows: Checkboxes | Status Label | Buttons
                 buttonPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize)); // Checkbox row
