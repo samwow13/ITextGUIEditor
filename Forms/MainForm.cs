@@ -45,7 +45,7 @@ namespace iTextDesignerWithGUI.Forms
         private readonly TemplateWatcherService _templateWatcher;
         private List<object> _referenceData;
         private string _currentPdfPath;
-        private AssessmentType _currentAssessmentType;
+        private AssessmentTypeWrapper _currentTypeWrapper;
         private Label _statusLabel;
         private const string RegistryPath = @"Software\ITextGUIDesigner";
         private const string WindowPosXKey = "WindowPosX";
@@ -63,12 +63,22 @@ namespace iTextDesignerWithGUI.Forms
         private bool _closeEdgeOnChange = false;
         private SecondaryForm _secondaryForm;
 
-        public MainForm(AssessmentType assessmentType = AssessmentType.OralCare)
+        public MainForm(AssessmentTypeWrapper typeWrapper)
         {
             InitializeComponent();
-            _currentAssessmentType = assessmentType;
-            _assessment = CreateAssessment(assessmentType);
-            _jsonManager = new JsonManager(_assessment.JsonDataPath, assessmentType);
+            _currentTypeWrapper = typeWrapper;
+            
+            if (typeWrapper.IsBuiltIn && typeWrapper.BuiltInType.HasValue)
+            {
+                // No need to store the enum value separately, it's in the wrapper
+            }
+            else
+            {
+                // For custom types, no need for a default enum value
+            }
+            
+            _assessment = typeWrapper.GetAssessment();
+            _jsonManager = new JsonManager(_assessment.JsonDataPath, _currentTypeWrapper);
             _pdfGenerator = new PdfGeneratorService();
             
             // Initialize secondary form
@@ -80,8 +90,40 @@ namespace iTextDesignerWithGUI.Forms
                 Path.GetFullPath(templatesPath), 
                 () => ReloadTemplates_Click(this, EventArgs.Empty),
                 this);
-            // Don't start watching by default since automatic saving starts disabled
+            
+            _closeEdgeOnChange = LoadCloseEdgePreference();
+            
+            // Update the window title to show the selected assessment type
+            this.Text = $"iText Designer - {_assessment.DisplayName}";
+            
+            // Load the saved window position
+            LoadWindowPosition();
+            
+            // Initialize the status label
+            InitializeStatusLabel();
+            
+            // Initialize the form asynchronously
+            InitializeAsync();
+        }
 
+        public MainForm(AssessmentType assessmentType = AssessmentType.OralCare)
+        {
+            InitializeComponent();
+            _currentTypeWrapper = AssessmentTypeWrapper.FromBuiltIn(assessmentType);
+            _assessment = _currentTypeWrapper.GetAssessment();
+            _jsonManager = new JsonManager(_assessment.JsonDataPath, _currentTypeWrapper);
+            _pdfGenerator = new PdfGeneratorService();
+            
+            // Initialize secondary form
+            _secondaryForm = new SecondaryForm(this);
+            
+            // Initialize template watcher
+            var templatesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\Templates");
+            _templateWatcher = new TemplateWatcherService(
+                Path.GetFullPath(templatesPath), 
+                () => ReloadTemplates_Click(this, EventArgs.Empty),
+                this);
+            
             // Load saved preferences
             _closeEdgeOnChange = LoadCloseEdgePreference();
             
@@ -261,15 +303,13 @@ namespace iTextDesignerWithGUI.Forms
             base.Dispose(disposing);
         }
 
-        private IAssessment CreateAssessment(AssessmentType type)
+        private void OnTemplateChanged(AssessmentType type)
         {
-            return type switch
-            {//ADD FORMS HERE
-                AssessmentType.OralCare => new OralCareAssessment(),
-                AssessmentType.RegisteredNurseTaskAndDelegation => new RegisteredNurseTaskDelegAssessment(),
-                AssessmentType.TestRazorDataInstance => new TestRazorDataAssessment(),      
-                _ => throw new ArgumentException($"Unsupported assessment type: {type}")
-            };
+            var wrapper = AssessmentTypeWrapper.FromBuiltIn(type);
+            var newAssessment = wrapper.GetAssessment();
+            _referenceData = null;
+            dataGridView.DataSource = null;
+            InitializeAsync();
         }
 
         private async void InitializeAsync()
@@ -587,90 +627,34 @@ namespace iTextDesignerWithGUI.Forms
             this.ResumeLayout(false);
         }
 
-        private void OnTemplateChanged(AssessmentType type)
-        {
-            var newAssessment = CreateAssessment(type);
-            _referenceData = null;
-            dataGridView.DataSource = null;
-            InitializeAsync();
-        }
-
         private void BackToSelection_Click(object sender, EventArgs e)
         {
             try
             {
-                // Create a list to store forms to close to avoid modification during enumeration
-                var formsToClose = new List<Form>();
-                
-                // Find all SecondaryForm instances
-                foreach (Form form in Application.OpenForms)
+                if (MessageBox.Show("Are you sure you want to change the assessment type? Any unsaved changes will be lost.", 
+                    "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    if (form is SecondaryForm)
+                    using (var selector = new AssessmentTypeSelector())
                     {
-                        formsToClose.Add(form);
-                    }
-                }
-                
-                // Close the forms
-                foreach (var form in formsToClose)
-                {
-                    if (!form.IsDisposed && form.Visible)
-                    {
-                        form.Close();
-                    }
-                }
-
-                var selector = new AssessmentTypeSelector();
-                var result = selector.ShowDialog();
-                
-                if (result == DialogResult.OK && !selector.WasCancelled)
-                {
-                    try
-                    {
-                        // Stop the template watcher before switching forms
-                        _templateWatcher?.StopWatching();
-                        
-                        // Create the new form first to catch any initialization errors
-                        var newForm = new MainForm(selector.SelectedType);
-                        
-                        // Only hide this form if the new one was created successfully
-                        this.Hide();
-                        
-                        newForm.FormClosed += (s, args) => 
+                        if (selector.ShowDialog() == DialogResult.OK && !selector.WasCancelled)
                         {
-                            try 
-                            {
-                                this.Close();
-                            }
-                            catch (Exception ex)
-                            {
-                                Debug.WriteLine($"Error closing old form: {ex}");
-                            }
-                        };
-                        newForm.Show();
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine($"Error creating new form: {ex}");
-                        MessageBox.Show("Error creating new form. Please try again.", "Error", 
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        
-                        // Show this form again since we failed to create the new one
-                        this.Show();
-                        
-                        // Restart the template watcher if it was enabled
-                        if (LoadAutoSavingPreference())
-                        {
-                            _templateWatcher?.StartWatching();
+                            CloseEdgeIfNeeded();
+                            _templateWatcher?.StopWatching();
+                            
+                            // Create the new form first to catch any initialization errors
+                            var newForm = new MainForm(selector.SelectedTypeWrapper);
+                            
+                            // Only hide this form if the new one was created successfully
+                            this.Hide();
+                            newForm.FormClosed += (s, args) => this.Close();
+                            newForm.Show();
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error in BackToSelection_Click: {ex}");
-                MessageBox.Show("An error occurred. Please try again.", "Error", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error changing assessment type: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -779,7 +763,7 @@ namespace iTextDesignerWithGUI.Forms
                 this.Hide();
                 
                 // Create and show the new form with the same assessment type
-                var newForm = new MainForm(_currentAssessmentType);
+                var newForm = new MainForm(_currentTypeWrapper);
                 newForm.FormClosed += (s, args) => this.Close();
                 newForm.Show();
 
@@ -893,6 +877,39 @@ namespace iTextDesignerWithGUI.Forms
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error in CloseEdgeWindows: {ex.Message}");
+            }
+        }
+
+        private void InitializeStatusLabel()
+        {
+            _statusLabel = new Label
+            {
+                Dock = DockStyle.Bottom,
+                AutoSize = false,
+                Height = 22,
+                TextAlign = ContentAlignment.MiddleLeft,
+                BorderStyle = BorderStyle.Fixed3D,
+                Text = "Ready"
+            };
+            this.Controls.Add(_statusLabel);
+        }
+
+        /// <summary>
+        /// Closes the Edge browser process if the setting is enabled
+        /// </summary>
+        private void CloseEdgeIfNeeded()
+        {
+            if (_closeEdgeOnChange && _currentEdgeProcess != null && !_currentEdgeProcess.HasExited)
+            {
+                try
+                {
+                    _currentEdgeProcess.Kill();
+                    _currentEdgeProcess = null;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error closing Edge: {ex.Message}");
+                }
             }
         }
     }

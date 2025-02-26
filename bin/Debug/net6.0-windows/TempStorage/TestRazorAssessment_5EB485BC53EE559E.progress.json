@@ -2,10 +2,7 @@
   "DocumentId": "TestRazorAssessment_5EB485BC53EE559E",
   "DocumentType": "TestRazorAssessment",
   "CheckStates": {
-    "User.Name": false,
-    "Orders[0].Items[0].Quantity": false,
-    "Preferences.Notifications.Sms": true,
-    "Orders[0].Amount": true
+    "User.Name": true
   },
-  "LastModified": "2025-02-24T07:16:09.8923513-08:00"
+  "LastModified": "2025-02-26T07:53:06.3416019-08:00"
 }

@@ -2,12 +2,15 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using iTextDesignerWithGUI.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace iTextDesignerWithGUI.Forms
 {
     public partial class AssessmentTypeSelector : Form
     {
-        public AssessmentType SelectedType { get; private set; }
+        public AssessmentTypeWrapper SelectedTypeWrapper { get; private set; }
+        public AssessmentType? SelectedBuiltInType => SelectedTypeWrapper?.IsBuiltIn == true ? SelectedTypeWrapper.BuiltInType : null;
         public bool WasCancelled { get; private set; } = true;
 
         public AssessmentTypeSelector()
@@ -70,15 +73,22 @@ namespace iTextDesignerWithGUI.Forms
                 Height = 25
             };
 
-            // Add assessment types
+            // Add built-in assessment types
             foreach (AssessmentType type in Enum.GetValues(typeof(AssessmentType)))
             {
-                var item = new { Display = type.ToString().SplitCamelCase(), Value = type };
-                comboBox.Items.Add(item);
+                var wrapper = AssessmentTypeWrapper.FromBuiltIn(type);
+                comboBox.Items.Add(wrapper);
             }
-            comboBox.DisplayMember = "Display";
-            comboBox.ValueMember = "Value";
-            comboBox.SelectedIndex = 0;
+
+            // Add custom assessment types
+            foreach (var customType in CustomAssessmentTypeManager.GetAllCustomTypes())
+            {
+                var wrapper = AssessmentTypeWrapper.FromCustom(customType);
+                comboBox.Items.Add(wrapper);
+            }
+
+            comboBox.DisplayMember = "DisplayName";
+            comboBox.SelectedIndex = comboBox.Items.Count > 0 ? 0 : -1;
             comboBoxContainer.Controls.Add(comboBox, 0, 0);
 
             // Add new template button
@@ -135,7 +145,7 @@ namespace iTextDesignerWithGUI.Forms
             okButton.FlatAppearance.BorderSize = 0;
             okButton.Click += (s, e) =>
             {
-                SelectedType = ((dynamic)comboBox.SelectedItem).Value;
+                SelectedTypeWrapper = (AssessmentTypeWrapper)comboBox.SelectedItem;
                 WasCancelled = false;
                 this.Close();
             };
@@ -168,9 +178,15 @@ namespace iTextDesignerWithGUI.Forms
 
         private void AddTemplateButton_Click(object sender, EventArgs e)
         {
-            using (var templateForm = new PDFTemplateForm())
+            using (var addCustomTypeForm = new AddCustomAssessmentTypeForm())
             {
-                templateForm.ShowDialog();
+                if (addCustomTypeForm.ShowDialog() == DialogResult.OK)
+                {
+                    // Refresh the form to show the new custom type
+                    this.Close();
+                    var newSelector = new AssessmentTypeSelector();
+                    newSelector.ShowDialog();
+                }
             }
         }
     }

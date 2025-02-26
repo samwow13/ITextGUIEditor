@@ -13,7 +13,7 @@ namespace iTextDesignerWithGUI
             var selector = new AssessmentTypeSelector();
             if (selector.ShowDialog() == DialogResult.OK && !selector.WasCancelled)
             {
-                Application.Run(new MainForm(selector.SelectedType));
+                Application.Run(new MainForm(selector.SelectedTypeWrapper));
             }
         }
 

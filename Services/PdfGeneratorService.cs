@@ -303,18 +303,36 @@ namespace iTextDesignerWithGUI.Services
                 _lastUsedTemplate = templateFileName;
 
                 var exePath = AppDomain.CurrentDomain.BaseDirectory;
-                var templatePath = Path.Combine(exePath, "Templates", templateFileName);
-
-                if (!File.Exists(templatePath))
+                var binTemplatesPath = Path.Combine(exePath, "Templates", templateFileName);
+                
+                // Also check for templates in the source directory
+                var projectDir = Path.GetFullPath(Path.Combine(exePath, "..\\..\\.."));
+                var sourceTemplatesPath = Path.Combine(projectDir, "Templates", templateFileName);
+                
+                string templatePath;
+                
+                // Prioritize source templates over compiled templates
+                if (File.Exists(sourceTemplatesPath))
                 {
-                    throw new FileNotFoundException($"Template file not found: {templatePath}");
+                    templatePath = sourceTemplatesPath;
+                    Trace.WriteLine($"Using source template: {templatePath}");
+                }
+                else if (File.Exists(binTemplatesPath))
+                {
+                    templatePath = binTemplatesPath;
+                    Trace.WriteLine($"Using compiled template: {templatePath}");
+                }
+                else
+                {
+                    throw new FileNotFoundException($"Template file not found in either source or bin directories: {templateFileName}");
                 }
 
                 // Process the template based on its type
                 var templateContent = ProcessTemplate(templatePath, templateFileName, data);
 
                 // Process image paths before converting to PDF
-                var templatesPath = Path.Combine(exePath, "Templates");
+                // Use the directory of the template we found
+                var templatesPath = Path.GetDirectoryName(Path.GetDirectoryName(templatePath));
                 templateContent = ProcessImagePaths(templateContent, templatesPath);
 
                 // Convert the processed content to PDF
