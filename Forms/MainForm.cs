@@ -608,32 +608,22 @@ namespace iTextDesignerWithGUI.Forms
 
         private void BackToSelection_Click(object sender, EventArgs e)
         {
-            try
+            // Create and show the AssessmentTypeSelector form
+            var selector = new AssessmentTypeSelector();
+            this.Hide(); // Hide this form instead of closing it immediately
+            
+            // Show the selector as a dialog
+            if (selector.ShowDialog() == DialogResult.OK && !selector.WasCancelled)
             {
-                if (MessageBox.Show("Are you sure you want to change the assessment type? Any unsaved changes will be lost.", 
-                    "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    using (var selector = new AssessmentTypeSelector())
-                    {
-                        if (selector.ShowDialog() == DialogResult.OK && !selector.WasCancelled)
-                        {
-                            CloseEdgeIfNeeded();
-                            _templateWatcher?.StopWatching();
-                            
-                            // Create the new form first to catch any initialization errors
-                            var newForm = new MainForm(selector.SelectedTypeWrapper);
-                            
-                            // Only hide this form if the new one was created successfully
-                            this.Hide();
-                            newForm.FormClosed += (s, args) => this.Close();
-                            newForm.Show();
-                        }
-                    }
-                }
+                // If user selected an assessment type, create a new MainForm with it
+                var newForm = new MainForm(selector.SelectedTypeWrapper);
+                newForm.FormClosed += (s, args) => this.Close(); // Close this form when the new one is closed
+                newForm.Show();
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show($"Error changing assessment type: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // If user cancelled, just show this form again
+                this.Show();
             }
         }
 

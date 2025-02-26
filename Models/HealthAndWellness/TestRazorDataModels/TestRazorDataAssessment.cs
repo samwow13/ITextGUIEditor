@@ -6,7 +6,7 @@ namespace iTextDesignerWithGUI.Models
     public class TestRazorDataAssessment : IAssessment
     {
         public string TemplateFileName => "HealthAndWellness/TestRazorDataAssessment.cshtml";
-        public string JsonDataPath => "ReferenceDataJsons/TestRazorData.json";
+        public string JsonDataPath => "ReferenceDataJsons/HealthAndWellness/TestRazorData.json";
         public string DisplayName => "Test Razor Data";
     }
 }
