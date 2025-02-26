@@ -85,79 +85,82 @@ namespace iTextDesignerWithGUI.Services
         }
         
         /// <summary>
-        /// Example method that generates an HTML file using PowerShell
+        /// Example method that generates a cshtml file using PowerShell
         /// </summary>
         /// <param name="fileName">File name without extension</param>
         /// <param name="outputPath">Full path where to save the file</param>
         /// <returns>True if successful, false otherwise</returns>
-        public static bool GenerateHtmlFileWithPowerShell(string fileName, string outputPath)
+        public static bool GenerateCshtmlFileWithPowerShell(string fileName, string outputPath)
         {
             try
             {
-                string fullPath = System.IO.Path.Combine(outputPath, $"{fileName}.html");
+                string fullPath = System.IO.Path.Combine(outputPath, $"{fileName}.cshtml");
                 
-                // PowerShell script to generate the HTML file
+                // PowerShell script to generate the Razor (cshtml) file
                 string script = @"
                 param(
                     [string]$FileName,
                     [string]$OutputPath
                 )
                 
-                $htmlContent = @""
+                $cshtmlContent = @""
+@page
+@model $FileName""Model""
+@{
+    ViewData[""Title""] = ""$FileName"";
+}
+
 <!DOCTYPE html>
 <html lang=""en"">
-  <head>
+<head>
     <meta charset=""UTF-8"">
-    <title>$FileName</title>
-    <link href=""globalStyles.css"" rel=""stylesheet"">
-  </head>
-  <body>
+    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+    <title>@ViewData[""Title""]</title>
+    <link href=""~/css/globalStyles.css"" rel=""stylesheet"">
+</head>
+<body>
     <div class=""container"">
-      <!-- Header with Title -->
-      <header>
-        <div class=""title"">
-          $FileName
-        </div>
-      </header>
+        <!-- Header with Title -->
+        <header>
+            <div class=""title"">
+                @ViewData[""Title""]
+            </div>
+        </header>
 
-      <!-- Content goes here -->
-      <div class=""content"">
-        <p>This is a template file for $FileName generated with PowerShell.</p>
-        <p>Generated on: $(Get-Date)</p>
-      </div>
+        <!-- Content goes here -->
+        <div class=""content"">
+            <p>This is a template file for @ViewData[""Title""].</p>
+            
+            @* Razor code example *@
+            <div>
+                @for (int i = 0; i < 3; i++)
+                {
+                    <div>Item @i</div>
+                }
+            </div>
+        </div>
     </div>
-  </body>
+</body>
 </html>
 ""@
                 
-                # Create directory if it doesn't exist
-                $directory = [System.IO.Path]::GetDirectoryName($OutputPath)
-                if (!(Test-Path -Path $directory)) {
-                    New-Item -ItemType Directory -Path $directory -Force | Out-Null
-                }
-                
-                # Write the HTML content to the file
-                Set-Content -Path $OutputPath -Value $htmlContent -Encoding UTF8
-                
-                return ""Successfully generated HTML file: $OutputPath""
+                # Create the file
+                $cshtmlContent | Out-File -FilePath $OutputPath -Encoding UTF8
+                Write-Output ""Cshtml file generated at: $OutputPath""
                 ";
                 
-                // Parameters to pass to the script
+                // Execute the script
                 var parameters = new Dictionary<string, object>
                 {
                     { "FileName", fileName },
                     { "OutputPath", fullPath }
                 };
                 
-                // Run the script
-                string result = RunScript(script, parameters);
+                var result = RunScript(script, parameters);
                 
-                // Check if the file was created
-                bool success = System.IO.File.Exists(fullPath);
-                
-                if (success)
+                if (File.Exists(fullPath))
                 {
-                    Debug.WriteLine($"PowerShell successfully generated file: {fullPath}");
+                    Debug.WriteLine($"Cshtml file generated successfully at: {fullPath}");
                     return true;
                 }
                 else
@@ -168,7 +171,7 @@ namespace iTextDesignerWithGUI.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error in GenerateHtmlFileWithPowerShell: {ex.Message}");
+                Debug.WriteLine($"Error in GenerateCshtmlFileWithPowerShell: {ex.Message}");
                 return false;
             }
         }
