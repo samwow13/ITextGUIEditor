@@ -66,6 +66,7 @@ namespace iTextDesignerWithGUI.Services
         private readonly string _tempPdfPath;
         private readonly IRazorLightEngine _razorEngine;
         private readonly RazorLightInMemoryProject _project;
+        private readonly ProjectDirectoryService _directoryService;
         private object _lastUsedData;
         private string _lastUsedTemplate;
         private readonly string _globalStylesPath;
@@ -74,9 +75,19 @@ namespace iTextDesignerWithGUI.Services
         {
             try
             {
-                var exePath = AppDomain.CurrentDomain.BaseDirectory;
-                _tempPdfPath = Path.Combine(exePath, "temp_assessment.pdf");
-                _globalStylesPath = Path.Combine(exePath, "Templates", "globalStyles.css");
+                // Initialize the directory service
+                _directoryService = new ProjectDirectoryService();
+                
+                // Use the temp directory for temporary files
+                var tempDir = Path.Combine(Path.GetTempPath(), "iTextDesigner");
+                if (!Directory.Exists(tempDir))
+                {
+                    Directory.CreateDirectory(tempDir);
+                }
+                _tempPdfPath = Path.Combine(tempDir, "temp_assessment.pdf");
+                
+                // Use the directory service to get the path to global styles
+                _globalStylesPath = _directoryService.GetFilePath(Path.Combine("Templates", "globalStyles.css"));
 
                 // Initialize RazorLight engine
                 _project = new RazorLightInMemoryProject();
@@ -278,65 +289,40 @@ namespace iTextDesignerWithGUI.Services
         }
 
         /// <summary>
-        /// Generates a PDF document from template and data using iText PDF library.
+        /// Generates a PDF document from a template and data model.
         /// </summary>
-        /// <param name="data">Data model to bind to the template</param>
-        /// <param name="templateFileName">Name of the template file in Templates directory</param>
-        /// <returns>Generated PDF as byte array</returns>
-        /// <remarks>
-        /// Supports two template types:
-        /// 1. Razor templates (.cshtml) - Uses RazorLight for template compilation
-        /// 2. HTML templates - Uses direct placeholder replacement
-        /// 
-        /// Process flow:
-        /// 1. Stores data and template for potential regeneration
-        /// 2. Loads and processes template based on type
-        /// 3. Injects global styles
-        /// 4. Processes images to base64
-        /// 5. Converts to PDF using iText
-        /// </remarks>
+        /// <param name="data">The data model to use for the template</param>
+        /// <param name="templateFileName">The name of the template file (with extension)</param>
+        /// <returns>Byte array containing the generated PDF</returns>
         public byte[] GeneratePdf(object data, string templateFileName)
         {
             try
             {
+                // Cache the data and template for potential regeneration
                 _lastUsedData = data;
                 _lastUsedTemplate = templateFileName;
 
-                var exePath = AppDomain.CurrentDomain.BaseDirectory;
-                var binTemplatesPath = Path.Combine(exePath, "Templates", templateFileName);
+                // Use the directory service to get the path to the template
+                var templatePath = _directoryService.GetFilePath(Path.Combine("Templates", templateFileName));
                 
-                // Also check for templates in the source directory
-                var projectDir = Path.GetFullPath(Path.Combine(exePath, "..\\..\\.."));
-                var sourceTemplatesPath = Path.Combine(projectDir, "Templates", templateFileName);
+                if (!File.Exists(templatePath))
+                {
+                    throw new FileNotFoundException($"Template file not found: {templatePath}");
+                }
                 
-                string templatePath;
+                Trace.WriteLine($"Using template: {templatePath}");
                 
-                // Prioritize source templates over compiled templates
-                if (File.Exists(sourceTemplatesPath))
-                {
-                    templatePath = sourceTemplatesPath;
-                    Trace.WriteLine($"Using source template: {templatePath}");
-                }
-                else if (File.Exists(binTemplatesPath))
-                {
-                    templatePath = binTemplatesPath;
-                    Trace.WriteLine($"Using compiled template: {templatePath}");
-                }
-                else
-                {
-                    throw new FileNotFoundException($"Template file not found in either source or bin directories: {templateFileName}");
-                }
+                // Get the templates directory for image processing
+                var templatesPath = _directoryService.GetDirectory("Templates");
 
                 // Process the template based on its type
                 var templateContent = ProcessTemplate(templatePath, templateFileName, data);
 
-                // Process image paths before converting to PDF
-                // Use the directory of the template we found
-                var templatesPath = Path.GetDirectoryName(Path.GetDirectoryName(templatePath));
+                // Process image paths in the HTML content
                 templateContent = ProcessImagePaths(templateContent, templatesPath);
 
                 // Convert the processed content to PDF
-                return ConvertToPdf(templateContent, templatePath, exePath);
+                return ConvertToPdf(templateContent, templatePath, _directoryService.GetExecutablePath());
             }
             catch (Exception ex)
             {

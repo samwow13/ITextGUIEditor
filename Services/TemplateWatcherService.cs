@@ -14,11 +14,70 @@ namespace iTextDesignerWithGUI.Services
         private readonly List<FileSystemWatcher> _watchers;
         private readonly Action _onTemplateChanged;
         private readonly Control _uiControl;
+        private readonly ProjectDirectoryService _directoryService;
         private readonly System.Windows.Forms.Timer _cooldownTimer;
         private bool _isDisposed;
         private const int COOLDOWN_PERIOD = 2000; // 2 second cooldown
         private bool _isInCooldown;
 
+        /// <summary>
+        /// Initializes a new instance of the TemplateWatcherService class.
+        /// </summary>
+        /// <param name="onTemplateChanged">Action to execute when a template file changes</param>
+        /// <param name="uiControl">Control to use for invoking UI operations</param>
+        public TemplateWatcherService(Action onTemplateChanged, Control uiControl)
+        {
+            _onTemplateChanged = onTemplateChanged ?? throw new ArgumentNullException(nameof(onTemplateChanged));
+            _uiControl = uiControl ?? throw new ArgumentNullException(nameof(uiControl));
+            _directoryService = new ProjectDirectoryService();
+            _watchers = new List<FileSystemWatcher>();
+            _isInCooldown = false;
+
+            string templatesPath = _directoryService.GetDirectory("Templates");
+            Debug.WriteLine($"Initializing TemplateWatcherService for path: {templatesPath}");
+
+            // Initialize the cooldown timer
+            _cooldownTimer = new System.Windows.Forms.Timer();
+            _cooldownTimer.Interval = COOLDOWN_PERIOD;
+            _cooldownTimer.Enabled = false;
+            _cooldownTimer.Tick += OnCooldownComplete;
+
+            // Create watchers for different file types
+            string[] fileTypes = new[] { "*.html", "*.cshtml", "*.css" };
+            foreach (var fileType in fileTypes)
+            {
+                var watcher = new FileSystemWatcher
+                {
+                    Path = templatesPath,
+                    NotifyFilter = NotifyFilters.LastWrite 
+                        | NotifyFilters.FileName 
+                        | NotifyFilters.DirectoryName 
+                        | NotifyFilters.Size 
+                        | NotifyFilters.LastAccess
+                        | NotifyFilters.CreationTime
+                        | NotifyFilters.Attributes,
+                    Filter = fileType,
+                    EnableRaisingEvents = false, // Start disabled
+                    IncludeSubdirectories = true // Enable monitoring of subdirectories
+                };
+
+                // Attach event handlers
+                watcher.Changed += OnTemplateFileChanged;
+                watcher.Created += OnTemplateFileChanged;
+                watcher.Deleted += OnTemplateFileChanged;
+                watcher.Renamed += OnTemplateFileRenamed;
+                watcher.Error += OnWatcherError;
+
+                _watchers.Add(watcher);
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the TemplateWatcherService class.
+        /// </summary>
+        /// <param name="templatesPath">Path to the Templates directory</param>
+        /// <param name="onTemplateChanged">Action to execute when a template file changes</param>
+        /// <param name="uiControl">Control to use for invoking UI operations</param>
         public TemplateWatcherService(string templatesPath, Action onTemplateChanged, Control uiControl)
         {
             if (string.IsNullOrEmpty(templatesPath))

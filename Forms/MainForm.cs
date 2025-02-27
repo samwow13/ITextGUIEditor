@@ -43,6 +43,7 @@ namespace iTextDesignerWithGUI.Forms
         private readonly JsonManager _jsonManager;
         private readonly PdfGeneratorService _pdfGenerator;
         private readonly TemplateWatcherService _templateWatcher;
+        private readonly ProjectDirectoryService _directoryService;
         private List<object> _referenceData;
         private string _currentPdfPath;
         private AssessmentTypeWrapper _currentTypeWrapper;
@@ -81,13 +82,14 @@ namespace iTextDesignerWithGUI.Forms
             _jsonManager = new JsonManager(_assessment.JsonDataPath, _currentTypeWrapper);
             _pdfGenerator = new PdfGeneratorService();
             
+            // Initialize the directory service
+            _directoryService = new ProjectDirectoryService();
+            
             // Initialize secondary form
             _secondaryForm = new SecondaryForm(this);
             
-            // Initialize template watcher
-            var templatesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\Templates");
+            // Initialize template watcher with the ProjectDirectoryService
             _templateWatcher = new TemplateWatcherService(
-                Path.GetFullPath(templatesPath), 
                 () => ReloadTemplates_Click(this, EventArgs.Empty),
                 this);
             
@@ -659,9 +661,8 @@ namespace iTextDesignerWithGUI.Forms
                 _statusLabel.ForeColor = System.Drawing.Color.FromArgb(255, 193, 7);
                 _statusLabel.Visible = true;
 
-                // Get the project directory path by going up from the bin directory
-                var binDir = AppDomain.CurrentDomain.BaseDirectory;
-                var projectDir = Path.GetFullPath(Path.Combine(binDir, "..\\..\\.."));
+                // Get the project directory using the directory service
+                var projectDir = _directoryService.GetRootDirectory();
                 var projectPath = Directory.GetFiles(projectDir, "*.csproj", SearchOption.TopDirectoryOnly)
                     .FirstOrDefault();
                 
