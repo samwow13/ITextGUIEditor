@@ -2,48 +2,19 @@
     "projectDirectories": [
       {
         "name": "HealthAndWellness",
-        "path": "Templates/HealthAndWellness",
-        "forms": [
-          {
-            "name": "Form1",
-            "files": {
-              "dataModel": "Templates/HealthAndWellness/Models/Form1Model.cs",
-              "assessmentType": "Templates/HealthAndWellness/Assessments/Form1Assessment.cs",
-              "htmlTemplate": "Templates/HealthAndWellness/Views/Form1.cshtml"
-            }
-          },
-          {
-            "name": "Form2",
-            "files": {
-              "dataModel": "Templates/HealthAndWellness/Models/Form2Model.cs",
-              "assessmentType": "Templates/HealthAndWellness/Assessments/Form2Assessment.cs",
-              "htmlTemplate": "Templates/HealthAndWellness/Views/Form2.cshtml"
-            }
-          },
-          {
-            "name": "Form3",
-            "files": {
-              "dataModel": "Templates/HealthAndWellness/Models/Form3Model.cs",
-              "assessmentType": "Templates/HealthAndWellness/Assessments/Form3Assessment.cs",
-              "htmlTemplate": "Templates/HealthAndWellness/Views/Form3.cshtml"
-            }
-          }
-        ]
+        "path": "Templates/HealthAndWellness"
       },
       {
         "name": "Hotline",
-        "path": "Templates/Hotline",
-        "forms": []
+        "path": "Templates/Hotline"
       },
       {
         "name": "ORKids",
-        "path": "Templates/ORKids",
-        "forms": []
+        "path": "Templates/ORKids"
       },
       {
         "name": "RFI",
-        "path": "Templates/RFI",
-        "forms": []
+        "path": "Templates/RFI"
       }
     ]
   }

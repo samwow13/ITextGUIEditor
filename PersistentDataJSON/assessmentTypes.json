@@ -23,6 +23,14 @@
       "assessmentDataInstanceDirectory": "Models/HealthAndWellness/TestRazorDataModels/TestRazorDataInstance.cs",
       "cshtmlTemplateDirectory": "Templates/HealthAndWellness/TestRazorDataAssessment.cshtml",
       "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellness/TestRazorData.json"
+    },
+    {
+      "name": "testers",
+      "displayName": "testers",
+      "assessmentTypeDirectory": "Models/HealthAndWellness/testersModels/testersAssessment.cs",
+      "assessmentDataInstanceDirectory": "Models/HealthAndWellness/testersModels/testersDataInstance.cs",
+      "cshtmlTemplateDirectory": "Templates/HealthAndWellness/testersTemplate.cshtml",
+      "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellness/testersData.json"
     }
   ]
 }

@@ -73,7 +73,7 @@ namespace iTextDesignerWithGUI.Forms
             // Display name section
             var displayNameLabel = new Label
             {
-                Text = "PDF Name:",
+                Text = "PDF Name: styled like: DellegationAssessment",
                 Font = new Font("Segoe UI", 10F, FontStyle.Regular),
                 AutoSize = true,
                 Margin = new Padding(0, 0, 0, 5)

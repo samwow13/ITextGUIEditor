@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using iTextDesignerWithGUI.Extensions;
+using iTextDesignerWithGUI.Services;
 
 namespace iTextDesignerWithGUI.Models
 {
@@ -41,6 +42,11 @@ namespace iTextDesignerWithGUI.Models
         /// Gets or sets the assessment class type
         /// </summary>
         public Type AssessmentClassType { get; private set; }
+
+        /// <summary>
+        /// Gets the JSON definition for this assessment type (if available)
+        /// </summary>
+        public AssessmentTypeJsonDefinition JsonDefinition { get; private set; }
 
         /// <summary>
         /// Creates a new wrapper for a built-in assessment type
@@ -122,6 +128,41 @@ namespace iTextDesignerWithGUI.Models
         }
 
         /// <summary>
+        /// Creates a new wrapper from a JSON assessment type definition
+        /// </summary>
+        public static AssessmentTypeWrapper FromJsonDefinition(AssessmentTypeJsonDefinition jsonDefinition)
+        {
+            if (jsonDefinition == null)
+                throw new ArgumentNullException(nameof(jsonDefinition));
+
+            // Check if this might be a built-in type that we should map to an enum
+            bool isBuiltIn = false;
+            AssessmentType? builtInType = null;
+            
+            try
+            {
+                // Try to match with enum if available
+                if (Enum.TryParse<AssessmentType>(jsonDefinition.Name, out var enumValue))
+                {
+                    isBuiltIn = true;
+                    builtInType = enumValue;
+                }
+            }
+            catch { /* Ignore, not an enum value */ }
+
+            return new AssessmentTypeWrapper
+            {
+                IsBuiltIn = isBuiltIn,
+                BuiltInType = builtInType,
+                TypeName = jsonDefinition.Name,
+                CustomTypeId = isBuiltIn ? null : $"json_{jsonDefinition.Name}",
+                DisplayName = jsonDefinition.DisplayName,
+                AssessmentClassType = null,
+                JsonDefinition = jsonDefinition
+            };
+        }
+
+        /// <summary>
         /// Dynamically discovers all assessment types in the current assembly
         /// </summary>
         public static List<AssessmentTypeWrapper> DiscoverAssessmentTypes()
@@ -130,7 +171,24 @@ namespace iTextDesignerWithGUI.Models
             
             try
             {
-                // Get all types from the current assembly that implement IAssessment and have a parameterless constructor
+                // First, load assessment types from the JSON file
+                var jsonLoader = AssessmentTypeJsonLoader.Instance;
+                var jsonTypes = jsonLoader.LoadAssessmentTypes(forceRefresh: true);
+                
+                // Create wrappers for each JSON type
+                foreach (var jsonType in jsonTypes)
+                {
+                    try
+                    {
+                        result.Add(FromJsonDefinition(jsonType));
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Error creating wrapper for JSON type {jsonType.Name}: {ex.Message}");
+                    }
+                }
+
+                // Now, get all types from the current assembly that implement IAssessment and have a parameterless constructor
                 var assessmentTypes = Assembly.GetExecutingAssembly()
                     .GetTypes()
                     .Where(t => typeof(IAssessment).IsAssignableFrom(t) && 
@@ -142,6 +200,12 @@ namespace iTextDesignerWithGUI.Models
                 // Start with a list of type names from the constants
                 // Even if the enum is missing some values, the constants will still be there
                 var knownTypeNames = new HashSet<string>(AssessmentTypeConstants.GetAll(), StringComparer.OrdinalIgnoreCase);
+                
+                // Also add the names from the JSON types
+                foreach (var jsonType in jsonTypes)
+                {
+                    knownTypeNames.Add(jsonType.Name);
+                }
                 
                 // Also add enum values if they still exist
                 try
@@ -158,7 +222,7 @@ namespace iTextDesignerWithGUI.Models
                     // Get the base name without "Assessment" suffix
                     string baseName = type.Name.Replace("Assessment", "");
                     
-                    // Skip the type if it's already represented by the enum or constants
+                    // Skip the type if it's already represented by the enum, constants, or JSON
                     // We only want to discover truly new types that aren't in the known list
                     if (knownTypeNames.Contains(baseName) || type == typeof(DynamicAssessment))
                     {
@@ -192,6 +256,21 @@ namespace iTextDesignerWithGUI.Models
             if (AssessmentClassType != null)
             {
                 return (IAssessment)Activator.CreateInstance(AssessmentClassType);
+            }
+            
+            // If we have a JSON definition, try to create a dynamic assessment from it
+            if (JsonDefinition != null)
+            {
+                // Create a custom assessment type from the JSON definition
+                var customType = new CustomAssessmentType
+                {
+                    Id = $"json_{JsonDefinition.Name}",
+                    DisplayName = JsonDefinition.DisplayName,
+                    TemplateFileName = JsonDefinition.CshtmlTemplateDirectory,
+                    JsonDataPath = JsonDefinition.JsonDataLocationDirectory
+                };
+                
+                return new DynamicAssessment(customType);
             }
             
             // Try to handle as a built-in type
