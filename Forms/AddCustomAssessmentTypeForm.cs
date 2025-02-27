@@ -18,6 +18,7 @@ namespace iTextDesignerWithGUI.Forms
     {
         private TextBox displayNameTextBox;
         private ComboBox projectNameComboBox;
+        private Label statusLabel;
 
         public AddCustomAssessmentTypeForm()
         {
@@ -33,7 +34,7 @@ namespace iTextDesignerWithGUI.Forms
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.Size = new System.Drawing.Size(500, 400);
+            this.Size = new System.Drawing.Size(500, 470); 
             this.Padding = new Padding(20);
             this.BackColor = Color.White;
 
@@ -41,133 +42,177 @@ namespace iTextDesignerWithGUI.Forms
             var mainContainer = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
-                RowCount = 7,
+                RowCount = 8,
                 ColumnCount = 1,
-                Padding = new Padding(10),
+                Padding = new Padding(20),
+                BackColor = Color.White
             };
 
-            // Add rows
-            for (int i = 0; i < 7; i++)
+            // Add rows with proper sizing
+            mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize)); 
+            mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize)); 
+            mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize)); 
+            mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize)); 
+            mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize)); 
+            mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize)); 
+            mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize)); 
+            mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize)); 
+
+            // Title
+            var titleLabel = new Label
             {
-                mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            }
+                Text = "Add Custom Assessment Type",
+                Font = new Font("Segoe UI", 14F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(33, 37, 41),
+                AutoSize = true,
+                Margin = new Padding(0, 0, 0, 20),
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+            mainContainer.Controls.Add(titleLabel, 0, 0);
 
             // Project name section
             var projectNameLabel = new Label
             {
                 Text = "Project Name:",
-                Font = new Font("Segoe UI", 10F, FontStyle.Regular),
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(33, 37, 41),
                 AutoSize = true,
-                Margin = new Padding(0, 0, 0, 5)
+                Margin = new Padding(0, 0, 0, 8)
             };
-            mainContainer.Controls.Add(projectNameLabel, 0, 0);
+            mainContainer.Controls.Add(projectNameLabel, 0, 1);
 
             projectNameComboBox = new ComboBox
             {
                 Dock = DockStyle.Fill,
-                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
-                Margin = new Padding(0, 0, 0, 15),
-                DropDownStyle = ComboBoxStyle.DropDownList
+                Font = new Font("Segoe UI", 10F, FontStyle.Regular),
+                Margin = new Padding(0, 0, 0, 20),
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.FromArgb(248, 249, 250),
+                Height = 30
             };
             projectNameComboBox.SelectedIndexChanged += ProjectNameComboBox_SelectedIndexChanged;
-            mainContainer.Controls.Add(projectNameComboBox, 0, 1);
+            mainContainer.Controls.Add(projectNameComboBox, 0, 2);
 
             // Display name section
             var displayNameLabel = new Label
             {
-                Text = "PDF Name: styled like: DellegationAssessment",
-                Font = new Font("Segoe UI", 10F, FontStyle.Regular),
+                Text = "PDF Name:",
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(33, 37, 41),
                 AutoSize = true,
-                Margin = new Padding(0, 0, 0, 5)
+                Margin = new Padding(0, 0, 0, 8)
             };
-            mainContainer.Controls.Add(displayNameLabel, 0, 2);
+            mainContainer.Controls.Add(displayNameLabel, 0, 3);
+
+            // Add helper text for naming convention
+            var helperLabel = new Label
+            {
+                Text = "Use PascalCase naming (e.g., DelegationAssessment)",
+                Font = new Font("Segoe UI", 8F, FontStyle.Italic),
+                ForeColor = Color.FromArgb(108, 117, 125),
+                AutoSize = true,
+                Margin = new Padding(0, 0, 0, 8)
+            };
+            mainContainer.Controls.Add(helperLabel, 0, 4);
 
             var displayNameContainer = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
                 ColumnCount = 2,
                 AutoSize = true,
-                Margin = new Padding(0, 0, 0, 15)
+                Margin = new Padding(0, 0, 0, 20)
             };
-            displayNameContainer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80));
-            displayNameContainer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+            displayNameContainer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 75));
+            displayNameContainer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
 
             displayNameTextBox = new TextBox
             {
                 Dock = DockStyle.Fill,
-                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
-                Height = 25
+                Font = new Font("Segoe UI", 10F, FontStyle.Regular),
+                Height = 32,
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = Color.FromArgb(248, 249, 250)
             };
             displayNameContainer.Controls.Add(displayNameTextBox, 0, 0);
 
             var generateFilesButton = new Button
             {
-                Text = "Generate Files",
+                Text = "Generate",
                 Dock = DockStyle.Fill,
-                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
-                Margin = new Padding(5, 0, 0, 0),
-                BackColor = Color.FromArgb(0, 120, 212),
-                ForeColor = Color.White
+                Font = new Font("Segoe UI", 10F, FontStyle.Regular),
+                Margin = new Padding(10, 0, 0, 0),
+                BackColor = Color.FromArgb(0, 123, 255),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Height = 32,
+                Cursor = Cursors.Hand
             };
+            generateFilesButton.FlatAppearance.BorderSize = 0;
             generateFilesButton.Click += GenerateFilesButton_Click;
             displayNameContainer.Controls.Add(generateFilesButton, 1, 0);
 
-            mainContainer.Controls.Add(displayNameContainer, 0, 3);
+            mainContainer.Controls.Add(displayNameContainer, 0, 5);
 
-            // Add a Delete Template button
-            var deleteTemplateButton = new Button
+            // Status label for feedback
+            statusLabel = new Label
             {
-                Text = "Delete a Template",
+                Text = "",
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular),
-                Padding = new Padding(10, 5, 10, 5),
-                BackColor = Color.FromArgb(220, 53, 69),
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat,
-                Margin = new Padding(0, 0, 0, 15),
-                Height = 35,
-                Dock = DockStyle.Fill,
-                AutoSize = true
+                ForeColor = Color.FromArgb(108, 117, 125),
+                AutoSize = true,
+                Margin = new Padding(0, 0, 0, 20),
+                Visible = false
             };
-            deleteTemplateButton.FlatAppearance.BorderSize = 0;
-            deleteTemplateButton.Click += DeleteTemplateButton_Click;
-            mainContainer.Controls.Add(deleteTemplateButton, 0, 4);
+            mainContainer.Controls.Add(statusLabel, 0, 6);
+
+            // Template manager link - styled as a more appropriate navigation element
+            var templateManagerLink = new LinkLabel
+            {
+                Text = "Manage Templates",
+                Font = new Font("Segoe UI", 10F, FontStyle.Regular),
+                LinkColor = Color.FromArgb(23, 162, 184), // Info color
+                ActiveLinkColor = Color.FromArgb(0, 123, 255),
+                AutoSize = true,
+                Margin = new Padding(0, 0, 0, 20),
+                TextAlign = ContentAlignment.MiddleCenter,
+                Dock = DockStyle.Fill,
+                Cursor = Cursors.Hand
+            };
+            templateManagerLink.LinkClicked += (sender, e) => DeleteTemplateButton_Click(sender, e);
+            mainContainer.Controls.Add(templateManagerLink, 0, 7);
 
             // Button panel
             var buttonPanel = new FlowLayoutPanel
             {
-                Dock = DockStyle.Fill,
+                Dock = DockStyle.Bottom,
                 FlowDirection = FlowDirection.RightToLeft,
-                Height = 40,
-                Margin = new Padding(0, 10, 0, 0),
+                Height = 60,
+                Margin = new Padding(0),
                 AutoSize = true,
-                Padding = new Padding(0)
+                Padding = new Padding(20, 15, 20, 15),
+                BackColor = Color.FromArgb(248, 249, 250)
             };
-
-            // Button styles
-            var buttonSize = new Size(100, 35);
-            var buttonMargin = new Padding(5, 0, 5, 0);
-            var buttonFont = new Font("Segoe UI", 9F, FontStyle.Regular);
-            var buttonPadding = new Padding(10, 5, 10, 5);
 
             // Create Go Back button
             var goBackButton = new Button
             {
                 Text = "Go Back",
                 DialogResult = DialogResult.Cancel,
-                Font = buttonFont,
-                Padding = buttonPadding,
-                BackColor = Color.FromArgb(0, 120, 212),
+                Font = new Font("Segoe UI", 10F, FontStyle.Regular),
+                Padding = new Padding(15, 8, 15, 8),
+                BackColor = Color.FromArgb(0, 123, 255),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
-                Size = new Size(120, 35),
-                Margin = buttonMargin,
-                Height = buttonSize.Height
+                Size = new Size(120, 40),
+                Margin = new Padding(0),
+                Cursor = Cursors.Hand
             };
             goBackButton.FlatAppearance.BorderSize = 0;
 
             buttonPanel.Controls.Add(goBackButton);
-            mainContainer.Controls.Add(buttonPanel, 0, 6);
-
+            this.Controls.Add(buttonPanel);
             this.Controls.Add(mainContainer);
             this.CancelButton = goBackButton;
         }
@@ -245,7 +290,7 @@ namespace iTextDesignerWithGUI.Forms
                         if (Directory.Exists(fullPath))
                         {
                             // Just update the UI to show the project selection was successful
-                            // We'll let the user select the specific template file
+                            UpdateStatus($"Project '{selectedProject}' selected", isSuccess: true);
                         }
                     }
                 }
@@ -261,12 +306,14 @@ namespace iTextDesignerWithGUI.Forms
             // Validate input
             if (projectNameComboBox.SelectedIndex < 0)
             {
+                UpdateStatus("Please select a project", isSuccess: false);
                 MessageBox.Show("Please select a project.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             
             if (string.IsNullOrWhiteSpace(displayNameTextBox.Text))
             {
+                UpdateStatus("Please enter a PDF name", isSuccess: false);
                 MessageBox.Show("Please enter a PDF name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -308,17 +355,20 @@ namespace iTextDesignerWithGUI.Forms
                             
                             // Note: No need for an additional MessageBox here as it would create
                             // an extra dialog that the user has to dismiss after file generation
+                            UpdateStatus($"Generation process initiated for '{pdfName}'", isSuccess: true);
                         }
                     }
                 }
                 else
                 {
+                    UpdateStatus($"Could not find project '{projectName}' in configuration", isSuccess: false);
                     MessageBox.Show($"Could not find project '{projectName}' in configuration.", 
                                    "Project Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
+                UpdateStatus("Error preparing PDF generation", isSuccess: false);
                 MessageBox.Show($"Error preparing PDF generation: {ex.Message}", 
                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -378,6 +428,18 @@ namespace iTextDesignerWithGUI.Forms
             {
                 deleteTemplateForm.ShowDialog();
             }
+        }
+
+        /// <summary>
+        /// Updates the status label with a message and sets its color based on success/failure
+        /// </summary>
+        /// <param name="message">The message to display</param>
+        /// <param name="isSuccess">Whether the status is a success or failure message</param>
+        private void UpdateStatus(string message, bool isSuccess)
+        {
+            statusLabel.Text = message;
+            statusLabel.ForeColor = isSuccess ? Color.FromArgb(40, 167, 69) : Color.FromArgb(220, 53, 69);
+            statusLabel.Visible = true;
         }
     }
 }
