@@ -45,40 +45,65 @@ namespace iTextDesignerWithGUI.Services
                 };
 
                 // Handle both built-in and custom assessment types
-                if (_assessmentTypeWrapper.IsBuiltIn && _assessmentTypeWrapper.BuiltInType.HasValue)
+                if (_assessmentTypeWrapper.IsBuiltIn && !string.IsNullOrEmpty(_assessmentTypeWrapper.BuiltInType))
                 {
                     // Get the type name, which is the string representation of the enum
-                    string typeName = _assessmentTypeWrapper.TypeName ?? _assessmentTypeWrapper.BuiltInType.Value.ToString();
+                    string typeName = _assessmentTypeWrapper.TypeName ?? _assessmentTypeWrapper.BuiltInType;
                     
-                    // Use a string-based switch for better compatibility with changes to the enum
-                    switch (typeName)
-                    {//ADD FORMS HERE
-                        case AssessmentTypeConstants.OralCare:
-                            return JsonSerializer.Deserialize<List<OralCareDataInstance>>(jsonContent, options).Cast<object>().ToList();
-                        case AssessmentTypeConstants.RegisteredNurseTaskAndDelegation:
-                            return JsonSerializer.Deserialize<List<RegisteredNurseTaskDelegDataInstance>>(jsonContent, options).Cast<object>().ToList();
-                        case AssessmentTypeConstants.TestRazorDataInstance:
-                            return JsonSerializer.Deserialize<List<TestRazorDataInstance>>(jsonContent, options).Cast<object>().ToList();
-                        case AssessmentTypeConstants.Tester:
-                            // Try to find the appropriate data instance type for Tester
-                            var testerInstanceType = Assembly.GetExecutingAssembly()
+                    // Try to get the model data type from the assessment type wrapper
+                    Type modelDataType = null;
+                    
+                    if (_assessmentTypeWrapper.JsonDefinition != null)
+                    {
+                        // Try to find the data instance type based on the path in the JSON definition
+                        string dataInstancePath = _assessmentTypeWrapper.JsonDefinition.AssessmentDataInstanceDirectory;
+                        if (!string.IsNullOrEmpty(dataInstancePath))
+                        {
+                            // Extract the class name from the path
+                            string className = System.IO.Path.GetFileNameWithoutExtension(dataInstancePath);
+                            
+                            // Try to find the type by name
+                            modelDataType = Assembly.GetExecutingAssembly()
                                 .GetTypes()
-                                .FirstOrDefault(t => t.Name.Contains("testerInstance") && !t.IsInterface && !t.IsAbstract);
-                                
-                            if (testerInstanceType != null)
-                            {
-                                // Use generic method to deserialize to the correct type
-                                var genericMethod = typeof(JsonSerializer).GetMethod("Deserialize", new[] { typeof(string), typeof(JsonSerializerOptions) })
-                                    .MakeGenericMethod(typeof(List<>).MakeGenericType(testerInstanceType));
-                                
-                                var result = genericMethod.Invoke(null, new object[] { jsonContent, options });
-                                // Need to cast to list of objects for compatibility
-                                return ((IEnumerable<object>)result).Cast<object>().ToList();
-                            }
-                            throw new ArgumentException($"Could not find appropriate data instance type for Tester");
-                        default:
-                            throw new ArgumentException($"Unsupported built-in assessment type: {typeName}");
+                                .FirstOrDefault(t => t.Name.Equals(className, StringComparison.OrdinalIgnoreCase));
+                        }
                     }
+                    
+                    // If we couldn't find the type from the JSON definition, try to infer it
+                    if (modelDataType == null)
+                    {
+                        // Get the assessment type name
+                        string typeNameLocal = _assessmentTypeWrapper.TypeName;
+                        
+                        // Try to find a matching data instance type
+                        modelDataType = Assembly.GetExecutingAssembly()
+                            .GetTypes()
+                            .FirstOrDefault(t => t.Name.Equals(typeNameLocal + "DataInstance", StringComparison.OrdinalIgnoreCase));
+                    }
+                    
+                    // If we found a valid model data type, use it for deserialization
+                    if (modelDataType != null)
+                    {
+                        // Use generic method to deserialize to the correct type
+                        var listType = typeof(List<>).MakeGenericType(modelDataType);
+                        var deserializeMethod = typeof(JsonSerializer).GetMethod("Deserialize", new[] { typeof(string), typeof(JsonSerializerOptions) });
+                        var genericMethod = deserializeMethod.MakeGenericMethod(listType);
+                        
+                        // Deserialize to the specific list type
+                        var typedList = genericMethod.Invoke(null, new object[] { jsonContent, options });
+                        
+                        // Convert to List<object>
+                        var castMethod = typeof(Enumerable).GetMethod("Cast").MakeGenericMethod(typeof(object));
+                        var castedList = castMethod.Invoke(null, new[] { typedList });
+                        
+                        // Convert to List<object>
+                        var toListMethod = typeof(Enumerable).GetMethod("ToList").MakeGenericMethod(typeof(object));
+                        return (List<object>)toListMethod.Invoke(null, new[] { castedList });
+                    }
+                    
+                    // Fallback to deserializing as JsonElement list if we couldn't determine the type
+                    var elements = JsonSerializer.Deserialize<List<JsonElement>>(jsonContent, options);
+                    return elements.Cast<object>().ToList();
                 }
                 else if (!string.IsNullOrEmpty(_assessmentTypeWrapper.CustomTypeId))
                 {

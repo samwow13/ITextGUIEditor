@@ -256,17 +256,68 @@ namespace iTextDesignerWithGUI.Services
         /// </summary>
         private string ProcessDataModel(string templateContent, object data)
         {
-            switch (data)
-            {//ADD FORMS HERE
-                case OralCareDataInstance oralCare:
-                    return HTMLTemplateMethods.ReplacePlaceholders(templateContent, oralCare);
-                case RegisteredNurseTaskDelegDataInstance nurseTask:
-                    return HTMLTemplateMethods.ReplacePlaceholders(templateContent, nurseTask);
-                case TestRazorDataInstance _:
-                    return templateContent; // Razor templates handle data binding internally
-                default:
-                    throw new ArgumentException("Unsupported data type");
+            // Get the type name of the data object
+            string typeName = data.GetType().Name;
+            
+            // Check if this is a Razor template (TestRazorDataInstance)
+            if (typeName.Contains("TestRazorDataInstance"))
+            {
+                return templateContent; // Razor templates handle data binding internally
             }
+            
+            // For other types, try to use reflection to call the appropriate ReplacePlaceholders method
+            try
+            {
+                // Get the ReplacePlaceholders method that takes this specific data type
+                var method = typeof(HTMLTemplateMethods).GetMethod("ReplacePlaceholders", 
+                    new[] { typeof(string), data.GetType() });
+                
+                if (method != null)
+                {
+                    // Invoke the method with the template and data
+                    return (string)method.Invoke(null, new[] { templateContent, data });
+                }
+                
+                // If no specific method exists, try to use a generic approach with reflection
+                // This allows for dynamic handling of any data type without hard-coded switch cases
+                return ReplaceTemplateValuesWithReflection(templateContent, data);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error processing data model: {ex.Message}");
+                throw new ArgumentException($"Error processing data type {typeName}: {ex.Message}", ex);
+            }
+        }
+        
+        /// <summary>
+        /// Uses reflection to replace placeholders in the template with values from any data object
+        /// </summary>
+        private string ReplaceTemplateValuesWithReflection(string template, object data)
+        {
+            if (data == null || string.IsNullOrEmpty(template))
+                return template;
+                
+            string result = template;
+            
+            // Get all properties of the data object
+            var properties = data.GetType().GetProperties();
+            
+            foreach (var prop in properties)
+            {
+                string placeholder = $"{{{{{prop.Name}}}}}";
+                
+                if (result.Contains(placeholder))
+                {
+                    // Get the property value
+                    var value = prop.GetValue(data);
+                    string valueStr = value?.ToString() ?? string.Empty;
+                    
+                    // Replace the placeholder with the value
+                    result = result.Replace(placeholder, valueStr);
+                }
+            }
+            
+            return result;
         }
 
         /// <summary>

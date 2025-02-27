@@ -69,7 +69,7 @@ namespace iTextDesignerWithGUI.Forms
             InitializeComponent();
             _currentTypeWrapper = typeWrapper;
             
-            if (typeWrapper.IsBuiltIn && typeWrapper.BuiltInType.HasValue)
+            if (typeWrapper.IsBuiltIn && !string.IsNullOrEmpty(typeWrapper.BuiltInType))
             {
                 // No need to store the enum value separately, it's in the wrapper
             }
@@ -108,13 +108,31 @@ namespace iTextDesignerWithGUI.Forms
             InitializeAsync();
         }
 
-        /// <summary>
-        /// Constructor that takes an AssessmentType enum value and converts it to an AssessmentTypeWrapper
-        /// </summary>
-        /// <param name="assessmentType">The built-in assessment type</param>
-        public MainForm(AssessmentType assessmentType = AssessmentType.OralCare) 
-            : this(AssessmentTypeWrapper.FromBuiltIn(assessmentType))
+        public MainForm() 
+            : this(GetDefaultAssessmentTypeWrapper())
         {
+        }
+
+        private static AssessmentTypeWrapper GetDefaultAssessmentTypeWrapper()
+        {
+            // Load assessment types from JSON
+            var jsonLoader = AssessmentTypeJsonLoader.Instance;
+            var jsonTypes = jsonLoader.LoadAssessmentTypes();
+            
+            // Use the first type in the JSON file as the default
+            if (jsonTypes.Count > 0)
+            {
+                return AssessmentTypeWrapper.FromJsonDefinition(jsonTypes[0]);
+            }
+            
+            // Fallback to using the constants if no JSON types are available
+            return AssessmentTypeWrapper.FromJsonDefinition(new AssessmentTypeJsonDefinition
+            {
+                Name = AssessmentTypeConstants.OralCare,
+                DisplayName = "Oral Care",
+                CshtmlTemplateDirectory = "Templates/HealthAndWellness/AssessmentTemplate.html",
+                JsonDataLocationDirectory = "ReferenceDataJsons/HealthAndWellness/OralCareReferenceData.json"
+            });
         }
 
         private void LoadWindowPosition()

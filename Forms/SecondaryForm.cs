@@ -4,6 +4,8 @@ using System.Windows.Forms;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using System.Reflection;
+using System.Collections.Generic;
 using iTextDesignerWithGUI.Models;
 using iTextDesignerWithGUI.Models.TestRazorDataModels;
 using iTextDesignerWithGUI.Controls;
@@ -42,51 +44,33 @@ namespace iTextDesignerWithGUI.Forms
             {
                 // Create a clean representation of the data based on its type
                 object displayData = data;
-                string documentType = "Unknown";
+                string documentType = data.GetType().Name;
 
-                //ADD FORMS HERE
-                // For HTML template data, create a clean object with only the relevant properties
-                if (data is OralCareDataInstance oralCare)
+                // Use reflection to create a dynamic object with the properties from the data object
+                try
                 {
-                    displayData = new
+                    // Get the properties of the data object
+                    var properties = data.GetType().GetProperties();
+
+                    // Create a dictionary to hold the property values
+                    var propertyValues = new Dictionary<string, object>();
+
+                    // Add each property to the dictionary
+                    foreach (var prop in properties)
                     {
-                        ChildInfo = oralCare.ChildInfo,
-                        RiskFactors = oralCare.RiskFactors,
-                        ProtectiveFactors = oralCare.ProtectiveFactors,
-                        ClinicalFindings = oralCare.ClinicalFindings,
-                        AssessmentPlan = oralCare.AssessmentPlan,
-                        SelfManagementGoals = oralCare.SelfManagementGoals,
-                        NursingRecommendations = oralCare.NursingRecommendations,
-                        Type = "Oral Care Assessment"
-                    };
-                    documentType = "OralCareAssessment";
+                        propertyValues[prop.Name] = prop.GetValue(data);
+                    }
+
+                    // Add the type information
+                    propertyValues["Type"] = documentType.Replace("DataInstance", " Assessment");
+
+                    // Create a dynamic object from the dictionary
+                    displayData = propertyValues;
                 }
-                else if (data is RegisteredNurseTaskDelegDataInstance nurseTask)
+                catch (Exception ex)
                 {
-                    displayData = new
-                    {
-                        ChildInfo = nurseTask.ChildInfo,
-                        CaregiverInfo = nurseTask.CaregiverInfo,
-                        DelegatedTasks = nurseTask.DelegatedTasks,
-                        TrainingDetails = nurseTask.TrainingDetails,
-                        NonDelegatedTasks = nurseTask.NonDelegatedTasks,
-                        NursingRules = nurseTask.NursingRules,
-                        InstructionsGiven = nurseTask.InstructionsGiven,
-                        SupervisoryVisitNotes = nurseTask.SupervisoryVisitNotes,
-                        Type = "Registered Nurse Task Delegation"
-                    };
-                    documentType = "NurseTaskDelegation";
-                }
-                else if (data is TestRazorDataInstance testRazor)
-                {
-                    displayData = new
-                    {
-                        User = testRazor.User,
-                        Preferences = testRazor.Preferences,
-                        Orders = testRazor.Orders,
-                        Type = "Test Razor Assessment"
-                    };
-                    documentType = "TestRazorAssessment";
+                    System.Diagnostics.Debug.WriteLine($"Error creating display data: {ex.Message}");
+                    // Fall back to using the original data object
                 }
 
                 _jsonChecklistControl.UpdateData(displayData, documentType);
@@ -133,10 +117,10 @@ namespace iTextDesignerWithGUI.Forms
         {
             // Match parent form width
             this.Width = _parentForm.Width;
-            
+
             // Make height 2.5 times taller than parent
             this.Height = (int)(_parentForm.Height * 2.5);
-            
+
             // Position directly below parent form
             Point parentLocation = _parentForm.Location;
             this.Location = new Point(

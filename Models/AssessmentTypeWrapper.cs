@@ -20,7 +20,7 @@ namespace iTextDesignerWithGUI.Models
         /// <summary>
         /// Gets the built-in assessment type (only valid if IsBuiltIn is true)
         /// </summary>
-        public AssessmentType? BuiltInType { get; private set; }
+        public string BuiltInType { get; private set; }
 
         /// <summary>
         /// Gets the type name that can be used to identify this assessment type
@@ -51,17 +51,18 @@ namespace iTextDesignerWithGUI.Models
         /// <summary>
         /// Creates a new wrapper for a built-in assessment type
         /// </summary>
-        public static AssessmentTypeWrapper FromBuiltIn(AssessmentType builtInType)
+        public static AssessmentTypeWrapper FromBuiltIn(string builtInType)
         {
-            string typeName = builtInType.ToString();
-            
+            if (string.IsNullOrEmpty(builtInType))
+                throw new ArgumentNullException(nameof(builtInType));
+                
             return new AssessmentTypeWrapper
             {
                 IsBuiltIn = true,
                 BuiltInType = builtInType,
-                TypeName = typeName,
+                TypeName = builtInType,
                 CustomTypeId = null,
-                DisplayName = typeName.SplitCamelCase(),
+                DisplayName = builtInType.SplitCamelCase(),
                 AssessmentClassType = null // Will be set in GetAssessment
             };
         }
@@ -101,17 +102,17 @@ namespace iTextDesignerWithGUI.Models
 
             // Check if this might be a built-in type that we should map to an enum
             bool isBuiltIn = false;
-            AssessmentType? builtInType = null;
+            string builtInType = null;
             
             try
             {
                 string typeName = assessmentType.Name.Replace("Assessment", "");
                 
                 // Try to match with enum if available
-                if (Enum.TryParse<AssessmentType>(typeName, out var enumValue))
+                if (AssessmentTypeConstants.GetAll().Contains(typeName, StringComparer.OrdinalIgnoreCase))
                 {
                     isBuiltIn = true;
-                    builtInType = enumValue;
+                    builtInType = typeName;
                 }
             }
             catch { /* Ignore, not an enum value */ }
@@ -137,15 +138,15 @@ namespace iTextDesignerWithGUI.Models
 
             // Check if this might be a built-in type that we should map to an enum
             bool isBuiltIn = false;
-            AssessmentType? builtInType = null;
+            string builtInType = null;
             
             try
             {
                 // Try to match with enum if available
-                if (Enum.TryParse<AssessmentType>(jsonDefinition.Name, out var enumValue))
+                if (AssessmentTypeConstants.GetAll().Contains(jsonDefinition.Name, StringComparer.OrdinalIgnoreCase))
                 {
                     isBuiltIn = true;
-                    builtInType = enumValue;
+                    builtInType = jsonDefinition.Name;
                 }
             }
             catch { /* Ignore, not an enum value */ }
@@ -207,16 +208,6 @@ namespace iTextDesignerWithGUI.Models
                     knownTypeNames.Add(jsonType.Name);
                 }
                 
-                // Also add enum values if they still exist
-                try
-                {
-                    foreach (AssessmentType enumType in Enum.GetValues(typeof(AssessmentType)))
-                    {
-                        knownTypeNames.Add(enumType.ToString());
-                    }
-                }
-                catch { /* Ignore if enum is modified */ }
-
                 foreach (var type in assessmentTypes)
                 {
                     // Get the base name without "Assessment" suffix
@@ -274,10 +265,10 @@ namespace iTextDesignerWithGUI.Models
             }
             
             // Try to handle as a built-in type
-            if (IsBuiltIn && BuiltInType.HasValue)
+            if (IsBuiltIn && !string.IsNullOrEmpty(BuiltInType))
             {
                 // Use the TypeName which is the string version of the enum
-                string typeName = TypeName ?? BuiltInType.Value.ToString();
+                string typeName = TypeName ?? BuiltInType;
                 
                 switch (typeName)
                 {

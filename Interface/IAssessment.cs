@@ -22,14 +22,4 @@ namespace iTextDesignerWithGUI.Models
         /// </summary>
         string DisplayName { get; }
     }
-
-    /// <summary>
-    /// Enumeration of available assessment types
-    /// </summary>
-    public enum AssessmentType
-    {
-        OralCare,
-
-        //ADD FORMS HERE
-    }
 }

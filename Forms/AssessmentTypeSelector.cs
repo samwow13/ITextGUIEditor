@@ -11,7 +11,7 @@ namespace iTextDesignerWithGUI.Forms
     public partial class AssessmentTypeSelector : Form
     {
         public AssessmentTypeWrapper SelectedTypeWrapper { get; private set; }
-        public AssessmentType? SelectedBuiltInType => SelectedTypeWrapper?.IsBuiltIn == true ? SelectedTypeWrapper.BuiltInType : null;
+        public string SelectedBuiltInType => SelectedTypeWrapper?.IsBuiltIn == true ? SelectedTypeWrapper.BuiltInType : null;
         public bool WasCancelled { get; private set; } = true;
 
         public AssessmentTypeSelector()
@@ -102,12 +102,12 @@ namespace iTextDesignerWithGUI.Forms
             }
 
             // Add built-in assessment types (only if they're not already in the JSON)
-            foreach (AssessmentType type in Enum.GetValues(typeof(AssessmentType)))
+            foreach (string typeName in AssessmentTypeConstants.GetAll())
             {
                 // Skip "Tester" since we'll get it from discovery instead
-                if (type.ToString() != AssessmentTypeConstants.Tester)
+                if (typeName != AssessmentTypeConstants.Tester)
                 {
-                    var wrapper = AssessmentTypeWrapper.FromBuiltIn(type);
+                    var wrapper = AssessmentTypeWrapper.FromBuiltIn(typeName);
                     
                     // Only add if we don't already have an item with this display name
                     if (!displayNames.Contains(wrapper.DisplayName))
