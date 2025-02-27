@@ -111,25 +111,12 @@ namespace iTextDesignerWithGUI.Forms
             // Track display names to avoid duplicates
             var displayNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             
-            // Get all assessment types from the discovery method which already includes JSON types
+            // Get all assessment types from the JSON file only
             var discoveredTypes = AssessmentTypeWrapper.DiscoverAssessmentTypes();
             
-            // Add all discovered types (including those from JSON)
+            // Add all discovered types from JSON
             foreach (var wrapper in discoveredTypes)
             {
-                // Only add if we don't already have an item with this display name
-                if (!displayNames.Contains(wrapper.DisplayName))
-                {
-                    comboBox.Items.Add(wrapper);
-                    displayNames.Add(wrapper.DisplayName);
-                }
-            }
-
-            // Add custom assessment types
-            foreach (var customType in CustomAssessmentTypeManager.GetAllCustomTypes())
-            {
-                var wrapper = AssessmentTypeWrapper.FromCustom(customType);
-                
                 // Only add if we don't already have an item with this display name
                 if (!displayNames.Contains(wrapper.DisplayName))
                 {

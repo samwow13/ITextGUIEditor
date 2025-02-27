@@ -163,7 +163,7 @@ namespace iTextDesignerWithGUI.Models
             
             try
             {
-                // First, load assessment types from the JSON file
+                // Load assessment types from the JSON file
                 var jsonLoader = AssessmentTypeJsonLoader.Instance;
                 var jsonTypes = jsonLoader.LoadAssessmentTypes(forceRefresh: true);
                 
@@ -177,47 +177,6 @@ namespace iTextDesignerWithGUI.Models
                     catch (Exception ex)
                     {
                         System.Diagnostics.Debug.WriteLine($"Error creating wrapper for JSON type {jsonType.Name}: {ex.Message}");
-                    }
-                }
-
-                // Now, get all types from the current assembly that implement IAssessment and have a parameterless constructor
-                var assessmentTypes = Assembly.GetExecutingAssembly()
-                    .GetTypes()
-                    .Where(t => typeof(IAssessment).IsAssignableFrom(t) && 
-                               !t.IsInterface && 
-                               !t.IsAbstract &&
-                               t.GetConstructor(Type.EmptyTypes) != null)
-                    .ToList();
-                
-                // Start with a list of type names from the constants
-                // Even if the enum is missing some values, the constants will still be there
-                var knownTypeNames = new HashSet<string>(AssessmentTypeConstants.GetAll(), StringComparer.OrdinalIgnoreCase);
-                
-                // Also add the names from the JSON types
-                foreach (var jsonType in jsonTypes)
-                {
-                    knownTypeNames.Add(jsonType.Name);
-                }
-                
-                foreach (var type in assessmentTypes)
-                {
-                    // Get the base name without "Assessment" suffix
-                    string baseName = type.Name.Replace("Assessment", "");
-                    
-                    // Skip the type if it's already represented by the enum, constants, or JSON
-                    // We only want to discover truly new types that aren't in the known list
-                    if (knownTypeNames.Contains(baseName) || type == typeof(DynamicAssessment))
-                    {
-                        continue;
-                    }
-
-                    try
-                    {
-                        result.Add(FromDiscoveredType(type));
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Error creating wrapper for {type.Name}: {ex.Message}");
                     }
                 }
             }
