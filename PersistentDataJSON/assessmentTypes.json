@@ -3,23 +3,26 @@
     {
       "name": "OralCare",
       "displayName": "Oral Care",
-      "assessmentTypeDirectory": "OralCareAssessment",
-      "assessmentDataInstanceDirectory": "OralCareDataInstance",
-      "cshtmlTemplateDirectory": "OralCareTemplates"
+      "assessmentTypeDirectory": "Models/HealthAndWellness/OralCareModels/OralCareAssessment.cs",
+      "assessmentDataInstanceDirectory": "Models/HealthAndWellness/OralCareModels/OralCareDataInstance.cs",
+      "cshtmlTemplateDirectory": "Templates/HealthAndWellness/AssessmentTemplate.html",
+      "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellness/OralCareReferenceData.json"
     },
     {
       "name": "RegisteredNurseTaskAndDelegation",
       "displayName": "Registered Nurse Task And Delegation",
-      "assessmentTypeDirectory": "RegisteredNurseTaskAndDelegationAssessment",
-      "assessmentDataInstanceDirectory": "RegisteredNurseTaskAndDelegDataInstance",
-      "cshtmlTemplateDirectory": "RegisteredNurseTaskAndDelegationTemplates"
+      "assessmentTypeDirectory": "Models/HealthAndWellness/RegisteredNurseTaskModels/RegisteredNurseTaskDelegAssessment.cs",
+      "assessmentDataInstanceDirectory": "Models/HealthAndWellness/RegisteredNurseTaskModels/RegisteredNurseTaskDelegDataInstance.cs",
+      "cshtmlTemplateDirectory": "Templates/HealthAndWellness/RNTaskDelegTemplate.html",
+      "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellness/RegisteredNurseTaskDelegAndAssignData.json"
     },
     {
       "name": "TestRazorDataInstance",
       "displayName": "Test Razor Data Instance",
-      "assessmentTypeDirectory": "TestRazorDataInstanceAssessment",
-      "assessmentDataInstanceDirectory": "TestRazorDataInstance",
-      "cshtmlTemplateDirectory": "TestRazorDataInstanceTemplates"
+      "assessmentTypeDirectory": "Models/HealthAndWellness/TestRazorDataModels/TestRazorDataAssessment.cs",
+      "assessmentDataInstanceDirectory": "Models/HealthAndWellness/TestRazorDataModels/TestRazorDataInstance.cs",
+      "cshtmlTemplateDirectory": "Templates/HealthAndWellness/TestRazorDataAssessment.cshtml",
+      "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellness/TestRazorData.json"
     }
   ]
 }
