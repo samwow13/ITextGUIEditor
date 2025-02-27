@@ -29,18 +29,12 @@ namespace iTextDesignerWithGUI.Services
                     {
                         if (_instance == null)
                         {
-                            // Navigate from the bin directory up to the actual project root
-                            // This matches the approach used in CshtmlGenerationService
-                            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                            // Use ProjectDirectoryService to get the project root directory
+                            var directoryService = new ProjectDirectoryService();
                             
-                            // Go up three directories: bin/Debug/net6.0-windows -> project root
-                            string projectPath = Path.Combine(baseDirectory, "..\\..\\..\\");
-                            string projectRoot = Path.GetFullPath(projectPath);
-                            
-                            // Create the path to the assessmentTypes.json file in the source directory
+                            // Create the path to the assessmentTypes.json file
                             string jsonFilePath = Path.Combine(
-                                projectRoot,
-                                "PersistentDataJSON",
+                                directoryService.GetDirectory("PersistentDataJSON"),
                                 "assessmentTypes.json");
                                 
                             _instance = new AssessmentTypeLoader(jsonFilePath);

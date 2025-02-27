@@ -253,8 +253,9 @@ namespace iTextDesignerWithGUI.Forms
                 // Template path has format like "Templates\HealthAndWellness"
                 string templateType = Path.GetFileName(TemplatePath);
                 
-                // Create the CSHTML generation service
-                var cshtmlService = new CshtmlGenerationService();
+                // Create the project directory service and CSHTML generation service
+                var directoryService = new ProjectDirectoryService();
+                var cshtmlService = new CshtmlGenerationService(directoryService);
                 
                 // Generate the CSHTML file
                 bool success = cshtmlService.GenerateCshtmlFile(PDFName, templateType);

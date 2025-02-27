@@ -12,51 +12,16 @@ namespace iTextDesignerWithGUI.Services
     /// </summary>
     public class CshtmlGenerationService
     {
-        private readonly string _projectRootPath;
+        private readonly ProjectDirectoryService _directoryService;
 
         /// <summary>
         /// Constructor for CshtmlGenerationService
         /// </summary>
-        /// <param name="projectRootPath">Root path of the project. If null, it will be determined automatically</param>
-        public CshtmlGenerationService(string? projectRootPath = null)
+        /// <param name="directoryService">Service for managing project directories</param>
+        public CshtmlGenerationService(ProjectDirectoryService directoryService)
         {
-            // If root path is not provided, determine it from the executing assembly location
-            _projectRootPath = projectRootPath ?? DetermineProjectRootPath();
-            Debug.WriteLine($"CshtmlGenerationService initialized with root path: {_projectRootPath}");
-        }
-
-        /// <summary>
-        /// Determines the project root path automatically
-        /// </summary>
-        /// <returns>Root path of the project</returns>
-        private string DetermineProjectRootPath()
-        {
-            try
-            {
-                // Navigate from the bin directory up to the actual project root
-                // This matches the approach used in MainForm for TemplateWatcherService
-                string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                
-                // Go up three directories: bin/Debug/net6.0-windows -> project root
-                string projectPath = Path.Combine(baseDirectory, "..\\..\\..\\");
-                string fullPath = Path.GetFullPath(projectPath);
-                
-                Debug.WriteLine($"Determined project root path: {fullPath}");
-                
-                // Validate that we found the correct directory by checking for Templates
-                if (!Directory.Exists(Path.Combine(fullPath, "Templates")))
-                {
-                    Debug.WriteLine("Warning: Templates directory not found in determined project path");
-                }
-                
-                return fullPath;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error determining project root path: {ex.Message}");
-                // Fallback to the current directory if we encounter an error
-                return AppDomain.CurrentDomain.BaseDirectory;
-            }
+            _directoryService = directoryService ?? throw new ArgumentNullException(nameof(directoryService));
+            Debug.WriteLine($"CshtmlGenerationService initialized");
         }
 
         /// <summary>
@@ -69,15 +34,8 @@ namespace iTextDesignerWithGUI.Services
         {
             try
             {
-                // Construct the target directory path
-                string targetDirectory = Path.Combine(_projectRootPath, "Templates", templateType);
-                
-                // Ensure the directory exists
-                if (!Directory.Exists(targetDirectory))
-                {
-                    Debug.WriteLine($"Creating directory: {targetDirectory}");
-                    Directory.CreateDirectory(targetDirectory);
-                }
+                // Construct the target directory path using the directory service
+                string targetDirectory = _directoryService.EnsureDirectoryExists(Path.Combine("Templates", templateType));
                 
                 // Append "Template" to the file name
                 string templateFileName = $"{fileName}Template";
@@ -138,14 +96,7 @@ namespace iTextDesignerWithGUI.Services
             try
             {
                 // Construct the target directory path
-                string targetDirectory = Path.Combine(_projectRootPath, "Models", templateType, $"{fileName}Models");
-                
-                // Ensure the directory exists
-                if (!Directory.Exists(targetDirectory))
-                {
-                    Debug.WriteLine($"Creating models directory: {targetDirectory}");
-                    Directory.CreateDirectory(targetDirectory);
-                }
+                string targetDirectory = _directoryService.EnsureDirectoryExists(Path.Combine("Models", templateType, $"{fileName}Models"));
                 
                 // Generate the assessment model file
                 bool assessmentGenerated = GenerateAssessmentModelFile(fileName, templateType, targetDirectory);
@@ -311,14 +262,7 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
             try
             {
                 // Construct the target directory path
-                string targetDirectory = Path.Combine(_projectRootPath, "ReferenceDataJsons", templateType);
-                
-                // Ensure the directory exists
-                if (!Directory.Exists(targetDirectory))
-                {
-                    Debug.WriteLine($"Creating directory: {targetDirectory}");
-                    Directory.CreateDirectory(targetDirectory);
-                }
+                string targetDirectory = _directoryService.EnsureDirectoryExists(Path.Combine("ReferenceDataJsons", templateType));
                 
                 // Append "Data" to the file name
                 string jsonFileName = $"{fileName}Data";
@@ -617,7 +561,7 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
             try
             {
                 // Construct the path to the assessmentTypes.json file
-                string assessmentTypesJsonPath = Path.Combine(_projectRootPath, "PersistentDataJSON", "assessmentTypes.json");
+                string assessmentTypesJsonPath = Path.Combine(_directoryService.GetDirectory("PersistentDataJSON"), "assessmentTypes.json");
                 
                 Debug.WriteLine($"Updating assessment types JSON file at: {assessmentTypesJsonPath}");
                 
