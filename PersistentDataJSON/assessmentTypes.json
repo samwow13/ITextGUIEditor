@@ -1,0 +1,20 @@
+{
+  "assessmentTypes": [
+    {
+      "name": "OralCare",
+      "displayName": "Oral Care"
+    },
+    {
+      "name": "RegisteredNurseTaskAndDelegation",
+      "displayName": "Registered Nurse Task And Delegation"
+    },
+    {
+      "name": "TestRazorDataInstance",
+      "displayName": "Test Razor Data Instance"
+    },
+    {
+      "name": "Tester",
+      "displayName": "Tester"
+    }
+  ]
+}

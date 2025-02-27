@@ -15,10 +15,6 @@ namespace iTextDesignerWithGUI.Forms
     public class AddCustomAssessmentTypeForm : Form
     {
         private TextBox displayNameTextBox;
-        private TextBox templateFileTextBox;
-        private TextBox jsonDataPathTextBox;
-        private Button browseTemplateButton;
-        private Button browseJsonButton;
         private ComboBox projectNameComboBox;
 
         public AddCustomAssessmentTypeForm()
@@ -43,13 +39,13 @@ namespace iTextDesignerWithGUI.Forms
             var mainContainer = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
-                RowCount = 8,
+                RowCount = 6,
                 ColumnCount = 1,
                 Padding = new Padding(10),
             };
 
             // Add rows
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 6; i++)
             {
                 mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             }
@@ -116,85 +112,22 @@ namespace iTextDesignerWithGUI.Forms
 
             mainContainer.Controls.Add(displayNameContainer, 0, 3);
 
-            // Template file section
-            var templateFileLabel = new Label
+            // Add Template Manager button
+            var templateManagerButton = new Button
             {
-                Text = "Template File:",
-                Font = new Font("Segoe UI", 10F, FontStyle.Regular),
-                AutoSize = true,
-                Margin = new Padding(0, 0, 0, 5)
-            };
-            mainContainer.Controls.Add(templateFileLabel, 0, 4);
-
-            var templateFileContainer = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                ColumnCount = 2,
-                AutoSize = true,
-                Margin = new Padding(0, 0, 0, 15)
-            };
-            templateFileContainer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80));
-            templateFileContainer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-
-            templateFileTextBox = new TextBox
-            {
+                Text = "Open Template Manager",
                 Dock = DockStyle.Fill,
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular),
-                Height = 25
+                Margin = new Padding(0, 0, 0, 15),
+                BackColor = Color.FromArgb(240, 240, 240),
+                ForeColor = Color.Black,
+                FlatStyle = FlatStyle.Flat,
+                Height = 35
             };
-            templateFileContainer.Controls.Add(templateFileTextBox, 0, 0);
-
-            browseTemplateButton = new Button
-            {
-                Text = "Browse...",
-                Dock = DockStyle.Fill,
-                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
-                Margin = new Padding(5, 0, 0, 0)
-            };
-            browseTemplateButton.Click += BrowseTemplateButton_Click;
-            templateFileContainer.Controls.Add(browseTemplateButton, 1, 0);
-
-            mainContainer.Controls.Add(templateFileContainer, 0, 5);
-
-            // JSON data path section
-            var jsonDataPathLabel = new Label
-            {
-                Text = "JSON Data Path:",
-                Font = new Font("Segoe UI", 10F, FontStyle.Regular),
-                AutoSize = true,
-                Margin = new Padding(0, 0, 0, 5)
-            };
-            mainContainer.Controls.Add(jsonDataPathLabel, 0, 6);
-
-            var jsonDataPathContainer = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                ColumnCount = 2,
-                AutoSize = true,
-                Margin = new Padding(0, 0, 0, 15)
-            };
-            jsonDataPathContainer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80));
-            jsonDataPathContainer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-
-            jsonDataPathTextBox = new TextBox
-            {
-                Dock = DockStyle.Fill,
-                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
-                Height = 25
-            };
-            jsonDataPathContainer.Controls.Add(jsonDataPathTextBox, 0, 0);
-
-            browseJsonButton = new Button
-            {
-                Text = "Browse...",
-                Dock = DockStyle.Fill,
-                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
-                Margin = new Padding(5, 0, 0, 0)
-            };
-            browseJsonButton.Click += BrowseJsonButton_Click;
-            jsonDataPathContainer.Controls.Add(browseJsonButton, 1, 0);
-
-            mainContainer.Controls.Add(jsonDataPathContainer, 0, 7);
+            templateManagerButton.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
+            templateManagerButton.FlatAppearance.BorderSize = 1;
+            templateManagerButton.Click += TemplateManager_Click;
+            mainContainer.Controls.Add(templateManagerButton, 0, 4);
 
             // Button panel
             var buttonPanel = new FlowLayoutPanel
@@ -248,7 +181,7 @@ namespace iTextDesignerWithGUI.Forms
 
             buttonPanel.Controls.Add(saveButton);
             buttonPanel.Controls.Add(cancelButton);
-            mainContainer.Controls.Add(buttonPanel, 0, 8);
+            mainContainer.Controls.Add(buttonPanel, 0, 5);
 
             this.Controls.Add(mainContainer);
             this.AcceptButton = saveButton;
@@ -339,92 +272,6 @@ namespace iTextDesignerWithGUI.Forms
             }
         }
 
-        private void BrowseTemplateButton_Click(object sender, EventArgs e)
-        {
-            using (var openFileDialog = new OpenFileDialog())
-            {
-                openFileDialog.Filter = "PDF Files (*.pdf)|*.pdf|All Files (*.*)|*.*";
-                openFileDialog.Title = "Select Template File";
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    templateFileTextBox.Text = openFileDialog.FileName;
-                }
-            }
-        }
-
-        private void BrowseJsonButton_Click(object sender, EventArgs e)
-        {
-            using (var openFileDialog = new OpenFileDialog())
-            {
-                openFileDialog.Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*";
-                openFileDialog.Title = "Select JSON Data File";
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    jsonDataPathTextBox.Text = openFileDialog.FileName;
-                }
-            }
-        }
-
-        private void SaveButton_Click(object sender, EventArgs e)
-        {
-            // Validate input
-            if (projectNameComboBox.SelectedIndex < 0)
-            {
-                MessageBox.Show("Please select a project.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                this.DialogResult = DialogResult.None;
-                return;
-            }
-            
-            if (string.IsNullOrWhiteSpace(displayNameTextBox.Text))
-            {
-                MessageBox.Show("Please enter a display name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                this.DialogResult = DialogResult.None;
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(templateFileTextBox.Text))
-            {
-                MessageBox.Show("Please select a template file.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                this.DialogResult = DialogResult.None;
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(jsonDataPathTextBox.Text))
-            {
-                MessageBox.Show("Please select a JSON data file.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                this.DialogResult = DialogResult.None;
-                return;
-            }
-
-            // Get the selected project name
-            string projectName = projectNameComboBox.SelectedItem.ToString();
-
-            // Create and save the custom assessment type
-            var customType = new CustomAssessmentType(
-                displayNameTextBox.Text.Trim(),
-                templateFileTextBox.Text.Trim(),
-                jsonDataPathTextBox.Text.Trim()
-            );
-            
-            // You could store the project name with the custom type if needed
-            // For now, just log it
-            Console.WriteLine($"Creating assessment type for project: {projectName}");
-
-            if (CustomAssessmentTypeManager.AddCustomType(customType))
-            {
-                MessageBox.Show($"Custom assessment type '{customType.DisplayName}' has been added successfully for project '{projectName}'.", 
-                    "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show("Failed to add custom assessment type. A type with this name may already exist.",
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                this.DialogResult = DialogResult.None;
-            }
-        }
-
         private void GenerateFilesButton_Click(object sender, EventArgs e)
         {
             // Validate input
@@ -490,6 +337,67 @@ namespace iTextDesignerWithGUI.Forms
             {
                 MessageBox.Show($"Error preparing PDF generation: {ex.Message}", 
                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void SaveButton_Click(object sender, EventArgs e)
+        {
+            // Validate input
+            if (projectNameComboBox.SelectedIndex < 0)
+            {
+                MessageBox.Show("Please select a project.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                this.DialogResult = DialogResult.None;
+                return;
+            }
+            
+            if (string.IsNullOrWhiteSpace(displayNameTextBox.Text))
+            {
+                MessageBox.Show("Please enter a display name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                this.DialogResult = DialogResult.None;
+                return;
+            }
+
+            // Get the selected project name
+            string projectName = projectNameComboBox.SelectedItem.ToString();
+
+            // Create and save the custom assessment type
+            var customType = new CustomAssessmentType(
+                displayNameTextBox.Text.Trim(),
+                "",
+                ""
+            );
+            
+            // You could store the project name with the custom type if needed
+            // For now, just log it
+            Console.WriteLine($"Creating assessment type for project: {projectName}");
+
+            if (CustomAssessmentTypeManager.AddCustomType(customType))
+            {
+                MessageBox.Show($"Custom assessment type '{customType.DisplayName}' has been added successfully for project '{projectName}'.", 
+                    "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Failed to add custom assessment type. A type with this name may already exist.",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.DialogResult = DialogResult.None;
+            }
+        }
+
+        // Add method to handle Template Manager button click
+        private void TemplateManager_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Open the AssessmentTypeManagerForm
+                using (var managerForm = new AssessmentTypeManagerForm())
+                {
+                    managerForm.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error opening Template Manager: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
