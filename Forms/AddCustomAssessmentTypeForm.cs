@@ -6,6 +6,8 @@ using iTextDesignerWithGUI.Models;
 using System.Text.Json;
 using System.Collections.Generic;
 using System.Linq;
+using iTextDesignerWithGUI.Forms;
+using iTextDesignerWithGUI.Services;
 
 namespace iTextDesignerWithGUI.Forms
 {
@@ -39,13 +41,13 @@ namespace iTextDesignerWithGUI.Forms
             var mainContainer = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
-                RowCount = 6,
+                RowCount = 7,
                 ColumnCount = 1,
                 Padding = new Padding(10),
             };
 
             // Add rows
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 7; i++)
             {
                 mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             }
@@ -112,6 +114,24 @@ namespace iTextDesignerWithGUI.Forms
 
             mainContainer.Controls.Add(displayNameContainer, 0, 3);
 
+            // Add a Delete Template button
+            var deleteTemplateButton = new Button
+            {
+                Text = "Delete a Template",
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
+                Padding = new Padding(10, 5, 10, 5),
+                BackColor = Color.FromArgb(220, 53, 69),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Margin = new Padding(0, 0, 0, 15),
+                Height = 35,
+                Dock = DockStyle.Fill,
+                AutoSize = true
+            };
+            deleteTemplateButton.FlatAppearance.BorderSize = 0;
+            deleteTemplateButton.Click += DeleteTemplateButton_Click;
+            mainContainer.Controls.Add(deleteTemplateButton, 0, 4);
+
             // Button panel
             var buttonPanel = new FlowLayoutPanel
             {
@@ -146,7 +166,7 @@ namespace iTextDesignerWithGUI.Forms
             goBackButton.FlatAppearance.BorderSize = 0;
 
             buttonPanel.Controls.Add(goBackButton);
-            mainContainer.Controls.Add(buttonPanel, 0, 5);
+            mainContainer.Controls.Add(buttonPanel, 0, 6);
 
             this.Controls.Add(mainContainer);
             this.CancelButton = goBackButton;
@@ -345,6 +365,18 @@ namespace iTextDesignerWithGUI.Forms
                 MessageBox.Show("Failed to add custom assessment type. A type with this name may already exist.",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.DialogResult = DialogResult.None;
+            }
+        }
+
+        /// <summary>
+        /// Handler for the Delete Template button click event
+        /// </summary>
+        private void DeleteTemplateButton_Click(object sender, EventArgs e)
+        {
+            // Open the Delete Template form
+            using (var deleteTemplateForm = new DeleteTemplateForm())
+            {
+                deleteTemplateForm.ShowDialog();
             }
         }
     }
