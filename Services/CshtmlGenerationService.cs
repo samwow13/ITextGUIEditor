@@ -298,39 +298,51 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
         /// <returns>String containing Razor (cshtml) content</returns>
         private string GenerateBasicCshtmlContent(string fileName)
         {
-            return $@"@page
-@model {fileName}Model
-@{{
-    ViewData[""Title""] = ""{fileName}"";
-}}
+            return $@"@model iTextDesignerWithGUI.Models.{fileName}Models.{fileName}Instance
 
 <!DOCTYPE html>
 <html lang=""en"">
 <head>
     <meta charset=""UTF-8"">
     <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
-    <title>@ViewData[""Title""]</title>
-    <link href=""~/css/globalStyles.css"" rel=""stylesheet"">
+    <title>{fileName}</title>
+    <link href=""https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"" rel=""stylesheet"">
+    <link href=""globalStyles.css"" rel=""stylesheet"">
 </head>
 <body>
     <div class=""container"">
         <!-- Header with Title -->
         <header>
-            <div class=""title"">
-                @ViewData[""Title""]
-            </div>
+            <div class=""title"">{fileName}</div>
         </header>
 
         <!-- Content goes here -->
         <div class=""content"">
-            <p>This is a template file for @ViewData[""Title""].</p>
+            <p>This is a template file for {fileName}.</p>
             
-            @* Razor code example *@
+            <!-- Display model data -->
+            <div class=""model-data"">
+                <h2>Model Information</h2>
+                @if (Model != null && Model.Model != null)
+                {{{{
+                    <p><strong>ID:</strong> @Model.Model.Id</p>
+                    <p><strong>Name:</strong> @Model.Model.Name</p>
+                    <p><strong>Description:</strong> @Model.Model.Description</p>
+                    <p><strong>Created At:</strong> @Model.Model.CreatedAt</p>
+                    <p><strong>Is Active:</strong> @(Model.Model.IsActive ? ""Yes"" : ""No"")</p>
+                }}}}
+                else
+                {{{{
+                    <p>No model data available.</p>
+                }}}}
+            </div>
+            
+            <!-- Example of Razor syntax -->
             <div>
                 @for (int i = 0; i < 3; i++)
-                {{
+                {{{{
                     <div>Item @i</div>
-                }}
+                }}}}
             </div>
         </div>
     </div>
@@ -608,7 +620,10 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
                             {
                                 // Create paths for the new assessment type
                                 string assessmentTypeDirectory = $"Models/{templateType}/{fileName}Models/{fileName}Assessment.cs";
-                                string assessmentDataInstanceDirectory = $"Models/{templateType}/{fileName}Models/{fileName}DataInstance.cs";
+                                
+                                // Use consistent naming convention: [Name]Instance.cs instead of [Name]DataInstance.cs
+                                string assessmentDataInstanceDirectory = $"Models/{templateType}/{fileName}Models/{fileName}Instance.cs";
+                                
                                 string cshtmlTemplateDirectory = $"Templates/{templateType}/{fileName}Template.cshtml";
                                 string jsonDataLocationDirectory = $"ReferenceDataJsons/{templateType}/{fileName}Data.json";
                                 

@@ -15,6 +15,7 @@ using System.IO;
 using System.Reflection;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace iTextDesignerWithGUI.Services
 {
@@ -94,6 +95,7 @@ namespace iTextDesignerWithGUI.Services
                 _razorEngine = new RazorLightEngineBuilder()
                     .UseMemoryCachingProvider()
                     .UseProject(_project)
+                    //.AddMetadataReferences(typeof(iTextDesignerWithGUI.Models.HealthTestModels.HealthTestInstance).Assembly)
                     .Build();
             }
             catch (Exception ex)
@@ -259,8 +261,27 @@ namespace iTextDesignerWithGUI.Services
             // Get the type name of the data object
             string typeName = data.GetType().Name;
             
-            // Check if this is a Razor template (TestRazorDataInstance)
-            if (typeName.Contains("TestRazorDataInstance"))
+            // Check if this is a Razor template by looking up the assessment type in the JSON file
+            var assessmentTypeJsonLoader = AssessmentTypeJsonLoader.Instance;
+            var assessmentTypes = assessmentTypeJsonLoader.LoadAssessmentTypes();
+            
+            // Extract the base name without "DataInstance" suffix if present
+            string baseTypeName = typeName;
+            if (typeName.EndsWith("DataInstance"))
+            {
+                baseTypeName = typeName.Substring(0, typeName.Length - "DataInstance".Length);
+            }
+            
+            // Look for matching assessment type in the JSON definitions
+            var matchingAssessmentType = assessmentTypes.FirstOrDefault(at => 
+                string.Equals(at.Name, baseTypeName, StringComparison.OrdinalIgnoreCase) ||
+                (at.AssessmentDataInstanceDirectory != null && 
+                 at.AssessmentDataInstanceDirectory.Contains(typeName)));
+                
+            // If this is a Razor template (has a .cshtml extension in the template directory)
+            if (matchingAssessmentType != null && 
+                matchingAssessmentType.CshtmlTemplateDirectory != null && 
+                matchingAssessmentType.CshtmlTemplateDirectory.EndsWith(".cshtml", StringComparison.OrdinalIgnoreCase))
             {
                 return templateContent; // Razor templates handle data binding internally
             }
@@ -380,6 +401,42 @@ namespace iTextDesignerWithGUI.Services
                 Trace.WriteLine($"Error generating PDF: {ex}");
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Generates a PDF document using an AssessmentTypeWrapper to determine the template.
+        /// </summary>
+        /// <param name="data">The data model to use for the template</param>
+        /// <param name="assessmentType">The assessment type wrapper that provides template information</param>
+        /// <returns>Byte array containing the generated PDF</returns>
+        public byte[] GeneratePdf(object data, AssessmentTypeWrapper assessmentType)
+        {
+            if (assessmentType == null)
+            {
+                throw new ArgumentNullException(nameof(assessmentType));
+            }
+
+            // Get the template file name from the JSON definition if available
+            string templateFileName;
+            if (assessmentType.JsonDefinition != null && !string.IsNullOrEmpty(assessmentType.JsonDefinition.CshtmlTemplateDirectory))
+            {
+                // Extract the file name from the full path in the JSON definition
+                templateFileName = assessmentType.JsonDefinition.CshtmlTemplateDirectory;
+                
+                // If the path includes directory separators, extract just the file name
+                if (templateFileName.Contains("/") || templateFileName.Contains("\\"))
+                {
+                    templateFileName = Path.GetFileName(templateFileName);
+                }
+            }
+            else
+            {
+                // Fall back to a default naming convention if no JSON definition is available
+                templateFileName = $"{assessmentType.TypeName}Template.html";
+            }
+
+            // Use the standard GeneratePdf method with the determined template file name
+            return GeneratePdf(data, templateFileName);
         }
     }
 }

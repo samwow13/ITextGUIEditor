@@ -2,9 +2,9 @@
   {
     "model": {
       "id": 1,
-      "name": "testers Sample 1",
-      "description": "Primary sample data for testers",
-      "created_at": "2025-02-27T11:39:09Z",
+      "name": "HealthTest Sample 1",
+      "description": "Primary sample data for HealthTest",
+      "created_at": "2025-02-27T14:52:26Z",
       "is_active": true
     },
     "properties": {
@@ -45,9 +45,9 @@
   {
     "model": {
       "id": 2,
-      "name": "testers Sample 2",
-      "description": "Secondary sample data for testers",
-      "created_at": "2025-02-20T11:39:09Z",
+      "name": "HealthTest Sample 2",
+      "description": "Secondary sample data for HealthTest",
+      "created_at": "2025-02-20T14:52:26Z",
       "is_active": true
     },
     "properties": {
@@ -93,9 +93,9 @@
   {
     "model": {
       "id": 3,
-      "name": "testers Sample 3",
-      "description": "Tertiary sample data for testers",
-      "created_at": "2025-02-13T11:39:09Z",
+      "name": "HealthTest Sample 3",
+      "description": "Tertiary sample data for HealthTest",
+      "created_at": "2025-02-13T14:52:26Z",
       "is_active": false
     },
     "properties": {
