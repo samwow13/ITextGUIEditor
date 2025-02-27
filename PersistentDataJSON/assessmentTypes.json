@@ -31,6 +31,70 @@
       "assessmentDataInstanceDirectory": "Models/HealthAndWellness/HealthTestModels/HealthTestInstance.cs",
       "cshtmlTemplateDirectory": "Templates/HealthAndWellness/HealthTestTemplate.cshtml",
       "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellness/HealthTestData.json"
+    },
+    {
+      "name": "HotlineTestAssessment",
+      "displayName": "HotlineTestAssessment",
+      "assessmentTypeDirectory": "Models/Hotline/HotlineTestAssessmentModels/HotlineTestAssessmentAssessment.cs",
+      "assessmentDataInstanceDirectory": "Models/Hotline/HotlineTestAssessmentModels/HotlineTestAssessmentInstance.cs",
+      "cshtmlTemplateDirectory": "Templates/Hotline/HotlineTestAssessmentTemplate.cshtml",
+      "jsonDataLocationDirectory": "ReferenceDataJsons/Hotline/HotlineTestAssessmentData.json"
+    },
+    {
+      "name": "TestFileProgress",
+      "displayName": "TestFileProgress",
+      "assessmentTypeDirectory": "Models/HealthAndWellness/TestFileProgressModels/TestFileProgressAssessment.cs",
+      "assessmentDataInstanceDirectory": "Models/HealthAndWellness/TestFileProgressModels/TestFileProgressInstance.cs",
+      "cshtmlTemplateDirectory": "Templates/HealthAndWellness/TestFileProgressTemplate.cshtml",
+      "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellness/TestFileProgressData.json"
+    },
+    {
+      "name": "TestNewGraphic",
+      "displayName": "TestNewGraphic",
+      "assessmentTypeDirectory": "Models/HealthAndWellness/TestNewGraphicModels/TestNewGraphicAssessment.cs",
+      "assessmentDataInstanceDirectory": "Models/HealthAndWellness/TestNewGraphicModels/TestNewGraphicInstance.cs",
+      "cshtmlTemplateDirectory": "Templates/HealthAndWellness/TestNewGraphicTemplate.cshtml",
+      "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellness/TestNewGraphicData.json"
+    },
+    {
+      "name": "TestGraphicAgain1",
+      "displayName": "TestGraphicAgain1",
+      "assessmentTypeDirectory": "Models/HealthAndWellness/TestGraphicAgain1Models/TestGraphicAgain1Assessment.cs",
+      "assessmentDataInstanceDirectory": "Models/HealthAndWellness/TestGraphicAgain1Models/TestGraphicAgain1Instance.cs",
+      "cshtmlTemplateDirectory": "Templates/HealthAndWellness/TestGraphicAgain1Template.cshtml",
+      "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellness/TestGraphicAgain1Data.json"
+    },
+    {
+      "name": "GenerateTest",
+      "displayName": "GenerateTest",
+      "assessmentTypeDirectory": "Models/HealthAndWellness/GenerateTestModels/GenerateTestAssessment.cs",
+      "assessmentDataInstanceDirectory": "Models/HealthAndWellness/GenerateTestModels/GenerateTestInstance.cs",
+      "cshtmlTemplateDirectory": "Templates/HealthAndWellness/GenerateTestTemplate.cshtml",
+      "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellness/GenerateTestData.json"
+    },
+    {
+      "name": "TesterNew",
+      "displayName": "TesterNew",
+      "assessmentTypeDirectory": "Models/HealthAndWellness/TesterNewModels/TesterNewAssessment.cs",
+      "assessmentDataInstanceDirectory": "Models/HealthAndWellness/TesterNewModels/TesterNewInstance.cs",
+      "cshtmlTemplateDirectory": "Templates/HealthAndWellness/TesterNewTemplate.cshtml",
+      "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellness/TesterNewData.json"
+    },
+    {
+      "name": "HotlineTestersz",
+      "displayName": "HotlineTestersz",
+      "assessmentTypeDirectory": "Models/Hotline/HotlineTesterszModels/HotlineTesterszAssessment.cs",
+      "assessmentDataInstanceDirectory": "Models/Hotline/HotlineTesterszModels/HotlineTesterszInstance.cs",
+      "cshtmlTemplateDirectory": "Templates/Hotline/HotlineTesterszTemplate.cshtml",
+      "jsonDataLocationDirectory": "ReferenceDataJsons/Hotline/HotlineTesterszData.json"
+    },
+    {
+      "name": "test1",
+      "displayName": "test1",
+      "assessmentTypeDirectory": "Models/Hotline/test1Models/test1Assessment.cs",
+      "assessmentDataInstanceDirectory": "Models/Hotline/test1Models/test1Instance.cs",
+      "cshtmlTemplateDirectory": "Templates/Hotline/test1Template.cshtml",
+      "jsonDataLocationDirectory": "ReferenceDataJsons/Hotline/test1Data.json"
     }
   ]
 }

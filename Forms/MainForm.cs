@@ -4,10 +4,12 @@ using System.Windows.Forms;
 using iTextDesignerWithGUI.Models;
 using iTextDesignerWithGUI.Models.TestRazorDataModels;
 using iTextDesignerWithGUI.Services;
-using System.IO;
-using System.Diagnostics;
-using System.Threading.Tasks;
+using System.Linq;
 using Microsoft.Win32;
+using System.Drawing;
+using System.Threading.Tasks;
+using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 
 namespace iTextDesignerWithGUI.Forms
@@ -139,6 +141,45 @@ namespace iTextDesignerWithGUI.Forms
         {
             try
             {
+                // First check if there's a temporary position file from a recent restart
+                string tempPositionFile = Path.Combine(Path.GetTempPath(), "AppPosition.txt");
+                if (File.Exists(tempPositionFile))
+                {
+                    try
+                    {
+                        string[] positionData = File.ReadAllText(tempPositionFile).Split(',');
+                        if (positionData.Length >= 4 && 
+                            int.TryParse(positionData[0], out int x) &&
+                            int.TryParse(positionData[1], out int y) &&
+                            int.TryParse(positionData[2], out int width) &&
+                            int.TryParse(positionData[3], out int height))
+                        {
+                            // Ensure the window will be visible on the screen
+                            var screen = Screen.FromPoint(new Point(x, y));
+                            if (screen != null)
+                            {
+                                this.StartPosition = FormStartPosition.Manual;
+                                this.Size = new Size(width, height);
+                                this.Location = new Point(
+                                    Math.Max(screen.WorkingArea.X, Math.Min(x, screen.WorkingArea.Right - this.Width)),
+                                    Math.Max(screen.WorkingArea.Y, Math.Min(y, screen.WorkingArea.Bottom - this.Height))
+                                );
+                                
+                                // Delete the temp file after using it
+                                try { File.Delete(tempPositionFile); } catch { }
+                                
+                                return;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Error loading temporary window position: {ex.Message}");
+                        // Fall back to registry settings if temp file fails
+                    }
+                }
+                
+                // Fall back to registry settings if no temp file
                 using (var key = Registry.CurrentUser.OpenSubKey(RegistryPath))
                 {
                     if (key != null)
@@ -163,12 +204,12 @@ namespace iTextDesignerWithGUI.Forms
                     }
                 }
                 
-                // If no saved position or invalid, center on screen
+                // If we couldn't restore a position, use the default
                 this.StartPosition = FormStartPosition.CenterScreen;
             }
-            catch
+            catch (Exception ex)
             {
-                // If anything goes wrong, fall back to center screen
+                Debug.WriteLine($"Error loading window position: {ex.Message}");
                 this.StartPosition = FormStartPosition.CenterScreen;
             }
         }

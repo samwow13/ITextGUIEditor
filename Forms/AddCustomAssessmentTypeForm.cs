@@ -283,11 +283,11 @@ namespace iTextDesignerWithGUI.Forms
                     {
                         if (confirmModal.ShowDialog() == DialogResult.OK)
                         {
-                            // User confirmed, you can proceed with PDF generation here
-                            MessageBox.Show($"PDF generation confirmed for '{pdfName}' using template at '{templatePath}'.",
-                                          "Generation Confirmed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            // User confirmed, proceed with PDF generation
+                            // The confirmation modal will handle the file generation process
                             
-                            // Future implementation: Add code to generate the PDF
+                            // Note: No need for an additional MessageBox here as it would create
+                            // an extra dialog that the user has to dismiss after file generation
                         }
                     }
                 }

@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
 using iTextDesignerWithGUI.Services;
+using iTextDesignerWithGUI.Forms;
 
 namespace iTextDesignerWithGUI.Forms
 {
@@ -257,13 +258,23 @@ namespace iTextDesignerWithGUI.Forms
                 var directoryService = new ProjectDirectoryService();
                 var cshtmlService = new CshtmlGenerationService(directoryService);
                 
-                // Generate the CSHTML file
-                bool success = cshtmlService.GenerateCshtmlFile(PDFName, templateType);
+                // Close this dialog
+                this.DialogResult = DialogResult.OK;
+                this.Close();
                 
-                if (success)
+                // Show the progress form
+                using (var progressForm = new FileGenerationProgressForm())
                 {
-                    MessageBox.Show($"Successfully generated CSHTML file: {PDFName}.cshtml", 
-                        "File Generation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    progressForm.StartProgress(() =>
+                    {
+                        // Generate the CSHTML file
+                        cshtmlService.GenerateCshtmlFile(PDFName, templateType);
+                    });
+                    
+                    progressForm.ShowDialog();
+                    
+                    // We don't continue execution after this point
+                    // since the application will exit when the close button is clicked
                 }
             }
             catch (Exception ex)
