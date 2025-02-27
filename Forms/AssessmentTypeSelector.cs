@@ -77,57 +77,17 @@ namespace iTextDesignerWithGUI.Forms
             // Track display names to avoid duplicates
             var displayNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             
-            // Load assessment types from the JSON file first
-            var jsonLoader = AssessmentTypeJsonLoader.Instance;
-            var jsonTypes = jsonLoader.LoadAssessmentTypes(forceRefresh: true);
-            
-            // Create wrappers for each JSON type
-            foreach (var jsonType in jsonTypes)
-            {
-                try
-                {
-                    var wrapper = AssessmentTypeWrapper.FromJsonDefinition(jsonType);
-                    
-                    // Only add if we don't already have an item with this display name
-                    if (!displayNames.Contains(wrapper.DisplayName))
-                    {
-                        comboBox.Items.Add(wrapper);
-                        displayNames.Add(wrapper.DisplayName);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"Error creating wrapper for JSON type {jsonType.Name}: {ex.Message}");
-                }
-            }
-
-            // Add built-in assessment types (only if they're not already in the JSON)
-            foreach (string typeName in AssessmentTypeConstants.GetAll())
-            {
-                // Skip "Tester" since we'll get it from discovery instead
-                if (typeName != AssessmentTypeConstants.Tester)
-                {
-                    var wrapper = AssessmentTypeWrapper.FromBuiltIn(typeName);
-                    
-                    // Only add if we don't already have an item with this display name
-                    if (!displayNames.Contains(wrapper.DisplayName))
-                    {
-                        comboBox.Items.Add(wrapper);
-                        displayNames.Add(wrapper.DisplayName);
-                    }
-                }
-            }
-
-            // Add dynamically discovered assessment types
+            // Get all assessment types from the discovery method which already includes JSON types
             var discoveredTypes = AssessmentTypeWrapper.DiscoverAssessmentTypes();
             
-            foreach (var discoveredWrapper in discoveredTypes)
+            // Add all discovered types (including those from JSON)
+            foreach (var wrapper in discoveredTypes)
             {
                 // Only add if we don't already have an item with this display name
-                if (!displayNames.Contains(discoveredWrapper.DisplayName))
+                if (!displayNames.Contains(wrapper.DisplayName))
                 {
-                    comboBox.Items.Add(discoveredWrapper);
-                    displayNames.Add(discoveredWrapper.DisplayName);
+                    comboBox.Items.Add(wrapper);
+                    displayNames.Add(wrapper.DisplayName);
                 }
             }
 

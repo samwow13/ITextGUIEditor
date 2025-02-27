@@ -47,7 +47,7 @@ namespace iTextDesignerWithGUI.Models
                 try
                 {
                     // Load assessment types from JSON
-                    var assessmentTypes = AssessmentTypeLoader.Instance.LoadAssessmentTypes();
+                    var assessmentTypes = AssessmentTypeJsonLoader.Instance.LoadAssessmentTypes();
 
                     // Add each type to the constants dictionary
                     foreach (var type in assessmentTypes)
@@ -119,6 +119,19 @@ namespace iTextDesignerWithGUI.Models
                 
             InitializeConstants();
             return _constants.ContainsKey(typeName);
+        }
+        
+        /// <summary>
+        /// Forces a refresh of the constants from the JSON file
+        /// </summary>
+        public static void RefreshConstants()
+        {
+            lock (_lock)
+            {
+                _initialized = false;
+                _constants.Clear();
+                InitializeConstants();
+            }
         }
     }
 }
