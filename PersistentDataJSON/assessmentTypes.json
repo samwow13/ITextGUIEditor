@@ -2,19 +2,24 @@
   "assessmentTypes": [
     {
       "name": "OralCare",
-      "displayName": "Oral Care"
+      "displayName": "Oral Care",
+      "assessmentTypeDirectory": "OralCareAssessment",
+      "assessmentDataInstanceDirectory": "OralCareDataInstance",
+      "cshtmlTemplateDirectory": "OralCareTemplates"
     },
     {
       "name": "RegisteredNurseTaskAndDelegation",
-      "displayName": "Registered Nurse Task And Delegation"
+      "displayName": "Registered Nurse Task And Delegation",
+      "assessmentTypeDirectory": "RegisteredNurseTaskAndDelegationAssessment",
+      "assessmentDataInstanceDirectory": "RegisteredNurseTaskAndDelegDataInstance",
+      "cshtmlTemplateDirectory": "RegisteredNurseTaskAndDelegationTemplates"
     },
     {
       "name": "TestRazorDataInstance",
-      "displayName": "Test Razor Data Instance"
-    },
-    {
-      "name": "Tester",
-      "displayName": "Tester"
+      "displayName": "Test Razor Data Instance",
+      "assessmentTypeDirectory": "TestRazorDataInstanceAssessment",
+      "assessmentDataInstanceDirectory": "TestRazorDataInstance",
+      "cshtmlTemplateDirectory": "TestRazorDataInstanceTemplates"
     }
   ]
 }

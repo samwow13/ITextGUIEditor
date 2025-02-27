@@ -109,6 +109,13 @@ namespace iTextDesignerWithGUI.Services
                     Debug.WriteLine("Warning: Generated cshtml and JSON files, but failed to generate model files");
                 }
                 
+                // Add the new assessment type to the assessmentTypes.json file
+                bool assessmentTypeAdded = AddAssessmentTypeToJson(fileName, templateType);
+                if (!assessmentTypeAdded)
+                {
+                    Debug.WriteLine("Warning: Generated files successfully, but failed to update assessmentTypes.json");
+                }
+                
                 return true;
             }
             catch (Exception ex)
@@ -597,6 +604,126 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
             { 
                 WriteIndented = true
             });
+        }
+        
+        /// <summary>
+        /// Adds a new assessment type to the assessmentTypes.json file
+        /// </summary>
+        /// <param name="fileName">Name of the file (without extension)</param>
+        /// <param name="templateType">Type of template (e.g., "HealthAndWellness")</param>
+        /// <returns>True if the operation was successful, false otherwise</returns>
+        private bool AddAssessmentTypeToJson(string fileName, string templateType)
+        {
+            try
+            {
+                // Construct the path to the assessmentTypes.json file
+                string assessmentTypesJsonPath = Path.Combine(_projectRootPath, "PersistentDataJSON", "assessmentTypes.json");
+                
+                Debug.WriteLine($"Updating assessment types JSON file at: {assessmentTypesJsonPath}");
+                
+                // Read the existing JSON file
+                string jsonContent = File.ReadAllText(assessmentTypesJsonPath);
+                
+                // Define a local class to match the JSON structure
+                var assessmentTypesJson = JsonSerializer.Deserialize<AssessmentTypesJson>(jsonContent);
+                
+                // Check if the JSON was deserialized properly
+                if (assessmentTypesJson == null)
+                {
+                    Debug.WriteLine("Error: Failed to deserialize assessmentTypes.json");
+                    return false;
+                }
+                
+                // Initialize the AssessmentTypes list if it's null
+                assessmentTypesJson.AssessmentTypes ??= new List<AssessmentTypeJson>();
+                
+                // Check if the assessment type already exists
+                if (assessmentTypesJson.AssessmentTypes.Exists(t => string.Equals(t.Name, fileName, StringComparison.OrdinalIgnoreCase)))
+                {
+                    Debug.WriteLine($"Assessment type '{fileName}' already exists in the JSON file");
+                    return true; // Consider it a success if it already exists
+                }
+                
+                // Create a new assessment type definition
+                var newAssessmentType = new AssessmentTypeJson
+                {
+                    Name = fileName,
+                    DisplayName = fileName,
+                    JsonDataPath = $"{fileName}.json",
+                    TemplateFileName = $"{fileName}.cshtml",
+                    ModelDataInstance = $"{fileName}Data",
+                    ModelAssessmentType = $"{fileName}Assessment"
+                };
+                
+                // Add the new assessment type to the list
+                assessmentTypesJson.AssessmentTypes.Add(newAssessmentType);
+                
+                // Serialize the updated list back to JSON
+                var writeOptions = new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                };
+                
+                string updatedJsonContent = JsonSerializer.Serialize(assessmentTypesJson, writeOptions);
+                
+                // Write the updated JSON content back to the file
+                File.WriteAllText(assessmentTypesJsonPath, updatedJsonContent);
+                
+                Debug.WriteLine($"Successfully added assessment type '{fileName}' to the JSON file");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error adding assessment type to JSON file: {ex.Message}");
+                return false;
+            }
+        }
+        
+        /// <summary>
+        /// Private class to match the structure of the assessmentTypes.json file
+        /// </summary>
+        private class AssessmentTypesJson
+        {
+            /// <summary>
+            /// List of assessment type definitions
+            /// </summary>
+            public List<AssessmentTypeJson> AssessmentTypes { get; set; } = new List<AssessmentTypeJson>();
+        }
+        
+        /// <summary>
+        /// Private class to match the structure of an assessment type in the JSON file
+        /// </summary>
+        private class AssessmentTypeJson
+        {
+            /// <summary>
+            /// Name of the assessment type
+            /// </summary>
+            public string Name { get; set; } = string.Empty;
+            
+            /// <summary>
+            /// Display name for the assessment type
+            /// </summary>
+            public string DisplayName { get; set; } = string.Empty;
+            
+            /// <summary>
+            /// Path to the JSON data file for this assessment type
+            /// </summary>
+            public string JsonDataPath { get; set; } = string.Empty;
+            
+            /// <summary>
+            /// Path to the template file for this assessment type
+            /// </summary>
+            public string TemplateFileName { get; set; } = string.Empty;
+            
+            /// <summary>
+            /// Name of the data instance model class
+            /// </summary>
+            public string ModelDataInstance { get; set; } = string.Empty;
+            
+            /// <summary>
+            /// Name of the assessment type model class
+            /// </summary>
+            public string ModelAssessmentType { get; set; } = string.Empty;
         }
     }
 }

@@ -161,24 +161,6 @@ namespace iTextDesignerWithGUI.Forms
             };
             mainContainer.Controls.Add(textBox, 0, 5);
 
-            // Add Template Manager button
-            var templateManagerButton = new Button
-            {
-                Text = "Open Template Manager",
-                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
-                Padding = new Padding(10, 5, 10, 5),
-                BackColor = Color.FromArgb(240, 240, 240),
-                ForeColor = Color.Black,
-                FlatStyle = FlatStyle.Flat,
-                Dock = DockStyle.Fill,
-                Margin = new Padding(0, 0, 0, 20),
-                Height = 35
-            };
-            templateManagerButton.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
-            templateManagerButton.FlatAppearance.BorderSize = 1;
-            templateManagerButton.Click += TemplateManager_Click;
-            mainContainer.Controls.Add(templateManagerButton, 0, 6);
-
             // Create button panel
             var buttonPanel = new FlowLayoutPanel
             {
@@ -303,21 +285,6 @@ namespace iTextDesignerWithGUI.Forms
             catch (Exception ex)
             {
                 MessageBox.Show($"Error creating template: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void TemplateManager_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                using (var managerForm = new AssessmentTypeManagerForm())
-                {
-                    managerForm.ShowDialog();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error opening Template Manager: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

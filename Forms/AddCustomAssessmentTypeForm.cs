@@ -112,23 +112,6 @@ namespace iTextDesignerWithGUI.Forms
 
             mainContainer.Controls.Add(displayNameContainer, 0, 3);
 
-            // Add Template Manager button
-            var templateManagerButton = new Button
-            {
-                Text = "Open Template Manager",
-                Dock = DockStyle.Fill,
-                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
-                Margin = new Padding(0, 0, 0, 15),
-                BackColor = Color.FromArgb(240, 240, 240),
-                ForeColor = Color.Black,
-                FlatStyle = FlatStyle.Flat,
-                Height = 35
-            };
-            templateManagerButton.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
-            templateManagerButton.FlatAppearance.BorderSize = 1;
-            templateManagerButton.Click += TemplateManager_Click;
-            mainContainer.Controls.Add(templateManagerButton, 0, 4);
-
             // Button panel
             var buttonPanel = new FlowLayoutPanel
             {
@@ -146,46 +129,27 @@ namespace iTextDesignerWithGUI.Forms
             var buttonFont = new Font("Segoe UI", 9F, FontStyle.Regular);
             var buttonPadding = new Padding(10, 5, 10, 5);
 
-            // Create buttons
-            var saveButton = new Button
+            // Create Go Back button
+            var goBackButton = new Button
             {
-                Text = "Save",
-                DialogResult = DialogResult.OK,
+                Text = "Go Back",
+                DialogResult = DialogResult.Cancel,
                 Font = buttonFont,
                 Padding = buttonPadding,
                 BackColor = Color.FromArgb(0, 120, 212),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
-                Size = buttonSize,
+                Size = new Size(120, 35),
                 Margin = buttonMargin,
                 Height = buttonSize.Height
             };
-            saveButton.FlatAppearance.BorderSize = 0;
-            saveButton.Click += SaveButton_Click;
+            goBackButton.FlatAppearance.BorderSize = 0;
 
-            var cancelButton = new Button
-            {
-                Text = "Cancel",
-                DialogResult = DialogResult.Cancel,
-                Font = buttonFont,
-                Padding = buttonPadding,
-                FlatStyle = FlatStyle.Flat,
-                BackColor = Color.White,
-                ForeColor = Color.Black,
-                Size = buttonSize,
-                Margin = buttonMargin,
-                Height = buttonSize.Height
-            };
-            cancelButton.FlatAppearance.BorderColor = Color.FromArgb(0, 120, 212);
-            cancelButton.FlatAppearance.BorderSize = 1;
-
-            buttonPanel.Controls.Add(saveButton);
-            buttonPanel.Controls.Add(cancelButton);
+            buttonPanel.Controls.Add(goBackButton);
             mainContainer.Controls.Add(buttonPanel, 0, 5);
 
             this.Controls.Add(mainContainer);
-            this.AcceptButton = saveButton;
-            this.CancelButton = cancelButton;
+            this.CancelButton = goBackButton;
         }
 
         // Load project directories from pdfCreationData.json
@@ -381,23 +345,6 @@ namespace iTextDesignerWithGUI.Forms
                 MessageBox.Show("Failed to add custom assessment type. A type with this name may already exist.",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.DialogResult = DialogResult.None;
-            }
-        }
-
-        // Add method to handle Template Manager button click
-        private void TemplateManager_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                // Open the AssessmentTypeManagerForm
-                using (var managerForm = new AssessmentTypeManagerForm())
-                {
-                    managerForm.ShowDialog();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error opening Template Manager: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
