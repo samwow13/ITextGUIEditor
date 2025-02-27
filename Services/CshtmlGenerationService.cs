@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
 namespace iTextDesignerWithGUI.Services
@@ -568,50 +569,78 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
                 // Read the existing JSON file
                 string jsonContent = File.ReadAllText(assessmentTypesJsonPath);
                 
-                // Define a local class to match the JSON structure
-                var assessmentTypesJson = JsonSerializer.Deserialize<AssessmentTypesJson>(jsonContent);
-                
-                // Check if the JSON was deserialized properly
-                if (assessmentTypesJson == null)
+                // Parse the JSON document to preserve the exact structure
+                using (JsonDocument document = JsonDocument.Parse(jsonContent))
                 {
-                    Debug.WriteLine("Error: Failed to deserialize assessmentTypes.json");
-                    return false;
+                    // Create a new JSON document with the same structure
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        using (Utf8JsonWriter writer = new Utf8JsonWriter(ms, new JsonWriterOptions { Indented = true }))
+                        {
+                            writer.WriteStartObject();
+                            
+                            // Start writing the assessmentTypes array
+                            writer.WritePropertyName("assessmentTypes");
+                            writer.WriteStartArray();
+                            
+                            // Copy all existing assessment types
+                            bool assessmentTypeExists = false;
+                            if (document.RootElement.TryGetProperty("assessmentTypes", out JsonElement assessmentTypes))
+                            {
+                                foreach (JsonElement assessmentType in assessmentTypes.EnumerateArray())
+                                {
+                                    // Check if this assessment type already exists
+                                    if (assessmentType.TryGetProperty("name", out JsonElement nameElement) &&
+                                        string.Equals(nameElement.GetString(), fileName, StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        assessmentTypeExists = true;
+                                        // Skip this element as we'll add an updated version
+                                        continue;
+                                    }
+                                    
+                                    // Copy the existing assessment type as-is
+                                    assessmentType.WriteTo(writer);
+                                }
+                            }
+                            
+                            // If the assessment type doesn't exist, add it
+                            if (!assessmentTypeExists)
+                            {
+                                // Create paths for the new assessment type
+                                string assessmentTypeDirectory = $"Models/{templateType}/{fileName}Models/{fileName}Assessment.cs";
+                                string assessmentDataInstanceDirectory = $"Models/{templateType}/{fileName}Models/{fileName}DataInstance.cs";
+                                string cshtmlTemplateDirectory = $"Templates/{templateType}/{fileName}Template.cshtml";
+                                string jsonDataLocationDirectory = $"ReferenceDataJsons/{templateType}/{fileName}Data.json";
+                                
+                                // Write the new assessment type
+                                writer.WriteStartObject();
+                                writer.WriteString("name", fileName);
+                                writer.WriteString("displayName", fileName);
+                                writer.WriteString("assessmentTypeDirectory", assessmentTypeDirectory);
+                                writer.WriteString("assessmentDataInstanceDirectory", assessmentDataInstanceDirectory);
+                                writer.WriteString("cshtmlTemplateDirectory", cshtmlTemplateDirectory);
+                                writer.WriteString("jsonDataLocationDirectory", jsonDataLocationDirectory);
+                                writer.WriteEndObject();
+                            }
+                            
+                            // End the assessmentTypes array
+                            writer.WriteEndArray();
+                            
+                            // End the root object
+                            writer.WriteEndObject();
+                        }
+                        
+                        // Get the JSON as a string
+                        ms.Position = 0;
+                        using (StreamReader reader = new StreamReader(ms))
+                        {
+                            string updatedJsonContent = reader.ReadToEnd();
+                            
+                            // Write the updated JSON back to the file
+                            File.WriteAllText(assessmentTypesJsonPath, updatedJsonContent);
+                        }
+                    }
                 }
-                
-                // Initialize the AssessmentTypes list if it's null
-                assessmentTypesJson.AssessmentTypes ??= new List<AssessmentTypeJson>();
-                
-                // Check if the assessment type already exists
-                if (assessmentTypesJson.AssessmentTypes.Exists(t => string.Equals(t.Name, fileName, StringComparison.OrdinalIgnoreCase)))
-                {
-                    Debug.WriteLine($"Assessment type '{fileName}' already exists in the JSON file");
-                    return true; // Consider it a success if it already exists
-                }
-                
-                // Create a new assessment type definition
-                var newAssessmentType = new AssessmentTypeJson
-                {
-                    Name = fileName,
-                    DisplayName = fileName,
-                    JsonDataPath = $"{fileName}.json",
-                    TemplateFileName = $"{fileName}.cshtml",
-                    ModelDataInstance = $"{fileName}Data",
-                    ModelAssessmentType = $"{fileName}Assessment"
-                };
-                
-                // Add the new assessment type to the list
-                assessmentTypesJson.AssessmentTypes.Add(newAssessmentType);
-                
-                // Serialize the updated list back to JSON
-                var writeOptions = new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                };
-                
-                string updatedJsonContent = JsonSerializer.Serialize(assessmentTypesJson, writeOptions);
-                
-                // Write the updated JSON content back to the file
-                File.WriteAllText(assessmentTypesJsonPath, updatedJsonContent);
                 
                 Debug.WriteLine($"Successfully added assessment type '{fileName}' to the JSON file");
                 return true;
@@ -631,6 +660,7 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
             /// <summary>
             /// List of assessment type definitions
             /// </summary>
+            [JsonPropertyName("assessmentTypes")]
             public List<AssessmentTypeJson> AssessmentTypes { get; set; } = new List<AssessmentTypeJson>();
         }
         
@@ -642,32 +672,38 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
             /// <summary>
             /// Name of the assessment type
             /// </summary>
+            [JsonPropertyName("name")]
             public string Name { get; set; } = string.Empty;
             
             /// <summary>
             /// Display name for the assessment type
             /// </summary>
+            [JsonPropertyName("displayName")]
             public string DisplayName { get; set; } = string.Empty;
             
             /// <summary>
-            /// Path to the JSON data file for this assessment type
+            /// Path to the assessment type model class
             /// </summary>
-            public string JsonDataPath { get; set; } = string.Empty;
+            [JsonPropertyName("assessmentTypeDirectory")]
+            public string AssessmentTypeDirectory { get; set; } = string.Empty;
+            
+            /// <summary>
+            /// Path to the data instance model class
+            /// </summary>
+            [JsonPropertyName("assessmentDataInstanceDirectory")]
+            public string AssessmentDataInstanceDirectory { get; set; } = string.Empty;
             
             /// <summary>
             /// Path to the template file for this assessment type
             /// </summary>
-            public string TemplateFileName { get; set; } = string.Empty;
+            [JsonPropertyName("cshtmlTemplateDirectory")]
+            public string CshtmlTemplateDirectory { get; set; } = string.Empty;
             
             /// <summary>
-            /// Name of the data instance model class
+            /// Path to the JSON data file for this assessment type
             /// </summary>
-            public string ModelDataInstance { get; set; } = string.Empty;
-            
-            /// <summary>
-            /// Name of the assessment type model class
-            /// </summary>
-            public string ModelAssessmentType { get; set; } = string.Empty;
+            [JsonPropertyName("jsonDataLocationDirectory")]
+            public string JsonDataLocationDirectory { get; set; } = string.Empty;
         }
     }
 }
