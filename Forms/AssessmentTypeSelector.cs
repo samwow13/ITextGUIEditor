@@ -76,15 +76,44 @@ namespace iTextDesignerWithGUI.Forms
             // Add built-in assessment types
             foreach (AssessmentType type in Enum.GetValues(typeof(AssessmentType)))
             {
-                var wrapper = AssessmentTypeWrapper.FromBuiltIn(type);
-                comboBox.Items.Add(wrapper);
+                // Skip "Tester" since we'll get it from discovery instead
+                if (type.ToString() != AssessmentTypeConstants.Tester)
+                {
+                    var wrapper = AssessmentTypeWrapper.FromBuiltIn(type);
+                    comboBox.Items.Add(wrapper);
+                }
+            }
+
+            // Add dynamically discovered assessment types
+            var discoveredTypes = AssessmentTypeWrapper.DiscoverAssessmentTypes();
+            
+            // Track display names to avoid duplicates
+            var displayNames = new HashSet<string>(
+                comboBox.Items.Cast<AssessmentTypeWrapper>().Select(w => w.DisplayName),
+                StringComparer.OrdinalIgnoreCase
+            );
+            
+            foreach (var discoveredWrapper in discoveredTypes)
+            {
+                // Only add if we don't already have an item with this display name
+                if (!displayNames.Contains(discoveredWrapper.DisplayName))
+                {
+                    comboBox.Items.Add(discoveredWrapper);
+                    displayNames.Add(discoveredWrapper.DisplayName);
+                }
             }
 
             // Add custom assessment types
             foreach (var customType in CustomAssessmentTypeManager.GetAllCustomTypes())
             {
                 var wrapper = AssessmentTypeWrapper.FromCustom(customType);
-                comboBox.Items.Add(wrapper);
+                
+                // Only add if we don't already have an item with this display name
+                if (!displayNames.Contains(wrapper.DisplayName))
+                {
+                    comboBox.Items.Add(wrapper);
+                    displayNames.Add(wrapper.DisplayName);
+                }
             }
 
             comboBox.DisplayMember = "DisplayName";

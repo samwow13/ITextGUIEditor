@@ -102,6 +102,13 @@ namespace iTextDesignerWithGUI.Services
                     Debug.WriteLine("Warning: Generated cshtml file, but failed to generate JSON reference file");
                 }
                 
+                // Generate the corresponding model files
+                bool modelsGenerated = GenerateModelFiles(fileName, templateType);
+                if (!modelsGenerated)
+                {
+                    Debug.WriteLine("Warning: Generated cshtml and JSON files, but failed to generate model files");
+                }
+                
                 return true;
             }
             catch (Exception ex)
@@ -109,6 +116,179 @@ namespace iTextDesignerWithGUI.Services
                 Debug.WriteLine($"Error generating Razor (cshtml) file: {ex.Message}");
                 MessageBox.Show($"Error generating Razor (cshtml) file: {ex.Message}", "Generation Error", 
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Generates model files for the assessment including an Assessment class and a DataInstance class
+        /// </summary>
+        /// <param name="fileName">Name of the file (without extension)</param>
+        /// <param name="templateType">Type of template (e.g., "HealthAndWellness")</param>
+        /// <returns>True if generation was successful, false otherwise</returns>
+        public bool GenerateModelFiles(string fileName, string templateType)
+        {
+            try
+            {
+                // Construct the target directory path
+                string targetDirectory = Path.Combine(_projectRootPath, "Models", templateType, $"{fileName}Models");
+                
+                // Ensure the directory exists
+                if (!Directory.Exists(targetDirectory))
+                {
+                    Debug.WriteLine($"Creating models directory: {targetDirectory}");
+                    Directory.CreateDirectory(targetDirectory);
+                }
+                
+                // Generate the assessment model file
+                bool assessmentGenerated = GenerateAssessmentModelFile(fileName, templateType, targetDirectory);
+                
+                // Generate the data instance model file
+                bool dataInstanceGenerated = GenerateDataInstanceModelFile(fileName, templateType, targetDirectory);
+                
+                return assessmentGenerated && dataInstanceGenerated;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error generating model files: {ex.Message}");
+                MessageBox.Show($"Error generating model files: {ex.Message}", "Generation Error", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+        
+        /// <summary>
+        /// Generates the assessment model file
+        /// </summary>
+        /// <param name="fileName">Name of the file (without extension)</param>
+        /// <param name="templateType">Type of template (e.g., "HealthAndWellness")</param>
+        /// <param name="targetDirectory">Target directory to save the model file</param>
+        /// <returns>True if generation was successful, false otherwise</returns>
+        private bool GenerateAssessmentModelFile(string fileName, string templateType, string targetDirectory)
+        {
+            try
+            {
+                // Construct the target file path
+                string targetFilePath = Path.Combine(targetDirectory, $"{fileName}Assessment.cs");
+                
+                Debug.WriteLine($"Generating Assessment model file at: {targetFilePath}");
+                
+                // Generate the assessment model content
+                string assessmentContent = $@"namespace iTextDesignerWithGUI.Models
+{{
+    /// <summary>
+    /// Implementation of IAssessment for {fileName} assessments
+    /// </summary>
+    public class {fileName}Assessment : IAssessment
+    {{
+        public string TemplateFileName => ""{templateType}/{fileName}Template.cshtml"";
+        public string JsonDataPath => ""ReferenceDataJsons/{templateType}/{fileName}Data.json"";
+        public string DisplayName => ""{fileName}"";
+    }}
+}}
+";
+                
+                // Write the assessment model content to the file
+                File.WriteAllText(targetFilePath, assessmentContent);
+                
+                Debug.WriteLine($"Successfully generated Assessment model file: {targetFilePath}");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error generating Assessment model file: {ex.Message}");
+                return false;
+            }
+        }
+        
+        /// <summary>
+        /// Generates the data instance model file based on the JSON structure
+        /// </summary>
+        /// <param name="fileName">Name of the file (without extension)</param>
+        /// <param name="templateType">Type of template (e.g., "HealthAndWellness")</param>
+        /// <param name="targetDirectory">Target directory to save the model file</param>
+        /// <returns>True if generation was successful, false otherwise</returns>
+        private bool GenerateDataInstanceModelFile(string fileName, string templateType, string targetDirectory)
+        {
+            try
+            {
+                // Construct the target file path
+                string targetFilePath = Path.Combine(targetDirectory, $"{fileName}Instance.cs");
+                
+                Debug.WriteLine($"Generating Data Instance model file at: {targetFilePath}");
+                
+                // Generate the data instance model content based on our JSON structure
+                string dataInstanceContent = $@"using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+
+namespace iTextDesignerWithGUI.Models.{fileName}Models
+{{
+    public class {fileName}Instance
+    {{
+        [JsonProperty(""model"")]
+        public ModelData Model {{ get; set; }}
+
+        [JsonProperty(""properties"")]
+        public Properties Properties {{ get; set; }}
+    }}
+
+    public class ModelData
+    {{
+        [JsonProperty(""id"")]
+        public int Id {{ get; set; }}
+        
+        [JsonProperty(""name"")]
+        public string Name {{ get; set; }}
+        
+        [JsonProperty(""description"")]
+        public string Description {{ get; set; }}
+        
+        [JsonProperty(""created_at"")]
+        public string CreatedAt {{ get; set; }}
+        
+        [JsonProperty(""is_active"")]
+        public bool IsActive {{ get; set; }}
+    }}
+
+    public class Properties
+    {{
+        [JsonProperty(""sections"")]
+        public List<Section> Sections {{ get; set; }}
+    }}
+
+    public class Section
+    {{
+        [JsonProperty(""title"")]
+        public string Title {{ get; set; }}
+        
+        [JsonProperty(""fields"")]
+        public List<Field> Fields {{ get; set; }}
+    }}
+
+    public class Field
+    {{
+        [JsonProperty(""name"")]
+        public string Name {{ get; set; }}
+        
+        [JsonProperty(""type"")]
+        public string Type {{ get; set; }}
+        
+        [JsonProperty(""value"")]
+        public object Value {{ get; set; }}
+    }}
+}}
+";
+                
+                // Write the data instance model content to the file
+                File.WriteAllText(targetFilePath, dataInstanceContent);
+                
+                Debug.WriteLine($"Successfully generated Data Instance model file: {targetFilePath}");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error generating Data Instance model file: {ex.Message}");
                 return false;
             }
         }
@@ -133,8 +313,11 @@ namespace iTextDesignerWithGUI.Services
                     Directory.CreateDirectory(targetDirectory);
                 }
                 
+                // Append "Data" to the file name
+                string jsonFileName = $"{fileName}Data";
+                
                 // Construct the target file path
-                string targetFilePath = Path.Combine(targetDirectory, $"{fileName}.json");
+                string targetFilePath = Path.Combine(targetDirectory, $"{jsonFileName}.json");
                 
                 Debug.WriteLine($"Generating JSON reference file at: {targetFilePath}");
                 
@@ -210,16 +393,17 @@ namespace iTextDesignerWithGUI.Services
         /// <returns>String containing JSON content</returns>
         private string GenerateBasicJsonContent(string fileName)
         {
-            // Create a sample data model with example data
+            // Create a sample data model with example data (3 data sets)
             var sampleData = new List<object>
             {
+                // Example data set 1
                 new
                 {
                     model = new
                     {
                         id = 1,
-                        name = fileName,
-                        description = $"Sample data for {fileName}",
+                        name = $"{fileName} Sample 1",
+                        description = $"Primary sample data for {fileName}",
                         created_at = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssZ"),
                         is_active = true
                     },
@@ -262,6 +446,144 @@ namespace iTextDesignerWithGUI.Services
                                         name = "Field4",
                                         type = "date",
                                         value = DateTime.Now.ToString("yyyy-MM-dd")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                
+                // Example data set 2
+                new
+                {
+                    model = new
+                    {
+                        id = 2,
+                        name = $"{fileName} Sample 2",
+                        description = $"Secondary sample data for {fileName}",
+                        created_at = DateTime.Now.AddDays(-7).ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                        is_active = true
+                    },
+                    properties = new
+                    {
+                        sections = new List<object>
+                        {
+                            new
+                            {
+                                title = "Personal Information",
+                                fields = new List<object>
+                                {
+                                    new
+                                    {
+                                        name = "FullName",
+                                        type = "text",
+                                        value = "Jane Smith"
+                                    },
+                                    new
+                                    {
+                                        name = "Age",
+                                        type = "number",
+                                        value = 35
+                                    },
+                                    new
+                                    {
+                                        name = "Email",
+                                        type = "email",
+                                        value = "jane.smith@example.com"
+                                    }
+                                }
+                            },
+                            new
+                            {
+                                title = "Preferences",
+                                fields = new List<object>
+                                {
+                                    new
+                                    {
+                                        name = "ReceiveNotifications",
+                                        type = "checkbox",
+                                        value = false
+                                    },
+                                    new
+                                    {
+                                        name = "Theme",
+                                        type = "select",
+                                        value = "Dark"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                
+                // Example data set 3
+                new
+                {
+                    model = new
+                    {
+                        id = 3,
+                        name = $"{fileName} Sample 3",
+                        description = $"Tertiary sample data for {fileName}",
+                        created_at = DateTime.Now.AddDays(-14).ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                        is_active = false
+                    },
+                    properties = new
+                    {
+                        sections = new List<object>
+                        {
+                            new
+                            {
+                                title = "Product Details",
+                                fields = new List<object>
+                                {
+                                    new
+                                    {
+                                        name = "ProductName",
+                                        type = "text",
+                                        value = "Super Widget Pro"
+                                    },
+                                    new
+                                    {
+                                        name = "SKU",
+                                        type = "text",
+                                        value = "WDG-1234-PRO"
+                                    },
+                                    new
+                                    {
+                                        name = "Price",
+                                        type = "currency",
+                                        value = 199.99
+                                    },
+                                    new
+                                    {
+                                        name = "InStock",
+                                        type = "checkbox",
+                                        value = true
+                                    }
+                                }
+                            },
+                            new
+                            {
+                                title = "Shipping Information",
+                                fields = new List<object>
+                                {
+                                    new
+                                    {
+                                        name = "Weight",
+                                        type = "number",
+                                        value = 2.5
+                                    },
+                                    new
+                                    {
+                                        name = "Dimensions",
+                                        type = "text",
+                                        value = "10 x 8 x 3 inches"
+                                    },
+                                    new
+                                    {
+                                        name = "ShippingMethod",
+                                        type = "select",
+                                        value = "Express"
                                     }
                                 }
                             }

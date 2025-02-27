@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using iTextDesignerWithGUI.Models;
@@ -45,14 +47,38 @@ namespace iTextDesignerWithGUI.Services
                 // Handle both built-in and custom assessment types
                 if (_assessmentTypeWrapper.IsBuiltIn && _assessmentTypeWrapper.BuiltInType.HasValue)
                 {
-                    // Use the existing switch for built-in types
-                    return _assessmentTypeWrapper.BuiltInType.Value switch
+                    // Get the type name, which is the string representation of the enum
+                    string typeName = _assessmentTypeWrapper.TypeName ?? _assessmentTypeWrapper.BuiltInType.Value.ToString();
+                    
+                    // Use a string-based switch for better compatibility with changes to the enum
+                    switch (typeName)
                     {//ADD FORMS HERE
-                        AssessmentType.OralCare => JsonSerializer.Deserialize<List<OralCareDataInstance>>(jsonContent, options).Cast<object>().ToList(),
-                        AssessmentType.RegisteredNurseTaskAndDelegation => JsonSerializer.Deserialize<List<RegisteredNurseTaskDelegDataInstance>>(jsonContent, options).Cast<object>().ToList(),
-                        AssessmentType.TestRazorDataInstance => JsonSerializer.Deserialize<List<TestRazorDataInstance>>(jsonContent, options).Cast<object>().ToList(),
-                        _ => throw new ArgumentException($"Unsupported built-in assessment type: {_assessmentTypeWrapper.BuiltInType}")
-                    };
+                        case AssessmentTypeConstants.OralCare:
+                            return JsonSerializer.Deserialize<List<OralCareDataInstance>>(jsonContent, options).Cast<object>().ToList();
+                        case AssessmentTypeConstants.RegisteredNurseTaskAndDelegation:
+                            return JsonSerializer.Deserialize<List<RegisteredNurseTaskDelegDataInstance>>(jsonContent, options).Cast<object>().ToList();
+                        case AssessmentTypeConstants.TestRazorDataInstance:
+                            return JsonSerializer.Deserialize<List<TestRazorDataInstance>>(jsonContent, options).Cast<object>().ToList();
+                        case AssessmentTypeConstants.Tester:
+                            // Try to find the appropriate data instance type for Tester
+                            var testerInstanceType = Assembly.GetExecutingAssembly()
+                                .GetTypes()
+                                .FirstOrDefault(t => t.Name.Contains("testerInstance") && !t.IsInterface && !t.IsAbstract);
+                                
+                            if (testerInstanceType != null)
+                            {
+                                // Use generic method to deserialize to the correct type
+                                var genericMethod = typeof(JsonSerializer).GetMethod("Deserialize", new[] { typeof(string), typeof(JsonSerializerOptions) })
+                                    .MakeGenericMethod(typeof(List<>).MakeGenericType(testerInstanceType));
+                                
+                                var result = genericMethod.Invoke(null, new object[] { jsonContent, options });
+                                // Need to cast to list of objects for compatibility
+                                return ((IEnumerable<object>)result).Cast<object>().ToList();
+                            }
+                            throw new ArgumentException($"Could not find appropriate data instance type for Tester");
+                        default:
+                            throw new ArgumentException($"Unsupported built-in assessment type: {typeName}");
+                    }
                 }
                 else if (!string.IsNullOrEmpty(_assessmentTypeWrapper.CustomTypeId))
                 {

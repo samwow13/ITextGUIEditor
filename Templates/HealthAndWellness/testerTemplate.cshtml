@@ -1,0 +1,38 @@
+@page
+@model testerModel
+@{
+    ViewData["Title"] = "tester";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="~/css/globalStyles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header with Title -->
+        <header>
+            <div class="title">
+                @ViewData["Title"]
+            </div>
+        </header>
+
+        <!-- Content goes here -->
+        <div class="content">
+            <p>This is a template file for @ViewData["Title"].</p>
+            
+            @* Razor code example *@
+            <div>
+                @for (int i = 0; i < 3; i++)
+                {
+                    <div>Item @i</div>
+                }
+            </div>
+        </div>
+    </div>
+</body>
+</html>

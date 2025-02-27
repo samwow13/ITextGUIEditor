@@ -29,8 +29,7 @@ namespace iTextDesignerWithGUI.Models
     public enum AssessmentType
     {
         OralCare,
-        RegisteredNurseTaskAndDelegation,
-        TestRazorDataInstance
+
         //ADD FORMS HERE
     }
 }
