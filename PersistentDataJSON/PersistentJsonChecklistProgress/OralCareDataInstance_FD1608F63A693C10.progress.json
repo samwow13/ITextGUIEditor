@@ -2,7 +2,10 @@
   "DocumentId": "OralCareDataInstance_FD1608F63A693C10",
   "DocumentType": "OralCareDataInstance",
   "CheckStates": {
-    "ChildInfo.recent_or_upcoming_dental_appts": true
+    "ChildInfo.recent_or_upcoming_dental_appts": true,
+    "RiskFactors.mother_active_decay": true,
+    "RiskFactors.mother_no_dentist": true,
+    "SelfManagementGoals.regular_dental_visits": true
   },
-  "LastModified": "2025-02-28T07:48:50.8384546-08:00"
+  "LastModified": "2025-02-28T08:11:25.4363705-08:00"
 }

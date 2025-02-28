@@ -1,0 +1,151 @@
+[
+  {
+    "model": {
+      "id": 1,
+      "name": "HotlineAssessment Sample 1",
+      "description": "Primary sample data for HotlineAssessment",
+      "created_at": "2025-02-28T08:49:32Z",
+      "is_active": true
+    },
+    "properties": {
+      "sections": [
+        {
+          "title": "Section 1",
+          "fields": [
+            {
+              "name": "Field1",
+              "type": "text",
+              "value": "Sample value 1"
+            },
+            {
+              "name": "Field2",
+              "type": "number",
+              "value": 42
+            }
+          ]
+        },
+        {
+          "title": "Section 2",
+          "fields": [
+            {
+              "name": "Field3",
+              "type": "checkbox",
+              "value": true
+            },
+            {
+              "name": "Field4",
+              "type": "date",
+              "value": "2025-02-28"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "model": {
+      "id": 2,
+      "name": "HotlineAssessment Sample 2",
+      "description": "Secondary sample data for HotlineAssessment",
+      "created_at": "2025-02-21T08:49:32Z",
+      "is_active": true
+    },
+    "properties": {
+      "sections": [
+        {
+          "title": "Personal Information",
+          "fields": [
+            {
+              "name": "FullName",
+              "type": "text",
+              "value": "Jane Smith"
+            },
+            {
+              "name": "Age",
+              "type": "number",
+              "value": 35
+            },
+            {
+              "name": "Email",
+              "type": "email",
+              "value": "jane.smith@example.com"
+            }
+          ]
+        },
+        {
+          "title": "Preferences",
+          "fields": [
+            {
+              "name": "ReceiveNotifications",
+              "type": "checkbox",
+              "value": false
+            },
+            {
+              "name": "Theme",
+              "type": "select",
+              "value": "Dark"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "model": {
+      "id": 3,
+      "name": "HotlineAssessment Sample 3",
+      "description": "Tertiary sample data for HotlineAssessment",
+      "created_at": "2025-02-14T08:49:32Z",
+      "is_active": false
+    },
+    "properties": {
+      "sections": [
+        {
+          "title": "Product Details",
+          "fields": [
+            {
+              "name": "ProductName",
+              "type": "text",
+              "value": "Super Widget Pro"
+            },
+            {
+              "name": "SKU",
+              "type": "text",
+              "value": "WDG-1234-PRO"
+            },
+            {
+              "name": "Price",
+              "type": "currency",
+              "value": 199.99
+            },
+            {
+              "name": "InStock",
+              "type": "checkbox",
+              "value": true
+            }
+          ]
+        },
+        {
+          "title": "Shipping Information",
+          "fields": [
+            {
+              "name": "Weight",
+              "type": "number",
+              "value": 2.5
+            },
+            {
+              "name": "Dimensions",
+              "type": "text",
+              "value": "10 x 8 x 3 inches"
+            },
+            {
+              "name": "ShippingMethod",
+              "type": "select",
+              "value": "Express"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

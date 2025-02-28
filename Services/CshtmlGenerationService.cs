@@ -47,7 +47,7 @@ namespace iTextDesignerWithGUI.Services
                 Debug.WriteLine($"Generating Razor (cshtml) file at: {targetFilePath}");
                 
                 // Generate a basic Razor content
-                string cshtmlContent = GenerateBasicCshtmlContent(fileName);
+                string cshtmlContent = GenerateBasicCshtmlContent(fileName, templateType);
                 
                 // Write the Razor content to the file
                 File.WriteAllText(targetFilePath, cshtmlContent);
@@ -295,9 +295,23 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
         /// Generates basic Razor (cshtml) content for a new file
         /// </summary>
         /// <param name="fileName">Name of the file (used as the title)</param>
+        /// <param name="templateType">Type of template (e.g., "HealthAndWellness")</param>
         /// <returns>String containing Razor (cshtml) content</returns>
-        private string GenerateBasicCshtmlContent(string fileName)
+        private string GenerateBasicCshtmlContent(string fileName, string templateType)
         {
+            // Get root directory for instructions
+            string rootDirectory = _directoryService.GetRootDirectory();
+            
+            // Generate specific folder paths based on the fileName and templateType
+            string referenceDataJsonFolder = Path.Combine(rootDirectory, "ReferenceDataJsons", templateType);
+            string referenceDataJsonFile = Path.Combine(referenceDataJsonFolder, $"{fileName}Data.json");
+            
+            string modelsFolder = Path.Combine(rootDirectory, "Models", templateType, $"{fileName}Models");
+            string modelInstanceFile = Path.Combine(modelsFolder, $"{fileName}Instance.cs");
+            
+            string templatesFolder = Path.Combine(rootDirectory, "Templates", templateType);
+            string templateFile = Path.Combine(templatesFolder, $"{fileName}Template.cshtml");
+
             return $@"@model iTextDesignerWithGUI.Models.{fileName}Models.{fileName}Instance
 
 <!DOCTYPE html>
@@ -312,40 +326,65 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
 <body>
     <div class=""container"">
         <!-- Header with Title -->
-        <header>
-            <div class=""title"">{fileName}</div>
+        <header class=""my-4"">
+            <h1 class=""text-center"">{fileName} Setup Instructions</h1>
         </header>
 
-        <!-- Content goes here -->
+        <!-- Setup Instructions -->
         <div class=""content"">
-            <p>This is a template file for {fileName}.</p>
-            
-            <!-- Display model data -->
-            <div class=""model-data"">
-                <h2>Model Information</h2>
-                @if (Model != null && Model.Model != null)
-                {{{{
-                    <p><strong>ID:</strong> @Model.Model.Id</p>
-                    <p><strong>Name:</strong> @Model.Model.Name</p>
-                    <p><strong>Description:</strong> @Model.Model.Description</p>
-                    <p><strong>Created At:</strong> @Model.Model.CreatedAt</p>
-                    <p><strong>Is Active:</strong> @(Model.Model.IsActive ? ""Yes"" : ""No"")</p>
-                }}}}
-                else
-                {{{{
-                    <p>No model data available.</p>
-                }}}}
+            <div class=""card mb-4"">
+                <div class=""card-header bg-primary text-white"">
+                    <h2 class=""h4 mb-0"">Step 1: Fixing the JSON</h2>
+                </div>
+                <div class=""card-body"">
+                    <p>Close this application and find the ReferenceDataJsons folder for your assessment type:</p>
+                    
+                    <p>Your JSON file will be located at:</p>
+                    <code class=""d-block bg-light p-2 mb-3"">{referenceDataJsonFile}</code>
+                    
+                    <p>Create and add your JSON here. You need to have an array of your initial JSON structure with at least 3 entries to work with the GUI.</p>
+                </div>
             </div>
-            
-            <!-- Example of Razor syntax -->
-            <div>
-                @for (int i = 0; i < 3; i++)
-                {{{{
-                    <div>Item @i</div>
-                }}}}
+
+            <div class=""card mb-4"">
+                <div class=""card-header bg-primary text-white"">
+                    <h2 class=""h4 mb-0"">Step 2: Fixing the C# Model</h2>
+                </div>
+                <div class=""card-body"">
+                    <p>Next, go to the Models Folder for your assessment type:</p>
+                    
+                    <p>Your model instance file will be located at:</p>
+                    <code class=""d-block bg-light p-2 mb-3"">{modelInstanceFile}</code>
+                    
+                    <p>Using ChatGPT, you can quickly create a model by copying in one of your JSON entries and asking for a C# model to be built.</p>
+                </div>
+            </div>
+
+            <div class=""card mb-4"">
+                <div class=""card-header bg-primary text-white"">
+                    <h2 class=""h4 mb-0"">Step 3: Getting access to the data</h2>
+                </div>
+                <div class=""card-body"">
+                    <p>Find the HTML template that was generated at:</p>
+                    <code class=""d-block bg-light p-2 mb-3"">{templateFile}</code>
+                    
+                    <p>Then, simply remove the old models references like <code>@@@@Model.User.Name</code>, while keeping the @@@@model declaration on the 1st line of code. This line of code passes your entire data set into the template.</p>
+                </div>
+            </div>
+
+            <div class=""card mb-4"">
+                <div class=""card-header bg-primary text-white"">
+                    <h2 class=""h4 mb-0"">Step 4: Referencing globalStyles.css</h2>
+                </div>
+                <div class=""card-body"">
+                    <p>Refer to other templates in the project to find out how to reference the globalStyles.css sheet. You can see how it's done in this example:</p>
+                    <code class=""d-block bg-light p-2 mb-3"">&lt;link href=""globalStyles.css"" rel=""stylesheet""&gt;</code>
+                </div>
             </div>
         </div>
     </div>
+
+    <script src=""https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js""></script>
 </body>
 </html>";
         }
