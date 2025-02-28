@@ -145,6 +145,7 @@ namespace iTextDesignerWithGUI.Forms
                 Margin = buttonMargin
             };
             cancelButton.FlatAppearance.BorderSize = 0;
+            cancelButton.Click += CancelButton_Click;
             buttonPanel.Controls.Add(cancelButton);
 
             mainContainer.Controls.Add(buttonPanel, 0, 3);
@@ -334,6 +335,9 @@ namespace iTextDesignerWithGUI.Forms
                         
                         // Refresh the template list
                         LoadAvailableTemplates();
+                        
+                        // Change cancel button to restart button
+                        UpdateButtonToRestart();
                     }
                     else
                     {
@@ -342,6 +346,91 @@ namespace iTextDesignerWithGUI.Forms
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Updates the cancel button to become a restart button
+        /// </summary>
+        private void UpdateButtonToRestart()
+        {
+            // Change button text
+            cancelButton.Text = "Restart";
+            cancelButton.BackColor = Color.FromArgb(76, 175, 80); // Green color for restart
+            
+            // Remove dialog result and add click handler
+            cancelButton.DialogResult = DialogResult.None;
+            cancelButton.Click -= CancelButton_Click; // Remove previous handler if exists
+            cancelButton.Click += RestartButton_Click;
+            
+            // Update status
+            statusLabel.Text = "Template deleted successfully. Please restart the application.";
+            statusLabel.ForeColor = Color.FromArgb(76, 175, 80);
+            
+            // Disable other controls
+            deleteButton.Enabled = false;
+            templateComboBox.Enabled = false;
+        }
+        
+        /// <summary>
+        /// Handler for the restart button click event
+        /// </summary>
+        private void RestartButton_Click(object sender, EventArgs e)
+        {
+            try 
+            {
+                // Get the current project directory
+                string projectDirectory = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\.."));
+                
+                // Save the current window position
+                var mainForm = Application.OpenForms[0]; // Get the main form (index 0)
+                string positionFile = Path.Combine(Path.GetTempPath(), "AppPosition.txt");
+                File.WriteAllText(positionFile, $"{mainForm.Location.X},{mainForm.Location.Y},{mainForm.Width},{mainForm.Height}");
+                
+                // Create a batch file that will rebuild and restart the application
+                string batchFilePath = Path.Combine(Path.GetTempPath(), "RestartApplication.bat");
+                
+                // Write commands to the batch file
+                // Wait 1 second for the current process to close, then rebuild and run the application silently
+                string batchContent = 
+                    "@echo off\r\n" +
+                    "timeout /t 1 /nobreak >nul\r\n" +
+                    $"cd /d \"{projectDirectory}\"\r\n" +
+                    "dotnet build >nul 2>&1\r\n" +
+                    "if %ERRORLEVEL% == 0 (\r\n" +
+                    "    start /b \"\" dotnet run --no-build\r\n" +
+                    ") else (\r\n" +
+                    "    echo Build failed during restart! >buildError.log\r\n" +
+                    ")\r\n";
+                
+                File.WriteAllText(batchFilePath, batchContent);
+                
+                // Start the batch file in a new process
+                System.Diagnostics.Process process = new System.Diagnostics.Process();
+                process.StartInfo.FileName = "cmd.exe";
+                process.StartInfo.Arguments = $"/c \"{batchFilePath}\"";
+                process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                process.StartInfo.CreateNoWindow = true;
+                process.Start();
+                
+                // Exit the current application
+                Application.Exit();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error restarting application: {ex.Message}", "Restart Error", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                
+                // If we can't restart, just close this form
+                this.Close();
+            }
+        }
+        
+        /// <summary>
+        /// Handler for the cancel button click event
+        /// </summary>
+        private void CancelButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 
