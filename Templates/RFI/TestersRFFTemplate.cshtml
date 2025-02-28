@@ -1,0 +1,139 @@
+@model iTextDesignerWithGUI.Models.TestersRFFModels.TestersRFFInstance
+@using System
+@using System.Linq
+@using System.Collections.Generic
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@Model.Model.Name</title>
+    <link href="globalStyles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header with Model Name -->
+        <header>
+            <div class="title">
+                <h1>@Model.Model.Name</h1>
+            </div>
+        </header>
+
+        <!-- Model Information Section -->
+        <section>
+            <h2>Model Information</h2>
+            <p><strong>ID:</strong> @Model.Model.Id</p>
+            <p><strong>Description:</strong> @Model.Model.Description</p>
+            <p>
+                <strong>Created At:</strong>
+                @{
+                    System.DateTime createdAt;
+                    string createdAtDisplay = "Invalid Date";
+                    if(System.DateTime.TryParse(Model.Model.CreatedAt, out createdAt))
+                    {
+                        createdAtDisplay = createdAt.ToString("yyyy-MM-dd HH:mm:ss");
+                    }
+                }
+                @createdAtDisplay
+            </p>
+            <p>
+                <strong>Active:</strong>
+                @{
+                    bool activeVal = false;
+                    string activeDisplay = "No";
+                    if(bool.TryParse(Model.Model.IsActive.ToString(), out activeVal) && activeVal)
+                    {
+                        activeDisplay = "Yes";
+                    }
+                }
+                @activeDisplay
+            </p>
+        </section>
+
+        <!-- Sections and Fields -->
+        <section>
+            <h2>Sections</h2>
+            @if(Model.Properties != null && Model.Properties.Sections != null && Model.Properties.Sections.Any())
+            {
+                foreach(var sect in Model.Properties.Sections)
+                {
+                    <div class="section">
+                        <h3>@sect.Title</h3>
+                        @if(sect.Fields != null && sect.Fields.Any())
+                        {
+                            <table class="section-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach(var field in sect.Fields)
+                                    {
+                                        <tr>
+                                            <td>@field.Name</td>
+                                            <td>@field.Type</td>
+                                            <td>
+                                                @{
+                                                    string displayValue = "";
+                                                    if(field.Value != null)
+                                                    {
+                                                        if(field.Type != null && field.Type.Equals("date", StringComparison.OrdinalIgnoreCase))
+                                                        {
+                                                            System.DateTime dt;
+                                                            displayValue = System.DateTime.TryParse(field.Value.ToString(), out dt) ? dt.ToString("yyyy-MM-dd") : "Invalid Date";
+                                                        }
+                                                        else if(field.Type != null && field.Type.Equals("checkbox", StringComparison.OrdinalIgnoreCase))
+                                                        {
+                                                            bool b;
+                                                            displayValue = bool.TryParse(field.Value.ToString(), out b) ? (b ? "true" : "false") : "false";
+                                                        }
+                                                        else if(field.Type != null && field.Type.Equals("number", StringComparison.OrdinalIgnoreCase))
+                                                        {
+                                                            double d;
+                                                            displayValue = double.TryParse(field.Value.ToString(), out d) ? d.ToString() : "0";
+                                                        }
+                                                        else if(field.Type != null && field.Type.Equals("currency", StringComparison.OrdinalIgnoreCase))
+                                                        {
+                                                            decimal dec;
+                                                            displayValue = decimal.TryParse(field.Value.ToString(), out dec) ? "$" + dec.ToString("0.00") : "$0.00";
+                                                        }
+                                                        else
+                                                        {
+                                                            displayValue = field.Value.ToString();
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        displayValue = "N/A";
+                                                    }
+                                                }
+                                                @displayValue
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <p>No fields available.</p>
+                        }
+                    </div>
+                }
+            }
+            else
+            {
+                <p>No sections available.</p>
+            }
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>Generated on @System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")</p>
+        </footer>
+    </div>
+</body>
+</html>

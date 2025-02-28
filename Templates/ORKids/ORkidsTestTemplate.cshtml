@@ -1,0 +1,223 @@
+@model iTextDesignerWithGUI.Models.ORkidsTestModels.ORkidsTestInstance
+@using System
+@using System.Linq
+@using System.Collections.Generic
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORkidsTest Report</title>
+    <link href="globalStyles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header with Title and Graphic -->
+        <header>
+            <div class="title">ORkidsTest Report</div>
+            <div class="graphic">
+                <!-- Placeholder for logo if needed -->
+            </div>
+        </header>
+
+        <!-- Introduction Section -->
+        <div class="intro-text">
+            @if (Model != null && Model.Model != null)
+            {
+                <p><strong>Report Name:</strong> @Model.Model.Name</p>
+                <p><strong>Description:</strong> @Model.Model.Description</p>
+                <p><strong>Created:</strong> @(DateTime.TryParse(Model.Model.CreatedAt, out DateTime createdDate) ? createdDate.ToString("MM/dd/yyyy") : "Unknown")</p>
+                <p><strong>Status:</strong> @(Model.Model.IsActive ? "Active" : "Inactive")</p>
+            }
+        </div>
+
+        <!-- Main Content Sections -->
+        @if (Model != null && Model.Properties != null && Model.Properties.Sections != null)
+        {
+            foreach (var sectionItem in Model.Properties.Sections)
+            {
+                <div class="section-wrapper">
+                    <h2>@sectionItem.Title</h2>
+                    <table class="full-table">
+                        <tbody>
+                            @if (sectionItem.Fields != null)
+                            {
+                                foreach (var field in sectionItem.Fields)
+                                {
+                                    <tr>
+                                        <th>@field.Name</th>
+                                        <td>
+                                            @{
+                                                string displayValue = "N/A";
+                                                if (field.Value != null)
+                                                {
+                                                    if (field.Type == "checkbox")
+                                                    {
+                                                        bool isChecked = false;
+                                                        bool.TryParse(field.Value.ToString(), out isChecked);
+                                                        <div class="checkbox-container">
+                                                            <input type="checkbox" @(isChecked ? "checked class=\"checked\"" : "") disabled />
+                                                            @(isChecked ? "Yes" : "No")
+                                                        </div>
+                                                    }
+                                                    else if (field.Type == "date")
+                                                    {
+                                                        if (DateTime.TryParse(field.Value.ToString(), out DateTime dateValue))
+                                                        {
+                                                            @dateValue.ToString("MM/dd/yyyy")
+                                                        }
+                                                        else
+                                                        {
+                                                            @field.Value.ToString()
+                                                        }
+                                                    }
+                                                    else if (field.Type == "currency")
+                                                    {
+                                                        if (decimal.TryParse(field.Value.ToString(), out decimal currencyValue))
+                                                        {
+                                                            @string.Format("${0:0.00}", currencyValue)
+                                                        }
+                                                        else
+                                                        {
+                                                            @field.Value.ToString()
+                                                        }
+                                                    }
+                                                    else if (field.Type == "number")
+                                                    {
+                                                        if (double.TryParse(field.Value.ToString(), out double numValue))
+                                                        {
+                                                            @numValue.ToString()
+                                                        }
+                                                        else
+                                                        {
+                                                            @field.Value.ToString()
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        @field.Value.ToString()
+                                                    }
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        }
+
+        <!-- Three Column Section Example (if needed) -->
+        @if (Model != null && Model.Properties != null && Model.Properties.Sections != null && Model.Properties.Sections.Count > 0)
+        {
+            <div class="three-column-wrapper">
+                <table class="three-column-section">
+                    <tr>
+                        @{
+                            var columnCount = Math.Min(3, Model.Properties.Sections.Count);
+                            for (int i = 0; i < columnCount; i++)
+                            {
+                                var columnData = Model.Properties.Sections[i];
+                                <td>
+                                    <h2>@columnData.Title</h2>
+                                    <table class="section-table">
+                                        <tbody>
+                                            @if (columnData.Fields != null)
+                                            {
+                                                foreach (var field in columnData.Fields)
+                                                {
+                                                    <tr>
+                                                        <th>@field.Name</th>
+                                                        <td>
+                                                            @if (field.Value != null)
+                                                            {
+                                                                if (field.Type == "checkbox")
+                                                                {
+                                                                    bool isChecked = false;
+                                                                    bool.TryParse(field.Value.ToString(), out isChecked);
+                                                                    <div class="checkbox-container">
+                                                                        <input type="checkbox" @(isChecked ? "checked class=\"checked\"" : "") disabled />
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    @field.Value.ToString()
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <text>N/A</text>
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </td>
+                            }
+                        }
+                    </tr>
+                </table>
+            </div>
+        }
+
+        <!-- Assessment Plan Section Example (if needed) -->
+        <div class="assessment-plan">
+            <h2>Assessment Summary</h2>
+            <table class="assessment-plan-table">
+                <tbody>
+                    <tr>
+                        <th>Model ID:</th>
+                        <td>@(Model != null && Model.Model != null ? Model.Model.Id.ToString() : "N/A")</td>
+                    </tr>
+                    <tr>
+                        <th>Created Date:</th>
+                        <td>
+                            @if (Model != null && Model.Model != null && !string.IsNullOrEmpty(Model.Model.CreatedAt))
+                            {
+                                if (DateTime.TryParse(Model.Model.CreatedAt, out DateTime createdDate))
+                                {
+                                    @createdDate.ToString("MM/dd/yyyy")
+                                }
+                                else
+                                {
+                                    @Model.Model.CreatedAt
+                                }
+                            }
+                            else
+                            {
+                                <text>N/A</text>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Active Status:</th>
+                        <td>
+                            @if (Model != null && Model.Model != null)
+                            {
+                                <div class="checkbox-container">
+                                    <input type="checkbox" @(Model.Model.IsActive ? "checked class=\"checked\"" : "") disabled />
+                                    @(Model.Model.IsActive ? "Active" : "Inactive")
+                                </div>
+                            }
+                            else
+                            {
+                                <text>N/A</text>
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>ORkidsTest Report - Generated on @System.DateTime.Now.ToString("MM/dd/yyyy")</p>
+        </footer>
+    </div>
+</body>
+</html>

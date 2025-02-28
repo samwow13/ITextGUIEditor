@@ -1,0 +1,511 @@
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Loading project directories from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\PersistentDataJSON\pdfCreationData.json
+JSON Content: {
+    "projectDirectories": [
+      {
+        "name": "HealthAndWellness",
+        "path": "Templates/HealthAndWellness"
+      },
+      {
+        "name": "Hotline",
+        "path": "Templates/Hotline"
+      },
+      {
+        "name": "ORKids",
+        "path": "Templates/ORKids"
+      },
+      {
+        "name": "RFI",
+        "path": "Templates/RFI"
+      }
+    ]
+  }
+Successfully loaded 4 project directories
+Cannot populate assessment types: ComboBox is null or disposed
+Initial load after constructor for project: HealthAndWellness
+Populating assessment types for project: 'HealthAndWellness'
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Found 4 total assessment types
+Filtered to 3 types for project 'HealthAndWellness'
+Added assessment type: Oral Care
+Added assessment type: Registered Nurse Task And Delegation
+Added assessment type: Test Razor Data Instance
+Selected first assessment: Oral Care
+Populating assessment types for project: 'Hotline'
+Found 4 total assessment types
+Filtered to 1 types for project 'Hotline'
+Added assessment type: Tester
+Selected first assessment: Tester
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Entry 1
+Using template: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\Hotline/TesterTemplate.cshtml
+PDF generated, size: 5416 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Entry_1_20250228_111353.pdf
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\Hotline\TesterTemplate.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\Hotline\TesterTemplate.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\Hotline\TesterTemplate.cshtml
+Stopping template watchers
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Entry 1
+Using template: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\Hotline/TesterTemplate.cshtml
+Error compiling Razor template: RazorLight.Generation.TemplateGenerationException: Failed to generate Razor template. See "Diagnostics" property for more details
+- The 'section` directive must appear at the start of the line.
+- The 'section' directives value(s) must be separated by whitespace.
+
+   at RazorLight.Generation.RazorSourceGenerator.GenerateCodeAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass11_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 234
+Error generating PDF: System.AggregateException: One or more errors occurred. (Failed to generate Razor template. See "Diagnostics" property for more details
+- The 'section` directive must appear at the start of the line.
+- The 'section' directives value(s) must be separated by whitespace.
+)
+ ---> RazorLight.Generation.TemplateGenerationException: Failed to generate Razor template. See "Diagnostics" property for more details
+- The 'section` directive must appear at the start of the line.
+- The 'section' directives value(s) must be separated by whitespace.
+
+   at RazorLight.Generation.RazorSourceGenerator.GenerateCodeAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass11_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 234
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 224
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 214
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 391
+Error generating PDF: One or more errors occurred. (Failed to generate Razor template. See "Diagnostics" property for more details
+- The 'section` directive must appear at the start of the line.
+- The 'section' directives value(s) must be separated by whitespace.
+)
+Stack trace:    at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 224
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 214
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 391
+   at iTextDesignerWithGUI.Forms.MainForm.dataGridView_CellContentClick(Object sender, DataGridViewCellEventArgs e) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Forms\MainForm.cs:line 607
+Cooldown period complete - resuming file watching
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\Hotline\TesterTemplate.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\Hotline\TesterTemplate.cshtml
+Stopping template watchers
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Entry 1
+Using template: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\Hotline/TesterTemplate.cshtml
+Error compiling Razor template: RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (5:18) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (12:38) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (21:22) 'TesterInstance' does not contain a definition for 'Description' and no accessible extension method 'Description' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (22:34) 'TesterInstance' does not contain a definition for 'CreatedAt' and no accessible extension method 'CreatedAt' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (23:31) 'TesterInstance' does not contain a definition for 'IsActive' and no accessible extension method 'IsActive' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (27:77) 'List<Section>' does not contain a definition for 'Any' and no accessible extension method 'Any' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (29:56) 'List<Section>' does not contain a definition for 'First' and no accessible extension method 'First' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (44:73) The name 'Convert' does not exist in the current context
+- (62:24) The name 'DateTime' does not exist in the current context
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass11_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 234
+Error generating PDF: System.AggregateException: One or more errors occurred. (Failed to compile generated Razor template:
+- (5:18) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (12:38) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (21:22) 'TesterInstance' does not contain a definition for 'Description' and no accessible extension method 'Description' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (22:34) 'TesterInstance' does not contain a definition for 'CreatedAt' and no accessible extension method 'CreatedAt' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (23:31) 'TesterInstance' does not contain a definition for 'IsActive' and no accessible extension method 'IsActive' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (27:77) 'List<Section>' does not contain a definition for 'Any' and no accessible extension method 'Any' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (29:56) 'List<Section>' does not contain a definition for 'First' and no accessible extension method 'First' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (44:73) The name 'Convert' does not exist in the current context
+- (62:24) The name 'DateTime' does not exist in the current context
+
+See CompilationErrors for detailed information
+)
+ ---> RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (5:18) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (12:38) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (21:22) 'TesterInstance' does not contain a definition for 'Description' and no accessible extension method 'Description' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (22:34) 'TesterInstance' does not contain a definition for 'CreatedAt' and no accessible extension method 'CreatedAt' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (23:31) 'TesterInstance' does not contain a definition for 'IsActive' and no accessible extension method 'IsActive' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (27:77) 'List<Section>' does not contain a definition for 'Any' and no accessible extension method 'Any' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (29:56) 'List<Section>' does not contain a definition for 'First' and no accessible extension method 'First' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (44:73) The name 'Convert' does not exist in the current context
+- (62:24) The name 'DateTime' does not exist in the current context
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass11_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 234
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 224
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 214
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 391
+Error generating PDF: One or more errors occurred. (Failed to compile generated Razor template:
+- (5:18) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (12:38) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (21:22) 'TesterInstance' does not contain a definition for 'Description' and no accessible extension method 'Description' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (22:34) 'TesterInstance' does not contain a definition for 'CreatedAt' and no accessible extension method 'CreatedAt' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (23:31) 'TesterInstance' does not contain a definition for 'IsActive' and no accessible extension method 'IsActive' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (27:77) 'List<Section>' does not contain a definition for 'Any' and no accessible extension method 'Any' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (29:56) 'List<Section>' does not contain a definition for 'First' and no accessible extension method 'First' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (44:73) The name 'Convert' does not exist in the current context
+- (62:24) The name 'DateTime' does not exist in the current context
+
+See CompilationErrors for detailed information
+)
+Stack trace:    at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 224
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 214
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 391
+   at iTextDesignerWithGUI.Forms.MainForm.dataGridView_CellContentClick(Object sender, DataGridViewCellEventArgs e) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Forms\MainForm.cs:line 607
+Cooldown period complete - resuming file watching
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\Hotline\TesterTemplate.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\Hotline\TesterTemplate.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\Hotline\TesterTemplate.cshtml
+Stopping template watchers
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Entry 1
+Using template: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\Hotline/TesterTemplate.cshtml
+Error compiling Razor template: RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (5:18) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (12:38) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (21:22) 'TesterInstance' does not contain a definition for 'Description' and no accessible extension method 'Description' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (22:34) 'TesterInstance' does not contain a definition for 'CreatedAt' and no accessible extension method 'CreatedAt' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (23:31) 'TesterInstance' does not contain a definition for 'IsActive' and no accessible extension method 'IsActive' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (27:77) 'List<Section>' does not contain a definition for 'Any' and no accessible extension method 'Any' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (29:56) 'List<Section>' does not contain a definition for 'First' and no accessible extension method 'First' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (44:73) The name 'Convert' does not exist in the current context
+- (62:24) The name 'DateTime' does not exist in the current context
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass11_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 234
+Error generating PDF: System.AggregateException: One or more errors occurred. (Failed to compile generated Razor template:
+- (5:18) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (12:38) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (21:22) 'TesterInstance' does not contain a definition for 'Description' and no accessible extension method 'Description' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (22:34) 'TesterInstance' does not contain a definition for 'CreatedAt' and no accessible extension method 'CreatedAt' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (23:31) 'TesterInstance' does not contain a definition for 'IsActive' and no accessible extension method 'IsActive' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (27:77) 'List<Section>' does not contain a definition for 'Any' and no accessible extension method 'Any' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (29:56) 'List<Section>' does not contain a definition for 'First' and no accessible extension method 'First' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (44:73) The name 'Convert' does not exist in the current context
+- (62:24) The name 'DateTime' does not exist in the current context
+
+See CompilationErrors for detailed information
+)
+ ---> RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (5:18) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (12:38) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (21:22) 'TesterInstance' does not contain a definition for 'Description' and no accessible extension method 'Description' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (22:34) 'TesterInstance' does not contain a definition for 'CreatedAt' and no accessible extension method 'CreatedAt' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (23:31) 'TesterInstance' does not contain a definition for 'IsActive' and no accessible extension method 'IsActive' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (27:77) 'List<Section>' does not contain a definition for 'Any' and no accessible extension method 'Any' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (29:56) 'List<Section>' does not contain a definition for 'First' and no accessible extension method 'First' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (44:73) The name 'Convert' does not exist in the current context
+- (62:24) The name 'DateTime' does not exist in the current context
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass11_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 234
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 224
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 214
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 391
+Error generating PDF: One or more errors occurred. (Failed to compile generated Razor template:
+- (5:18) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (12:38) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (21:22) 'TesterInstance' does not contain a definition for 'Description' and no accessible extension method 'Description' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (22:34) 'TesterInstance' does not contain a definition for 'CreatedAt' and no accessible extension method 'CreatedAt' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (23:31) 'TesterInstance' does not contain a definition for 'IsActive' and no accessible extension method 'IsActive' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (27:77) 'List<Section>' does not contain a definition for 'Any' and no accessible extension method 'Any' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (29:56) 'List<Section>' does not contain a definition for 'First' and no accessible extension method 'First' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (44:73) The name 'Convert' does not exist in the current context
+- (62:24) The name 'DateTime' does not exist in the current context
+
+See CompilationErrors for detailed information
+)
+Stack trace:    at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 224
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 214
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 391
+   at iTextDesignerWithGUI.Forms.MainForm.dataGridView_CellContentClick(Object sender, DataGridViewCellEventArgs e) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Forms\MainForm.cs:line 607
+Cooldown period complete - resuming file watching
+Generating PDF for row 0
+Data for PDF: Name=Entry 1
+Using template: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\Hotline/TesterTemplate.cshtml
+Error compiling Razor template: RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (5:18) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (12:38) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (21:22) 'TesterInstance' does not contain a definition for 'Description' and no accessible extension method 'Description' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (22:34) 'TesterInstance' does not contain a definition for 'CreatedAt' and no accessible extension method 'CreatedAt' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (23:31) 'TesterInstance' does not contain a definition for 'IsActive' and no accessible extension method 'IsActive' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (27:77) 'List<Section>' does not contain a definition for 'Any' and no accessible extension method 'Any' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (29:56) 'List<Section>' does not contain a definition for 'First' and no accessible extension method 'First' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (44:73) The name 'Convert' does not exist in the current context
+- (62:24) The name 'DateTime' does not exist in the current context
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass11_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 234
+Error generating PDF: System.AggregateException: One or more errors occurred. (Failed to compile generated Razor template:
+- (5:18) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (12:38) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (21:22) 'TesterInstance' does not contain a definition for 'Description' and no accessible extension method 'Description' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (22:34) 'TesterInstance' does not contain a definition for 'CreatedAt' and no accessible extension method 'CreatedAt' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (23:31) 'TesterInstance' does not contain a definition for 'IsActive' and no accessible extension method 'IsActive' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (27:77) 'List<Section>' does not contain a definition for 'Any' and no accessible extension method 'Any' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (29:56) 'List<Section>' does not contain a definition for 'First' and no accessible extension method 'First' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (44:73) The name 'Convert' does not exist in the current context
+- (62:24) The name 'DateTime' does not exist in the current context
+
+See CompilationErrors for detailed information
+)
+ ---> RazorLight.Compilation.TemplateCompilationException: Failed to compile generated Razor template:
+- (5:18) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (12:38) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (21:22) 'TesterInstance' does not contain a definition for 'Description' and no accessible extension method 'Description' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (22:34) 'TesterInstance' does not contain a definition for 'CreatedAt' and no accessible extension method 'CreatedAt' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (23:31) 'TesterInstance' does not contain a definition for 'IsActive' and no accessible extension method 'IsActive' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (27:77) 'List<Section>' does not contain a definition for 'Any' and no accessible extension method 'Any' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (29:56) 'List<Section>' does not contain a definition for 'First' and no accessible extension method 'First' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (44:73) The name 'Convert' does not exist in the current context
+- (62:24) The name 'DateTime' does not exist in the current context
+
+See CompilationErrors for detailed information
+
+   at RazorLight.Compilation.RoslynCompilationService.CompileAndEmit(IGeneratedRazorTemplate razorTemplate)
+   at RazorLight.Compilation.RazorTemplateCompiler.CompileAndEmitAsync(RazorLightProjectItem projectItem)
+   at RazorLight.Compilation.RazorTemplateCompiler.OnCacheMissAsync(String templateKey)
+   at RazorLight.EngineHandler.CompileTemplateAsync(String key)
+   at RazorLight.EngineHandler.CompileRenderAsync[T](String key, T model, ExpandoObject viewBag)
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.<>c__DisplayClass11_0.<<ProcessRazorTemplate>b__0>d.MoveNext() in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 234
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 224
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 214
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 391
+Error generating PDF: One or more errors occurred. (Failed to compile generated Razor template:
+- (5:18) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (12:38) 'TesterInstance' does not contain a definition for 'Name' and no accessible extension method 'Name' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (21:22) 'TesterInstance' does not contain a definition for 'Description' and no accessible extension method 'Description' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (22:34) 'TesterInstance' does not contain a definition for 'CreatedAt' and no accessible extension method 'CreatedAt' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (23:31) 'TesterInstance' does not contain a definition for 'IsActive' and no accessible extension method 'IsActive' accepting a first argument of type 'TesterInstance' could be found (are you missing a using directive or an assembly reference?)
+- (27:77) 'List<Section>' does not contain a definition for 'Any' and no accessible extension method 'Any' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (29:56) 'List<Section>' does not contain a definition for 'First' and no accessible extension method 'First' accepting a first argument of type 'List<Section>' could be found (are you missing a using directive or an assembly reference?)
+- (44:73) The name 'Convert' does not exist in the current context
+- (62:24) The name 'DateTime' does not exist in the current context
+
+See CompilationErrors for detailed information
+)
+Stack trace:    at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessRazorTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 224
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.ProcessTemplate(String templatePath, String templateFileName, Object data) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 214
+   at iTextDesignerWithGUI.Services.PdfGeneratorService.GeneratePdf(Object data, String templateFileName) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Services\PdfGeneratorService.cs:line 391
+   at iTextDesignerWithGUI.Forms.MainForm.dataGridView_CellContentClick(Object sender, DataGridViewCellEventArgs e) in C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Forms\MainForm.cs:line 607
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\Hotline\TesterTemplate.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\Hotline\TesterTemplate.cshtml
+Stopping template watchers
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Entry 1
+Using template: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\Hotline/TesterTemplate.cshtml
+Image not found: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\path/to/image.png
+PDF generated, size: 1859 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Entry_1_20250228_111752.pdf
+Cooldown period complete - resuming file watching
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\Hotline\TesterTemplate.cshtml
+File change detected: Changed - C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\Hotline\TesterTemplate.cshtml
+Stopping template watchers
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Starting directory search from: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Moving up from bin directory to: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Found project root at: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Project root directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22
+Executable directory initialized: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\bin\Debug\net6.0-windows
+Initializing TemplateWatcherService for path: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates
+Starting template watchers
+Generating PDF for row 0
+Data for PDF: Name=Entry 1
+Using template: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\Hotline/TesterTemplate.cshtml
+Image not found: C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\path/to/image.png
+PDF generated, size: 1859 bytes
+PDF saved to: C:\Users\samwo\AppData\Local\Temp\Entry_1_20250228_111803.pdf
+Cooldown period complete - resuming file watching

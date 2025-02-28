@@ -324,7 +324,36 @@ namespace iTextDesignerWithGUI.Forms
                 clipboardContent.AppendLine("```");
                 clipboardContent.AppendLine();
                 
-                clipboardContent.AppendLine("Please use the model above and the globalStyles.css referenced above to generate a cshtml document (the service injects via itext in C#). The model is an instance of the data found in the json file. Do not generate Bootstrap styles and only include a link to <link href=\"globalStyles.css\" rel=\"stylesheet\">     ");
+                clipboardContent.AppendLine("Please generate a complete .cshtml template using the model structure above and reference the globalStyles.css. Follow these guidelines for Razor compatibility:");
+                clipboardContent.AppendLine("1. Begin with the appropriate model directive that exactly matches the model class name and namespace");
+                clipboardContent.AppendLine("2. ALWAYS include these required namespace imports:");
+                clipboardContent.AppendLine("   @using System");
+                clipboardContent.AppendLine("   @using System.Linq");
+                clipboardContent.AppendLine("   @using System.Collections.Generic");
+                clipboardContent.AppendLine("3. Access properties using the correct path hierarchy (e.g., if properties are nested in Model.SomeProperty.ChildProperty)");
+                clipboardContent.AppendLine("4. When using .NET framework types (Convert, DateTime, etc.), use their fully qualified names (System.Convert, System.DateTime)");
+                clipboardContent.AppendLine("5. For collection operations (Any(), First(), etc.), ensure they are properly accessed on collection properties");
+                clipboardContent.AppendLine("6. Avoid variable names that conflict with Razor keywords (like 'section', 'model', 'page')");
+                clipboardContent.AppendLine("7. Only include this CSS reference: <link href=\"globalStyles.css\" rel=\"stylesheet\">");
+                clipboardContent.AppendLine("8. Do not include Bootstrap or other external CSS frameworks");
+                clipboardContent.AppendLine("9. The template will be processed by RazorLight engine with iText for PDF generation");
+                clipboardContent.AppendLine("10. When working with JSON data types in Razor, use safe parsing instead of direct conversion:");
+                clipboardContent.AppendLine("    - Use bool.TryParse() instead of Convert.ToBoolean()");
+                clipboardContent.AppendLine("    - Use DateTime.TryParse() instead of DateTime.Parse()");
+                clipboardContent.AppendLine("    - Use decimal.TryParse() or double.TryParse() for numeric values");
+                clipboardContent.AppendLine("    - Always include null checks and fallback values");
+                clipboardContent.AppendLine("11. When writing conditional logic blocks in Razor:");
+                clipboardContent.AppendLine("    - Avoid nesting @{ } code blocks - this causes parsing errors");
+                clipboardContent.AppendLine("    - Declare variables in a single @{ } block at the beginning of complex conditional sections");
+                clipboardContent.AppendLine("    - Use separate @if statements outside the @{ } block for rendering HTML");
+                clipboardContent.AppendLine("12. Remember that the model structure determines how properties are accessed:");
+                clipboardContent.AppendLine("    - If your JSON has { \"model\": { \"name\": \"...\" } }, use @Model.Model.Name");
+                clipboardContent.AppendLine("    - If your JSON has { \"name\": \"...\" }, use @Model.Name");
+                clipboardContent.AppendLine("13. When using TryParse methods with conditional (ternary) operators:");
+                clipboardContent.AppendLine("    - Place the closing parenthesis of the TryParse method before the question mark");
+                clipboardContent.AppendLine("    - CORRECT: @(DateTime.TryParse(value, out DateTime result) ? result.ToString(\"format\") : \"fallback\")");
+                clipboardContent.AppendLine("    - INCORRECT: @(DateTime.TryParse(value, out DateTime result ? result.ToString(\"format\") : \"fallback\"))");
+                clipboardContent.AppendLine("14. Be extra careful with balancing parentheses in Razor expressions, especially with nested conditions");
 
                 // Copy to clipboard
                 Clipboard.SetText(clipboardContent.ToString());
