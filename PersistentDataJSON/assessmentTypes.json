@@ -27,10 +27,10 @@
     {
       "name": "HotlineAssessment",
       "displayName": "HotlineAssessment",
-      "assessmentTypeDirectory": "Models/Hotline/HotlineAssessmentModels/HotlineAssessmentAssessment.cs",
-      "assessmentDataInstanceDirectory": "Models/Hotline/HotlineAssessmentModels/HotlineAssessmentInstance.cs",
-      "cshtmlTemplateDirectory": "Templates/Hotline/HotlineAssessmentTemplate.cshtml",
-      "jsonDataLocationDirectory": "ReferenceDataJsons/Hotline/HotlineAssessmentData.json"
+      "assessmentTypeDirectory": "Models/HealthAndWellness/HotlineAssessmentModels/HotlineAssessmentAssessment.cs",
+      "assessmentDataInstanceDirectory": "Models/HealthAndWellness/HotlineAssessmentModels/HotlineAssessmentInstance.cs",
+      "cshtmlTemplateDirectory": "Templates/HealthAndWellness/HotlineAssessmentTemplate.cshtml",
+      "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellness/HotlineAssessmentData.json"
     }
   ]
 }

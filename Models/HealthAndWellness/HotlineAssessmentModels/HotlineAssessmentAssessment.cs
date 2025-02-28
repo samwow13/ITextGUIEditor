@@ -5,8 +5,8 @@ namespace iTextDesignerWithGUI.Models
     /// </summary>
     public class HotlineAssessmentAssessment : IAssessment
     {
-        public string TemplateFileName => "Hotline/HotlineAssessmentTemplate.cshtml";
-        public string JsonDataPath => "ReferenceDataJsons/Hotline/HotlineAssessmentData.json";
+        public string TemplateFileName => "HealthAndWellness/HotlineAssessmentTemplate.cshtml";
+        public string JsonDataPath => "ReferenceDataJsons/HealthAndWellness/HotlineAssessmentData.json";
         public string DisplayName => "HotlineAssessment";
     }
 }
