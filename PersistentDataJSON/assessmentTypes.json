@@ -25,30 +25,6 @@
       "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellness/TestRazorData.json"
     },
     {
-      "name": "Tester",
-      "displayName": "Tester",
-      "assessmentTypeDirectory": "Models/Hotline/TesterModels/TesterAssessment.cs",
-      "assessmentDataInstanceDirectory": "Models/Hotline/TesterModels/TesterInstance.cs",
-      "cshtmlTemplateDirectory": "Templates/Hotline/TesterTemplate.cshtml",
-      "jsonDataLocationDirectory": "ReferenceDataJsons/Hotline/TesterData.json"
-    },
-    {
-      "name": "test1",
-      "displayName": "test1",
-      "assessmentTypeDirectory": "Models/Hotline/test1Models/test1Assessment.cs",
-      "assessmentDataInstanceDirectory": "Models/Hotline/test1Models/test1Instance.cs",
-      "cshtmlTemplateDirectory": "Templates/Hotline/test1Template.cshtml",
-      "jsonDataLocationDirectory": "ReferenceDataJsons/Hotline/test1Data.json"
-    },
-    {
-      "name": "ORkidsTest",
-      "displayName": "ORkidsTest",
-      "assessmentTypeDirectory": "Models/ORKids/ORkidsTestModels/ORkidsTestAssessment.cs",
-      "assessmentDataInstanceDirectory": "Models/ORKids/ORkidsTestModels/ORkidsTestInstance.cs",
-      "cshtmlTemplateDirectory": "Templates/ORKids/ORkidsTestTemplate.cshtml",
-      "jsonDataLocationDirectory": "ReferenceDataJsons/ORKids/ORkidsTestData.json"
-    },
-    {
       "name": "TestersRFF",
       "displayName": "TestersRFF",
       "assessmentTypeDirectory": "Models/RFI/TestersRFFModels/TestersRFFAssessment.cs",
