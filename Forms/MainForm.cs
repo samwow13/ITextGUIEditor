@@ -680,6 +680,9 @@ namespace iTextDesignerWithGUI.Forms
 
         private void BackToSelection_Click(object sender, EventArgs e)
         {
+            // Stop the template watcher before navigating back to selection
+            _templateWatcher?.StopWatching();
+            
             // Create and show the AssessmentTypeSelector form
             var selector = new AssessmentTypeSelector();
             this.Hide(); // Hide this form instead of closing it immediately
@@ -694,8 +697,9 @@ namespace iTextDesignerWithGUI.Forms
             }
             else
             {
-                // If user cancelled, just show this form again
+                // If user cancelled, just show this form again and restart the watcher
                 this.Show();
+                _templateWatcher?.StartWatching();
             }
         }
 

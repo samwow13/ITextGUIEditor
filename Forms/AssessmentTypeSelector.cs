@@ -218,15 +218,25 @@ namespace iTextDesignerWithGUI.Forms
             {
                 Dock = DockStyle.Fill,
                 RowCount = 1,
-                ColumnCount = 2,
+                ColumnCount = 1,
                 Margin = new Padding(0, 10, 0, 0), // Added 10px top margin for spacing between dropdown and buttons
                 Height = 45 // Taller buttons
             };
-            buttonsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50f));
-            buttonsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50f));
+
+            // Create a flow layout panel for the buttons to ensure they're centered
+            var buttonsFlowPanel = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                FlowDirection = FlowDirection.LeftToRight,
+                WrapContents = false,
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                Anchor = AnchorStyles.None // This centers the panel
+            };
 
             // Button base style
-            var buttonSize = new Size(120, 40); // Larger buttons
+            var okButtonSize = new Size(120, 40); // OK button size
+            var cancelButtonSize = new Size(135, 40); // Cancel button size
             var buttonMargin = new Padding(5, 0, 5, 0);
             var buttonFont = new Font("Segoe UI", 9F, FontStyle.Regular);
             var buttonPadding = new Padding(10, 5, 10, 5);
@@ -241,9 +251,8 @@ namespace iTextDesignerWithGUI.Forms
                 BackColor = Color.FromArgb(0, 120, 212),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
-                Size = buttonSize,
+                Size = okButtonSize,
                 Margin = buttonMargin,
-                Height = buttonSize.Height,
                 Enabled = false // Initially disabled since no assessment is selected yet
             };
             okButton.Click += (s, e) =>
@@ -272,16 +281,23 @@ namespace iTextDesignerWithGUI.Forms
                 FlatStyle = FlatStyle.Flat,
                 BackColor = Color.White,
                 ForeColor = Color.Black,
-                Size = buttonSize,
-                Margin = buttonMargin,
-                Height = buttonSize.Height
+                Size = cancelButtonSize,
+                Margin = buttonMargin
             };
             cancelButton.FlatAppearance.BorderColor = Color.FromArgb(0, 120, 212);
             cancelButton.FlatAppearance.BorderSize = 1;
             cancelButton.Click += (s, e) => this.Close();
 
-            buttonsPanel.Controls.Add(okButton, 0, 0);
-            buttonsPanel.Controls.Add(cancelButton, 1, 0);
+            // Add buttons to the flow panel
+            buttonsFlowPanel.Controls.Add(okButton);
+            buttonsFlowPanel.Controls.Add(cancelButton);
+            
+            // Center the flow panel
+            buttonsFlowPanel.Left = (buttonsPanel.Width - buttonsFlowPanel.Width) / 2;
+            
+            // Add the flow panel to the buttons panel
+            buttonsPanel.Controls.Add(buttonsFlowPanel, 0, 0);
+            
             assessmentSelectionContainer.Controls.Add(buttonsPanel, 0, 1);
 
             mainContainer.Controls.Add(assessmentSelectionContainer, 0, 3);
