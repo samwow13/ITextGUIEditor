@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Text.Json;
 using System.Collections.Generic;
 using iTextDesignerWithGUI.Models;
+using iTextDesignerWithGUI.Services;
 
 namespace iTextDesignerWithGUI.Controls
 {
@@ -22,12 +23,13 @@ namespace iTextDesignerWithGUI.Controls
         public JsonChecklistControl()
         {
             InitializeComponent();
-            _progressManager = new ChecklistProgressManager(
-                System.IO.Path.Combine(
-                    AppDomain.CurrentDomain.BaseDirectory, 
-                    "TempStorage"
-                )
-            );
+            
+            // Use ProjectDirectoryService to get the correct persistent data directory
+            var projectDirService = new ProjectDirectoryService();
+            string storagePath = projectDirService.EnsureDirectoryExists("PersistentDataJSON\\PersistentJsonChecklistProgress");
+            
+            // Initialize the progress manager with the correct path
+            _progressManager = new ChecklistProgressManager(storagePath);
         }
 
         private void InitializeComponent()
