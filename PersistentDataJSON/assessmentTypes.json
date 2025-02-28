@@ -25,12 +25,12 @@
       "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellness/TestRazorData.json"
     },
     {
-      "name": "HotlineAssessment",
-      "displayName": "HotlineAssessment",
-      "assessmentTypeDirectory": "Models/HealthAndWellness/HotlineAssessmentModels/HotlineAssessmentAssessment.cs",
-      "assessmentDataInstanceDirectory": "Models/HealthAndWellness/HotlineAssessmentModels/HotlineAssessmentInstance.cs",
-      "cshtmlTemplateDirectory": "Templates/HealthAndWellness/HotlineAssessmentTemplate.cshtml",
-      "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellness/HotlineAssessmentData.json"
+      "name": "Tester",
+      "displayName": "Tester",
+      "assessmentTypeDirectory": "Models/Hotline/TesterModels/TesterAssessment.cs",
+      "assessmentDataInstanceDirectory": "Models/Hotline/TesterModels/TesterInstance.cs",
+      "cshtmlTemplateDirectory": "Templates/Hotline/TesterTemplate.cshtml",
+      "jsonDataLocationDirectory": "ReferenceDataJsons/Hotline/TesterData.json"
     }
   ]
 }

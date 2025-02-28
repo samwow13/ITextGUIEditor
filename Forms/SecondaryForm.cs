@@ -13,6 +13,7 @@ using System.IO;
 using System.Text;
 using System.Linq;
 using iTextDesignerWithGUI.Services;
+using System.Diagnostics;
 
 namespace iTextDesignerWithGUI.Forms
 {
@@ -253,6 +254,10 @@ namespace iTextDesignerWithGUI.Forms
                 
                 string templatePath = projectDirService.GetFilePath(
                     matchingAssessment.Value.GetProperty("cshtmlTemplateDirectory").GetString());
+                
+                // Get the reference JSON data path
+                string jsonDataPath = projectDirService.GetFilePath(
+                    matchingAssessment.Value.GetProperty("jsonDataLocationDirectory").GetString());
 
                 // Global CSS is always in the same location
                 string cssPath = projectDirService.GetFilePath("Templates/globalStyles.css");
@@ -274,6 +279,17 @@ namespace iTextDesignerWithGUI.Forms
                 {
                     MessageBox.Show($"CSS file not found: {cssPath}", "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
+                }
+
+                // Check if JSON reference data exists (don't fail if it doesn't)
+                string jsonDataContent = "// No reference JSON data found";
+                if (File.Exists(jsonDataPath))
+                {
+                    jsonDataContent = File.ReadAllText(jsonDataPath);
+                }
+                else
+                {
+                    Debug.WriteLine($"Warning: JSON reference data file not found: {jsonDataPath}");
                 }
 
                 // Read the content of all files
@@ -302,8 +318,13 @@ namespace iTextDesignerWithGUI.Forms
                 clipboardContent.AppendLine("```");
                 clipboardContent.AppendLine();
                 
-                clipboardContent.AppendLine("Please use the model above and create a filled-in instance of this model " +
-                                             "with appropriate sample data, I want an output of an cshtml document only, and utilize as many global styles as possible.");
+                clipboardContent.AppendLine("// REFERENCE JSON DATA: " + Path.GetFileName(jsonDataPath));
+                clipboardContent.AppendLine("```json");
+                clipboardContent.AppendLine(jsonDataContent);
+                clipboardContent.AppendLine("```");
+                clipboardContent.AppendLine();
+                
+                clipboardContent.AppendLine("Please use the model above and the globalStyles.css referenced above to generate a cshtml document (the service injects via itext in C#). The model is an instance of the data found in the json file. Do not generate Bootstrap styles and only include a link to <link href=\"globalStyles.css\" rel=\"stylesheet\">     ");
 
                 // Copy to clipboard
                 Clipboard.SetText(clipboardContent.ToString());

@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace iTextDesignerWithGUI.Services
 {
@@ -17,8 +18,9 @@ namespace iTextDesignerWithGUI.Services
         private readonly ProjectDirectoryService _directoryService;
         private readonly System.Windows.Forms.Timer _cooldownTimer;
         private bool _isDisposed;
-        private const int COOLDOWN_PERIOD = 2000; // 2 second cooldown
+        private const int COOLDOWN_PERIOD = 5000; // 5 second cooldown
         private bool _isInCooldown;
+        private const int PRE_PROCESS_DELAY = 1000; // 1 second delay before processing changes
 
         /// <summary>
         /// Initializes a new instance of the TemplateWatcherService class.
@@ -144,7 +146,7 @@ namespace iTextDesignerWithGUI.Services
             }
         }
 
-        private void OnTemplateFileChanged(object sender, FileSystemEventArgs e)
+        private async void OnTemplateFileChanged(object sender, FileSystemEventArgs e)
         {
             Debug.WriteLine($"File change detected: {e.ChangeType} - {e.FullPath}");
             
@@ -154,6 +156,9 @@ namespace iTextDesignerWithGUI.Services
                 return;
             }
 
+            // Add a short delay to allow file operations to complete
+            await Task.Delay(PRE_PROCESS_DELAY);
+            
             if (_uiControl.InvokeRequired)
             {
                 _uiControl.BeginInvoke(new Action(() => HandleFileChange()));

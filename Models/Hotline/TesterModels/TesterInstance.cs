@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace iTextDesignerWithGUI.Models.HotlineAssessmentModels
+namespace iTextDesignerWithGUI.Models.TesterModels
 {
-    public class HotlineAssessmentInstance
+    public class TesterInstance
     {
         [JsonProperty("model")]
         public ModelData Model { get; set; }
