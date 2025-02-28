@@ -101,7 +101,7 @@ namespace iTextDesignerWithGUI.Forms
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.Size = new System.Drawing.Size(400, 350); // Increased height to ensure buttons are visible
+            this.Size = new System.Drawing.Size(400, 300); // Increased height to ensure buttons are visible
             this.Padding = new Padding(20);
             this.BackColor = Color.White;
 
@@ -201,7 +201,7 @@ namespace iTextDesignerWithGUI.Forms
                 Text = "+",
                 Font = new Font("Segoe UI", 12F, FontStyle.Bold),
                 Size = new Size(30, 25),
-                Margin = new Padding(5, 3, 0, 0),
+                Margin = new Padding(5, 2, 0, 0), // Changed from 3 to 0 to move it up by 3 pixels
                 BackColor = Color.FromArgb(0, 120, 215),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
