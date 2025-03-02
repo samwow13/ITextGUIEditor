@@ -25,20 +25,12 @@
       "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellness/TestRazorData.json"
     },
     {
-      "name": "TestersRFF",
-      "displayName": "TestersRFF",
-      "assessmentTypeDirectory": "Models/RFI/TestersRFFModels/TestersRFFAssessment.cs",
-      "assessmentDataInstanceDirectory": "Models/RFI/TestersRFFModels/TestersRFFInstance.cs",
-      "cshtmlTemplateDirectory": "Templates/RFI/TestersRFFTemplate.cshtml",
-      "jsonDataLocationDirectory": "ReferenceDataJsons/RFI/TestersRFFData.json"
-    },
-    {
-      "name": "KansasTest",
-      "displayName": "KansasTest",
-      "assessmentTypeDirectory": "Models/Hotline/KansasTestModels/KansasTestAssessment.cs",
-      "assessmentDataInstanceDirectory": "Models/Hotline/KansasTestModels/KansasTestInstance.cs",
-      "cshtmlTemplateDirectory": "Templates/Hotline/KansasTestTemplate.cshtml",
-      "jsonDataLocationDirectory": "ReferenceDataJsons/Hotline/KansasTestData.json"
+      "name": "OralHealthRazer",
+      "displayName": "OralHealthRazer",
+      "assessmentTypeDirectory": "Models/HealthAndWellness/OralHealthRazerModels/OralHealthRazerAssessment.cs",
+      "assessmentDataInstanceDirectory": "Models/HealthAndWellness/OralHealthRazerModels/OralHealthRazerInstance.cs",
+      "cshtmlTemplateDirectory": "Templates/HealthAndWellness/OralHealthRazerTemplate.cshtml",
+      "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellness/OralHealthRazerData.json"
     }
   ]
 }

@@ -605,6 +605,9 @@ namespace iTextDesignerWithGUI.Forms
                 var item = _referenceData[e.RowIndex];
                 try
                 {
+                    // Temporarily disable the template watcher to prevent unwanted reloads
+                    _templateWatcher?.StopWatching();
+                    
                     // Use a simple "Entry X" naming scheme instead of extracting names from different data types
                     string name = $"Entry {e.RowIndex + 1}";
                     
@@ -669,6 +672,19 @@ namespace iTextDesignerWithGUI.Forms
                     {
                         errorForm.ShowDialog(this);
                     }
+                }
+                finally
+                {
+                    // Re-enable the template watcher after a delay
+                    Task.Run(async () =>
+                    {
+                        // Wait 3 seconds before re-enabling to avoid picking up changes from the PDF generation
+                        await Task.Delay(3000);
+                        if (!_isReloading) // Only restart if we're not already reloading
+                        {
+                            _templateWatcher?.StartWatching();
+                        }
+                    });
                 }
             }
         }

@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace iTextDesignerWithGUI.Models.KansasTestModels
+namespace iTextDesignerWithGUI.Models.OralHealthRazerModels
 {
-    public class KansasTestInstance
+    public class OralHealthRazerInstance
     {
         [JsonProperty("model")]
         public ModelData Model { get; set; }
