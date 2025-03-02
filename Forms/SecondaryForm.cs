@@ -342,6 +342,9 @@ namespace iTextDesignerWithGUI.Forms
                 clipboardContent.AppendLine("    - Use DateTime.TryParse() instead of DateTime.Parse()");
                 clipboardContent.AppendLine("    - Use decimal.TryParse() or double.TryParse() for numeric values");
                 clipboardContent.AppendLine("    - Always include null checks and fallback values");
+                clipboardContent.AppendLine("    - When using nullable properties with the null conditional operator (?.) in conditions:");
+                clipboardContent.AppendLine("      CORRECT: @(Model.Model?.IsActive == true ? \"Yes\" : \"No\")");
+                clipboardContent.AppendLine("      INCORRECT: @(Model.Model?.IsActive ? \"Yes\" : \"No\") // This will cause a nullable bool error");
                 clipboardContent.AppendLine("11. When writing conditional logic blocks in Razor:");
                 clipboardContent.AppendLine("    - Avoid nesting @{ } code blocks - this causes parsing errors");
                 clipboardContent.AppendLine("    - Declare variables in a single @{ } block at the beginning of complex conditional sections");

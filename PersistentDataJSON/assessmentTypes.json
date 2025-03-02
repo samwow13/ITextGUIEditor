@@ -31,6 +31,14 @@
       "assessmentDataInstanceDirectory": "Models/RFI/TestersRFFModels/TestersRFFInstance.cs",
       "cshtmlTemplateDirectory": "Templates/RFI/TestersRFFTemplate.cshtml",
       "jsonDataLocationDirectory": "ReferenceDataJsons/RFI/TestersRFFData.json"
+    },
+    {
+      "name": "KansasTest",
+      "displayName": "KansasTest",
+      "assessmentTypeDirectory": "Models/Hotline/KansasTestModels/KansasTestAssessment.cs",
+      "assessmentDataInstanceDirectory": "Models/Hotline/KansasTestModels/KansasTestInstance.cs",
+      "cshtmlTemplateDirectory": "Templates/Hotline/KansasTestTemplate.cshtml",
+      "jsonDataLocationDirectory": "ReferenceDataJsons/Hotline/KansasTestData.json"
     }
   ]
 }
