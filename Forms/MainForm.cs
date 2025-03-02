@@ -321,6 +321,17 @@ namespace iTextDesignerWithGUI.Forms
             {
                 // Save the window position before closing
                 SaveWindowPosition();
+                
+                // Ensure secondary form is closed and disposed
+                if (_secondaryForm != null && !_secondaryForm.IsDisposed)
+                {
+                    if (_secondaryForm.Visible)
+                    {
+                        _secondaryForm.Close();
+                    }
+                    _secondaryForm.Dispose();
+                    _secondaryForm = null;
+                }
 
                 if (!string.IsNullOrEmpty(_currentPdfPath) && File.Exists(_currentPdfPath))
                 {
@@ -718,6 +729,14 @@ namespace iTextDesignerWithGUI.Forms
 
                 // Save current window position before doing anything else - do this in parallel
                 var saveWindowTask = Task.Run(() => SaveWindowPosition());
+
+                // Close the secondary form if it exists and is visible
+                if (_secondaryForm != null && _secondaryForm.Visible)
+                {
+                    _secondaryForm.Close();
+                    _secondaryForm.Dispose();
+                    _secondaryForm = null; // Clear the reference
+                }
 
                 // Show the building message
                 _statusLabel.Text = "Building application...";
