@@ -1,151 +1,176 @@
 [
   {
-    "model": {
-      "id": 1,
-      "name": "OralHealthRazer Sample 1",
-      "description": "Primary sample data for OralHealthRazer",
-      "created_at": "2025-03-02T07:26:39Z",
-      "is_active": true
+    "child_info": {
+      "child_name": "Alice Smith",
+      "case_number": "67890",
+      "assessment_date": "2024-03-12",
+      "date_of_birth": "2019-09-01",
+      "recent_or_upcoming_dental_appts": "next Monday",
+      "nursing_note": "Child appears cooperative. Routine check-up.",
+      "required_comment": "Follow up on dietary habits.",
+      "rn_completing_assessment": "Maria Gonzalez"
     },
-    "properties": {
-      "sections": [
-        {
-          "title": "Section 1",
-          "fields": [
-            {
-              "name": "Field1",
-              "type": "text",
-              "value": "Sample value 1"
-            },
-            {
-              "name": "Field2",
-              "type": "number",
-              "value": 42
-            }
-          ]
-        },
-        {
-          "title": "Section 2",
-          "fields": [
-            {
-              "name": "Field3",
-              "type": "checkbox",
-              "value": true
-            },
-            {
-              "name": "Field4",
-              "type": "date",
-              "value": "2025-03-02"
-            }
-          ]
-        }
-      ]
-    }
+    "risk_factors": {
+      "mother_active_decay": "No",
+      "mother_no_dentist": "Yes",
+      "bottle_usage": "No",
+      "frequent_snacking": "Yes",
+      "special_health_care_needs": "No",
+      "medicaid_eligible": "No"
+    },
+    "protective_factors": {
+      "existing_dental_home": true,
+      "fluoridated_water": true,
+      "fluoride_varnish": "Yes",
+      "brushing_twice_daily": true
+    },
+    "clinical_findings": {
+      "white_spots": false,
+      "obvious_decay": false,
+      "fillings_present": false,
+      "plaque_accumulation": true,
+      "gingivitis": false,
+      "teeth_present": true,
+      "healthy_teeth": true
+    },
+    "assessment_plan": {
+      "caries_risk": "Low",
+      "completed_actions": {
+        "anticipatory_guidance": true,
+        "fluoride_varnish": true,
+        "dental_referral": false
+      }
+    },
+    "self_management_goals": {
+      "regular_dental_visits": true,
+      "dental_treatment_for_caregivers": false,
+      "brush_twice_daily": true,
+      "use_fluoride_toothpaste": true,
+      "wean_bottle": false,
+      "less_or_nojuice": true,
+      "water_in_sippy": true,
+      "drink_tap": true,
+      "healthy_snacks": true,
+      "less_or_nojunkfood": true,
+      "no_soda": true,
+      "xylitol": false
+    },
+    "nursing_recommendations": "Maintain current routine and schedule next check-up in 6 months."
   },
   {
-    "model": {
-      "id": 2,
-      "name": "OralHealthRazer Sample 2",
-      "description": "Secondary sample data for OralHealthRazer",
-      "created_at": "2025-02-23T07:26:39Z",
-      "is_active": true
+    "child_info": {
+      "child_name": "Benjamin Lee",
+      "case_number": "54321",
+      "assessment_date": "2024-04-20",
+      "date_of_birth": "2021-01-10",
+      "recent_or_upcoming_dental_appts": "completed last week",
+      "nursing_note": "Exhibits mild anxiety during dental exams.",
+      "required_comment": "Reassure and use distraction techniques.",
+      "rn_completing_assessment": "Karen Johnson"
     },
-    "properties": {
-      "sections": [
-        {
-          "title": "Personal Information",
-          "fields": [
-            {
-              "name": "FullName",
-              "type": "text",
-              "value": "Jane Smith"
-            },
-            {
-              "name": "Age",
-              "type": "number",
-              "value": 35
-            },
-            {
-              "name": "Email",
-              "type": "email",
-              "value": "jane.smith@example.com"
-            }
-          ]
-        },
-        {
-          "title": "Preferences",
-          "fields": [
-            {
-              "name": "ReceiveNotifications",
-              "type": "checkbox",
-              "value": false
-            },
-            {
-              "name": "Theme",
-              "type": "select",
-              "value": "Dark"
-            }
-          ]
-        }
-      ]
-    }
+    "risk_factors": {
+      "mother_active_decay": "Yes",
+      "mother_no_dentist": "No",
+      "bottle_usage": "Yes",
+      "frequent_snacking": "No",
+      "special_health_care_needs": "No",
+      "medicaid_eligible": "Yes"
+    },
+    "protective_factors": {
+      "existing_dental_home": false,
+      "fluoridated_water": false,
+      "fluoride_varnish": "No",
+      "brushing_twice_daily": false
+    },
+    "clinical_findings": {
+      "white_spots": true,
+      "obvious_decay": true,
+      "fillings_present": false,
+      "plaque_accumulation": true,
+      "gingivitis": true,
+      "teeth_present": true,
+      "healthy_teeth": false
+    },
+    "assessment_plan": {
+      "caries_risk": "High",
+      "completed_actions": {
+        "anticipatory_guidance": false,
+        "fluoride_varnish": true,
+        "dental_referral": true
+      }
+    },
+    "self_management_goals": {
+      "regular_dental_visits": false,
+      "dental_treatment_for_caregivers": true,
+      "brush_twice_daily": false,
+      "use_fluoride_toothpaste": false,
+      "wean_bottle": true,
+      "less_or_nojuice": false,
+      "water_in_sippy": false,
+      "drink_tap": false,
+      "healthy_snacks": false,
+      "less_or_nojunkfood": false,
+      "no_soda": false,
+      "xylitol": false
+    },
+    "nursing_recommendations": "Increase parental education on oral hygiene and schedule a dental referral."
   },
   {
-    "model": {
-      "id": 3,
-      "name": "OralHealthRazer Sample 3",
-      "description": "Tertiary sample data for OralHealthRazer",
-      "created_at": "2025-02-16T07:26:39Z",
-      "is_active": false
+    "child_info": {
+      "child_name": "Carlos Rivera",
+      "case_number": "98765",
+      "assessment_date": "2024-05-08",
+      "date_of_birth": "2018-11-25",
+      "recent_or_upcoming_dental_appts": "scheduled for next week",
+      "nursing_note": "Child has shown improvement in brushing technique.",
+      "required_comment": "Monitor for any signs of decay.",
+      "rn_completing_assessment": "Liam Patel"
     },
-    "properties": {
-      "sections": [
-        {
-          "title": "Product Details",
-          "fields": [
-            {
-              "name": "ProductName",
-              "type": "text",
-              "value": "Super Widget Pro"
-            },
-            {
-              "name": "SKU",
-              "type": "text",
-              "value": "WDG-1234-PRO"
-            },
-            {
-              "name": "Price",
-              "type": "currency",
-              "value": 199.99
-            },
-            {
-              "name": "InStock",
-              "type": "checkbox",
-              "value": true
-            }
-          ]
-        },
-        {
-          "title": "Shipping Information",
-          "fields": [
-            {
-              "name": "Weight",
-              "type": "number",
-              "value": 2.5
-            },
-            {
-              "name": "Dimensions",
-              "type": "text",
-              "value": "10 x 8 x 3 inches"
-            },
-            {
-              "name": "ShippingMethod",
-              "type": "select",
-              "value": "Express"
-            }
-          ]
-        }
-      ]
-    }
+    "risk_factors": {
+      "mother_active_decay": "Unknown",
+      "mother_no_dentist": "Unknown",
+      "bottle_usage": "NA",
+      "frequent_snacking": "Yes",
+      "special_health_care_needs": "No",
+      "medicaid_eligible": "Yes"
+    },
+    "protective_factors": {
+      "existing_dental_home": true,
+      "fluoridated_water": true,
+      "fluoride_varnish": "Unknown",
+      "brushing_twice_daily": true
+    },
+    "clinical_findings": {
+      "white_spots": false,
+      "obvious_decay": false,
+      "fillings_present": true,
+      "plaque_accumulation": false,
+      "gingivitis": false,
+      "teeth_present": true,
+      "healthy_teeth": true
+    },
+    "assessment_plan": {
+      "caries_risk": "Low",
+      "completed_actions": {
+        "anticipatory_guidance": true,
+        "fluoride_varnish": true,
+        "dental_referral": false
+      }
+    },
+    "self_management_goals": {
+      "regular_dental_visits": true,
+      "dental_treatment_for_caregivers": false,
+      "brush_twice_daily": true,
+      "use_fluoride_toothpaste": true,
+      "wean_bottle": false,
+      "less_or_nojuice": true,
+      "water_in_sippy": true,
+      "drink_tap": true,
+      "healthy_snacks": true,
+      "less_or_nojunkfood": true,
+      "no_soda": true,
+      "xylitol": true
+    },
+    "nursing_recommendations": "Continue with current regimen and re-assess in 6 months for any changes."
   }
 ]

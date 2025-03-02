@@ -5,68 +5,289 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OralHealthRazer</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Oral Health Risk Assessment Tool</title>
     <link href="globalStyles.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <!-- Header with Title -->
-        <header class="my-4">
-            <h1 class="text-center">OralHealthRazer Setup Instructions</h1>
+        <!-- Header with Title and Graphic -->
+        <header>
+            <div class="title">
+                Oral Health Risk
+                <br>
+                Assessment Tool
+            </div>
+            <div class="graphic">
+                <img src="images/ODHSgraphic.PNG" alt="ODHS Graphic">
+            </div>
         </header>
 
-        <!-- Setup Instructions -->
-        <div class="content">
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h2 class="h4 mb-0">Step 1: Fixing the JSON</h2>
-                </div>
-                <div class="card-body">
-                    <p>Close this application and find the ReferenceDataJsons folder for your assessment type:</p>
-                    
-                    <p>Your JSON file will be located at:</p>
-                    <code class="d-block bg-light p-2 mb-3">C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\ReferenceDataJsons\HealthAndWellness\OralHealthRazerData.json</code>
-                    
-                    <p>Create and add your JSON here. You need to have an array of your initial JSON structure with at least 3 entries to work with the GUI.</p>
-                </div>
-            </div>
+        <!-- Introduction text -->
+        <div class="intro-text">
+            <p>The American Academy of Pediatrics (AAP) has developed this tool to aid in the implementation of oral health risk assessment during health supervision visits. This tool has been subsequently reviewed and endorsed by the National Interprofessional Initiative on Oral Health.</p>
+            <p><strong>Instructions for Use</strong><br>
+            This tool is intended for documenting caries risk of the child, however, two risk factors are based on the mother or primary caregiver's oral health. All other factors and findings should be documented based on the child.</p>
+        </div>
+        
+        <!-- Child Information Table -->
+        <table class="full-table">
+            <tr>
+                <td width="25%"><strong>Child's name:</strong><br>@(Model?.ChildInfo?.ChildName ?? "")</td>
+                <td width="45%"><strong>Case number/person number:</strong><br>@(Model?.ChildInfo?.CaseNumber ?? "")</td>
+                <td width="30%"><strong>Assessment Date:</strong><br>@(Model?.ChildInfo?.AssessmentDate ?? "")</td>
+            </tr>
+            <tr>
+                <td width="25%"><strong>Date of Birth:</strong><br>@(Model?.ChildInfo?.DateOfBirth ?? "")</td>
+                <td colspan="2"><strong>Recent or upcoming dental appointments:</strong><br>@(Model?.ChildInfo?.RecentOrUpcomingDentalAppts ?? "")</td>
+            </tr>
+            <tr>
+                <td colspan="3"><strong>Nursing Note:</strong><br>@(Model?.ChildInfo?.NursingNote ?? "")</td>
+            </tr>
+            <tr>
+                <td colspan="3"><strong>Required comment if assessment not completed (refused, recent dentist appointment, etc.):</strong><br>@(Model?.ChildInfo?.RequiredComment ?? "")</td>
+            </tr>
+            <tr>
+                <td colspan="3"><strong>RN Completing Assessment:</strong><br>@(Model?.ChildInfo?.RNCompletingAssessment ?? "")</td>
+            </tr>
+        </table>
+        
+        <!-- Three Column Section for Risk Factors, Protective Factors, Clinical Findings -->
+        <div class="three-column-wrapper">
+            <table class="three-column-section">
+                <tr>
+                    <td><h2>Risk Factors</h2></td>
+                    <td><h2>Protective Factors</h2></td>
+                    <td><h2>Clinical Findings</h2></td>
+                </tr>
+                <tr>
+                    <td>
+                        <table class="section-table">
+                            <tr>
+                                <td>Mother or primary caregiver had active decay in the past 12 months:</td>
+                                <td>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.RiskFactors?.MotherActiveDecay == "Yes" ? "class=\"checked\"" : "") disabled> Yes
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.RiskFactors?.MotherActiveDecay == "No" ? "class=\"checked\"" : "") disabled> No
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.RiskFactors?.MotherActiveDecay == "Unknown" ? "class=\"checked\"" : "") disabled> Unknown
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Mother or primary caregiver does not have a dentist:</td>
+                                <td>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.RiskFactors?.MotherNoDentist == "Yes" ? "class=\"checked\"" : "") disabled> Yes
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.RiskFactors?.MotherNoDentist == "No" ? "class=\"checked\"" : "") disabled> No
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.RiskFactors?.MotherNoDentist == "Unknown" ? "class=\"checked\"" : "") disabled> Unknown
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Continual bottle/sippy cup use with fluid other than water:</td>
+                                <td>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.RiskFactors?.BottleUsage == "Yes" ? "class=\"checked\"" : "") disabled> Yes
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.RiskFactors?.BottleUsage == "No" ? "class=\"checked\"" : "") disabled> No
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.RiskFactors?.BottleUsage == "NA" ? "class=\"checked\"" : "") disabled> NA
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Frequent snacking:</td>
+                                <td>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.RiskFactors?.FrequentSnacking == "Yes" ? "class=\"checked\"" : "") disabled> Yes
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.RiskFactors?.FrequentSnacking == "No" ? "class=\"checked\"" : "") disabled> No
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.RiskFactors?.FrequentSnacking == "NA" ? "class=\"checked\"" : "") disabled> NA
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Special health care needs:</td>
+                                <td>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.RiskFactors?.SpecialHealthCareNeeds == "Yes" ? "class=\"checked\"" : "") disabled> Yes
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.RiskFactors?.SpecialHealthCareNeeds == "No" ? "class=\"checked\"" : "") disabled> No
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.RiskFactors?.SpecialHealthCareNeeds == "NA" ? "class=\"checked\"" : "") disabled> NA
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Medicaid eligible:</td>
+                                <td>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.RiskFactors?.MedicaidEligible == "Yes" ? "class=\"checked\"" : "") disabled> Yes
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.RiskFactors?.MedicaidEligible == "No" ? "class=\"checked\"" : "") disabled> No
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.RiskFactors?.MedicaidEligible == "Unknown" ? "class=\"checked\"" : "") disabled> Unknown
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="section-table">
+                            <tr>
+                                <td>Existing dental home:</td>
+                                <td>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ProtectiveFactors?.ExistingDentalHome ?? false ? "class=\"checked\"" : "") disabled> Yes
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ProtectiveFactors?.ExistingDentalHome ?? false ? "" : "class=\"checked\"") disabled> No
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Drinks fluoridated water:</td>
+                                <td>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ProtectiveFactors?.FluoridatedWater ?? false ? "class=\"checked\"" : "") disabled> Yes
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ProtectiveFactors?.FluoridatedWater ?? false ? "" : "class=\"checked\"") disabled> No
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Fluoride varnish in the last 6 months:</td>
+                                <td>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ProtectiveFactors?.FluorideVarnish == "Yes" ? "class=\"checked\"" : "") disabled> Yes
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ProtectiveFactors?.FluorideVarnish == "No" ? "class=\"checked\"" : "") disabled> No
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ProtectiveFactors?.FluorideVarnish == "Unknown" ? "class=\"checked\"" : "") disabled> Unknown
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Brushes with fluoride toothpaste twice daily:</td>
+                                <td>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ProtectiveFactors?.BrushingTwiceDaily ?? false ? "class=\"checked\"" : "") disabled> Yes
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ProtectiveFactors?.BrushingTwiceDaily ?? false ? "" : "class=\"checked\"") disabled> No
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="section-table">
+                            <tr>
+                                <td>White spots or visible decalcifications in the past 12 months:</td>
+                                <td>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ClinicalFindings?.WhiteSpots ?? false ? "class=\"checked\"" : "") disabled> Yes
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ClinicalFindings?.WhiteSpots ?? false ? "" : "class=\"checked\"") disabled> No
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Obvious decay:</td>
+                                <td>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ClinicalFindings?.ObviousDecay ?? false ? "class=\"checked\"" : "") disabled> Yes
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ClinicalFindings?.ObviousDecay ?? false ? "" : "class=\"checked\"") disabled> No
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Restorations (fillings) present:</td>
+                                <td>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ClinicalFindings?.FillingsPresent ?? false ? "class=\"checked\"" : "") disabled> Yes
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ClinicalFindings?.FillingsPresent ?? false ? "" : "class=\"checked\"") disabled> No
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Visible plaque accumulation:</td>
+                                <td>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ClinicalFindings?.PlaqueAccumulation ?? false ? "class=\"checked\"" : "") disabled> Yes
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ClinicalFindings?.PlaqueAccumulation ?? false ? "" : "class=\"checked\"") disabled> No
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Gingivitis (inflammation of the gums):</td>
+                                <td>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ClinicalFindings?.Gingivitis ?? false ? "class=\"checked\"" : "") disabled> Yes
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ClinicalFindings?.Gingivitis ?? false ? "" : "class=\"checked\"") disabled> No
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Teeth present:</td>
+                                <td>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ClinicalFindings?.TeethPresent ?? false ? "class=\"checked\"" : "") disabled> Yes
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ClinicalFindings?.TeethPresent ?? false ? "" : "class=\"checked\"") disabled> No
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Healthy teeth:</td>
+                                <td>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ClinicalFindings?.HealthyTeeth ?? false ? "class=\"checked\"" : "") disabled> Yes
+                                    </div><br>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" @(Model?.ClinicalFindings?.HealthyTeeth ?? false ? "" : "class=\"checked\"") disabled> No
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
 
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h2 class="h4 mb-0">Step 2: Fixing the C# Model</h2>
-                </div>
-                <div class="card-body">
-                    <p>Next, go to the Models Folder for your assessment type:</p>
-                    
-                    <p>Your model instance file will be located at:</p>
-                    <code class="d-block bg-light p-2 mb-3">C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Models\HealthAndWellness\OralHealthRazerModels\OralHealthRazerInstance.cs</code>
-                    
-                    <p>Using ChatGPT, you can quickly create a model by copying in one of your JSON entries and asking for a C# model to be built.</p>
-                </div>
-            </div>
-
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h2 class="h4 mb-0">Step 3: Getting access to the data</h2>
-                </div>
-                <div class="card-body">
-                    <p>Find the HTML template that was generated at:</p>
-                    <code class="d-block bg-light p-2 mb-3">C:\Users\samwo\OneDrive\Desktop\Python Code\ITextGUIProject2_22\Templates\HealthAndWellness\OralHealthRazerTemplate.cshtml</code>
-                    
-                    <p>Then, simply remove the old models references like <code>@@@@Model.User.Name</code>, while keeping the @@@@model declaration on the 1st line of code. This line of code passes your entire data set into the template.</p>
-                </div>
-            </div>
-
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h2 class="h4 mb-0">Step 4: Referencing globalStyles.css</h2>
-                </div>
-                <div class="card-body">
-                    <p>Refer to other templates in the project to find out how to reference the globalStyles.css sheet. You can see how it's done in this example:</p>
-                    <code class="d-block bg-light p-2 mb-3">&lt;link href="globalStyles.css" rel="stylesheet"&gt;</code>
-                </div>
-            </div>
+        <!-- Placeholder for future content -->
+        <div class="content mt-4">
+            <!-- Additional content will be added in future updates -->
         </div>
     </div>
 
