@@ -42,13 +42,14 @@ namespace iTextDesignerWithGUI.Forms
             var mainContainer = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
-                RowCount = 8,
+                RowCount = 9,
                 ColumnCount = 1,
                 Padding = new Padding(20),
                 BackColor = Color.White
             };
 
             // Add rows with proper sizing
+            mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize)); 
             mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize)); 
             mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize)); 
             mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize)); 
@@ -167,6 +168,42 @@ namespace iTextDesignerWithGUI.Forms
             };
             mainContainer.Controls.Add(statusLabel, 0, 6);
 
+            // Create a panel for the Template & Project Management section
+            var managementPanel = new Panel
+            {
+                Dock = DockStyle.Fill,
+                Padding = new Padding(15),
+                Margin = new Padding(0, 0, 0, 20),
+                BackColor = Color.FromArgb(248, 249, 250),
+                BorderStyle = BorderStyle.FixedSingle
+            };
+
+            // Container for the management section content
+            var managementContainer = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                RowCount = 2,
+                ColumnCount = 1,
+                Width = 400,
+                AutoSize = true,
+                BackColor = Color.Transparent
+            };
+            managementContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            managementContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+
+            // Section title for management links
+            var managementSectionLabel = new Label
+            {
+                Text = "Template & Project Management",
+                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(33, 37, 41),
+                AutoSize = true,
+                Margin = new Padding(0, 0, 0, 15),
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleCenter
+            };
+            managementContainer.Controls.Add(managementSectionLabel, 0, 0);
+
             // Create a horizontal layout for the links
             var linksPanel = new TableLayoutPanel
             {
@@ -174,42 +211,49 @@ namespace iTextDesignerWithGUI.Forms
                 ColumnCount = 2,
                 RowCount = 1,
                 AutoSize = true,
-                Margin = new Padding(0, 0, 0, 20)
+                CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
+                Padding = new Padding(5)
             };
             linksPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             linksPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
 
-            // Add project link
+            // Add project button-like link
             var addProjectLink = new LinkLabel
             {
                 Text = "Add Project",
-                Font = new Font("Segoe UI", 10F, FontStyle.Regular),
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
                 LinkColor = Color.FromArgb(40, 167, 69), // Success color
-                ActiveLinkColor = Color.FromArgb(0, 123, 255),
+                ActiveLinkColor = Color.FromArgb(32, 136, 55),
                 AutoSize = true,
                 TextAlign = ContentAlignment.MiddleCenter,
                 Dock = DockStyle.Fill,
-                Cursor = Cursors.Hand
+                Cursor = Cursors.Hand,
+                Padding = new Padding(0, 10, 0, 10),
+                LinkBehavior = LinkBehavior.HoverUnderline
             };
             addProjectLink.LinkClicked += (sender, e) => AddProjectButton_Click(sender, e);
             linksPanel.Controls.Add(addProjectLink, 0, 0);
 
-            // Template manager link - styled as a more appropriate navigation element
+            // Delete assessment button-like link
             var templateManagerLink = new LinkLabel
             {
                 Text = "Delete an Assessment",
-                Font = new Font("Segoe UI", 10F, FontStyle.Regular),
-                LinkColor = Color.FromArgb(23, 162, 184), // Info color
-                ActiveLinkColor = Color.FromArgb(0, 123, 255),
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                LinkColor = Color.FromArgb(220, 53, 69), // Danger color
+                ActiveLinkColor = Color.FromArgb(189, 33, 48),
                 AutoSize = true,
                 TextAlign = ContentAlignment.MiddleCenter,
                 Dock = DockStyle.Fill,
-                Cursor = Cursors.Hand
+                Cursor = Cursors.Hand,
+                Padding = new Padding(0, 10, 0, 10),
+                LinkBehavior = LinkBehavior.HoverUnderline
             };
             templateManagerLink.LinkClicked += (sender, e) => DeleteTemplateButton_Click(sender, e);
             linksPanel.Controls.Add(templateManagerLink, 1, 0);
 
-            mainContainer.Controls.Add(linksPanel, 0, 7);
+            managementContainer.Controls.Add(linksPanel, 0, 1);
+            managementPanel.Controls.Add(managementContainer);
+            mainContainer.Controls.Add(managementPanel, 0, 7);
 
             // Button panel
             var buttonPanel = new FlowLayoutPanel
