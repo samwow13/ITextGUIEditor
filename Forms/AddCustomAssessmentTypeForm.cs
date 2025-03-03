@@ -34,7 +34,7 @@ namespace iTextDesignerWithGUI.Forms
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.Size = new System.Drawing.Size(500, 470); 
+            this.Size = new System.Drawing.Size(500, 520); 
             this.Padding = new Padding(20);
             this.BackColor = Color.White;
 
@@ -167,21 +167,49 @@ namespace iTextDesignerWithGUI.Forms
             };
             mainContainer.Controls.Add(statusLabel, 0, 6);
 
+            // Create a horizontal layout for the links
+            var linksPanel = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                ColumnCount = 2,
+                RowCount = 1,
+                AutoSize = true,
+                Margin = new Padding(0, 0, 0, 20)
+            };
+            linksPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            linksPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+
+            // Add project link
+            var addProjectLink = new LinkLabel
+            {
+                Text = "Add Project",
+                Font = new Font("Segoe UI", 10F, FontStyle.Regular),
+                LinkColor = Color.FromArgb(40, 167, 69), // Success color
+                ActiveLinkColor = Color.FromArgb(0, 123, 255),
+                AutoSize = true,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Dock = DockStyle.Fill,
+                Cursor = Cursors.Hand
+            };
+            addProjectLink.LinkClicked += (sender, e) => AddProjectButton_Click(sender, e);
+            linksPanel.Controls.Add(addProjectLink, 0, 0);
+
             // Template manager link - styled as a more appropriate navigation element
             var templateManagerLink = new LinkLabel
             {
-                Text = "Manage Templates",
+                Text = "Delete an Assessment",
                 Font = new Font("Segoe UI", 10F, FontStyle.Regular),
                 LinkColor = Color.FromArgb(23, 162, 184), // Info color
                 ActiveLinkColor = Color.FromArgb(0, 123, 255),
                 AutoSize = true,
-                Margin = new Padding(0, 0, 0, 20),
                 TextAlign = ContentAlignment.MiddleCenter,
                 Dock = DockStyle.Fill,
                 Cursor = Cursors.Hand
             };
             templateManagerLink.LinkClicked += (sender, e) => DeleteTemplateButton_Click(sender, e);
-            mainContainer.Controls.Add(templateManagerLink, 0, 7);
+            linksPanel.Controls.Add(templateManagerLink, 1, 0);
+
+            mainContainer.Controls.Add(linksPanel, 0, 7);
 
             // Button panel
             var buttonPanel = new FlowLayoutPanel
@@ -427,6 +455,15 @@ namespace iTextDesignerWithGUI.Forms
             using (var deleteTemplateForm = new DeleteTemplateForm())
             {
                 deleteTemplateForm.ShowDialog();
+            }
+        }
+
+        private void AddProjectButton_Click(object sender, EventArgs e)
+        {
+            // Open the Add Project form
+            using (var addProjectForm = new AddProjectForm())
+            {
+                addProjectForm.ShowDialog();
             }
         }
 

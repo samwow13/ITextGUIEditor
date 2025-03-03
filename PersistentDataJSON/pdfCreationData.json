@@ -1,20 +1,29 @@
 {
-    "projectDirectories": [
-      {
-        "name": "HealthAndWellness",
-        "path": "Templates/HealthAndWellness"
-      },
-      {
-        "name": "Hotline",
-        "path": "Templates/Hotline"
-      },
-      {
-        "name": "ORKids",
-        "path": "Templates/ORKids"
-      },
-      {
-        "name": "RFI",
-        "path": "Templates/RFI"
-      }
-    ]
-  }
+  "ProjectDirectories": [
+    {
+      "Name": "HealthAndWellness",
+      "Path": "Templates/HealthAndWellness",
+      "Forms": []
+    },
+    {
+      "Name": "Hotline",
+      "Path": "Templates/Hotline",
+      "Forms": []
+    },
+    {
+      "Name": "ORKids",
+      "Path": "Templates/ORKids",
+      "Forms": []
+    },
+    {
+      "Name": "RFI",
+      "Path": "Templates/RFI",
+      "Forms": []
+    },
+    {
+      "Name": "HealthAndWellnessProduction",
+      "Path": "Templates/HealthAndWellnessProduction",
+      "Forms": []
+    }
+  ]
+}

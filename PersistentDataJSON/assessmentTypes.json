@@ -31,6 +31,14 @@
       "assessmentDataInstanceDirectory": "Models/HealthAndWellness/OralHealthRazerModels/OralHealthRazerInstance.cs",
       "cshtmlTemplateDirectory": "Templates/HealthAndWellness/OralHealthRazerTemplate.cshtml",
       "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellness/OralHealthRazerData.json"
+    },
+    {
+      "name": "TestProd",
+      "displayName": "TestProd",
+      "assessmentTypeDirectory": "Models/HealthAndWellnessProduction/TestProdModels/TestProdAssessment.cs",
+      "assessmentDataInstanceDirectory": "Models/HealthAndWellnessProduction/TestProdModels/TestProdInstance.cs",
+      "cshtmlTemplateDirectory": "Templates/HealthAndWellnessProduction/TestProdTemplate.cshtml",
+      "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellnessProduction/TestProdData.json"
     }
   ]
 }
