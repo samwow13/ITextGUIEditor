@@ -182,16 +182,29 @@ namespace iTextDesignerWithGUI.Forms
             {
                 Text = "Create a prompt",
                 Location = new Point(20, 20),
-                Size = new Size(300, 24),
+                Size = new Size(240, 24),
                 Font = new Font("Segoe UI", 12F, FontStyle.Bold),
                 ForeColor = Color.DarkSlateBlue
             };
+            
+            // Create a "New Prompt" button next to the heading
+            Button newPromptButton = new Button
+            {
+                Text = "New Prompt",
+                Location = new Point(265, 20),
+                Size = new Size(105, 24),
+                BackColor = Color.FromArgb(230, 240, 255),
+                ForeColor = Color.DarkBlue,
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold)
+            };
+            newPromptButton.Click += NewPromptButton_Click;
+            _toolTip.SetToolTip(newPromptButton, "Create a new prompt or edit existing prompts");
             
             // Create the category ComboBox
             _promptCategoryComboBox = new ComboBox
             {
                 Location = new Point(20, 50),
-                Size = new Size(280, 24),
+                Size = new Size(350, 24),
                 DropDownStyle = ComboBoxStyle.DropDownList
             };
             _promptCategoryComboBox.SelectedIndexChanged += PromptCategory_SelectedIndexChanged;
@@ -200,11 +213,19 @@ namespace iTextDesignerWithGUI.Forms
             _promptListBox = new ListBox
             {
                 Location = new Point(20, 80),
-                Size = new Size(280, 100),
+                Size = new Size(350, 100),
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular),
                 ScrollAlwaysVisible = true
             };
             _promptListBox.SelectedIndexChanged += PromptListBox_SelectedIndexChanged;
+            _promptListBox.DoubleClick += (s, e) => EditSelectedPrompt();
+            
+            // Add context menu to the prompt ListBox for editing
+            ContextMenuStrip promptContextMenu = new ContextMenuStrip();
+            ToolStripMenuItem editMenuItem = new ToolStripMenuItem("Edit");
+            editMenuItem.Click += (s, e) => EditSelectedPrompt();
+            promptContextMenu.Items.Add(editMenuItem);
+            _promptListBox.ContextMenuStrip = promptContextMenu;
             
             // Add a label for the prompt preview
             Label promptPreviewLabel = new Label
@@ -219,7 +240,7 @@ namespace iTextDesignerWithGUI.Forms
             _promptPreviewTextBox = new TextBox
             {
                 Location = new Point(20, 215),
-                Size = new Size(280, 80),
+                Size = new Size(350, 80),
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular),
                 Multiline = true,
                 ReadOnly = false,
@@ -245,7 +266,7 @@ namespace iTextDesignerWithGUI.Forms
             {
                 Text = "LLM Context Builder",
                 Location = new Point(20, 345),
-                Size = new Size(300, 24),
+                Size = new Size(375, 24),  
                 Font = new Font("Segoe UI", 12F, FontStyle.Bold),
                 ForeColor = Color.DarkSlateBlue
             };
@@ -264,7 +285,7 @@ namespace iTextDesignerWithGUI.Forms
             {
                 Text = "Global Styles CSS",
                 Location = new Point(30, 425),
-                Size = new Size(200, 24),
+                Size = new Size(250, 24),  
                 Checked = LoadCheckboxState(CssCheckboxKey, true) // Load saved state with default true
             };
             _toolTip.SetToolTip(_cssCheckBox, "Include globalStyles.css in the context");
@@ -274,7 +295,7 @@ namespace iTextDesignerWithGUI.Forms
             {
                 Text = "Current CSHTML Template",
                 Location = new Point(30, 455),
-                Size = new Size(200, 24),
+                Size = new Size(250, 24),  
                 Checked = LoadCheckboxState(TemplateCheckboxKey, true) // Load saved state with default true
             };
             _toolTip.SetToolTip(_templateCheckBox, "Include the current CSHTML template in the context");
@@ -284,7 +305,7 @@ namespace iTextDesignerWithGUI.Forms
             {
                 Text = "Current Model Instance",
                 Location = new Point(30, 485),
-                Size = new Size(200, 24),
+                Size = new Size(250, 24),  
                 Checked = LoadCheckboxState(ModelCheckboxKey, true) // Load saved state with default true
             };
             _toolTip.SetToolTip(_modelCheckBox, "Include the current model instance file in the context");
@@ -294,7 +315,7 @@ namespace iTextDesignerWithGUI.Forms
             {
                 Text = "Current JSON Data",
                 Location = new Point(30, 515),
-                Size = new Size(200, 24),
+                Size = new Size(250, 24),  
                 Checked = LoadCheckboxState(JsonCheckboxKey, true) // Load saved state with default true
             };
             _toolTip.SetToolTip(_jsonCheckBox, "Include the current JSON data file in the context");
@@ -304,7 +325,7 @@ namespace iTextDesignerWithGUI.Forms
             Button buildCopyContextButton = new Button
             {
                 Text = "Build & Copy Context",
-                Size = new Size(200, 40),
+                Size = new Size(250, 40),
                 Location = new Point(30, 555),
                 BackColor = Color.FromArgb(230, 240, 255),
                 ForeColor = Color.DarkBlue,
@@ -318,6 +339,7 @@ namespace iTextDesignerWithGUI.Forms
             
             // Add controls to the panel
             powerToolsPanel.Controls.Add(_promptBuilderLabel);
+            powerToolsPanel.Controls.Add(newPromptButton);
             powerToolsPanel.Controls.Add(_promptCategoryComboBox);
             powerToolsPanel.Controls.Add(_promptListBox);
             powerToolsPanel.Controls.Add(promptPreviewLabel);
@@ -612,6 +634,10 @@ namespace iTextDesignerWithGUI.Forms
         {
             try
             {
+                // Save current selections to restore after reload
+                string currentCategory = _promptCategoryComboBox.SelectedItem?.ToString();
+                string currentPrompt = _promptListBox.SelectedItem?.ToString();
+                
                 // Use ProjectDirectoryService to find the JSON file
                 var projectDirService = new ProjectDirectoryService();
                 string promptBuilderPath = projectDirService.GetFilePath("PersistentDataJSON/promptBuilder.json");
@@ -644,16 +670,34 @@ namespace iTextDesignerWithGUI.Forms
                     _promptCategoryComboBox.Items.Add(category.Name);
                 }
                 
-                // Load the previously selected category, if any
-                string savedCategory = LoadSelectedCategory();
-                if (!string.IsNullOrEmpty(savedCategory) && _promptCategoryComboBox.Items.Contains(savedCategory))
+                // Try to restore the previous selection
+                if (!string.IsNullOrEmpty(currentCategory) && _promptCategoryComboBox.Items.Contains(currentCategory))
                 {
-                    _promptCategoryComboBox.SelectedItem = savedCategory;
+                    _promptCategoryComboBox.SelectedItem = currentCategory;
+                    
+                    // Find and restore the current prompt if it still exists
+                    if (!string.IsNullOrEmpty(currentPrompt))
+                    {
+                        var selectedCategory = promptBuilder.Categories.FirstOrDefault(c => c.Name == currentCategory);
+                        if (selectedCategory != null && selectedCategory.Prompts.Any(p => p.Name == currentPrompt))
+                        {
+                            _promptListBox.SelectedItem = currentPrompt;
+                        }
+                    }
                 }
-                else if (_promptCategoryComboBox.Items.Count > 0)
+                else
                 {
-                    // Default to the first item
-                    _promptCategoryComboBox.SelectedIndex = 0;
+                    // Fall back to saved preference
+                    string savedCategory = LoadSelectedCategory();
+                    if (!string.IsNullOrEmpty(savedCategory) && _promptCategoryComboBox.Items.Contains(savedCategory))
+                    {
+                        _promptCategoryComboBox.SelectedItem = savedCategory;
+                    }
+                    else if (_promptCategoryComboBox.Items.Count > 0)
+                    {
+                        // Default to the first item
+                        _promptCategoryComboBox.SelectedIndex = 0;
+                    }
                 }
                 
                 // Now the SelectedIndexChanged event will populate the ListBox
@@ -751,9 +795,8 @@ namespace iTextDesignerWithGUI.Forms
         {
             try
             {
-                // Clear the existing prompts
+                // Clear the prompts list first
                 _promptListBox.Items.Clear();
-                _selectedPrompt = "";
                 
                 if (_promptCategoryComboBox.SelectedItem == null)
                     return;
@@ -1016,6 +1059,48 @@ namespace iTextDesignerWithGUI.Forms
             {
                 MessageBox.Show($"Error saving prompt: {ex.Message}",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void NewPromptButton_Click(object sender, EventArgs e)
+        {
+            // Create the prompt editor form
+            using (var promptEditorForm = new PromptEditorForm())
+            {
+                // Show the form as a dialog
+                var result = promptEditorForm.ShowDialog();
+                
+                // If the user saved changes, reload the prompts
+                if (result == DialogResult.OK)
+                {
+                    LoadPromptsFromJson();
+                }
+            }
+        }
+
+        private void EditSelectedPrompt()
+        {
+            // Get the selected category and prompt
+            if (_promptCategoryComboBox.SelectedItem == null || _promptListBox.SelectedItem == null)
+            {
+                MessageBox.Show("Please select a prompt to edit.", "No Prompt Selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            
+            string categoryName = _promptCategoryComboBox.SelectedItem.ToString();
+            string promptName = _promptListBox.SelectedItem.ToString();
+            
+            // Create the prompt editor form in edit mode
+            using (var promptEditorForm = new PromptEditorForm(categoryName, promptName))
+            {
+                // Show the form as a dialog
+                var result = promptEditorForm.ShowDialog();
+                
+                // If the user saved changes, reload the prompts
+                if (result == DialogResult.OK)
+                {
+                    LoadPromptsFromJson();
+                }
             }
         }
     }
