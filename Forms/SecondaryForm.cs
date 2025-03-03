@@ -388,8 +388,19 @@ namespace iTextDesignerWithGUI.Forms
         /// </summary>
         private void BuildAndCopyContext(bool includeCss, bool includeTemplate, bool includeModel, bool includeJsonData)
         {
+            // Store a reference to the parent form's TemplateWatcherService
+            var mainForm = _parentForm as MainForm;
+            bool wasWatchingEnabled = false;
+
             try
             {
+                // Temporarily stop the template watcher service to prevent triggering reloads
+                if (mainForm != null)
+                {
+                    wasWatchingEnabled = mainForm.StopTemplateWatcher();
+                    Debug.WriteLine("Temporarily stopped template watcher for file operations");
+                }
+
                 if (_currentData == null)
                 {
                     MessageBox.Show("No assessment data is currently loaded.", "No Data", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -552,6 +563,15 @@ namespace iTextDesignerWithGUI.Forms
             {
                 MessageBox.Show($"An error occurred: {ex.Message}\n\n{ex.StackTrace}", 
                     "Context Builder Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                // Restart the template watcher service if it was enabled before
+                if (mainForm != null && wasWatchingEnabled)
+                {
+                    mainForm.RestartTemplateWatcher();
+                    Debug.WriteLine("Restarted template watcher after file operations");
+                }
             }
         }
 

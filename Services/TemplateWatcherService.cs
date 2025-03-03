@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq; // Added this line
 
 namespace iTextDesignerWithGUI.Services
 {
@@ -144,6 +145,15 @@ namespace iTextDesignerWithGUI.Services
             {
                 watcher.EnableRaisingEvents = false;
             }
+        }
+
+        /// <summary>
+        /// Checks if the template watchers are currently enabled
+        /// </summary>
+        /// <returns>True if any watchers are enabled, false otherwise</returns>
+        public bool IsWatching()
+        {
+            return _watchers.Any(w => w.EnableRaisingEvents);
         }
 
         private async void OnTemplateFileChanged(object sender, FileSystemEventArgs e)

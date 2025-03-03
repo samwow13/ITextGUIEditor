@@ -991,5 +991,31 @@ namespace iTextDesignerWithGUI.Forms
                 }
             }
         }
+
+        /// <summary>
+        /// Stops the template watcher service and returns whether it was enabled
+        /// </summary>
+        /// <returns>True if the watcher was enabled and successfully stopped, false otherwise</returns>
+        public bool StopTemplateWatcher()
+        {
+            if (_templateWatcher != null)
+            {
+                bool isWatching = _templateWatcher.IsWatching();
+                if (isWatching)
+                {
+                    _templateWatcher.StopWatching();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Restarts the template watcher service
+        /// </summary>
+        public void RestartTemplateWatcher()
+        {
+            _templateWatcher?.StartWatching();
+        }
     }
 }
