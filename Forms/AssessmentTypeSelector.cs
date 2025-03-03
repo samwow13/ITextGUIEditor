@@ -5,6 +5,8 @@ using iTextDesignerWithGUI.Models;
 using System.Collections.Generic;
 using System.Linq;
 using iTextDesignerWithGUI.Services;
+using Microsoft.Win32;
+using System.Diagnostics;
 
 namespace iTextDesignerWithGUI.Forms
 {
@@ -24,6 +26,11 @@ namespace iTextDesignerWithGUI.Forms
         private ComboBox assessmentComboBox;
         private Label projectLabel;
         private Label assessmentLabel;
+        
+        // Registry keys for saving preferences
+        private const string RegistryPath = @"Software\ITextGUIDesigner\AssessmentTypeSelector";
+        private const string SelectedProjectKey = "SelectedProject";
+        private const string SelectedAssessmentKey = "SelectedAssessment";
 
         public AssessmentTypeSelector()
         {
@@ -263,6 +270,19 @@ namespace iTextDesignerWithGUI.Forms
                     // because the button will be disabled when nothing is selected
                     SelectedTypeWrapper = (AssessmentTypeWrapper)assessmentComboBox.SelectedItem;
                     WasCancelled = false;
+                    
+                    // Save selections to registry
+                    var selectedProject = projectComboBox.SelectedItem as ProjectDirectoryDefinition;
+                    if (selectedProject != null && !string.IsNullOrEmpty(selectedProject.Name))
+                    {
+                        SaveSelectedProject(selectedProject.Name);
+                    }
+                    
+                    if (SelectedTypeWrapper != null && !string.IsNullOrEmpty(SelectedTypeWrapper.DisplayName))
+                    {
+                        SaveSelectedAssessment(SelectedTypeWrapper.DisplayName);
+                    }
+                    
                     this.Close();
                 }
                 catch (Exception ex)
@@ -312,6 +332,16 @@ namespace iTextDesignerWithGUI.Forms
             assessmentComboBox.SelectedIndexChanged += (s, e) => {
                 okButton.Enabled = assessmentComboBox.SelectedItem != null;
                 UpdateOkButtonAppearance(okButton);
+                
+                // Save selected assessment to registry
+                if (assessmentComboBox.SelectedItem != null)
+                {
+                    var selectedAssessment = assessmentComboBox.SelectedItem as AssessmentTypeWrapper;
+                    if (selectedAssessment != null && !string.IsNullOrEmpty(selectedAssessment.DisplayName))
+                    {
+                        SaveSelectedAssessment(selectedAssessment.DisplayName);
+                    }
+                }
             };
         }
 
@@ -342,10 +372,29 @@ namespace iTextDesignerWithGUI.Forms
                     projectComboBox.DisplayMember = "Name";
                     projectComboBox.EndUpdate();
                     
-                    // Select first project without triggering event (will be handled in constructor)
+                    // Load previously selected project from registry
+                    string savedProjectName = LoadSelectedProject();
+                    
+                    int selectedIndex = 0; // Default to first item
+                    if (!string.IsNullOrEmpty(savedProjectName))
+                    {
+                        // Try to find the saved project in the list
+                        for (int i = 0; i < projectComboBox.Items.Count; i++)
+                        {
+                            var project = projectComboBox.Items[i] as ProjectDirectoryDefinition;
+                            if (project != null && string.Equals(project.Name, savedProjectName, StringComparison.OrdinalIgnoreCase))
+                            {
+                                selectedIndex = i;
+                                Debug.WriteLine($"Found saved project {savedProjectName} at index {i}");
+                                break;
+                            }
+                        }
+                    }
+                    
+                    // Select the project (either saved one or first one)
                     if (projectComboBox.Items.Count > 0)
                     {
-                        projectComboBox.SelectedIndex = 0;
+                        projectComboBox.SelectedIndex = selectedIndex;
                     }
                 }
                 else
@@ -434,12 +483,31 @@ namespace iTextDesignerWithGUI.Forms
                 assessmentComboBox.DisplayMember = "DisplayName";
                 assessmentComboBox.EndUpdate();
                 
-                // Select the first item if available
+                // Load previously selected assessment from registry
+                string savedAssessmentName = LoadSelectedAssessment();
+                
+                int selectedIndex = 0; // Default to first item
+                if (!string.IsNullOrEmpty(savedAssessmentName))
+                {
+                    // Try to find the saved assessment in the list
+                    for (int i = 0; i < assessmentComboBox.Items.Count; i++)
+                    {
+                        var assessment = assessmentComboBox.Items[i] as AssessmentTypeWrapper;
+                        if (assessment != null && string.Equals(assessment.DisplayName, savedAssessmentName, StringComparison.OrdinalIgnoreCase))
+                        {
+                            selectedIndex = i;
+                            Debug.WriteLine($"Found saved assessment {savedAssessmentName} at index {i}");
+                            break;
+                        }
+                    }
+                }
+                
+                // Select the assessment (either saved one or first one)
                 if (assessmentComboBox.Items.Count > 0)
                 {
-                    assessmentComboBox.SelectedIndex = 0;
+                    assessmentComboBox.SelectedIndex = selectedIndex;
                     var selected = assessmentComboBox.SelectedItem as AssessmentTypeWrapper;
-                    System.Diagnostics.Debug.WriteLine($"Selected first assessment: {selected?.DisplayName ?? "null"}");
+                    System.Diagnostics.Debug.WriteLine($"Selected assessment: {selected?.DisplayName ?? "null"}");
                 }
                 else
                 {
@@ -475,6 +543,12 @@ namespace iTextDesignerWithGUI.Forms
                 
                 var selectedProject = projectComboBox.SelectedItem as ProjectDirectoryDefinition;
                 string projectName = selectedProject?.Name;
+                
+                // Save the selected project to registry
+                if (!string.IsNullOrEmpty(projectName))
+                {
+                    SaveSelectedProject(projectName);
+                }
                 
                 // Reload assessment types filtered by the selected project
                 LoadAssessmentTypes(projectName);
@@ -517,6 +591,104 @@ namespace iTextDesignerWithGUI.Forms
                 button.BackColor = Color.LightGray;
                 button.ForeColor = Color.DarkGray;
             }
+        }
+        
+        /// <summary>
+        /// Saves the selected project name to registry
+        /// </summary>
+        /// <param name="projectName">The name of the selected project</param>
+        private void SaveSelectedProject(string projectName)
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.CreateSubKey(RegistryPath))
+                {
+                    if (key != null && !string.IsNullOrEmpty(projectName))
+                    {
+                        key.SetValue(SelectedProjectKey, projectName);
+                        Debug.WriteLine($"Saved selected project: {projectName}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error saving selected project: {ex.Message}");
+            }
+        }
+        
+        /// <summary>
+        /// Loads the previously selected project name from registry
+        /// </summary>
+        /// <returns>The saved project name or empty string if not found</returns>
+        private string LoadSelectedProject()
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.OpenSubKey(RegistryPath))
+                {
+                    if (key != null)
+                    {
+                        string projectName = key.GetValue(SelectedProjectKey, "").ToString();
+                        Debug.WriteLine($"Loaded selected project: {projectName}");
+                        return projectName;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error loading selected project: {ex.Message}");
+            }
+            
+            return "";
+        }
+        
+        /// <summary>
+        /// Saves the selected assessment name to registry
+        /// </summary>
+        /// <param name="assessmentName">The name of the selected assessment</param>
+        private void SaveSelectedAssessment(string assessmentName)
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.CreateSubKey(RegistryPath))
+                {
+                    if (key != null && !string.IsNullOrEmpty(assessmentName))
+                    {
+                        key.SetValue(SelectedAssessmentKey, assessmentName);
+                        Debug.WriteLine($"Saved selected assessment: {assessmentName}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error saving selected assessment: {ex.Message}");
+            }
+        }
+        
+        /// <summary>
+        /// Loads the previously selected assessment name from registry
+        /// </summary>
+        /// <returns>The saved assessment name or empty string if not found</returns>
+        private string LoadSelectedAssessment()
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.OpenSubKey(RegistryPath))
+                {
+                    if (key != null)
+                    {
+                        string assessmentName = key.GetValue(SelectedAssessmentKey, "").ToString();
+                        Debug.WriteLine($"Loaded selected assessment: {assessmentName}");
+                        return assessmentName;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error loading selected assessment: {ex.Message}");
+            }
+            
+            return "";
         }
     }
 }
