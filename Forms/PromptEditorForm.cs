@@ -273,16 +273,16 @@ namespace iTextDesignerWithGUI.Forms
             _moveUpButton = new Button
             {
                 Text = "Move Up",
-                Location = new Point(380, 70),
-                Size = new Size(80, 24),
+                Location = new Point(560, 10), // Moved to a more visible position
+                Size = new Size(80, 25),
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular)
             };
             
             _moveDownButton = new Button
             {
                 Text = "Move Down",
-                Location = new Point(470, 70),
-                Size = new Size(90, 24),
+                Location = new Point(650, 10), // Moved to a more visible position
+                Size = new Size(90, 25),
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular)
             };
             
