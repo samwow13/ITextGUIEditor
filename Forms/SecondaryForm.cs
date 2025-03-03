@@ -14,6 +14,7 @@ using System.Text;
 using System.Linq;
 using iTextDesignerWithGUI.Services;
 using System.Diagnostics;
+using Microsoft.Win32;
 
 namespace iTextDesignerWithGUI.Forms
 {
@@ -31,6 +32,20 @@ namespace iTextDesignerWithGUI.Forms
         private ToolTip _toolTip;  // ToolTip for displaying hover information
         private JsonChecklistControl _jsonChecklistControl;
         private object _currentData;
+        
+        // Checkbox controls for the context builder
+        private CheckBox _cssCheckBox;
+        private CheckBox _templateCheckBox;
+        private CheckBox _modelCheckBox;
+        private CheckBox _jsonCheckBox;
+        
+        // Registry keys for saving preferences
+        private const string RegistryPath = @"Software\ITextGUIDesigner\SecondaryForm";
+        private const string CssCheckboxKey = "CssCheckboxEnabled";
+        private const string TemplateCheckboxKey = "TemplateCheckboxEnabled";
+        private const string ModelCheckboxKey = "ModelCheckboxEnabled";
+        private const string JsonCheckboxKey = "JsonCheckboxEnabled";
+        private const string SelectedTabKey = "SelectedTabIndex";
 
         public SecondaryForm(MainForm parentForm)
         {
@@ -185,41 +200,45 @@ namespace iTextDesignerWithGUI.Forms
             };
             
             // Create checkboxes for selecting content to copy
-            CheckBox cssCheckBox = new CheckBox
+            _cssCheckBox = new CheckBox
             {
                 Text = "Global Styles CSS",
                 Location = new Point(30, 190),
                 Size = new Size(200, 24),
-                Checked = true
+                Checked = LoadCheckboxState(CssCheckboxKey, true) // Load saved state with default true
             };
-            _toolTip.SetToolTip(cssCheckBox, "Include globalStyles.css in the context");
+            _toolTip.SetToolTip(_cssCheckBox, "Include globalStyles.css in the context");
+            _cssCheckBox.CheckedChanged += (s, e) => SaveCheckboxState(CssCheckboxKey, _cssCheckBox.Checked);
             
-            CheckBox templateCheckBox = new CheckBox
+            _templateCheckBox = new CheckBox
             {
                 Text = "Current CSHTML Template",
                 Location = new Point(30, 220),
                 Size = new Size(200, 24),
-                Checked = true
+                Checked = LoadCheckboxState(TemplateCheckboxKey, true) // Load saved state with default true
             };
-            _toolTip.SetToolTip(templateCheckBox, "Include the current CSHTML template in the context");
+            _toolTip.SetToolTip(_templateCheckBox, "Include the current CSHTML template in the context");
+            _templateCheckBox.CheckedChanged += (s, e) => SaveCheckboxState(TemplateCheckboxKey, _templateCheckBox.Checked);
             
-            CheckBox modelCheckBox = new CheckBox
+            _modelCheckBox = new CheckBox
             {
                 Text = "Current Model Instance",
                 Location = new Point(30, 250),
                 Size = new Size(200, 24),
-                Checked = true
+                Checked = LoadCheckboxState(ModelCheckboxKey, true) // Load saved state with default true
             };
-            _toolTip.SetToolTip(modelCheckBox, "Include the current model instance file in the context");
+            _toolTip.SetToolTip(_modelCheckBox, "Include the current model instance file in the context");
+            _modelCheckBox.CheckedChanged += (s, e) => SaveCheckboxState(ModelCheckboxKey, _modelCheckBox.Checked);
             
-            CheckBox jsonCheckBox = new CheckBox
+            _jsonCheckBox = new CheckBox
             {
                 Text = "Current JSON Data",
                 Location = new Point(30, 280),
                 Size = new Size(200, 24),
-                Checked = true
+                Checked = LoadCheckboxState(JsonCheckboxKey, true) // Load saved state with default true
             };
-            _toolTip.SetToolTip(jsonCheckBox, "Include the current JSON data file in the context");
+            _toolTip.SetToolTip(_jsonCheckBox, "Include the current JSON data file in the context");
+            _jsonCheckBox.CheckedChanged += (s, e) => SaveCheckboxState(JsonCheckboxKey, _jsonCheckBox.Checked);
             
             // Create button to copy selected content to clipboard
             Button copyToClipboardButton = new Button
@@ -231,7 +250,7 @@ namespace iTextDesignerWithGUI.Forms
                 ForeColor = Color.DarkBlue,
                 Font = new Font("Segoe UI", 10F, FontStyle.Bold)
             };
-            copyToClipboardButton.Click += (s, e) => BuildAndCopyContext(cssCheckBox.Checked, templateCheckBox.Checked, modelCheckBox.Checked, jsonCheckBox.Checked);
+            copyToClipboardButton.Click += (s, e) => BuildAndCopyContext(_cssCheckBox.Checked, _templateCheckBox.Checked, _modelCheckBox.Checked, _jsonCheckBox.Checked);
             _toolTip.SetToolTip(copyToClipboardButton, "Build and copy the selected context items to the clipboard for use with LLMs");
             
             // Add controls to the panel
@@ -240,10 +259,10 @@ namespace iTextDesignerWithGUI.Forms
             powerToolsPanel.Controls.Add(dividerPanel);
             powerToolsPanel.Controls.Add(llmContextBuilderLabel);
             powerToolsPanel.Controls.Add(descriptionLabel);
-            powerToolsPanel.Controls.Add(cssCheckBox);
-            powerToolsPanel.Controls.Add(templateCheckBox);
-            powerToolsPanel.Controls.Add(modelCheckBox);
-            powerToolsPanel.Controls.Add(jsonCheckBox);
+            powerToolsPanel.Controls.Add(_cssCheckBox);
+            powerToolsPanel.Controls.Add(_templateCheckBox);
+            powerToolsPanel.Controls.Add(_modelCheckBox);
+            powerToolsPanel.Controls.Add(_jsonCheckBox);
             powerToolsPanel.Controls.Add(copyToClipboardButton);
             
             // Add panel to the Power Tools tab
@@ -252,6 +271,12 @@ namespace iTextDesignerWithGUI.Forms
             // Add tabs to tab control
             _tabControl.TabPages.Add(_jsonViewTab);
             _tabControl.TabPages.Add(_powerToolsTab);  // Add the Power Tools tab
+            
+            // Set the selected tab based on saved preference
+            _tabControl.SelectedIndex = LoadSelectedTabIndex();
+            
+            // Add event handler to save the selected tab when it changes
+            _tabControl.SelectedIndexChanged += (s, e) => SaveSelectedTabIndex(_tabControl.SelectedIndex);
 
             // Add tab control to form
             Controls.Add(_tabControl);
@@ -622,6 +647,114 @@ namespace iTextDesignerWithGUI.Forms
             {
                 MessageBox.Show($"An error occurred: {ex.Message}\n\n{ex.StackTrace}", 
                     "Context Builder Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Loads the saved state of a checkbox from the registry
+        /// </summary>
+        /// <param name="keyName">Registry key name</param>
+        /// <param name="defaultValue">Default value if the registry key doesn't exist</param>
+        /// <returns>The saved checkbox state or the default value</returns>
+        private bool LoadCheckboxState(string keyName, bool defaultValue)
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.OpenSubKey(RegistryPath))
+                {
+                    if (key != null)
+                    {
+                        var value = key.GetValue(keyName);
+                        if (value != null)
+                        {
+                            return Convert.ToBoolean(value);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error loading checkbox state for {keyName}: {ex.Message}");
+            }
+            return defaultValue; // Return default value if not found or error
+        }
+
+        /// <summary>
+        /// Saves the state of a checkbox to the registry
+        /// </summary>
+        /// <param name="keyName">Registry key name</param>
+        /// <param name="isChecked">Current state of the checkbox</param>
+        private void SaveCheckboxState(string keyName, bool isChecked)
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.CreateSubKey(RegistryPath))
+                {
+                    if (key != null)
+                    {
+                        key.SetValue(keyName, isChecked ? 1 : 0, RegistryValueKind.DWord);
+                        Debug.WriteLine($"Saved {keyName} state: {isChecked}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error saving checkbox state for {keyName}: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Loads the saved selected tab index from the registry
+        /// </summary>
+        /// <returns>The saved tab index or 0 if not found</returns>
+        private int LoadSelectedTabIndex()
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.OpenSubKey(RegistryPath))
+                {
+                    if (key != null)
+                    {
+                        var value = key.GetValue(SelectedTabKey);
+                        if (value != null)
+                        {
+                            int tabIndex = Convert.ToInt32(value);
+                            // Ensure the index is valid (in case the number of tabs changes in the future)
+                            if (tabIndex >= 0 && tabIndex < _tabControl.TabCount)
+                            {
+                                return tabIndex;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error loading selected tab index: {ex.Message}");
+            }
+            return 0; // Default to first tab if not found or error
+        }
+
+        /// <summary>
+        /// Saves the selected tab index to the registry
+        /// </summary>
+        /// <param name="tabIndex">The index of the currently selected tab</param>
+        private void SaveSelectedTabIndex(int tabIndex)
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.CreateSubKey(RegistryPath))
+                {
+                    if (key != null)
+                    {
+                        key.SetValue(SelectedTabKey, tabIndex, RegistryValueKind.DWord);
+                        Debug.WriteLine($"Saved selected tab index: {tabIndex}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error saving selected tab index: {ex.Message}");
             }
         }
     }
