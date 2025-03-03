@@ -45,15 +45,18 @@ namespace iTextDesignerWithGUI.Forms
         
         // UI Components
         private ComboBox _categoryComboBox;
-        private TextBox _newCategoryTextBox;
-        private ComboBox _promptComboBox;
         private TextBox _promptNameTextBox;
         private TextBox _promptContentTextBox;
         private Button _saveButton;
         private Button _cancelButton;
+        private Button _moveUpButton;
+        private Button _moveDownButton;
+        private Label _editModeIndicatorLabel;
+        private ComboBox _promptComboBox;
         
         // Mode of operation
         private bool _isEditMode = false;
+        private bool _isDuplicateMode = false;
         private string _originalCategoryName = string.Empty;
         private string _originalPromptName = string.Empty;
         
@@ -70,6 +73,15 @@ namespace iTextDesignerWithGUI.Forms
             
             this.Text = "Create New Prompt";
             _isEditMode = false;
+            _editModeIndicatorLabel.Visible = false;
+            _moveUpButton.Visible = false;
+            _moveDownButton.Visible = false;
+            
+            // Select the first category if available
+            if (_categoryComboBox.Items.Count > 0)
+            {
+                _categoryComboBox.SelectedIndex = 0;
+            }
         }
         
         /// <summary>
@@ -78,6 +90,17 @@ namespace iTextDesignerWithGUI.Forms
         /// <param name="categoryName">Category of the prompt to edit</param>
         /// <param name="promptName">Name of the prompt to edit</param>
         public PromptEditorForm(string categoryName, string promptName)
+            : this(categoryName, promptName, false)
+        {
+        }
+
+        /// <summary>
+        /// Constructor for editing or duplicating an existing prompt
+        /// </summary>
+        /// <param name="categoryName">Category of the prompt to edit</param>
+        /// <param name="promptName">Name of the prompt to edit</param>
+        /// <param name="isDuplicate">True if duplicating, false if editing</param>
+        public PromptEditorForm(string categoryName, string promptName, bool isDuplicate)
         {
             var projectDirService = new ProjectDirectoryService();
             _promptBuilderJsonPath = projectDirService.GetFilePath("PersistentDataJSON/promptBuilder.json");
@@ -85,10 +108,27 @@ namespace iTextDesignerWithGUI.Forms
             InitializeComponent();
             LoadPromptData();
             
-            this.Text = "Edit Prompt";
-            _isEditMode = true;
+            _isDuplicateMode = isDuplicate;
+            _isEditMode = !isDuplicate; // If duplicating, it's not technically editing
             _originalCategoryName = categoryName;
             _originalPromptName = promptName;
+            
+            // Set the title based on mode
+            this.Text = isDuplicate ? "Duplicate Prompt" : "Edit Prompt";
+            
+            // Show edit mode indicator and reordering buttons (only for edit mode, not duplicate)
+            _editModeIndicatorLabel.Visible = true;
+            _editModeIndicatorLabel.Text = isDuplicate ? $"Duplicating: {promptName}" : $"Editing: {promptName}";
+            _editModeIndicatorLabel.ForeColor = isDuplicate ? Color.DarkGreen : Color.DarkBlue;
+            
+            _moveUpButton.Visible = !isDuplicate; // Only show reordering in edit mode
+            _moveDownButton.Visible = !isDuplicate; // Only show reordering in edit mode
+            
+            if (!isDuplicate)
+            {
+                _moveUpButton.Click += MovePromptUp_Click;
+                _moveDownButton.Click += MovePromptDown_Click;
+            }
             
             // Select the category and prompt
             int categoryIndex = _categoryComboBox.Items.IndexOf(categoryName);
@@ -132,7 +172,7 @@ namespace iTextDesignerWithGUI.Forms
         {
             // Form properties
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.Size = new Size(600, 650);
+            this.Size = new Size(750, 650);
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -142,31 +182,32 @@ namespace iTextDesignerWithGUI.Forms
             {
                 Text = "Category:",
                 Location = new Point(20, 20),
-                Size = new Size(120, 20),
+                Size = new Size(150, 20),
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular)
             };
             
-            Label newCategoryLabel = new Label
+            Label promptLabel = new Label
             {
-                Text = "or Create New Category:",
-                Location = new Point(20, 70),
-                Size = new Size(150, 20),
-                Font = new Font("Segoe UI", 9F, FontStyle.Regular)
+                Text = "Select Existing Prompt:",
+                Location = new Point(380, 20),
+                Size = new Size(200, 20),
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
+                Visible = _isEditMode || _isDuplicateMode // Only show in edit or duplicate mode
             };
             
             Label promptNameLabel = new Label
             {
                 Text = "Prompt Name:",
-                Location = new Point(20, 120),
-                Size = new Size(120, 20),
+                Location = new Point(20, 70),
+                Size = new Size(150, 20),
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular)
             };
             
             Label promptContentLabel = new Label
             {
                 Text = "Prompt Content:",
-                Location = new Point(20, 170),
-                Size = new Size(120, 20),
+                Location = new Point(20, 120),
+                Size = new Size(150, 20),
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular)
             };
             
@@ -175,68 +216,85 @@ namespace iTextDesignerWithGUI.Forms
             {
                 Location = new Point(20, 40),
                 Size = new Size(350, 24),
-                DropDownStyle = ComboBoxStyle.DropDownList
-            };
-            _categoryComboBox.SelectedIndexChanged += CategoryComboBox_SelectedIndexChanged;
-            
-            _newCategoryTextBox = new TextBox
-            {
-                Location = new Point(20, 90),
-                Size = new Size(350, 24),
+                DropDownStyle = ComboBoxStyle.DropDownList,
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular)
             };
+            _categoryComboBox.SelectedIndexChanged += CategoryComboBox_SelectedIndexChanged;
             
             _promptComboBox = new ComboBox
             {
                 Location = new Point(380, 40),
-                Size = new Size(180, 24),
+                Size = new Size(350, 24),
                 DropDownStyle = ComboBoxStyle.DropDownList,
-                Visible = false  // Initially hidden until a category is selected when in edit mode
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
+                Visible = _isEditMode || _isDuplicateMode // Only show in edit or duplicate mode
             };
             _promptComboBox.SelectedIndexChanged += PromptComboBox_SelectedIndexChanged;
             
             _promptNameTextBox = new TextBox
             {
-                Location = new Point(20, 140),
-                Size = new Size(350, 24),
+                Location = new Point(20, 90),
+                Size = new Size(710, 24),
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular)
             };
             
             _promptContentTextBox = new TextBox
             {
-                Location = new Point(20, 190),
-                Size = new Size(540, 360),
-                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
+                Location = new Point(20, 140),
+                Size = new Size(710, 400),
                 Multiline = true,
-                ScrollBars = ScrollBars.Vertical
+                ScrollBars = ScrollBars.Vertical,
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular)
             };
             
             // Create buttons
             _saveButton = new Button
             {
                 Text = "Save",
-                Location = new Point(380, 570),
-                Size = new Size(100, 30),
-                BackColor = Color.FromArgb(230, 240, 255),
-                ForeColor = Color.DarkBlue,
-                Font = new Font("Segoe UI", 9F, FontStyle.Bold)
+                Location = new Point(560, 550),
+                Size = new Size(80, 30),
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular)
             };
             _saveButton.Click += SaveButton_Click;
             
             _cancelButton = new Button
             {
                 Text = "Cancel",
-                Location = new Point(490, 570),
+                Location = new Point(650, 550),
                 Size = new Size(80, 30),
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular)
             };
             _cancelButton.Click += (s, e) => this.Close();
             
+            _moveUpButton = new Button
+            {
+                Text = "Move Up",
+                Location = new Point(380, 70),
+                Size = new Size(80, 24),
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular)
+            };
+            
+            _moveDownButton = new Button
+            {
+                Text = "Move Down",
+                Location = new Point(470, 70),
+                Size = new Size(90, 24),
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular)
+            };
+            
+            _editModeIndicatorLabel = new Label
+            {
+                Text = "Edit Mode",
+                Location = new Point(20, 570),
+                Size = new Size(100, 20),
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+                Visible = false
+            };
+            
             // Add controls to form
             this.Controls.Add(categoryLabel);
             this.Controls.Add(_categoryComboBox);
-            this.Controls.Add(newCategoryLabel);
-            this.Controls.Add(_newCategoryTextBox);
+            this.Controls.Add(promptLabel);
             this.Controls.Add(_promptComboBox);
             this.Controls.Add(promptNameLabel);
             this.Controls.Add(_promptNameTextBox);
@@ -244,6 +302,9 @@ namespace iTextDesignerWithGUI.Forms
             this.Controls.Add(_promptContentTextBox);
             this.Controls.Add(_saveButton);
             this.Controls.Add(_cancelButton);
+            this.Controls.Add(_moveUpButton);
+            this.Controls.Add(_moveDownButton);
+            this.Controls.Add(_editModeIndicatorLabel);
         }
         
         /// <summary>
@@ -253,21 +314,21 @@ namespace iTextDesignerWithGUI.Forms
         {
             try
             {
-                // Read the JSON file
+                // Read and deserialize the JSON file
                 string jsonContent = File.ReadAllText(_promptBuilderJsonPath);
                 _promptData = JsonSerializer.Deserialize<PromptBuilderJson>(jsonContent);
                 
-                // Populate the category dropdown
+                // Clear the ComboBox
                 _categoryComboBox.Items.Clear();
-                foreach (var category in _promptData.Categories)
-                {
-                    _categoryComboBox.Items.Add(category.Name);
-                }
+                _promptComboBox.Items.Clear();
                 
-                // Select the first item if not in edit mode
-                if (!_isEditMode && _categoryComboBox.Items.Count > 0)
+                // Populate the category ComboBox
+                if (_promptData != null && _promptData.Categories != null)
                 {
-                    _categoryComboBox.SelectedIndex = 0;
+                    foreach (var category in _promptData.Categories)
+                    {
+                        _categoryComboBox.Items.Add(category.Name);
+                    }
                 }
             }
             catch (Exception ex)
@@ -354,36 +415,15 @@ namespace iTextDesignerWithGUI.Forms
                     MessageBox.Show("Prompt name cannot be empty.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                
-                // Determine which category to use
-                string categoryName;
-                if (!string.IsNullOrWhiteSpace(_newCategoryTextBox.Text))
+
+                if (_categoryComboBox.SelectedItem == null)
                 {
-                    // Use the new category
-                    categoryName = _newCategoryTextBox.Text.Trim();
-                    
-                    // Check if the category already exists
-                    var existingCategory = _promptData.Categories.FirstOrDefault(c => c.Name == categoryName);
-                    if (existingCategory == null)
-                    {
-                        // Create a new category
-                        _promptData.Categories.Add(new PromptCategory
-                        {
-                            Name = categoryName,
-                            Prompts = new List<PromptItem>()
-                        });
-                    }
-                }
-                else if (_categoryComboBox.SelectedItem != null)
-                {
-                    // Use the selected category
-                    categoryName = _categoryComboBox.SelectedItem as string;
-                }
-                else
-                {
-                    MessageBox.Show("Please select a category or create a new one.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Please select a category.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
+                
+                // Get the selected category
+                string categoryName = _categoryComboBox.SelectedItem as string;
                 
                 // Get the category object
                 var category = _promptData.Categories.FirstOrDefault(c => c.Name == categoryName);
@@ -397,7 +437,29 @@ namespace iTextDesignerWithGUI.Forms
                 string promptName = _promptNameTextBox.Text.Trim();
                 string promptContent = _promptContentTextBox.Text;
                 
-                if (_isEditMode)
+                // When duplicating, make sure to append " (Copy)" if name hasn't changed
+                if (_isDuplicateMode && promptName == _originalPromptName)
+                {
+                    promptName += " (Copy)";
+                    _promptNameTextBox.Text = promptName;
+                }
+                
+                // Check for name conflict within the target category
+                if ((_isEditMode || _isDuplicateMode) && 
+                    categoryName == _originalCategoryName && 
+                    promptName != _originalPromptName && 
+                    category.Prompts.Any(p => p.Name == promptName))
+                {
+                    var result = MessageBox.Show($"A prompt named '{promptName}' already exists in this category. Would you like to overwrite it?",
+                        "Prompt Already Exists", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    
+                    if (result != DialogResult.Yes)
+                    {
+                        return;
+                    }
+                }
+                
+                if (_isEditMode && !_isDuplicateMode)
                 {
                     // If editing an existing prompt, remove the original one first
                     var originalCategory = _promptData.Categories.FirstOrDefault(c => c.Name == _originalCategoryName);
@@ -437,13 +499,118 @@ namespace iTextDesignerWithGUI.Forms
                 });
                 File.WriteAllText(_promptBuilderJsonPath, jsonContent);
                 
-                MessageBox.Show("Prompt saved successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // Show a success message including the mode (create, edit, duplicate)
+                string modeText = _isEditMode ? "edited" : (_isDuplicateMode ? "duplicated" : "created");
+                MessageBox.Show($"Prompt {modeText} successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error saving prompt: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        
+        /// <summary>
+        /// Move the current prompt up in the category order
+        /// </summary>
+        private void MovePromptUp_Click(object sender, EventArgs e)
+        {
+            if (_promptComboBox.SelectedIndex > 0)
+            {
+                try
+                {
+                    // Get the current prompt and category
+                    string categoryName = _categoryComboBox.SelectedItem.ToString();
+                    string promptName = _promptComboBox.SelectedItem.ToString();
+                    
+                    // Load the JSON data
+                    string jsonContent = File.ReadAllText(_promptBuilderJsonPath);
+                    var promptData = JsonSerializer.Deserialize<PromptBuilderJson>(jsonContent);
+                    
+                    // Get the current category
+                    var category = promptData.Categories.FirstOrDefault(c => c.Name == categoryName);
+                    if (category == null) return;
+                    
+                    // Find the prompt position
+                    int currentIndex = category.Prompts.FindIndex(p => p.Name == promptName);
+                    if (currentIndex <= 0) return; // Already at the top
+                    
+                    // Swap with the previous prompt
+                    var prompt = category.Prompts[currentIndex];
+                    category.Prompts.RemoveAt(currentIndex);
+                    category.Prompts.Insert(currentIndex - 1, prompt);
+                    
+                    // Save the JSON
+                    string updatedJson = JsonSerializer.Serialize(promptData, new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
+                    File.WriteAllText(_promptBuilderJsonPath, updatedJson);
+                    
+                    // Update the UI
+                    LoadPromptData();
+                    
+                    // Reselect the current items
+                    _categoryComboBox.SelectedItem = categoryName;
+                    _promptComboBox.SelectedIndex = currentIndex - 1;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error moving prompt: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Move the current prompt down in the category order
+        /// </summary>
+        private void MovePromptDown_Click(object sender, EventArgs e)
+        {
+            if (_promptComboBox.SelectedIndex >= 0 && _promptComboBox.SelectedIndex < _promptComboBox.Items.Count - 1)
+            {
+                try
+                {
+                    // Get the current prompt and category
+                    string categoryName = _categoryComboBox.SelectedItem.ToString();
+                    string promptName = _promptComboBox.SelectedItem.ToString();
+                    
+                    // Load the JSON data
+                    string jsonContent = File.ReadAllText(_promptBuilderJsonPath);
+                    var promptData = JsonSerializer.Deserialize<PromptBuilderJson>(jsonContent);
+                    
+                    // Get the current category
+                    var category = promptData.Categories.FirstOrDefault(c => c.Name == categoryName);
+                    if (category == null) return;
+                    
+                    // Find the prompt position
+                    int currentIndex = category.Prompts.FindIndex(p => p.Name == promptName);
+                    if (currentIndex < 0 || currentIndex >= category.Prompts.Count - 1) return; // Already at the bottom
+                    
+                    // Swap with the next prompt
+                    var prompt = category.Prompts[currentIndex];
+                    category.Prompts.RemoveAt(currentIndex);
+                    category.Prompts.Insert(currentIndex + 1, prompt);
+                    
+                    // Save the JSON
+                    string updatedJson = JsonSerializer.Serialize(promptData, new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
+                    File.WriteAllText(_promptBuilderJsonPath, updatedJson);
+                    
+                    // Update the UI
+                    LoadPromptData();
+                    
+                    // Reselect the current items
+                    _categoryComboBox.SelectedItem = categoryName;
+                    _promptComboBox.SelectedIndex = currentIndex + 1;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error moving prompt: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }

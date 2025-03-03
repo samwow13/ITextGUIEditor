@@ -1,15 +1,6 @@
 {
   "categories": [
     {
-      "name": "No Prompt Selected:",
-      "prompts": [
-        {
-          "name": "No Prompt Selected:",
-          "prompt": ""
-        }
-      ]
-    },
-    {
       "name": "Newly Created",
       "prompts": [
         {
@@ -108,7 +99,7 @@
       "prompts": [
         {
           "name": "Style Like Image",
-          "prompt": "I want you to re-create the .csthml image with the attached image as a style guide. Ensure that the styles from the globalStyles.css are used first, and add any remaining style upgrades to the .cshtml file itself if they aren\u0027t already present in the global styles sheet."
+          "prompt": "I want you to re-create the .csthml image with the attached image as a style guide. Ensure that the styles from the globalStyles.css are used first, and add any remaining style upgrades to the .cshtml file itself if they aren\u0027t already present in the global styles sheestts"
         }
       ]
     }

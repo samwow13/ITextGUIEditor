@@ -225,6 +225,17 @@ namespace iTextDesignerWithGUI.Forms
             ToolStripMenuItem editMenuItem = new ToolStripMenuItem("Edit");
             editMenuItem.Click += (s, e) => EditSelectedPrompt();
             promptContextMenu.Items.Add(editMenuItem);
+            
+            // Add duplicate option to the context menu
+            ToolStripMenuItem duplicateMenuItem = new ToolStripMenuItem("Duplicate");
+            duplicateMenuItem.Click += (s, e) => DuplicateSelectedPrompt();
+            promptContextMenu.Items.Add(duplicateMenuItem);
+            
+            // Add delete option to the context menu
+            ToolStripMenuItem deleteMenuItem = new ToolStripMenuItem("Delete");
+            deleteMenuItem.Click += (s, e) => DeleteSelectedPrompt();
+            promptContextMenu.Items.Add(deleteMenuItem);
+            
             _promptListBox.ContextMenuStrip = promptContextMenu;
             
             // Add a label for the prompt preview
@@ -634,78 +645,69 @@ namespace iTextDesignerWithGUI.Forms
         {
             try
             {
-                // Save current selections to restore after reload
-                string currentCategory = _promptCategoryComboBox.SelectedItem?.ToString();
-                string currentPrompt = _promptListBox.SelectedItem?.ToString();
+                // Save the current selections
+                string currentCategoryName = _promptCategoryComboBox.SelectedItem as string;
+                string currentPromptName = _promptListBox.SelectedItem as string;
                 
-                // Use ProjectDirectoryService to find the JSON file
+                // Get path to promptBuilder.json
                 var projectDirService = new ProjectDirectoryService();
                 string promptBuilderPath = projectDirService.GetFilePath("PersistentDataJSON/promptBuilder.json");
-                
-                if (!File.Exists(promptBuilderPath))
-                {
-                    MessageBox.Show("Prompt builder JSON file not found at: " + promptBuilderPath, 
-                        "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
                 
                 // Read and deserialize the JSON file
                 string jsonContent = File.ReadAllText(promptBuilderPath);
                 var promptBuilder = JsonSerializer.Deserialize<PromptBuilderJson>(jsonContent);
                 
-                if (promptBuilder == null || promptBuilder.Categories == null || promptBuilder.Categories.Count == 0)
-                {
-                    MessageBox.Show("No prompt categories found in the promptBuilder.json file.", 
-                        "No Data", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-                
-                // Clear existing items
+                // Clear the category ComboBox
                 _promptCategoryComboBox.Items.Clear();
-                _promptListBox.Items.Clear();
                 
-                // Add categories to the ComboBox
-                foreach (var category in promptBuilder.Categories)
+                // Populate the category ComboBox
+                if (promptBuilder != null && promptBuilder.Categories != null)
                 {
-                    _promptCategoryComboBox.Items.Add(category.Name);
+                    foreach (var category in promptBuilder.Categories)
+                    {
+                        _promptCategoryComboBox.Items.Add(category.Name);
+                    }
                 }
                 
-                // Try to restore the previous selection
-                if (!string.IsNullOrEmpty(currentCategory) && _promptCategoryComboBox.Items.Contains(currentCategory))
+                // Restore the selected category or select the first one
+                int categoryIndex = -1;
+                if (!string.IsNullOrEmpty(currentCategoryName))
                 {
-                    _promptCategoryComboBox.SelectedItem = currentCategory;
+                    categoryIndex = _promptCategoryComboBox.Items.IndexOf(currentCategoryName);
+                }
+                
+                if (categoryIndex >= 0)
+                {
+                    _promptCategoryComboBox.SelectedIndex = categoryIndex;
                     
-                    // Find and restore the current prompt if it still exists
-                    if (!string.IsNullOrEmpty(currentPrompt))
+                    // Since selecting the category clears the prompts list, we need to find the selected prompt again
+                    if (!string.IsNullOrEmpty(currentPromptName))
                     {
-                        var selectedCategory = promptBuilder.Categories.FirstOrDefault(c => c.Name == currentCategory);
-                        if (selectedCategory != null && selectedCategory.Prompts.Any(p => p.Name == currentPrompt))
+                        int promptIndex = _promptListBox.Items.IndexOf(currentPromptName);
+                        if (promptIndex >= 0)
                         {
-                            _promptListBox.SelectedItem = currentPrompt;
+                            _promptListBox.SelectedIndex = promptIndex;
+                        }
+                        else if (_promptListBox.Items.Count > 0)
+                        {
+                            // If the previously selected prompt is no longer available (e.g., deleted),
+                            // select the closest position or the last item if deleted from the end
+                            int newIndex = Math.Min(promptIndex, _promptListBox.Items.Count - 1);
+                            if (newIndex >= 0)
+                            {
+                                _promptListBox.SelectedIndex = newIndex;
+                            }
                         }
                     }
                 }
-                else
+                else if (_promptCategoryComboBox.Items.Count > 0)
                 {
-                    // Fall back to saved preference
-                    string savedCategory = LoadSelectedCategory();
-                    if (!string.IsNullOrEmpty(savedCategory) && _promptCategoryComboBox.Items.Contains(savedCategory))
-                    {
-                        _promptCategoryComboBox.SelectedItem = savedCategory;
-                    }
-                    else if (_promptCategoryComboBox.Items.Count > 0)
-                    {
-                        // Default to the first item
-                        _promptCategoryComboBox.SelectedIndex = 0;
-                    }
+                    _promptCategoryComboBox.SelectedIndex = 0;
                 }
-                
-                // Now the SelectedIndexChanged event will populate the ListBox
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading prompts: {ex.Message}", 
-                    "Prompt Builder Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error loading promptBuilder.json: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -1102,6 +1104,106 @@ namespace iTextDesignerWithGUI.Forms
                     LoadPromptsFromJson();
                 }
             }
+        }
+
+        private void DuplicateSelectedPrompt()
+        {
+            // Get the selected category and prompt
+            if (_promptCategoryComboBox.SelectedItem == null || _promptListBox.SelectedItem == null)
+            {
+                MessageBox.Show("Please select a prompt to duplicate.", "No Prompt Selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            
+            string categoryName = _promptCategoryComboBox.SelectedItem.ToString();
+            string promptName = _promptListBox.SelectedItem.ToString();
+            
+            // Create the prompt editor form in duplicate mode
+            using (var promptEditorForm = new PromptEditorForm(categoryName, promptName, true))
+            {
+                // Show the form as a dialog
+                var result = promptEditorForm.ShowDialog();
+                
+                // If the user saved changes, reload the prompts
+                if (result == DialogResult.OK)
+                {
+                    LoadPromptsFromJson();
+                }
+            }
+        }
+
+        private void DeleteSelectedPrompt()
+        {
+            // Get the selected category and prompt
+            if (_promptCategoryComboBox.SelectedItem == null || _promptListBox.SelectedItem == null)
+            {
+                MessageBox.Show("Please select a prompt to delete.", "No Prompt Selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            
+            string categoryName = _promptCategoryComboBox.SelectedItem.ToString();
+            string promptName = _promptListBox.SelectedItem.ToString();
+            
+            // Confirm deletion
+            var result = MessageBox.Show($"Are you sure you want to delete prompt '{promptName}'?", 
+                "Delete Prompt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result != DialogResult.Yes)
+            {
+                return;
+            }
+            
+            // Get path to promptBuilder.json
+            var projectDirService = new ProjectDirectoryService();
+            string promptBuilderPath = projectDirService.GetFilePath("PersistentDataJSON/promptBuilder.json");
+            
+            // Read and parse the JSON file
+            string jsonContent = File.ReadAllText(promptBuilderPath);
+            var promptBuilder = JsonSerializer.Deserialize<PromptBuilderJson>(jsonContent);
+            
+            if (promptBuilder == null || promptBuilder.Categories == null)
+            {
+                MessageBox.Show("Error loading promptBuilder.json: Invalid file format.",
+                    "JSON Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            
+            // Find the selected category
+            var category = promptBuilder.Categories.FirstOrDefault(c => c.Name == categoryName);
+            if (category == null || category.Prompts == null)
+            {
+                MessageBox.Show($"Category '{categoryName}' not found in promptBuilder.json.",
+                    "Category Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            
+            // Find and remove the selected prompt
+            var promptIndex = category.Prompts.FindIndex(p => p.Name == promptName);
+            if (promptIndex != -1)
+            {
+                category.Prompts.RemoveAt(promptIndex);
+            }
+            else
+            {
+                MessageBox.Show($"Prompt '{promptName}' not found in category '{categoryName}'.",
+                    "Prompt Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            
+            // Save the updated JSON back to the file
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+            
+            string updatedJson = JsonSerializer.Serialize(promptBuilder, options);
+            File.WriteAllText(promptBuilderPath, updatedJson);
+            
+            // Reload the prompts
+            LoadPromptsFromJson();
+            
+            MessageBox.Show($"Prompt '{promptName}' deleted successfully!",
+                "Prompt Deleted", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
