@@ -34,7 +34,7 @@ namespace iTextDesignerWithGUI.Forms
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.Size = new System.Drawing.Size(500, 520); 
+            this.Size = new System.Drawing.Size(500, 600); 
             this.Padding = new Padding(20);
             this.BackColor = Color.White;
 
@@ -175,7 +175,9 @@ namespace iTextDesignerWithGUI.Forms
                 Padding = new Padding(15),
                 Margin = new Padding(0, 0, 0, 20),
                 BackColor = Color.FromArgb(248, 249, 250),
-                BorderStyle = BorderStyle.FixedSingle
+                BorderStyle = BorderStyle.FixedSingle,
+                AutoSize = false,
+                MinimumSize = new Size(0, 150)
             };
 
             // Container for the management section content
@@ -184,12 +186,11 @@ namespace iTextDesignerWithGUI.Forms
                 Dock = DockStyle.Fill,
                 RowCount = 2,
                 ColumnCount = 1,
-                Width = 400,
-                AutoSize = true,
+                AutoSize = false,
                 BackColor = Color.Transparent
             };
-            managementContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            managementContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            managementContainer.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
+            managementContainer.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
 
             // Section title for management links
             var managementSectionLabel = new Label
@@ -210,10 +211,13 @@ namespace iTextDesignerWithGUI.Forms
                 Dock = DockStyle.Fill,
                 ColumnCount = 2,
                 RowCount = 1,
-                AutoSize = true,
+                AutoSize = false,
+                Height = 60,
                 CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
-                Padding = new Padding(5)
+                Padding = new Padding(5),
+                Margin = new Padding(0, 0, 0, 0)
             };
+            linksPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
             linksPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             linksPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
 
@@ -228,7 +232,7 @@ namespace iTextDesignerWithGUI.Forms
                 TextAlign = ContentAlignment.MiddleCenter,
                 Dock = DockStyle.Fill,
                 Cursor = Cursors.Hand,
-                Padding = new Padding(0, 10, 0, 10),
+                Padding = new Padding(10, 15, 10, 15),
                 LinkBehavior = LinkBehavior.HoverUnderline
             };
             addProjectLink.LinkClicked += (sender, e) => AddProjectButton_Click(sender, e);
@@ -245,7 +249,7 @@ namespace iTextDesignerWithGUI.Forms
                 TextAlign = ContentAlignment.MiddleCenter,
                 Dock = DockStyle.Fill,
                 Cursor = Cursors.Hand,
-                Padding = new Padding(0, 10, 0, 10),
+                Padding = new Padding(10, 15, 10, 15),
                 LinkBehavior = LinkBehavior.HoverUnderline
             };
             templateManagerLink.LinkClicked += (sender, e) => DeleteTemplateButton_Click(sender, e);
