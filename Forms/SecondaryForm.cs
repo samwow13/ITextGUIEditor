@@ -125,7 +125,8 @@ namespace iTextDesignerWithGUI.Forms
             Panel powerToolsPanel = new Panel
             {
                 Dock = DockStyle.Fill,
-                Padding = new Padding(10)
+                Padding = new Padding(10),
+                AutoScroll = true // Add scrolling for many controls
             };
             
             // Create the instruction label
@@ -155,9 +156,95 @@ namespace iTextDesignerWithGUI.Forms
                                  "Copy this into the premiere ChatGPT model";
             _toolTip.SetToolTip(_initialFormButton, tooltipText);
             
+            // Create a visual divider between top and bottom sections
+            Panel dividerPanel = new Panel
+            {
+                Location = new Point(20, 110),
+                Size = new Size(powerToolsPanel.Width - 40, 2),
+                BackColor = Color.LightGray,
+                Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top
+            };
+            
+            // Create a heading for the LLM Context Builder section
+            Label llmContextBuilderLabel = new Label
+            {
+                Text = "LLM Context Builder",
+                Location = new Point(20, 130),
+                Size = new Size(300, 24),
+                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                ForeColor = Color.DarkSlateBlue
+            };
+            
+            // Description label for the new section
+            Label descriptionLabel = new Label
+            {
+                Text = "Select items to include in the context for Large Language Models:",
+                Location = new Point(20, 160),
+                Size = new Size(450, 20),
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular)
+            };
+            
+            // Create checkboxes for selecting content to copy
+            CheckBox cssCheckBox = new CheckBox
+            {
+                Text = "Global Styles CSS",
+                Location = new Point(30, 190),
+                Size = new Size(200, 24),
+                Checked = true
+            };
+            _toolTip.SetToolTip(cssCheckBox, "Include globalStyles.css in the context");
+            
+            CheckBox templateCheckBox = new CheckBox
+            {
+                Text = "Current CSHTML Template",
+                Location = new Point(30, 220),
+                Size = new Size(200, 24),
+                Checked = true
+            };
+            _toolTip.SetToolTip(templateCheckBox, "Include the current CSHTML template in the context");
+            
+            CheckBox modelCheckBox = new CheckBox
+            {
+                Text = "Current Model Instance",
+                Location = new Point(30, 250),
+                Size = new Size(200, 24),
+                Checked = true
+            };
+            _toolTip.SetToolTip(modelCheckBox, "Include the current model instance file in the context");
+            
+            CheckBox jsonCheckBox = new CheckBox
+            {
+                Text = "Current JSON Data",
+                Location = new Point(30, 280),
+                Size = new Size(200, 24),
+                Checked = true
+            };
+            _toolTip.SetToolTip(jsonCheckBox, "Include the current JSON data file in the context");
+            
+            // Create button to copy selected content to clipboard
+            Button copyToClipboardButton = new Button
+            {
+                Text = "Build & Copy Context",
+                Size = new Size(200, 40),
+                Location = new Point(20, 320),
+                BackColor = Color.FromArgb(230, 240, 255),
+                ForeColor = Color.DarkBlue,
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold)
+            };
+            copyToClipboardButton.Click += (s, e) => BuildAndCopyContext(cssCheckBox.Checked, templateCheckBox.Checked, modelCheckBox.Checked, jsonCheckBox.Checked);
+            _toolTip.SetToolTip(copyToClipboardButton, "Build and copy the selected context items to the clipboard for use with LLMs");
+            
             // Add controls to the panel
             powerToolsPanel.Controls.Add(_instructionLabel);
             powerToolsPanel.Controls.Add(_initialFormButton);
+            powerToolsPanel.Controls.Add(dividerPanel);
+            powerToolsPanel.Controls.Add(llmContextBuilderLabel);
+            powerToolsPanel.Controls.Add(descriptionLabel);
+            powerToolsPanel.Controls.Add(cssCheckBox);
+            powerToolsPanel.Controls.Add(templateCheckBox);
+            powerToolsPanel.Controls.Add(modelCheckBox);
+            powerToolsPanel.Controls.Add(jsonCheckBox);
+            powerToolsPanel.Controls.Add(copyToClipboardButton);
             
             // Add panel to the Power Tools tab
             _powerToolsTab.Controls.Add(powerToolsPanel);
@@ -199,6 +286,17 @@ namespace iTextDesignerWithGUI.Forms
             // Handle parent form resizing
             _parentForm.SizeChanged += (s, e) => {
                 this.Width = _parentForm.Width;
+                
+                // Update the divider width when the form resizes
+                if (_powerToolsTab.Controls.Count > 0)
+                {
+                    Panel powerToolsPanel = (Panel)_powerToolsTab.Controls[0];
+                    if (powerToolsPanel.Controls.Count > 3)
+                    {
+                        Panel dividerPanel = (Panel)powerToolsPanel.Controls[3];
+                        dividerPanel.Width = powerToolsPanel.Width - 40;
+                    }
+                }
             };
         }
 
@@ -367,6 +465,163 @@ namespace iTextDesignerWithGUI.Forms
             {
                 MessageBox.Show($"An error occurred: {ex.Message}\n\n{ex.StackTrace}", 
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Builds context from selected files and copies to clipboard based on user's checkbox selections
+        /// </summary>
+        private void BuildAndCopyContext(bool includeCss, bool includeTemplate, bool includeModel, bool includeJson)
+        {
+            try
+            {
+                if (_currentData == null)
+                {
+                    MessageBox.Show("No assessment data is currently loaded.", "No Data", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                // Use ProjectDirectoryService to find root directory
+                var projectDirService = new ProjectDirectoryService();
+                string rootPath = projectDirService.GetRootDirectory();
+
+                // Get the current assessment type from the data object
+                string currentAssessmentType = _currentData.GetType().Name.Replace("Instance", "");
+
+                // Load the assessment types from JSON
+                string assessmentTypesPath = projectDirService.GetFilePath("PersistentDataJSON/assessmentTypes.json");
+                string assessmentTypesJson = File.ReadAllText(assessmentTypesPath);
+                var assessmentTypesDoc = JsonDocument.Parse(assessmentTypesJson);
+                var assessmentTypes = assessmentTypesDoc.RootElement.GetProperty("assessmentTypes");
+
+                // Find the matching assessment type entry
+                JsonElement? matchingAssessment = null;
+                foreach (var assessment in assessmentTypes.EnumerateArray())
+                {
+                    string name = assessment.GetProperty("name").GetString();
+                    if (name == currentAssessmentType)
+                    {
+                        matchingAssessment = assessment;
+                        break;
+                    }
+                }
+
+                if (matchingAssessment == null)
+                {
+                    MessageBox.Show($"Could not find assessment type '{currentAssessmentType}' in assessmentTypes.json", 
+                        "Assessment Type Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Get paths from the matching assessment
+                string modelPath = projectDirService.GetFilePath(
+                    matchingAssessment.Value.GetProperty("assessmentDataInstanceDirectory").GetString());
+                
+                string templatePath = projectDirService.GetFilePath(
+                    matchingAssessment.Value.GetProperty("cshtmlTemplateDirectory").GetString());
+                
+                // Get the reference JSON data path
+                string jsonDataPath = projectDirService.GetFilePath(
+                    matchingAssessment.Value.GetProperty("jsonDataLocationDirectory").GetString());
+
+                // Global CSS is always in the same location
+                string cssPath = projectDirService.GetFilePath("Templates/globalStyles.css");
+
+                // Check if required files exist based on user selections
+                bool filesExist = true;
+                
+                if (includeModel && !File.Exists(modelPath))
+                {
+                    MessageBox.Show($"Model file not found: {modelPath}", "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    filesExist = false;
+                }
+                
+                if (includeTemplate && !File.Exists(templatePath))
+                {
+                    MessageBox.Show($"Template file not found: {templatePath}", "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    filesExist = false;
+                }
+                
+                if (includeCss && !File.Exists(cssPath))
+                {
+                    MessageBox.Show($"CSS file not found: {cssPath}", "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    filesExist = false;
+                }
+
+                if (!filesExist)
+                {
+                    return;
+                }
+
+                // Check if JSON reference data exists (don't fail if it doesn't)
+                string jsonDataContent = "// No reference JSON data found";
+                if (includeJson && File.Exists(jsonDataPath))
+                {
+                    jsonDataContent = File.ReadAllText(jsonDataPath);
+                }
+                else if (includeJson)
+                {
+                    Debug.WriteLine($"Warning: JSON reference data file not found: {jsonDataPath}");
+                }
+
+                // Read the content of all selected files
+                string modelContent = includeModel ? File.ReadAllText(modelPath) : "";
+                string templateContent = includeTemplate ? File.ReadAllText(templatePath) : "";
+                string cssContent = includeCss ? File.ReadAllText(cssPath) : "";
+
+                // Create the clipboard content
+                StringBuilder clipboardContent = new StringBuilder();
+                
+                // Add a header to explain the context
+                clipboardContent.AppendLine("# LLM Context Builder Output");
+                clipboardContent.AppendLine("The following files are provided as context for working with this assessment template:");
+                clipboardContent.AppendLine();
+                
+                if (includeModel)
+                {
+                    clipboardContent.AppendLine("## MODEL FILE: " + Path.GetFileName(modelPath));
+                    clipboardContent.AppendLine("```csharp");
+                    clipboardContent.AppendLine(modelContent);
+                    clipboardContent.AppendLine("```");
+                    clipboardContent.AppendLine();
+                }
+                
+                if (includeCss)
+                {
+                    clipboardContent.AppendLine("## GLOBAL CSS: globalStyles.css");
+                    clipboardContent.AppendLine("```css");
+                    clipboardContent.AppendLine(cssContent);
+                    clipboardContent.AppendLine("```");
+                    clipboardContent.AppendLine();
+                }
+                
+                if (includeTemplate)
+                {
+                    clipboardContent.AppendLine("## TEMPLATE: " + Path.GetFileName(templatePath));
+                    clipboardContent.AppendLine("```html");
+                    clipboardContent.AppendLine(templateContent);
+                    clipboardContent.AppendLine("```");
+                    clipboardContent.AppendLine();
+                }
+                
+                if (includeJson && File.Exists(jsonDataPath))
+                {
+                    clipboardContent.AppendLine("## REFERENCE JSON DATA: " + Path.GetFileName(jsonDataPath));
+                    clipboardContent.AppendLine("```json");
+                    clipboardContent.AppendLine(jsonDataContent);
+                    clipboardContent.AppendLine("```");
+                    clipboardContent.AppendLine();
+                }
+
+                // Copy to clipboard
+                Clipboard.SetText(clipboardContent.ToString());
+                
+                MessageBox.Show("Selected files copied to clipboard successfully!", "Context Builder Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}\n\n{ex.StackTrace}", 
+                    "Context Builder Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
