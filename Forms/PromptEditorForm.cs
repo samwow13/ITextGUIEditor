@@ -60,6 +60,10 @@ namespace iTextDesignerWithGUI.Forms
         private string _originalCategoryName = string.Empty;
         private string _originalPromptName = string.Empty;
         
+        // For returning edited prompt info to the caller
+        public string EditedCategoryName { get; private set; }
+        public string EditedPromptName { get; private set; }
+        
         /// <summary>
         /// Constructor for creating a new prompt
         /// </summary>
@@ -172,7 +176,7 @@ namespace iTextDesignerWithGUI.Forms
         {
             // Form properties
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.Size = new Size(750, 650);
+            this.Size = new Size(750, 680); // Increase form height to add more space
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -251,7 +255,7 @@ namespace iTextDesignerWithGUI.Forms
             _saveButton = new Button
             {
                 Text = "Save",
-                Location = new Point(560, 550),
+                Location = new Point(560, 570), // Move buttons down to add more space
                 Size = new Size(80, 30),
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular)
             };
@@ -260,7 +264,7 @@ namespace iTextDesignerWithGUI.Forms
             _cancelButton = new Button
             {
                 Text = "Cancel",
-                Location = new Point(650, 550),
+                Location = new Point(650, 570), // Move buttons down to add more space
                 Size = new Size(80, 30),
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular)
             };
@@ -285,8 +289,8 @@ namespace iTextDesignerWithGUI.Forms
             _editModeIndicatorLabel = new Label
             {
                 Text = "Edit Mode",
-                Location = new Point(20, 570),
-                Size = new Size(100, 20),
+                Location = new Point(20, 590),  // Move indicator down to match buttons
+                Size = new Size(200, 20),
                 Font = new Font("Segoe UI", 9F, FontStyle.Bold),
                 Visible = false
             };
@@ -502,6 +506,10 @@ namespace iTextDesignerWithGUI.Forms
                 // Show a success message including the mode (create, edit, duplicate)
                 string modeText = _isEditMode ? "edited" : (_isDuplicateMode ? "duplicated" : "created");
                 MessageBox.Show($"Prompt {modeText} successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                
+                // Store edited prompt info
+                EditedCategoryName = categoryName;
+                EditedPromptName = promptName;
                 
                 this.DialogResult = DialogResult.OK;
                 this.Close();

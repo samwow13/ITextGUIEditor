@@ -1076,6 +1076,13 @@ namespace iTextDesignerWithGUI.Forms
                 if (result == DialogResult.OK)
                 {
                     LoadPromptsFromJson();
+                    
+                    // Select the newly created prompt
+                    if (!string.IsNullOrEmpty(promptEditorForm.EditedCategoryName) && 
+                        !string.IsNullOrEmpty(promptEditorForm.EditedPromptName))
+                    {
+                        SelectPrompt(promptEditorForm.EditedCategoryName, promptEditorForm.EditedPromptName);
+                    }
                 }
             }
         }
@@ -1102,6 +1109,13 @@ namespace iTextDesignerWithGUI.Forms
                 if (result == DialogResult.OK)
                 {
                     LoadPromptsFromJson();
+                    
+                    // Select the edited prompt
+                    if (!string.IsNullOrEmpty(promptEditorForm.EditedCategoryName) && 
+                        !string.IsNullOrEmpty(promptEditorForm.EditedPromptName))
+                    {
+                        SelectPrompt(promptEditorForm.EditedCategoryName, promptEditorForm.EditedPromptName);
+                    }
                 }
             }
         }
@@ -1128,6 +1142,13 @@ namespace iTextDesignerWithGUI.Forms
                 if (result == DialogResult.OK)
                 {
                     LoadPromptsFromJson();
+                    
+                    // Select the new duplicated prompt
+                    if (!string.IsNullOrEmpty(promptEditorForm.EditedCategoryName) && 
+                        !string.IsNullOrEmpty(promptEditorForm.EditedPromptName))
+                    {
+                        SelectPrompt(promptEditorForm.EditedCategoryName, promptEditorForm.EditedPromptName);
+                    }
                 }
             }
         }
@@ -1204,6 +1225,21 @@ namespace iTextDesignerWithGUI.Forms
             
             MessageBox.Show($"Prompt '{promptName}' deleted successfully!",
                 "Prompt Deleted", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void SelectPrompt(string categoryName, string promptName)
+        {
+            // Select the category
+            if (_promptCategoryComboBox.Items.Contains(categoryName))
+            {
+                _promptCategoryComboBox.SelectedItem = categoryName;
+            }
+            
+            // Select the prompt
+            if (_promptListBox.Items.Contains(promptName))
+            {
+                _promptListBox.SelectedItem = promptName;
+            }
         }
     }
 }
