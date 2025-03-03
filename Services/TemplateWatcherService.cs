@@ -35,6 +35,7 @@ namespace iTextDesignerWithGUI.Services
             _directoryService = new ProjectDirectoryService();
             _watchers = new List<FileSystemWatcher>();
             _isInCooldown = false;
+            _isDisposed = false;  // Explicitly initialize this field
 
             string templatesPath = _directoryService.GetDirectory("Templates");
             Debug.WriteLine($"Initializing TemplateWatcherService for path: {templatesPath}");
@@ -90,6 +91,7 @@ namespace iTextDesignerWithGUI.Services
             _uiControl = uiControl ?? throw new ArgumentNullException(nameof(uiControl));
             _watchers = new List<FileSystemWatcher>();
             _isInCooldown = false;
+            _isDisposed = false;  // Explicitly initialize this field
 
             Debug.WriteLine($"Initializing TemplateWatcherService for path: {templatesPath}");
 

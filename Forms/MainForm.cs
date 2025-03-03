@@ -95,6 +95,8 @@ namespace iTextDesignerWithGUI.Forms
                 () => ReloadTemplates_Click(this, EventArgs.Empty),
                 this);
             
+            // Don't start watching yet - this will be controlled by the checkbox preference later
+            
             _closeEdgeOnChange = LoadCloseEdgePreference();
             
             // Update the window title to show the selected assessment type
@@ -475,6 +477,12 @@ namespace iTextDesignerWithGUI.Forms
                 if (autoSaveCheckbox.Checked)
                 {
                     _templateWatcher.StartWatching();
+                    Debug.WriteLine("Template watcher service started on form initialization");
+                }
+                else
+                {
+                    _templateWatcher.StopWatching();
+                    Debug.WriteLine("Template watcher service explicitly stopped on form initialization");
                 }
 
                 reloadButton.Click += ReloadTemplates_Click;
