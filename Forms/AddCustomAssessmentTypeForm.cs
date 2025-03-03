@@ -221,39 +221,41 @@ namespace iTextDesignerWithGUI.Forms
             linksPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             linksPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
 
-            // Add project button-like link
-            var addProjectLink = new LinkLabel
+            // Add project button
+            var addProjectButton = new Button
             {
                 Text = "Add Project",
                 Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                LinkColor = Color.FromArgb(40, 167, 69), // Success color
-                ActiveLinkColor = Color.FromArgb(32, 136, 55),
-                AutoSize = true,
+                BackColor = Color.FromArgb(40, 167, 69), // Success color
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                AutoSize = false,
                 TextAlign = ContentAlignment.MiddleCenter,
                 Dock = DockStyle.Fill,
                 Cursor = Cursors.Hand,
-                Padding = new Padding(10, 15, 10, 15),
-                LinkBehavior = LinkBehavior.HoverUnderline
+                Margin = new Padding(5)
             };
-            addProjectLink.LinkClicked += (sender, e) => AddProjectButton_Click(sender, e);
-            linksPanel.Controls.Add(addProjectLink, 0, 0);
+            addProjectButton.FlatAppearance.BorderSize = 0;
+            addProjectButton.Click += (sender, e) => AddProjectButton_Click(sender, e);
+            linksPanel.Controls.Add(addProjectButton, 0, 0);
 
-            // Delete assessment button-like link
-            var templateManagerLink = new LinkLabel
+            // Delete assessment button
+            var deleteAssessmentButton = new Button
             {
                 Text = "Delete an Assessment",
                 Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                LinkColor = Color.FromArgb(220, 53, 69), // Danger color
-                ActiveLinkColor = Color.FromArgb(189, 33, 48),
-                AutoSize = true,
+                BackColor = Color.FromArgb(220, 53, 69), // Danger color
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                AutoSize = false,
                 TextAlign = ContentAlignment.MiddleCenter,
                 Dock = DockStyle.Fill,
                 Cursor = Cursors.Hand,
-                Padding = new Padding(10, 15, 10, 15),
-                LinkBehavior = LinkBehavior.HoverUnderline
+                Margin = new Padding(5)
             };
-            templateManagerLink.LinkClicked += (sender, e) => DeleteTemplateButton_Click(sender, e);
-            linksPanel.Controls.Add(templateManagerLink, 1, 0);
+            deleteAssessmentButton.FlatAppearance.BorderSize = 0;
+            deleteAssessmentButton.Click += (sender, e) => DeleteTemplateButton_Click(sender, e);
+            linksPanel.Controls.Add(deleteAssessmentButton, 1, 0);
 
             managementContainer.Controls.Add(linksPanel, 0, 1);
             managementPanel.Controls.Add(managementContainer);
