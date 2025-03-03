@@ -10,6 +10,15 @@
         ]
       },
       {
+        "name": "Newly Created",
+        "prompts": [
+          {
+            "name": "Template Generation",
+            "prompt": "Please generate a complete .cshtml template using the model structure above and reference the globalStyles.css. Follow these guidelines for Razor compatibility:\n1. Begin with the appropriate model directive that exactly matches the model class name and namespace\n2. ALWAYS include these required namespace imports:\n   @using System\n   @using System.Linq\n   @using System.Collections.Generic\n3. Access properties using the correct path hierarchy (e.g., if properties are nested in Model.SomeProperty.ChildProperty)\n4. When using .NET framework types (Convert, DateTime, etc.), use their fully qualified names (System.Convert, System.DateTime)\n5. For collection operations (Any(), First(), etc.), ensure they are properly accessed on collection properties\n6. Avoid variable names that conflict with Razor keywords (like 'section', 'model', 'page')\n7. Only include this CSS reference: <link href=\"globalStyles.css\" rel=\"stylesheet\">\n8. Do not include Bootstrap or other external CSS frameworks\n9. The template will be processed by RazorLight engine with iText for PDF generation\n10. When working with JSON data types in Razor, use safe parsing instead of direct conversion:\n    - Use bool.TryParse() instead of Convert.ToBoolean()\n    - Use DateTime.TryParse() instead of DateTime.Parse()\n    - Use decimal.TryParse() or double.TryParse() for numeric values\n    - Always include null checks and fallback values\n    - When using nullable properties with the null conditional operator (?.) in conditions:\n      CORRECT: @(Model.Model?.IsActive == true ? \"Yes\" : \"No\")\n      INCORRECT: @(Model.Model?.IsActive ? \"Yes\" : \"No\") // This will cause a nullable bool error\n11. When writing conditional logic blocks in Razor:\n    - Avoid nesting @{ } code blocks - this causes parsing errors\n    - Declare variables in a single @{ } block at the beginning of complex conditional sections\n    - Use separate @if statements outside the @{ } block for rendering HTML\n12. Remember that the model structure determines how properties are accessed:\n    - If your JSON has { \"model\": { \"name\": \"...\" } }, use @Model.Model.Name\n    - If your JSON has { \"name\": \"...\" }, use @Model.Name\n13. When using TryParse methods with conditional (ternary) operators:\n    - Place the closing parenthesis of the TryParse method before the question mark\n    - CORRECT: @(DateTime.TryParse(value, out DateTime result) ? result.ToString(\"format\") : \"fallback\")\n    - INCORRECT: @(DateTime.TryParse(value, out DateTime result ? result.ToString(\"format\") : \"fallback\"))\n14. Be extra careful with balancing parentheses in Razor expressions, especially with nested conditions"
+          }
+        ]
+      },
+      {
         "name": "Code Structure",
         "prompts": [
           {

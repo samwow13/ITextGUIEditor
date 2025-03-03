@@ -52,7 +52,6 @@ namespace iTextDesignerWithGUI.Forms
         private TabControl _tabControl;
         private TabPage _jsonViewTab;
         private TabPage _powerToolsTab;  // New tab for Power Tools
-        private Button _initialFormButton;  // Button for Initial Form
         private Label _instructionLabel;  // Label for general instructions
         private ToolTip _toolTip;  // ToolTip for displaying hover information
         private JsonChecklistControl _jsonChecklistControl;
@@ -178,47 +177,11 @@ namespace iTextDesignerWithGUI.Forms
                 AutoScroll = true // Add scrolling for many controls
             };
             
-            // Create the instruction label
-            _instructionLabel = new Label
-            {
-                Text = "Hover over buttons for detailed instructions",
-                Location = new Point(20, 20),
-                Size = new Size(300, 20),
-                Font = new Font("Segoe UI", 9F, FontStyle.Italic),
-                ForeColor = Color.DarkSlateGray
-            };
-            
-            // Create the Initial Form button
-            _initialFormButton = new Button
-            {
-                Text = "Initial Form Copy",
-                Size = new Size(160, 40),  // Wider to accommodate the longer text
-                Location = new Point(20, 50),  // Moved down to accommodate the label
-                BackColor = SystemColors.Control,
-                Font = new Font("Segoe UI", 9F, FontStyle.Regular)
-            };
-            _initialFormButton.Click += InitialFormButton_Click;
-            
-            // Set the tooltip for the Initial Form button
-            string tooltipText = "This copies the associated Model, globalCSS, and current state of the HTML file" + Environment.NewLine +
-                                 "into your clipboard, along with a prompt to seed your Data model into the template." + Environment.NewLine +
-                                 "Copy this into the premiere ChatGPT model";
-            _toolTip.SetToolTip(_initialFormButton, tooltipText);
-            
-            // Create a visual divider between top and bottom sections
-            Panel dividerPanel = new Panel
-            {
-                Location = new Point(20, 110),
-                Size = new Size(powerToolsPanel.Width - 40, 2),
-                BackColor = Color.LightGray,
-                Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top
-            };
-            
             // Create a heading for the LLM Context Builder section
             Label llmContextBuilderLabel = new Label
             {
                 Text = "LLM Context Builder",
-                Location = new Point(20, 130),
+                Location = new Point(20, 20),
                 Size = new Size(300, 24),
                 Font = new Font("Segoe UI", 12F, FontStyle.Bold),
                 ForeColor = Color.DarkSlateBlue
@@ -228,7 +191,7 @@ namespace iTextDesignerWithGUI.Forms
             Label descriptionLabel = new Label
             {
                 Text = "Select items to include in the context for Large Language Models:",
-                Location = new Point(20, 160),
+                Location = new Point(20, 50),
                 Size = new Size(450, 20),
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular)
             };
@@ -237,7 +200,7 @@ namespace iTextDesignerWithGUI.Forms
             _cssCheckBox = new CheckBox
             {
                 Text = "Global Styles CSS",
-                Location = new Point(30, 190),
+                Location = new Point(30, 80),
                 Size = new Size(200, 24),
                 Checked = LoadCheckboxState(CssCheckboxKey, true) // Load saved state with default true
             };
@@ -247,7 +210,7 @@ namespace iTextDesignerWithGUI.Forms
             _templateCheckBox = new CheckBox
             {
                 Text = "Current CSHTML Template",
-                Location = new Point(30, 220),
+                Location = new Point(30, 110),
                 Size = new Size(200, 24),
                 Checked = LoadCheckboxState(TemplateCheckboxKey, true) // Load saved state with default true
             };
@@ -257,7 +220,7 @@ namespace iTextDesignerWithGUI.Forms
             _modelCheckBox = new CheckBox
             {
                 Text = "Current Model Instance",
-                Location = new Point(30, 250),
+                Location = new Point(30, 140),
                 Size = new Size(200, 24),
                 Checked = LoadCheckboxState(ModelCheckboxKey, true) // Load saved state with default true
             };
@@ -267,7 +230,7 @@ namespace iTextDesignerWithGUI.Forms
             _jsonCheckBox = new CheckBox
             {
                 Text = "Current JSON Data",
-                Location = new Point(30, 280),
+                Location = new Point(30, 170),
                 Size = new Size(200, 24),
                 Checked = LoadCheckboxState(JsonCheckboxKey, true) // Load saved state with default true
             };
@@ -279,7 +242,7 @@ namespace iTextDesignerWithGUI.Forms
             {
                 Text = "Build & Copy Context",
                 Size = new Size(200, 40),
-                Location = new Point(20, 630),  // Move the button to the bottom of the page
+                Location = new Point(30, 210),
                 BackColor = Color.FromArgb(230, 240, 255),
                 ForeColor = Color.DarkBlue,
                 Font = new Font("Segoe UI", 10F, FontStyle.Bold)
@@ -287,74 +250,57 @@ namespace iTextDesignerWithGUI.Forms
             copyToClipboardButton.Click += (s, e) => BuildAndCopyContext(_cssCheckBox.Checked, _templateCheckBox.Checked, _modelCheckBox.Checked, _jsonCheckBox.Checked);
             _toolTip.SetToolTip(copyToClipboardButton, "Build and copy the selected context items to the clipboard for use with LLMs");
             
-            // Add controls to the panel
-            powerToolsPanel.Controls.Add(_instructionLabel);
-            powerToolsPanel.Controls.Add(_initialFormButton);
-            powerToolsPanel.Controls.Add(dividerPanel);
-            powerToolsPanel.Controls.Add(llmContextBuilderLabel);
-            powerToolsPanel.Controls.Add(descriptionLabel);
-            powerToolsPanel.Controls.Add(_cssCheckBox);
-            powerToolsPanel.Controls.Add(_templateCheckBox);
-            powerToolsPanel.Controls.Add(_modelCheckBox);
-            powerToolsPanel.Controls.Add(_jsonCheckBox);
-            powerToolsPanel.Controls.Add(copyToClipboardButton);
-            
-            // Create a second divider for the Prompt Builder section
+            // Create a divider for the Prompt Builder section
             Panel promptDividerPanel = new Panel
             {
-                Location = new Point(20, 320),
+                Location = new Point(20, 270),
                 Size = new Size(powerToolsPanel.Width - 40, 2),
                 BackColor = Color.LightGray,
                 Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top
             };
-            powerToolsPanel.Controls.Add(promptDividerPanel);
             
             // Create heading for the Prompt Builder section
             _promptBuilderLabel = new Label
             {
                 Text = "Create a prompt",
-                Location = new Point(20, 335),
+                Location = new Point(20, 285),
                 Size = new Size(300, 24),
                 Font = new Font("Segoe UI", 12F, FontStyle.Bold),
                 ForeColor = Color.DarkSlateBlue
             };
-            powerToolsPanel.Controls.Add(_promptBuilderLabel);
             
             // Create the category ComboBox
             _promptCategoryComboBox = new ComboBox
             {
-                Location = new Point(20, 365),
+                Location = new Point(20, 315),
                 Size = new Size(280, 24),
                 DropDownStyle = ComboBoxStyle.DropDownList
             };
             _promptCategoryComboBox.SelectedIndexChanged += PromptCategory_SelectedIndexChanged;
-            powerToolsPanel.Controls.Add(_promptCategoryComboBox);
             
             // Create the prompt ListBox
             _promptListBox = new ListBox
             {
-                Location = new Point(20, 395),
+                Location = new Point(20, 345),
                 Size = new Size(280, 100),
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular),
                 ScrollAlwaysVisible = true
             };
             _promptListBox.SelectedIndexChanged += PromptListBox_SelectedIndexChanged;
-            powerToolsPanel.Controls.Add(_promptListBox);
             
             // Add a label for the prompt preview
             Label promptPreviewLabel = new Label
             {
                 Text = "Prompt Preview:",
-                Location = new Point(20, 505),
+                Location = new Point(20, 455),
                 Size = new Size(120, 20),
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular)
             };
-            powerToolsPanel.Controls.Add(promptPreviewLabel);
             
             // Create a text box to preview the selected prompt
             _promptPreviewTextBox = new TextBox
             {
-                Location = new Point(20, 530),
+                Location = new Point(20, 480),
                 Size = new Size(280, 80),
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular),
                 Multiline = true,
@@ -362,10 +308,48 @@ namespace iTextDesignerWithGUI.Forms
                 ScrollBars = ScrollBars.Vertical,
                 BorderStyle = BorderStyle.FixedSingle
             };
-            powerToolsPanel.Controls.Add(_promptPreviewTextBox);
+            
+            // Create button to copy prompt to clipboard
+            Button copyPromptButton = new Button
+            {
+                Text = "Copy Prompt to Clipboard",
+                Size = new Size(200, 30),
+                Location = new Point(20, 570),
+                BackColor = Color.FromArgb(230, 240, 255),
+                ForeColor = Color.DarkBlue,
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular)
+            };
+            copyPromptButton.Click += (s, e) => 
+            {
+                if (!string.IsNullOrEmpty(_selectedPrompt))
+                {
+                    Clipboard.SetText(_selectedPrompt);
+                    MessageBox.Show("Prompt copied to clipboard", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("No prompt is selected", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            };
             
             // Load prompts from the JSON file
             LoadPromptsFromJson();
+            
+            // Add controls to the panel
+            powerToolsPanel.Controls.Add(llmContextBuilderLabel);
+            powerToolsPanel.Controls.Add(descriptionLabel);
+            powerToolsPanel.Controls.Add(_cssCheckBox);
+            powerToolsPanel.Controls.Add(_templateCheckBox);
+            powerToolsPanel.Controls.Add(_modelCheckBox);
+            powerToolsPanel.Controls.Add(_jsonCheckBox);
+            powerToolsPanel.Controls.Add(copyToClipboardButton);
+            powerToolsPanel.Controls.Add(promptDividerPanel);
+            powerToolsPanel.Controls.Add(_promptBuilderLabel);
+            powerToolsPanel.Controls.Add(_promptCategoryComboBox);
+            powerToolsPanel.Controls.Add(_promptListBox);
+            powerToolsPanel.Controls.Add(promptPreviewLabel);
+            powerToolsPanel.Controls.Add(_promptPreviewTextBox);
+            powerToolsPanel.Controls.Add(copyPromptButton);
             
             // Add panel to the Power Tools tab
             _powerToolsTab.Controls.Add(powerToolsPanel);
@@ -428,177 +412,9 @@ namespace iTextDesignerWithGUI.Forms
         }
 
         /// <summary>
-        /// Handles the click event for the Initial Form Copy button
-        /// Gathers model, template, and CSS files and copies them to clipboard
-        /// </summary>
-        private void InitialFormButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (_currentData == null)
-                {
-                    MessageBox.Show("No assessment data is currently loaded.", "No Data", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
-
-                // Use ProjectDirectoryService to find root directory
-                var projectDirService = new ProjectDirectoryService();
-                string rootPath = projectDirService.GetRootDirectory();
-
-                // Get the current assessment type from the data object
-                string currentAssessmentType = _currentData.GetType().Name.Replace("Instance", "");
-
-                // Load the assessment types from JSON
-                string assessmentTypesPath = projectDirService.GetFilePath("PersistentDataJSON/assessmentTypes.json");
-                string assessmentTypesJson = File.ReadAllText(assessmentTypesPath);
-                var assessmentTypesDoc = JsonDocument.Parse(assessmentTypesJson);
-                var assessmentTypes = assessmentTypesDoc.RootElement.GetProperty("assessmentTypes");
-
-                // Find the matching assessment type entry
-                JsonElement? matchingAssessment = null;
-                foreach (var assessment in assessmentTypes.EnumerateArray())
-                {
-                    string name = assessment.GetProperty("name").GetString();
-                    if (name == currentAssessmentType)
-                    {
-                        matchingAssessment = assessment;
-                        break;
-                    }
-                }
-
-                if (matchingAssessment == null)
-                {
-                    MessageBox.Show($"Could not find assessment type '{currentAssessmentType}' in assessmentTypes.json", 
-                        "Assessment Type Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                // Get paths from the matching assessment
-                string modelPath = projectDirService.GetFilePath(
-                    matchingAssessment.Value.GetProperty("assessmentDataInstanceDirectory").GetString());
-                
-                string templatePath = projectDirService.GetFilePath(
-                    matchingAssessment.Value.GetProperty("cshtmlTemplateDirectory").GetString());
-                
-                // Get the reference JSON data path
-                string jsonDataPath = projectDirService.GetFilePath(
-                    matchingAssessment.Value.GetProperty("jsonDataLocationDirectory").GetString());
-
-                // Global CSS is always in the same location
-                string cssPath = projectDirService.GetFilePath("Templates/globalStyles.css");
-
-                // Check if all required files exist
-                if (!File.Exists(modelPath))
-                {
-                    MessageBox.Show($"Model file not found: {modelPath}", "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                
-                if (!File.Exists(templatePath))
-                {
-                    MessageBox.Show($"Template file not found: {templatePath}", "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                
-                if (!File.Exists(cssPath))
-                {
-                    MessageBox.Show($"CSS file not found: {cssPath}", "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                // Check if JSON reference data exists (don't fail if it doesn't)
-                string jsonDataContent = "// No reference JSON data found";
-                if (File.Exists(jsonDataPath))
-                {
-                    jsonDataContent = File.ReadAllText(jsonDataPath);
-                }
-                else
-                {
-                    Debug.WriteLine($"Warning: JSON reference data file not found: {jsonDataPath}");
-                }
-
-                // Read the content of all files
-                string modelContent = File.ReadAllText(modelPath);
-                string templateContent = File.ReadAllText(templatePath);
-                string cssContent = File.ReadAllText(cssPath);
-
-                // Create the clipboard content
-                StringBuilder clipboardContent = new StringBuilder();
-                
-                clipboardContent.AppendLine("// MODEL FILE: " + Path.GetFileName(modelPath));
-                clipboardContent.AppendLine("```csharp");
-                clipboardContent.AppendLine(modelContent);
-                clipboardContent.AppendLine("```");
-                clipboardContent.AppendLine();
-                
-                clipboardContent.AppendLine("// GLOBAL CSS: globalStyles.css");
-                clipboardContent.AppendLine("```css");
-                clipboardContent.AppendLine(cssContent);
-                clipboardContent.AppendLine("```");
-                clipboardContent.AppendLine();
-                
-                clipboardContent.AppendLine("// TEMPLATE: " + Path.GetFileName(templatePath));
-                clipboardContent.AppendLine("```html");
-                clipboardContent.AppendLine(templateContent);
-                clipboardContent.AppendLine("```");
-                clipboardContent.AppendLine();
-                
-                clipboardContent.AppendLine("// REFERENCE JSON DATA: " + Path.GetFileName(jsonDataPath));
-                clipboardContent.AppendLine("```json");
-                clipboardContent.AppendLine(jsonDataContent);
-                clipboardContent.AppendLine("```");
-                clipboardContent.AppendLine();
-                
-                clipboardContent.AppendLine("Please generate a complete .cshtml template using the model structure above and reference the globalStyles.css. Follow these guidelines for Razor compatibility:");
-                clipboardContent.AppendLine("1. Begin with the appropriate model directive that exactly matches the model class name and namespace");
-                clipboardContent.AppendLine("2. ALWAYS include these required namespace imports:");
-                clipboardContent.AppendLine("   @using System");
-                clipboardContent.AppendLine("   @using System.Linq");
-                clipboardContent.AppendLine("   @using System.Collections.Generic");
-                clipboardContent.AppendLine("3. Access properties using the correct path hierarchy (e.g., if properties are nested in Model.SomeProperty.ChildProperty)");
-                clipboardContent.AppendLine("4. When using .NET framework types (Convert, DateTime, etc.), use their fully qualified names (System.Convert, System.DateTime)");
-                clipboardContent.AppendLine("5. For collection operations (Any(), First(), etc.), ensure they are properly accessed on collection properties");
-                clipboardContent.AppendLine("6. Avoid variable names that conflict with Razor keywords (like 'section', 'model', 'page')");
-                clipboardContent.AppendLine("7. Only include this CSS reference: <link href=\"globalStyles.css\" rel=\"stylesheet\">");
-                clipboardContent.AppendLine("8. Do not include Bootstrap or other external CSS frameworks");
-                clipboardContent.AppendLine("9. The template will be processed by RazorLight engine with iText for PDF generation");
-                clipboardContent.AppendLine("10. When working with JSON data types in Razor, use safe parsing instead of direct conversion:");
-                clipboardContent.AppendLine("    - Use bool.TryParse() instead of Convert.ToBoolean()");
-                clipboardContent.AppendLine("    - Use DateTime.TryParse() instead of DateTime.Parse()");
-                clipboardContent.AppendLine("    - Use decimal.TryParse() or double.TryParse() for numeric values");
-                clipboardContent.AppendLine("    - Always include null checks and fallback values");
-                clipboardContent.AppendLine("    - When using nullable properties with the null conditional operator (?.) in conditions:");
-                clipboardContent.AppendLine("      CORRECT: @(Model.Model?.IsActive == true ? \"Yes\" : \"No\")");
-                clipboardContent.AppendLine("      INCORRECT: @(Model.Model?.IsActive ? \"Yes\" : \"No\") // This will cause a nullable bool error");
-                clipboardContent.AppendLine("11. When writing conditional logic blocks in Razor:");
-                clipboardContent.AppendLine("    - Avoid nesting @{ } code blocks - this causes parsing errors");
-                clipboardContent.AppendLine("    - Declare variables in a single @{ } block at the beginning of complex conditional sections");
-                clipboardContent.AppendLine("    - Use separate @if statements outside the @{ } block for rendering HTML");
-                clipboardContent.AppendLine("12. Remember that the model structure determines how properties are accessed:");
-                clipboardContent.AppendLine("    - If your JSON has { \"model\": { \"name\": \"...\" } }, use @Model.Model.Name");
-                clipboardContent.AppendLine("    - If your JSON has { \"name\": \"...\" }, use @Model.Name");
-                clipboardContent.AppendLine("13. When using TryParse methods with conditional (ternary) operators:");
-                clipboardContent.AppendLine("    - Place the closing parenthesis of the TryParse method before the question mark");
-                clipboardContent.AppendLine("    - CORRECT: @(DateTime.TryParse(value, out DateTime result) ? result.ToString(\"format\") : \"fallback\")");
-                clipboardContent.AppendLine("    - INCORRECT: @(DateTime.TryParse(value, out DateTime result ? result.ToString(\"format\") : \"fallback\"))");
-                clipboardContent.AppendLine("14. Be extra careful with balancing parentheses in Razor expressions, especially with nested conditions");
-
-                // Copy to clipboard
-                Clipboard.SetText(clipboardContent.ToString());
-                
-                MessageBox.Show("Files copied to clipboard successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred: {ex.Message}\n\n{ex.StackTrace}", 
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        /// <summary>
         /// Builds context from selected files and copies to clipboard based on user's checkbox selections
         /// </summary>
-        private void BuildAndCopyContext(bool includeCss, bool includeTemplate, bool includeModel, bool includeJson)
+        private void BuildAndCopyContext(bool includeCss, bool includeTemplate, bool includeModel, bool includeJsonData)
         {
             try
             {
@@ -682,11 +498,11 @@ namespace iTextDesignerWithGUI.Forms
 
                 // Check if JSON reference data exists (don't fail if it doesn't)
                 string jsonDataContent = "// No reference JSON data found";
-                if (includeJson && File.Exists(jsonDataPath))
+                if (includeJsonData && File.Exists(jsonDataPath))
                 {
                     jsonDataContent = File.ReadAllText(jsonDataPath);
                 }
-                else if (includeJson)
+                else if (includeJsonData)
                 {
                     Debug.WriteLine($"Warning: JSON reference data file not found: {jsonDataPath}");
                 }
@@ -746,7 +562,7 @@ namespace iTextDesignerWithGUI.Forms
                     clipboardContent.AppendLine();
                 }
                 
-                if (includeJson && File.Exists(jsonDataPath))
+                if (includeJsonData && File.Exists(jsonDataPath))
                 {
                     clipboardContent.AppendLine("## REFERENCE JSON DATA: " + Path.GetFileName(jsonDataPath));
                     clipboardContent.AppendLine("```json");
@@ -773,7 +589,7 @@ namespace iTextDesignerWithGUI.Forms
         /// <param name="keyName">Registry key name</param>
         /// <param name="defaultValue">Default value if the registry key doesn't exist</param>
         /// <returns>The saved checkbox state or the default value</returns>
-        private bool LoadCheckboxState(string keyName, bool defaultValue)
+        private bool LoadCheckboxState(string keyName, bool defaultValue = true)
         {
             try
             {
