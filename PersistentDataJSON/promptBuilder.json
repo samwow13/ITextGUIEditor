@@ -1,6 +1,15 @@
 {
     "categories": [
       {
+        "name": "No Prompt Selected:",
+        "prompts": [
+          {
+            "name": "No Prompt Selected:",
+            "prompt": ""
+          }
+        ]
+      },
+      {
         "name": "Code Structure",
         "prompts": [
           {

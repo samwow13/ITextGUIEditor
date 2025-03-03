@@ -23,6 +23,31 @@ namespace iTextDesignerWithGUI.Forms
     /// </summary>
     public class SecondaryForm : Form
     {
+        // Classes to represent the prompt structure from the JSON file
+        private class PromptCategory
+        {
+            [JsonPropertyName("name")]
+            public string Name { get; set; }
+            
+            [JsonPropertyName("prompts")]
+            public List<PromptItem> Prompts { get; set; }
+        }
+        
+        private class PromptItem
+        {
+            [JsonPropertyName("name")]
+            public string Name { get; set; }
+            
+            [JsonPropertyName("prompt")]
+            public string Prompt { get; set; }
+        }
+        
+        private class PromptBuilderJson
+        {
+            [JsonPropertyName("categories")]
+            public List<PromptCategory> Categories { get; set; }
+        }
+        
         private readonly MainForm _parentForm;
         private TabControl _tabControl;
         private TabPage _jsonViewTab;
@@ -39,6 +64,13 @@ namespace iTextDesignerWithGUI.Forms
         private CheckBox _modelCheckBox;
         private CheckBox _jsonCheckBox;
         
+        // Prompt Builder UI components
+        private ComboBox _promptCategoryComboBox;
+        private ListBox _promptListBox;
+        private string _selectedPrompt = "";
+        private Label _promptBuilderLabel;
+        private TextBox _promptPreviewTextBox;
+        
         // Registry keys for saving preferences
         private const string RegistryPath = @"Software\ITextGUIDesigner\SecondaryForm";
         private const string CssCheckboxKey = "CssCheckboxEnabled";
@@ -46,6 +78,8 @@ namespace iTextDesignerWithGUI.Forms
         private const string ModelCheckboxKey = "ModelCheckboxEnabled";
         private const string JsonCheckboxKey = "JsonCheckboxEnabled";
         private const string SelectedTabKey = "SelectedTabIndex";
+        private const string SelectedPromptCategoryKey = "SelectedPromptCategory";
+        private const string SelectedPromptKey = "SelectedPrompt";
 
         public SecondaryForm(MainForm parentForm)
         {
@@ -245,7 +279,7 @@ namespace iTextDesignerWithGUI.Forms
             {
                 Text = "Build & Copy Context",
                 Size = new Size(200, 40),
-                Location = new Point(20, 320),
+                Location = new Point(20, 630),  // Move the button to the bottom of the page
                 BackColor = Color.FromArgb(230, 240, 255),
                 ForeColor = Color.DarkBlue,
                 Font = new Font("Segoe UI", 10F, FontStyle.Bold)
@@ -265,6 +299,74 @@ namespace iTextDesignerWithGUI.Forms
             powerToolsPanel.Controls.Add(_jsonCheckBox);
             powerToolsPanel.Controls.Add(copyToClipboardButton);
             
+            // Create a second divider for the Prompt Builder section
+            Panel promptDividerPanel = new Panel
+            {
+                Location = new Point(20, 320),
+                Size = new Size(powerToolsPanel.Width - 40, 2),
+                BackColor = Color.LightGray,
+                Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top
+            };
+            powerToolsPanel.Controls.Add(promptDividerPanel);
+            
+            // Create heading for the Prompt Builder section
+            _promptBuilderLabel = new Label
+            {
+                Text = "Create a prompt",
+                Location = new Point(20, 335),
+                Size = new Size(300, 24),
+                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                ForeColor = Color.DarkSlateBlue
+            };
+            powerToolsPanel.Controls.Add(_promptBuilderLabel);
+            
+            // Create the category ComboBox
+            _promptCategoryComboBox = new ComboBox
+            {
+                Location = new Point(20, 365),
+                Size = new Size(280, 24),
+                DropDownStyle = ComboBoxStyle.DropDownList
+            };
+            _promptCategoryComboBox.SelectedIndexChanged += PromptCategory_SelectedIndexChanged;
+            powerToolsPanel.Controls.Add(_promptCategoryComboBox);
+            
+            // Create the prompt ListBox
+            _promptListBox = new ListBox
+            {
+                Location = new Point(20, 395),
+                Size = new Size(280, 100),
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
+                ScrollAlwaysVisible = true
+            };
+            _promptListBox.SelectedIndexChanged += PromptListBox_SelectedIndexChanged;
+            powerToolsPanel.Controls.Add(_promptListBox);
+            
+            // Add a label for the prompt preview
+            Label promptPreviewLabel = new Label
+            {
+                Text = "Prompt Preview:",
+                Location = new Point(20, 505),
+                Size = new Size(120, 20),
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular)
+            };
+            powerToolsPanel.Controls.Add(promptPreviewLabel);
+            
+            // Create a text box to preview the selected prompt
+            _promptPreviewTextBox = new TextBox
+            {
+                Location = new Point(20, 530),
+                Size = new Size(280, 80),
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
+                Multiline = true,
+                ReadOnly = true,
+                ScrollBars = ScrollBars.Vertical,
+                BorderStyle = BorderStyle.FixedSingle
+            };
+            powerToolsPanel.Controls.Add(_promptPreviewTextBox);
+            
+            // Load prompts from the JSON file
+            LoadPromptsFromJson();
+            
             // Add panel to the Power Tools tab
             _powerToolsTab.Controls.Add(powerToolsPanel);
 
@@ -282,7 +384,7 @@ namespace iTextDesignerWithGUI.Forms
             Controls.Add(_tabControl);
 
             // Set form size
-            Size = new Size(800, 400);
+            Size = new Size(800, 630);
         }
 
         private void PositionFormBelowParent()
@@ -602,6 +704,21 @@ namespace iTextDesignerWithGUI.Forms
                 clipboardContent.AppendLine("The following files are provided as context for working with this assessment template:");
                 clipboardContent.AppendLine();
                 
+                // Add the selected prompt if one exists
+                if (!string.IsNullOrEmpty(_selectedPrompt))
+                {
+                    string categoryName = _promptCategoryComboBox.SelectedItem?.ToString() ?? "Unknown Category";
+                    string promptName = _promptListBox.SelectedItem?.ToString() ?? "Unknown Prompt";
+                    
+                    clipboardContent.AppendLine("## SELECTED PROMPT");
+                    clipboardContent.AppendLine($"Category: {categoryName}");
+                    clipboardContent.AppendLine($"Prompt: {promptName}");
+                    clipboardContent.AppendLine("```");
+                    clipboardContent.AppendLine(_selectedPrompt);
+                    clipboardContent.AppendLine("```");
+                    clipboardContent.AppendLine();
+                }
+                
                 if (includeModel)
                 {
                     clipboardContent.AppendLine("## MODEL FILE: " + Path.GetFileName(modelPath));
@@ -664,7 +781,7 @@ namespace iTextDesignerWithGUI.Forms
                 {
                     if (key != null)
                     {
-                        var value = key.GetValue(keyName);
+                        object value = key.GetValue(keyName);
                         if (value != null)
                         {
                             return Convert.ToBoolean(value);
@@ -674,9 +791,70 @@ namespace iTextDesignerWithGUI.Forms
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error loading checkbox state for {keyName}: {ex.Message}");
+                Debug.WriteLine($"Error loading checkbox state: {ex.Message}");
             }
-            return defaultValue; // Return default value if not found or error
+            
+            return defaultValue;
+        }
+        
+        /// <summary>
+        /// Loads prompts from the promptBuilder.json file and populates the UI components
+        /// </summary>
+        private void LoadPromptsFromJson()
+        {
+            try
+            {
+                // Use ProjectDirectoryService to find the JSON file
+                var projectDirService = new ProjectDirectoryService();
+                string promptBuilderPath = projectDirService.GetFilePath("PersistentDataJSON/promptBuilder.json");
+                
+                if (!File.Exists(promptBuilderPath))
+                {
+                    MessageBox.Show("Prompt builder JSON file not found at: " + promptBuilderPath, 
+                        "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                
+                // Read and deserialize the JSON file
+                string jsonContent = File.ReadAllText(promptBuilderPath);
+                var promptBuilder = JsonSerializer.Deserialize<PromptBuilderJson>(jsonContent);
+                
+                if (promptBuilder == null || promptBuilder.Categories == null || promptBuilder.Categories.Count == 0)
+                {
+                    MessageBox.Show("No prompt categories found in the promptBuilder.json file.", 
+                        "No Data", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                
+                // Clear existing items
+                _promptCategoryComboBox.Items.Clear();
+                _promptListBox.Items.Clear();
+                
+                // Add categories to the ComboBox
+                foreach (var category in promptBuilder.Categories)
+                {
+                    _promptCategoryComboBox.Items.Add(category.Name);
+                }
+                
+                // Load the previously selected category, if any
+                string savedCategory = LoadSelectedCategory();
+                if (!string.IsNullOrEmpty(savedCategory) && _promptCategoryComboBox.Items.Contains(savedCategory))
+                {
+                    _promptCategoryComboBox.SelectedItem = savedCategory;
+                }
+                else if (_promptCategoryComboBox.Items.Count > 0)
+                {
+                    // Default to the first item
+                    _promptCategoryComboBox.SelectedIndex = 0;
+                }
+                
+                // Now the SelectedIndexChanged event will populate the ListBox
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading prompts: {ex.Message}", 
+                    "Prompt Builder Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /// <summary>
@@ -756,6 +934,192 @@ namespace iTextDesignerWithGUI.Forms
             {
                 Debug.WriteLine($"Error saving selected tab index: {ex.Message}");
             }
+        }
+
+        /// <summary>
+        /// Event handler for when a new category is selected in the ComboBox
+        /// </summary>
+        private void PromptCategory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                // Clear the existing prompts
+                _promptListBox.Items.Clear();
+                _selectedPrompt = "";
+                
+                if (_promptCategoryComboBox.SelectedItem == null)
+                    return;
+                    
+                string selectedCategory = _promptCategoryComboBox.SelectedItem.ToString();
+                
+                // Save the selected category
+                SaveSelectedCategory(selectedCategory);
+                
+                // Load the JSON file again to get the prompts for this category
+                var projectDirService = new ProjectDirectoryService();
+                string promptBuilderPath = projectDirService.GetFilePath("PersistentDataJSON/promptBuilder.json");
+                string jsonContent = File.ReadAllText(promptBuilderPath);
+                var promptBuilder = JsonSerializer.Deserialize<PromptBuilderJson>(jsonContent);
+                
+                if (promptBuilder == null || promptBuilder.Categories == null)
+                    return;
+                    
+                // Find the selected category
+                var category = promptBuilder.Categories.FirstOrDefault(c => c.Name == selectedCategory);
+                if (category == null || category.Prompts == null)
+                    return;
+                    
+                // Add the prompts to the ListBox
+                foreach (var prompt in category.Prompts)
+                {
+                    _promptListBox.Items.Add(prompt.Name);
+                }
+                
+                // Load the previously selected prompt for this category, if any
+                string savedPrompt = LoadSelectedPrompt();
+                if (!string.IsNullOrEmpty(savedPrompt) && _promptListBox.Items.Contains(savedPrompt))
+                {
+                    _promptListBox.SelectedItem = savedPrompt;
+                }
+                else if (_promptListBox.Items.Count > 0)
+                {
+                    // Default to the first item
+                    _promptListBox.SelectedIndex = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error loading prompts for category: {ex.Message}");
+            }
+        }
+        
+        /// <summary>
+        /// Event handler for when a new prompt is selected in the ListBox
+        /// </summary>
+        private void PromptListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (_promptListBox.SelectedItem == null || _promptCategoryComboBox.SelectedItem == null)
+                    return;
+                    
+                string selectedCategory = _promptCategoryComboBox.SelectedItem.ToString();
+                string selectedPromptName = _promptListBox.SelectedItem.ToString();
+                
+                // Save the selected prompt
+                SaveSelectedPrompt(selectedPromptName);
+                
+                // Get the prompt text from the JSON file
+                var projectDirService = new ProjectDirectoryService();
+                string promptBuilderPath = projectDirService.GetFilePath("PersistentDataJSON/promptBuilder.json");
+                string jsonContent = File.ReadAllText(promptBuilderPath);
+                var promptBuilder = JsonSerializer.Deserialize<PromptBuilderJson>(jsonContent);
+                
+                if (promptBuilder == null || promptBuilder.Categories == null)
+                    return;
+                    
+                var category = promptBuilder.Categories.FirstOrDefault(c => c.Name == selectedCategory);
+                if (category == null || category.Prompts == null)
+                    return;
+                    
+                var prompt = category.Prompts.FirstOrDefault(p => p.Name == selectedPromptName);
+                if (prompt == null)
+                    return;
+                    
+                // Store the selected prompt text
+                _selectedPrompt = prompt.Prompt;
+                
+                // Update the preview text box
+                _promptPreviewTextBox.Text = _selectedPrompt;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error setting selected prompt: {ex.Message}");
+                _selectedPrompt = "";
+                _promptPreviewTextBox.Text = "";
+            }
+        }
+        
+        /// <summary>
+        /// Save the selected prompt category to the registry
+        /// </summary>
+        private void SaveSelectedCategory(string category)
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.CreateSubKey(RegistryPath))
+                {
+                    key.SetValue(SelectedPromptCategoryKey, category);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error saving selected category: {ex.Message}");
+            }
+        }
+        
+        /// <summary>
+        /// Load the selected prompt category from the registry
+        /// </summary>
+        private string LoadSelectedCategory()
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.OpenSubKey(RegistryPath))
+                {
+                    if (key != null)
+                    {
+                        return key.GetValue(SelectedPromptCategoryKey, "").ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error loading selected category: {ex.Message}");
+            }
+            
+            return "";
+        }
+        
+        /// <summary>
+        /// Save the selected prompt to the registry
+        /// </summary>
+        private void SaveSelectedPrompt(string prompt)
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.CreateSubKey(RegistryPath))
+                {
+                    key.SetValue(SelectedPromptKey, prompt);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error saving selected prompt: {ex.Message}");
+            }
+        }
+        
+        /// <summary>
+        /// Load the selected prompt from the registry
+        /// </summary>
+        private string LoadSelectedPrompt()
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.OpenSubKey(RegistryPath))
+                {
+                    if (key != null)
+                    {
+                        return key.GetValue(SelectedPromptKey, "").ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error loading selected prompt: {ex.Message}");
+            }
+            
+            return "";
         }
     }
 }
