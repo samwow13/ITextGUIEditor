@@ -177,93 +177,11 @@ namespace iTextDesignerWithGUI.Forms
                 AutoScroll = true // Add scrolling for many controls
             };
             
-            // Create a heading for the LLM Context Builder section
-            Label llmContextBuilderLabel = new Label
-            {
-                Text = "LLM Context Builder",
-                Location = new Point(20, 20),
-                Size = new Size(300, 24),
-                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
-                ForeColor = Color.DarkSlateBlue
-            };
-            
-            // Description label for the new section
-            Label descriptionLabel = new Label
-            {
-                Text = "Select items to include in the context for Large Language Models:",
-                Location = new Point(20, 50),
-                Size = new Size(450, 20),
-                Font = new Font("Segoe UI", 9F, FontStyle.Regular)
-            };
-            
-            // Create checkboxes for selecting content to copy
-            _cssCheckBox = new CheckBox
-            {
-                Text = "Global Styles CSS",
-                Location = new Point(30, 80),
-                Size = new Size(200, 24),
-                Checked = LoadCheckboxState(CssCheckboxKey, true) // Load saved state with default true
-            };
-            _toolTip.SetToolTip(_cssCheckBox, "Include globalStyles.css in the context");
-            _cssCheckBox.CheckedChanged += (s, e) => SaveCheckboxState(CssCheckboxKey, _cssCheckBox.Checked);
-            
-            _templateCheckBox = new CheckBox
-            {
-                Text = "Current CSHTML Template",
-                Location = new Point(30, 110),
-                Size = new Size(200, 24),
-                Checked = LoadCheckboxState(TemplateCheckboxKey, true) // Load saved state with default true
-            };
-            _toolTip.SetToolTip(_templateCheckBox, "Include the current CSHTML template in the context");
-            _templateCheckBox.CheckedChanged += (s, e) => SaveCheckboxState(TemplateCheckboxKey, _templateCheckBox.Checked);
-            
-            _modelCheckBox = new CheckBox
-            {
-                Text = "Current Model Instance",
-                Location = new Point(30, 140),
-                Size = new Size(200, 24),
-                Checked = LoadCheckboxState(ModelCheckboxKey, true) // Load saved state with default true
-            };
-            _toolTip.SetToolTip(_modelCheckBox, "Include the current model instance file in the context");
-            _modelCheckBox.CheckedChanged += (s, e) => SaveCheckboxState(ModelCheckboxKey, _modelCheckBox.Checked);
-            
-            _jsonCheckBox = new CheckBox
-            {
-                Text = "Current JSON Data",
-                Location = new Point(30, 170),
-                Size = new Size(200, 24),
-                Checked = LoadCheckboxState(JsonCheckboxKey, true) // Load saved state with default true
-            };
-            _toolTip.SetToolTip(_jsonCheckBox, "Include the current JSON data file in the context");
-            _jsonCheckBox.CheckedChanged += (s, e) => SaveCheckboxState(JsonCheckboxKey, _jsonCheckBox.Checked);
-            
-            // Create button to copy selected content to clipboard
-            Button copyToClipboardButton = new Button
-            {
-                Text = "Build & Copy Context",
-                Size = new Size(200, 40),
-                Location = new Point(30, 210),
-                BackColor = Color.FromArgb(230, 240, 255),
-                ForeColor = Color.DarkBlue,
-                Font = new Font("Segoe UI", 10F, FontStyle.Bold)
-            };
-            copyToClipboardButton.Click += (s, e) => BuildAndCopyContext(_cssCheckBox.Checked, _templateCheckBox.Checked, _modelCheckBox.Checked, _jsonCheckBox.Checked);
-            _toolTip.SetToolTip(copyToClipboardButton, "Build and copy the selected context items to the clipboard for use with LLMs");
-            
-            // Create a divider for the Prompt Builder section
-            Panel promptDividerPanel = new Panel
-            {
-                Location = new Point(20, 270),
-                Size = new Size(powerToolsPanel.Width - 40, 2),
-                BackColor = Color.LightGray,
-                Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top
-            };
-            
             // Create heading for the Prompt Builder section
             _promptBuilderLabel = new Label
             {
                 Text = "Create a prompt",
-                Location = new Point(20, 285),
+                Location = new Point(20, 20),
                 Size = new Size(300, 24),
                 Font = new Font("Segoe UI", 12F, FontStyle.Bold),
                 ForeColor = Color.DarkSlateBlue
@@ -272,7 +190,7 @@ namespace iTextDesignerWithGUI.Forms
             // Create the category ComboBox
             _promptCategoryComboBox = new ComboBox
             {
-                Location = new Point(20, 315),
+                Location = new Point(20, 50),
                 Size = new Size(280, 24),
                 DropDownStyle = ComboBoxStyle.DropDownList
             };
@@ -281,7 +199,7 @@ namespace iTextDesignerWithGUI.Forms
             // Create the prompt ListBox
             _promptListBox = new ListBox
             {
-                Location = new Point(20, 345),
+                Location = new Point(20, 80),
                 Size = new Size(280, 100),
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular),
                 ScrollAlwaysVisible = true
@@ -292,7 +210,7 @@ namespace iTextDesignerWithGUI.Forms
             Label promptPreviewLabel = new Label
             {
                 Text = "Prompt Preview:",
-                Location = new Point(20, 455),
+                Location = new Point(20, 190),
                 Size = new Size(120, 20),
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular)
             };
@@ -300,56 +218,118 @@ namespace iTextDesignerWithGUI.Forms
             // Create a text box to preview the selected prompt
             _promptPreviewTextBox = new TextBox
             {
-                Location = new Point(20, 480),
+                Location = new Point(20, 215),
                 Size = new Size(280, 80),
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular),
                 Multiline = true,
-                ReadOnly = true,
+                ReadOnly = false,
                 ScrollBars = ScrollBars.Vertical,
                 BorderStyle = BorderStyle.FixedSingle
             };
             
-            // Create button to copy prompt to clipboard
-            Button copyPromptButton = new Button
+            // Create a save button for saving edited prompt text
+            Button savePromptButton = new Button
             {
-                Text = "Copy Prompt to Clipboard",
-                Size = new Size(200, 30),
-                Location = new Point(20, 570),
+                Text = "Save Prompt",
+                Location = new Point(20, 305),
+                Size = new Size(120, 30),
                 BackColor = Color.FromArgb(230, 240, 255),
                 ForeColor = Color.DarkBlue,
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold)
+            };
+            savePromptButton.Click += SavePromptButton_Click;
+            _toolTip.SetToolTip(savePromptButton, "Save the edited prompt text to the promptBuilder.json file");
+            
+            // Create a heading for the LLM Context Builder section
+            Label llmContextBuilderLabel = new Label
+            {
+                Text = "LLM Context Builder",
+                Location = new Point(20, 345),
+                Size = new Size(300, 24),
+                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                ForeColor = Color.DarkSlateBlue
+            };
+            
+            // Description label for the new section
+            Label descriptionLabel = new Label
+            {
+                Text = "Select items to include in the context for Large\r\nLanguage Models:",
+                Location = new Point(20, 375),
+                Size = new Size(450, 40), 
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular)
             };
-            copyPromptButton.Click += (s, e) => 
+            
+            // Create checkboxes for selecting content to copy
+            _cssCheckBox = new CheckBox
             {
-                if (!string.IsNullOrEmpty(_selectedPrompt))
-                {
-                    Clipboard.SetText(_selectedPrompt);
-                    MessageBox.Show("Prompt copied to clipboard", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("No prompt is selected", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
+                Text = "Global Styles CSS",
+                Location = new Point(30, 425),
+                Size = new Size(200, 24),
+                Checked = LoadCheckboxState(CssCheckboxKey, true) // Load saved state with default true
             };
+            _toolTip.SetToolTip(_cssCheckBox, "Include globalStyles.css in the context");
+            _cssCheckBox.CheckedChanged += (s, e) => SaveCheckboxState(CssCheckboxKey, _cssCheckBox.Checked);
+            
+            _templateCheckBox = new CheckBox
+            {
+                Text = "Current CSHTML Template",
+                Location = new Point(30, 455),
+                Size = new Size(200, 24),
+                Checked = LoadCheckboxState(TemplateCheckboxKey, true) // Load saved state with default true
+            };
+            _toolTip.SetToolTip(_templateCheckBox, "Include the current CSHTML template in the context");
+            _templateCheckBox.CheckedChanged += (s, e) => SaveCheckboxState(TemplateCheckboxKey, _templateCheckBox.Checked);
+            
+            _modelCheckBox = new CheckBox
+            {
+                Text = "Current Model Instance",
+                Location = new Point(30, 485),
+                Size = new Size(200, 24),
+                Checked = LoadCheckboxState(ModelCheckboxKey, true) // Load saved state with default true
+            };
+            _toolTip.SetToolTip(_modelCheckBox, "Include the current model instance file in the context");
+            _modelCheckBox.CheckedChanged += (s, e) => SaveCheckboxState(ModelCheckboxKey, _modelCheckBox.Checked);
+            
+            _jsonCheckBox = new CheckBox
+            {
+                Text = "Current JSON Data",
+                Location = new Point(30, 515),
+                Size = new Size(200, 24),
+                Checked = LoadCheckboxState(JsonCheckboxKey, true) // Load saved state with default true
+            };
+            _toolTip.SetToolTip(_jsonCheckBox, "Include the current JSON data file in the context");
+            _jsonCheckBox.CheckedChanged += (s, e) => SaveCheckboxState(JsonCheckboxKey, _jsonCheckBox.Checked);
+            
+            // Create button to copy combined prompt and context
+            Button buildCopyContextButton = new Button
+            {
+                Text = "Build & Copy Context",
+                Size = new Size(200, 40),
+                Location = new Point(30, 555),
+                BackColor = Color.FromArgb(230, 240, 255),
+                ForeColor = Color.DarkBlue,
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold)
+            };
+            buildCopyContextButton.Click += (s, e) => BuildAndCopyContext(_cssCheckBox.Checked, _templateCheckBox.Checked, _modelCheckBox.Checked, _jsonCheckBox.Checked);
+            _toolTip.SetToolTip(buildCopyContextButton, "Build and copy the context items and selected prompt to the clipboard");
             
             // Load prompts from the JSON file
             LoadPromptsFromJson();
             
             // Add controls to the panel
+            powerToolsPanel.Controls.Add(_promptBuilderLabel);
+            powerToolsPanel.Controls.Add(_promptCategoryComboBox);
+            powerToolsPanel.Controls.Add(_promptListBox);
+            powerToolsPanel.Controls.Add(promptPreviewLabel);
+            powerToolsPanel.Controls.Add(_promptPreviewTextBox);
+            powerToolsPanel.Controls.Add(savePromptButton);
             powerToolsPanel.Controls.Add(llmContextBuilderLabel);
             powerToolsPanel.Controls.Add(descriptionLabel);
             powerToolsPanel.Controls.Add(_cssCheckBox);
             powerToolsPanel.Controls.Add(_templateCheckBox);
             powerToolsPanel.Controls.Add(_modelCheckBox);
             powerToolsPanel.Controls.Add(_jsonCheckBox);
-            powerToolsPanel.Controls.Add(copyToClipboardButton);
-            powerToolsPanel.Controls.Add(promptDividerPanel);
-            powerToolsPanel.Controls.Add(_promptBuilderLabel);
-            powerToolsPanel.Controls.Add(_promptCategoryComboBox);
-            powerToolsPanel.Controls.Add(_promptListBox);
-            powerToolsPanel.Controls.Add(promptPreviewLabel);
-            powerToolsPanel.Controls.Add(_promptPreviewTextBox);
-            powerToolsPanel.Controls.Add(copyPromptButton);
+            powerToolsPanel.Controls.Add(buildCopyContextButton);
             
             // Add panel to the Power Tools tab
             _powerToolsTab.Controls.Add(powerToolsPanel);
@@ -398,16 +378,8 @@ namespace iTextDesignerWithGUI.Forms
             _parentForm.SizeChanged += (s, e) => {
                 this.Width = _parentForm.Width;
                 
-                // Update the divider width when the form resizes
-                if (_powerToolsTab.Controls.Count > 0)
-                {
-                    Panel powerToolsPanel = (Panel)_powerToolsTab.Controls[0];
-                    if (powerToolsPanel.Controls.Count > 3)
-                    {
-                        Panel dividerPanel = (Panel)powerToolsPanel.Controls[3];
-                        dividerPanel.Width = powerToolsPanel.Width - 40;
-                    }
-                }
+                // Resize doesn't need to do anything with the divider panel anymore
+                // since we've removed it from the UI
             };
         }
 
@@ -818,7 +790,7 @@ namespace iTextDesignerWithGUI.Forms
             {
                 if (_promptListBox.SelectedItem == null || _promptCategoryComboBox.SelectedItem == null)
                     return;
-                    
+                
                 string selectedCategory = _promptCategoryComboBox.SelectedItem.ToString();
                 string selectedPromptName = _promptListBox.SelectedItem.ToString();
                 
@@ -936,6 +908,95 @@ namespace iTextDesignerWithGUI.Forms
             }
             
             return "";
+        }
+
+        /// <summary>
+        /// Saves the edited prompt text to the promptBuilder.json file
+        /// </summary>
+        private void SavePromptButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Check if a prompt is selected
+                if (_promptListBox.SelectedItem == null || _promptCategoryComboBox.SelectedItem == null)
+                {
+                    MessageBox.Show("Please select a prompt category and prompt before saving.", 
+                        "No Prompt Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                
+                string selectedCategory = _promptCategoryComboBox.SelectedItem.ToString();
+                string selectedPromptName = _promptListBox.SelectedItem.ToString();
+                string editedPromptText = _promptPreviewTextBox.Text;
+                
+                // If prompt is empty, ask user for confirmation
+                if (string.IsNullOrWhiteSpace(editedPromptText))
+                {
+                    var result = MessageBox.Show("Are you sure you want to save an empty prompt?", 
+                        "Empty Prompt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (result == DialogResult.No)
+                    {
+                        return;
+                    }
+                }
+                
+                // Get path to promptBuilder.json
+                var projectDirService = new ProjectDirectoryService();
+                string promptBuilderPath = projectDirService.GetFilePath("PersistentDataJSON/promptBuilder.json");
+                
+                // Read and parse the JSON file
+                string jsonContent = File.ReadAllText(promptBuilderPath);
+                var promptBuilder = JsonSerializer.Deserialize<PromptBuilderJson>(jsonContent);
+                
+                if (promptBuilder == null || promptBuilder.Categories == null)
+                {
+                    MessageBox.Show("Error loading promptBuilder.json: Invalid file format.",
+                        "JSON Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                
+                // Find the selected category
+                var category = promptBuilder.Categories.FirstOrDefault(c => c.Name == selectedCategory);
+                if (category == null || category.Prompts == null)
+                {
+                    MessageBox.Show($"Category '{selectedCategory}' not found in promptBuilder.json.",
+                        "Category Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                
+                // Find the selected prompt
+                var prompt = category.Prompts.FirstOrDefault(p => p.Name == selectedPromptName);
+                if (prompt == null)
+                {
+                    MessageBox.Show($"Prompt '{selectedPromptName}' not found in category '{selectedCategory}'.",
+                        "Prompt Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                
+                // Update the prompt text
+                prompt.Prompt = editedPromptText;
+                
+                // Save the updated JSON back to the file
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                };
+                
+                string updatedJson = JsonSerializer.Serialize(promptBuilder, options);
+                File.WriteAllText(promptBuilderPath, updatedJson);
+                
+                // Update the _selectedPrompt variable to match the saved text
+                _selectedPrompt = editedPromptText;
+                
+                MessageBox.Show($"Prompt '{selectedPromptName}' saved successfully!",
+                    "Prompt Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error saving prompt: {ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

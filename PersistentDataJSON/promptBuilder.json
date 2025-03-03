@@ -1,107 +1,107 @@
 {
-    "categories": [
-      {
-        "name": "No Prompt Selected:",
-        "prompts": [
-          {
-            "name": "No Prompt Selected:",
-            "prompt": ""
-          }
-        ]
-      },
-      {
-        "name": "Newly Created",
-        "prompts": [
-          {
-            "name": "Template Generation",
-            "prompt": "Please generate a complete .cshtml template using the model structure above and reference the globalStyles.css. Follow these guidelines for Razor compatibility:\n1. Begin with the appropriate model directive that exactly matches the model class name and namespace\n2. ALWAYS include these required namespace imports:\n   @using System\n   @using System.Linq\n   @using System.Collections.Generic\n3. Access properties using the correct path hierarchy (e.g., if properties are nested in Model.SomeProperty.ChildProperty)\n4. When using .NET framework types (Convert, DateTime, etc.), use their fully qualified names (System.Convert, System.DateTime)\n5. For collection operations (Any(), First(), etc.), ensure they are properly accessed on collection properties\n6. Avoid variable names that conflict with Razor keywords (like 'section', 'model', 'page')\n7. Only include this CSS reference: <link href=\"globalStyles.css\" rel=\"stylesheet\">\n8. Do not include Bootstrap or other external CSS frameworks\n9. The template will be processed by RazorLight engine with iText for PDF generation\n10. When working with JSON data types in Razor, use safe parsing instead of direct conversion:\n    - Use bool.TryParse() instead of Convert.ToBoolean()\n    - Use DateTime.TryParse() instead of DateTime.Parse()\n    - Use decimal.TryParse() or double.TryParse() for numeric values\n    - Always include null checks and fallback values\n    - When using nullable properties with the null conditional operator (?.) in conditions:\n      CORRECT: @(Model.Model?.IsActive == true ? \"Yes\" : \"No\")\n      INCORRECT: @(Model.Model?.IsActive ? \"Yes\" : \"No\") // This will cause a nullable bool error\n11. When writing conditional logic blocks in Razor:\n    - Avoid nesting @{ } code blocks - this causes parsing errors\n    - Declare variables in a single @{ } block at the beginning of complex conditional sections\n    - Use separate @if statements outside the @{ } block for rendering HTML\n12. Remember that the model structure determines how properties are accessed:\n    - If your JSON has { \"model\": { \"name\": \"...\" } }, use @Model.Model.Name\n    - If your JSON has { \"name\": \"...\" }, use @Model.Name\n13. When using TryParse methods with conditional (ternary) operators:\n    - Place the closing parenthesis of the TryParse method before the question mark\n    - CORRECT: @(DateTime.TryParse(value, out DateTime result) ? result.ToString(\"format\") : \"fallback\")\n    - INCORRECT: @(DateTime.TryParse(value, out DateTime result ? result.ToString(\"format\") : \"fallback\"))\n14. Be extra careful with balancing parentheses in Razor expressions, especially with nested conditions"
-          }
-        ]
-      },
-      {
-        "name": "Code Structure",
-        "prompts": [
-          {
-            "name": "Basic Refactoring",
-            "prompt": "Please refactor this .cshtml file while maintaining all existing functionality. Follow standard Razor syntax conventions, improve code organization, and ensure proper indentation. Return the complete updated .cshtml file with all model bindings intact."
-          },
-          {
-            "name": "Partial View Extraction",
-            "prompt": "Refactor this .cshtml file by identifying and extracting reusable components into partial views. Implement proper partial view references, ensure data is correctly passed to partials, and maintain overall functionality. Return both the updated main .cshtml file and the extracted partial view files."
-          },
-          {
-            "name": "Performance Optimization",
-            "prompt": "Optimize this .cshtml file for performance. Reduce redundant markup, implement lazy loading for images and heavy content, minimize DOM elements, and ensure efficient Razor expressions. Return the complete performance-optimized .cshtml file."
-          },
-          {
-            "name": "Conditional Display Logic",
-            "prompt": "Update this .cshtml file to implement conditional display logic based on model properties. Create appropriate @if, @switch, or ternary expressions to conditionally render elements. Ensure all conditional logic is readable and maintainable. Return the complete .cshtml file with conditional display implementations."
-          }
-        ]
-      },
-      {
-        "name": "Data Integration",
-        "prompts": [
-          {
-            "name": "Model Integration",
-            "prompt": "Rewrite this .cshtml file to fully utilize all properties from the provided data model. Ensure every relevant model property is properly bound and displayed. Follow Razor best practices and maintain a clean separation of concerns. Below is the current .cshtml file and the data model structure:\n\n[PASTE CURRENT CSHTML AND MODEL HERE]\n\nReturn the complete updated .cshtml file with comprehensive model integration."
-          },
-          {
-            "name": "Data Table Creation",
-            "prompt": "Transform this .cshtml file to display model data in a well-structured, sortable data table. Implement pagination, search functionality, and column sorting if appropriate. Ensure the table is responsive and maintains readability on mobile devices. Return the complete .cshtml file with the data table implementation."
-          },
-          {
-            "name": "Dynamic Content Section",
-            "prompt": "Enhance this .cshtml file by implementing a dynamic content section that can be populated from the model. Create a flexible layout that adjusts based on the content provided, with appropriate styling and formatting. Return the complete .cshtml file with the dynamic content implementation."
-          },
-          {
-            "name": "Form Implementation",
-            "prompt": "Convert this .cshtml file into a properly structured form with validation. Implement client and server-side validation attributes, proper input types, and user-friendly error messages. Ensure all form elements are properly bound to the model. Include submit/cancel buttons and proper form action. Return the complete form-enabled .cshtml file."
-          }
-        ]
-      },
-      {
-        "name": "Styling & Appearance",
-        "prompts": [
-          {
-            "name": "Bootstrap Styling",
-            "prompt": "Update this .cshtml file with Bootstrap 5 styling. Implement responsive design principles, ensure mobile compatibility, and follow Bootstrap component patterns. Keep all existing functionality and model bindings intact. Apply appropriate spacing, typography, and component classes. Return the fully styled .cshtml file."
-          },
-          {
-            "name": "Custom CSS Implementation",
-            "prompt": "Enhance this .cshtml file with custom CSS styling based on these design guidelines:\n\n- Primary color: #3a5998\n- Secondary color: #8b9dc3\n- Font: 'Open Sans', sans-serif\n- Section spacing: 24px margins\n- Border radius: 8px for containers\n- Box shadows for card elements\n\nImplement the styling either inline or in a style block, maintaining all existing functionality. Return the complete .cshtml file with the styling applied."
-          }
-        ]
-      },
-      {
-        "name": "PDF & Print Optimization",
-        "prompts": [
-          {
-            "name": "IText7 PDF Optimization",
-            "prompt": "Optimize this .cshtml file specifically for IText7 PDF generation. Ensure proper element sizing, positioning, and pagination. Implement appropriate CSS for PDF output including print-specific rules. Verify all images have proper paths and dimensions. Return the PDF-optimized .cshtml file."
-          },
-          {
-            "name": "IText7 Table Formatting",
-            "prompt": "Optimize this .cshtml file for IText7 PDF generation with specific focus on table formatting. Implement proper table structure, column sizing, header styling, and alternating row colors. Ensure tables break properly across pages when rendered to PDF. Return the complete IText7-optimized .cshtml file."
-          },
-          {
-            "name": "Print Layout Optimization",
-            "prompt": "Modify this .cshtml file to create an optimized print layout. Implement print-specific CSS, proper page breaks, header/footer for printed pages, and hide non-essential elements when printing. Ensure the printed document maintains readability and professional appearance. Return the complete print-optimized .cshtml file."
-          }
-        ]
-      },
-      {
-        "name": "Accessibility & Localization",
-        "prompts": [
-          {
-            "name": "Accessibility Enhancement",
-            "prompt": "Enhance this .cshtml file with WCAG 2.1 AA compliance features. Add proper aria attributes, semantic HTML structure, appropriate color contrast, keyboard navigation support, and screen reader compatibility. Maintain all existing functionality while improving accessibility. Return the complete accessibility-enhanced .cshtml file."
-          },
-          {
-            "name": "Localization Implementation",
-            "prompt": "Update this .cshtml file to support localization. Implement resource string references for all user-facing text, add culture-specific formatting for dates and numbers, and ensure the layout accommodates text expansion for other languages. Return the complete localization-ready .cshtml file."
-          }
-        ]
-      }
-    ]
-  }
+  "categories": [
+    {
+      "name": "No Prompt Selected:",
+      "prompts": [
+        {
+          "name": "No Prompt Selected:",
+          "prompt": ""
+        }
+      ]
+    },
+    {
+      "name": "Newly Created",
+      "prompts": [
+        {
+          "name": "Template Generation",
+          "prompt": "Please generate a complete .cshtml template using the model structure above and reference the globalStyles.css. Follow these guidelines for Razor compatibility:\n1. Begin with the appropriate model directive that exactly matches the model class name and namespace\n2. ALWAYS include these required namespace imports:\n   @using System\n   @using System.Linq\n   @using System.Collections.Generic\n3. Access properties using the correct path hierarchy (e.g., if properties are nested in Model.SomeProperty.ChildProperty)\n4. When using .NET framework types (Convert, DateTime, etc.), use their fully qualified names (System.Convert, System.DateTime)\n5. For collection operations (Any(), First(), etc.), ensure they are properly accessed on collection properties\n6. Avoid variable names that conflict with Razor keywords (like \u0027section\u0027, \u0027model\u0027, \u0027page\u0027)\n7. Only include this CSS reference: \u003Clink href=\u0022globalStyles.css\u0022 rel=\u0022stylesheet\u0022\u003E\n8. Do not include Bootstrap or other external CSS frameworks\n9. The template will be processed by RazorLight engine with iText for PDF generation\n10. When working with JSON data types in Razor, use safe parsing instead of direct conversion:\n    - Use bool.TryParse() instead of Convert.ToBoolean()\n    - Use DateTime.TryParse() instead of DateTime.Parse()\n    - Use decimal.TryParse() or double.TryParse() for numeric values\n    - Always include null checks and fallback values\n    - When using nullable properties with the null conditional operator (?.) in conditions:\n      CORRECT: @(Model.Model?.IsActive == true ? \u0022Yes\u0022 : \u0022No\u0022)\n      INCORRECT: @(Model.Model?.IsActive ? \u0022Yes\u0022 : \u0022No\u0022) // This will cause a nullable bool error\n11. When writing conditional logic blocks in Razor:\n    - Avoid nesting @{ } code blocks - this causes parsing errors\n    - Declare variables in a single @{ } block at the beginning of complex conditional sections\n    - Use separate @if statements outside the @{ } block for rendering HTML\n12. Remember that the model structure determines how properties are accessed:\n    - If your JSON has { \u0022model\u0022: { \u0022name\u0022: \u0022...\u0022 } }, use @Model.Model.Name\n    - If your JSON has { \u0022name\u0022: \u0022...\u0022 }, use @Model.Name\n13. When using TryParse methods with conditional (ternary) operators:\n    - Place the closing parenthesis of the TryParse method before the question mark\n    - CORRECT: @(DateTime.TryParse(value, out DateTime result) ? result.ToString(\u0022format\u0022) : \u0022fallback\u0022)\n    - INCORRECT: @(DateTime.TryParse(value, out DateTime result ? result.ToString(\u0022format\u0022) : \u0022fallback\u0022))\n14. Be extra careful with balancing parentheses in Razor expressions, especially with nested conditions"
+        }
+      ]
+    },
+    {
+      "name": "Code Structure",
+      "prompts": [
+        {
+          "name": "Basic Refactoring",
+          "prompt": "Please refactor this .cshtml file while maintaining all existing functionality. Follow standard Razor syntax conventions, improve code organization, and ensure proper indentation. Return the complete updated .cshtml file with all model bindings intact."
+        },
+        {
+          "name": "Partial View Extraction",
+          "prompt": "Refactor this .cshtml file by identifying and extracting reusable components into partial views. Implement proper partial view references, ensure data is correctly passed to partials, and maintain overall functionality. Return both the updated main .cshtml file and the extracted partial view files."
+        },
+        {
+          "name": "Performance Optimization",
+          "prompt": "Optimize this .cshtml file for performance. Reduce redundant markup, implement lazy loading for images and heavy content, minimize DOM elements, and ensure efficient Razor expressions. Return the complete performance-optimized .cshtml file."
+        },
+        {
+          "name": "Conditional Display Logic",
+          "prompt": "Update this .cshtml file to implement conditional display logic based on model properties. Create appropriate @if, @switch, or ternary expressions to conditionally render elements. Ensure all conditional logic is readable and maintainable. Return the complete .cshtml file with conditional display implementations."
+        }
+      ]
+    },
+    {
+      "name": "Data Integration",
+      "prompts": [
+        {
+          "name": "Model Integration",
+          "prompt": "Rewrite this .cshtml file to fully utilize all properties from the provided data model. Ensure every relevant model property is properly bound and displayed. Follow Razor best practices and maintain a clean separation of concerns. Below is the current .cshtml file and the data model structure:\n\n[PASTE CURRENT CSHTML AND MODEL HERE]\n\nReturn the complete updated .cshtml file with comprehensive model integration."
+        },
+        {
+          "name": "Data Table Creation",
+          "prompt": "Transform this .cshtml file to display model data in a well-structured, sortable data table. Implement pagination, search functionality, and column sorting if appropriate. Ensure the table is responsive and maintains readability on mobile devices. Return the complete .cshtml file with the data table implementation."
+        },
+        {
+          "name": "Dynamic Content Section",
+          "prompt": "Enhance this .cshtml file by implementing a dynamic content section that can be populated from the model. Create a flexible layout that adjusts based on the content provided, with appropriate styling and formatting. Return the complete .cshtml file with the dynamic content implementation."
+        },
+        {
+          "name": "Form Implementation",
+          "prompt": "Convert this .cshtml file into a properly structured form with validation. Implement client and server-side validation attributes, proper input types, and user-friendly error messages. Ensure all form elements are properly bound to the model. Include submit/cancel buttons and proper form action. Return the complete form-enabled .cshtml file."
+        }
+      ]
+    },
+    {
+      "name": "Styling \u0026 Appearance",
+      "prompts": [
+        {
+          "name": "Bootstrap Styling",
+          "prompt": "Update this .cshtml file with Bootstrap 5 styling. Implement responsive design principles, ensure mobile compatibility, and follow Bootstrap component patterns. Keep all existing functionality and model bindings intact. Apply appropriate spacing, typography, and component classes. Return the fully styled .cshtml file."
+        },
+        {
+          "name": "Custom CSS Implementation",
+          "prompt": "Enhance this .cshtml file with custom CSS styling based on these design guidelines:\n\n- Primary color: #3a5998\n- Secondary color: #8b9dc3\n- Font: \u0027Open Sans\u0027, sans-serif\n- Section spacing: 24px margins\n- Border radius: 8px for containers\n- Box shadows for card elements\n\nImplement the styling either inline or in a style block, maintaining all existing functionality. Return the complete .cshtml file with the styling applied."
+        }
+      ]
+    },
+    {
+      "name": "PDF \u0026 Print Optimization",
+      "prompts": [
+        {
+          "name": "IText7 PDF Optimization",
+          "prompt": "Optimize this .cshtml file specifically for IText7 PDF generation. Ensure proper element sizing, positioning, and pagination. Implement appropriate CSS for PDF output including print-specific rules. Verify all images have proper paths and dimensions. Return the PDF-optimized .cshtml file."
+        },
+        {
+          "name": "IText7 Table Formatting",
+          "prompt": "Optimize this .cshtml file for IText7 PDF generation with specific focus on table formatting. Implement proper table structure, column sizing, header styling, and alternating row colors. Ensure tables break properly across pages when rendered to PDF. Return the complete IText7-optimized .cshtml file."
+        },
+        {
+          "name": "Print Layout Optimization",
+          "prompt": "Modify this .cshtml file to create an optimized print layout. Implement print-specific CSS, proper page breaks, header/footer for printed pages, and hide non-essential elements when printing. Ensure the printed document maintains readability and professional appearance. Return the complete print-optimized .cshtml file."
+        }
+      ]
+    },
+    {
+      "name": "Accessibility \u0026 Localization",
+      "prompts": [
+        {
+          "name": "Accessibility Enhancement",
+          "prompt": "Enhance this .cshtml file with WCAG 2.1 AA compliance features. Add proper aria attributes, semantic HTML structure, appropriate color contrast, keyboard navigation support, and screen reader compatibility. Maintain all existing functionality while improving accessibility. Return the complete accessibility-enhanced .cshtml file."
+        },
+        {
+          "name": "Localization Implementation",
+          "prompt": "Update this .cshtml file to support localization. Implement resource string references for all user-facing text, add culture-specific formatting for dates and numbers, and ensure the layout accommodates text expansion for other languages. Return the complete localization-ready .cshtml file."
+        }
+      ]
+    }
+  ]
+}
