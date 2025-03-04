@@ -1,7 +1,3 @@
-using System;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
-
 namespace iTextDesignerWithGUI.Utilities
 {
     /// <summary>
@@ -16,11 +12,12 @@ namespace iTextDesignerWithGUI.Utilities
         /// <param name="style">The style to set</param>
         public static void SetStyle(this ProgressBar progressBar, ProgressBarStyle style)
         {
-            if (progressBar == null) throw new ArgumentNullException(nameof(progressBar));
-            
+            if (progressBar == null)
+                throw new ArgumentNullException(nameof(progressBar));
+
             // Send the WM_STYLECHANGED message to set the progress bar style
             progressBar.Style = style;
-            
+
             // Force the progress bar to redraw
             progressBar.Invalidate();
         }

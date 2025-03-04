@@ -1,10 +1,5 @@
-using System;
-using System.Threading;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.IO;
-using System.Windows.Forms;
-using System.Collections.Generic;
 
 namespace iTextDesignerWithGUI.Utils
 {
@@ -17,7 +12,7 @@ namespace iTextDesignerWithGUI.Utils
         private bool _isFirstInstance;
         private bool _isDisposed;
         private static readonly string MutexName = "iTextDesignerWithGUI_SingleInstanceMutex";
-        
+
         /// <summary>
         /// Creates a new instance of the SingleInstanceManager
         /// </summary>
@@ -36,7 +31,7 @@ namespace iTextDesignerWithGUI.Utils
                 _isFirstInstance = true;
             }
         }
-        
+
         /// <summary>
         /// Checks if this is the first/only instance of the application
         /// </summary>
@@ -45,7 +40,7 @@ namespace iTextDesignerWithGUI.Utils
         {
             return _isFirstInstance;
         }
-        
+
         /// <summary>
         /// Tries to activate the first instance of the application if another instance is already running
         /// </summary>
@@ -54,19 +49,19 @@ namespace iTextDesignerWithGUI.Utils
         {
             if (_isFirstInstance)
                 return false;
-                
+
             try
             {
                 // Get all processes with the same name as the current process
                 Process currentProcess = Process.GetCurrentProcess();
                 Process[] processes = Process.GetProcessesByName(currentProcess.ProcessName);
-                
+
                 foreach (Process process in processes)
                 {
                     // Skip the current process
                     if (process.Id == currentProcess.Id)
                         continue;
-                        
+
                     // Try to activate the window of the other process
                     NativeMethods.SetForegroundWindow(process.MainWindowHandle);
                     return true;
@@ -76,10 +71,10 @@ namespace iTextDesignerWithGUI.Utils
             {
                 Debug.WriteLine($"Error trying to activate first instance: {ex.Message}");
             }
-            
+
             return false;
         }
-        
+
         /// <summary>
         /// Releases resources used by the SingleInstanceManager
         /// </summary>
@@ -88,7 +83,7 @@ namespace iTextDesignerWithGUI.Utils
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        
+
         /// <summary>
         /// Releases resources used by the SingleInstanceManager
         /// </summary>
@@ -113,16 +108,16 @@ namespace iTextDesignerWithGUI.Utils
                                 // Ignore - mutex might not be owned by this thread
                             }
                         }
-                        
+
                         _mutex.Dispose();
                         _mutex = null;
                     }
                 }
-                
+
                 _isDisposed = true;
             }
         }
-        
+
         /// <summary>
         /// Finalizer for SingleInstanceManager
         /// </summary>
@@ -130,7 +125,7 @@ namespace iTextDesignerWithGUI.Utils
         {
             Dispose(false);
         }
-        
+
         /// <summary>
         /// Native methods for window manipulation
         /// </summary>
