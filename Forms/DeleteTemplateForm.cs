@@ -1,11 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Text.Json;
-using System.Windows.Forms;
-using iTextDesignerWithGUI.Models;
 using iTextDesignerWithGUI.Services;
 
 namespace iTextDesignerWithGUI.Forms
@@ -28,10 +21,10 @@ namespace iTextDesignerWithGUI.Forms
         {
             // Initialize the template removal service
             _removalService = new TemplateRemovalService();
-            
+
             // Initialize the form
             InitializeForm();
-            
+
             // Load the available templates
             LoadAvailableTemplates();
         }
@@ -72,7 +65,7 @@ namespace iTextDesignerWithGUI.Forms
                 Text = "Select Template to Delete:",
                 Font = new Font("Segoe UI", 10F, FontStyle.Regular),
                 AutoSize = true,
-                Margin = new Padding(0, 0, 0, 5)
+                Margin = new Padding(0, 0, 0, 5),
             };
             mainContainer.Controls.Add(templateLabel, 0, 0);
 
@@ -81,7 +74,7 @@ namespace iTextDesignerWithGUI.Forms
                 Dock = DockStyle.Fill,
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular),
                 Margin = new Padding(0, 0, 0, 15),
-                DropDownStyle = ComboBoxStyle.DropDownList
+                DropDownStyle = ComboBoxStyle.DropDownList,
             };
             templateComboBox.SelectedIndexChanged += TemplateComboBox_SelectedIndexChanged;
             mainContainer.Controls.Add(templateComboBox, 0, 1);
@@ -93,7 +86,7 @@ namespace iTextDesignerWithGUI.Forms
                 Font = new Font("Segoe UI", 9F, FontStyle.Italic),
                 AutoSize = true,
                 Margin = new Padding(0, 0, 0, 15),
-                ForeColor = Color.Gray
+                ForeColor = Color.Gray,
             };
             mainContainer.Controls.Add(statusLabel, 0, 2);
 
@@ -105,7 +98,7 @@ namespace iTextDesignerWithGUI.Forms
                 Height = 40,
                 Margin = new Padding(0, 10, 0, 0),
                 AutoSize = true,
-                Padding = new Padding(0)
+                Padding = new Padding(0),
             };
 
             // Button styles
@@ -125,7 +118,7 @@ namespace iTextDesignerWithGUI.Forms
                 FlatStyle = FlatStyle.Flat,
                 Size = buttonSize,
                 Margin = buttonMargin,
-                Enabled = false
+                Enabled = false,
             };
             deleteButton.FlatAppearance.BorderSize = 0;
             deleteButton.Click += DeleteButton_Click;
@@ -142,7 +135,7 @@ namespace iTextDesignerWithGUI.Forms
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
                 Size = buttonSize,
-                Margin = buttonMargin
+                Margin = buttonMargin,
             };
             cancelButton.FlatAppearance.BorderSize = 0;
             cancelButton.Click += CancelButton_Click;
@@ -161,79 +154,119 @@ namespace iTextDesignerWithGUI.Forms
         {
             try
             {
-                string projectRoot = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\.."));
-                string assessmentJsonPath = Path.Combine(projectRoot, "PersistentDataJSON", "assessmentTypes.json");
+                string projectRoot = Path.GetFullPath(
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..")
+                );
+                string assessmentJsonPath = Path.Combine(
+                    projectRoot,
+                    "PersistentDataJSON",
+                    "assessmentTypes.json"
+                );
 
                 if (!File.Exists(assessmentJsonPath))
                 {
-                    MessageBox.Show("Could not find the assessment types configuration file.", 
-                        "Configuration Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        "Could not find the assessment types configuration file.",
+                        "Configuration Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
                     return;
                 }
 
                 string jsonContent = File.ReadAllText(assessmentJsonPath);
                 using (JsonDocument document = JsonDocument.Parse(jsonContent))
                 {
-                    if (document.RootElement.TryGetProperty("assessmentTypes", out JsonElement assessmentTypes))
+                    if (
+                        document.RootElement.TryGetProperty(
+                            "assessmentTypes",
+                            out JsonElement assessmentTypes
+                        )
+                    )
                     {
                         // Create a list to hold the display items
                         var displayItems = new List<TemplateDisplayItem>();
-                        
+
                         foreach (JsonElement assessmentType in assessmentTypes.EnumerateArray())
                         {
-                            if (assessmentType.TryGetProperty("name", out JsonElement nameElement) &&
-                                assessmentType.TryGetProperty("displayName", out JsonElement displayNameElement))
+                            if (
+                                assessmentType.TryGetProperty("name", out JsonElement nameElement)
+                                && assessmentType.TryGetProperty(
+                                    "displayName",
+                                    out JsonElement displayNameElement
+                                )
+                            )
                             {
                                 string name = nameElement.GetString();
                                 string displayName = displayNameElement.GetString();
-                                
+
                                 // Get additional path information for display
                                 string templatePath = "";
-                                string jsonPath = "";
+                                string? jsonPath = "";
                                 string modelsPath = "";
-                                
-                                if (assessmentType.TryGetProperty("cshtmlTemplateDirectory", out JsonElement cshtmlTemplateElement))
+
+                                if (
+                                    assessmentType.TryGetProperty(
+                                        "cshtmlTemplateDirectory",
+                                        out JsonElement cshtmlTemplateElement
+                                    )
+                                )
                                 {
                                     templatePath = cshtmlTemplateElement.GetString();
                                 }
-                                
-                                if (assessmentType.TryGetProperty("jsonDataLocationDirectory", out JsonElement jsonDataElement))
+
+                                if (
+                                    assessmentType.TryGetProperty(
+                                        "jsonDataLocationDirectory",
+                                        out JsonElement jsonDataElement
+                                    )
+                                )
                                 {
                                     jsonPath = jsonDataElement.GetString();
                                 }
-                                
-                                if (assessmentType.TryGetProperty("assessmentTypeDirectory", out JsonElement assessmentTypeElement))
+
+                                if (
+                                    assessmentType.TryGetProperty(
+                                        "assessmentTypeDirectory",
+                                        out JsonElement assessmentTypeElement
+                                    )
+                                )
                                 {
-                                    string assessmentTypePath = assessmentTypeElement.GetString();
+                                    string? assessmentTypePath = assessmentTypeElement.GetString();
                                     string[] pathParts = assessmentTypePath.Split('/');
                                     if (pathParts.Length > 2)
                                     {
                                         modelsPath = $"Models/{pathParts[1]}/{pathParts[2]}";
                                     }
                                 }
-                                
-                                if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(displayName))
+
+                                if (
+                                    !string.IsNullOrEmpty(name)
+                                    && !string.IsNullOrEmpty(displayName)
+                                )
                                 {
-                                    displayItems.Add(new TemplateDisplayItem
-                                    {
-                                        Name = name,
-                                        DisplayName = displayName,
-                                        TemplatePath = templatePath,
-                                        JsonDataPath = jsonPath,
-                                        ModelsPath = modelsPath
-                                    });
+                                    displayItems.Add(
+                                        new TemplateDisplayItem
+                                        {
+                                            Name = name,
+                                            DisplayName = displayName,
+                                            TemplatePath = templatePath,
+                                            JsonDataPath = jsonPath,
+                                            ModelsPath = modelsPath,
+                                        }
+                                    );
                                 }
                             }
                         }
-                        
+
                         // Sort display items by name for easier navigation
                         displayItems = displayItems.OrderBy(item => item.Name).ToList();
-                        
+
                         // Set the data source
                         templateComboBox.DataSource = displayItems;
                         templateComboBox.DisplayMember = "DisplayName";
                         templateComboBox.ValueMember = "Name";
-                        
+
                         if (templateComboBox.Items.Count > 0)
                         {
                             templateComboBox.SelectedIndex = 0;
@@ -248,8 +281,12 @@ namespace iTextDesignerWithGUI.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading templates: {ex.Message}", 
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    $"Error loading templates: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
         }
 
@@ -261,7 +298,8 @@ namespace iTextDesignerWithGUI.Forms
             if (templateComboBox.SelectedIndex >= 0)
             {
                 var selectedItem = (TemplateDisplayItem)templateComboBox.SelectedItem;
-                statusLabel.Text = $"Selected template: {selectedItem.DisplayName} ({selectedItem.Name})";
+                statusLabel.Text =
+                    $"Selected template: {selectedItem.DisplayName} ({selectedItem.Name})";
                 deleteButton.Enabled = true;
             }
             else
@@ -278,71 +316,89 @@ namespace iTextDesignerWithGUI.Forms
         {
             if (templateComboBox.SelectedIndex < 0)
             {
-                MessageBox.Show("Please select a template to delete.",
-                    "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    "Please select a template to delete.",
+                    "Validation Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
                 return;
             }
 
             var selectedItem = (TemplateDisplayItem)templateComboBox.SelectedItem;
-            
+
             // Prepare details of what will be deleted
             string details = "The following will be deleted:\n\n";
-            
+
             if (!string.IsNullOrEmpty(selectedItem.TemplatePath))
             {
                 details += $"• Template file: {selectedItem.TemplatePath}\n";
             }
-            
+
             if (!string.IsNullOrEmpty(selectedItem.JsonDataPath))
             {
                 details += $"• JSON data file: {selectedItem.JsonDataPath}\n";
             }
-            
+
             if (!string.IsNullOrEmpty(selectedItem.ModelsPath))
             {
                 details += $"• Models directory: {selectedItem.ModelsPath} (including all files)\n";
             }
-            
+
             details += $"• Entry in assessmentTypes.json for '{selectedItem.Name}'";
-            
+
             // Confirm deletion
             DialogResult result = MessageBox.Show(
-                $"Are you sure you want to delete the template '{selectedItem.DisplayName}'?\n\n" +
-                details,
+                $"Are you sure you want to delete the template '{selectedItem.DisplayName}'?\n\n"
+                    + details,
                 "Confirm Deletion",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Warning,
-                MessageBoxDefaultButton.Button2);
-            
+                MessageBoxDefaultButton.Button2
+            );
+
             if (result == DialogResult.Yes)
             {
                 // Show a progress form during deletion
-                using (var progressForm = new ProgressForm("Deleting Template", $"Deleting template '{selectedItem.DisplayName}'..."))
+                using (
+                    var progressForm = new ProgressForm(
+                        "Deleting Template",
+                        $"Deleting template '{selectedItem.DisplayName}'..."
+                    )
+                )
                 {
                     progressForm.Show();
                     progressForm.SetProgress(30, "Removing from configuration...");
-                    
+
                     // Perform the deletion
                     bool success = _removalService.RemoveTemplate(selectedItem.Name);
-                    
+
                     progressForm.SetProgress(100, "Complete");
                     progressForm.Close();
-                    
+
                     if (success)
                     {
-                        MessageBox.Show($"Successfully removed template '{selectedItem.DisplayName}' and its associated files.",
-                            "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        
+                        MessageBox.Show(
+                            $"Successfully removed template '{selectedItem.DisplayName}' and its associated files.",
+                            "Success",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information
+                        );
+
                         // Refresh the template list
                         LoadAvailableTemplates();
-                        
+
                         // Change cancel button to restart button
                         UpdateButtonToRestart();
                     }
                     else
                     {
-                        MessageBox.Show($"Failed to remove template '{selectedItem.DisplayName}'.",
-                            "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(
+                            $"Failed to remove template '{selectedItem.DisplayName}'.",
+                            "Error",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error
+                        );
                     }
                 }
             }
@@ -356,54 +412,59 @@ namespace iTextDesignerWithGUI.Forms
             // Change button text
             cancelButton.Text = "Restart";
             cancelButton.BackColor = Color.FromArgb(76, 175, 80); // Green color for restart
-            
+
             // Remove dialog result and add click handler
             cancelButton.DialogResult = DialogResult.None;
             cancelButton.Click -= CancelButton_Click; // Remove previous handler if exists
             cancelButton.Click += RestartButton_Click;
-            
+
             // Update status
             statusLabel.Text = "Template deleted successfully. Please restart the application.";
             statusLabel.ForeColor = Color.FromArgb(76, 175, 80);
-            
+
             // Disable other controls
             deleteButton.Enabled = false;
             templateComboBox.Enabled = false;
         }
-        
+
         /// <summary>
         /// Handler for the restart button click event
         /// </summary>
         private void RestartButton_Click(object sender, EventArgs e)
         {
-            try 
+            try
             {
                 // Get the current project directory
-                string projectDirectory = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\.."));
-                
+                string projectDirectory = Path.GetFullPath(
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..")
+                );
+
                 // Save the current window position
                 var mainForm = Application.OpenForms[0]; // Get the main form (index 0)
                 string positionFile = Path.Combine(Path.GetTempPath(), "AppPosition.txt");
-                File.WriteAllText(positionFile, $"{mainForm.Location.X},{mainForm.Location.Y},{mainForm.Width},{mainForm.Height}");
-                
+                File.WriteAllText(
+                    positionFile,
+                    $"{mainForm.Location.X},{mainForm.Location.Y},{mainForm.Width},{mainForm.Height}"
+                );
+
                 // Create a batch file that will rebuild and restart the application
                 string batchFilePath = Path.Combine(Path.GetTempPath(), "RestartApplication.bat");
-                
+
                 // Write commands to the batch file
                 // Wait 1 second for the current process to close, then rebuild and run the application silently
-                string batchContent = 
-                    "@echo off\r\n" +
-                    "timeout /t 1 /nobreak >nul\r\n" +
-                    $"cd /d \"{projectDirectory}\"\r\n" +
-                    "dotnet build >nul 2>&1\r\n" +
-                    "if %ERRORLEVEL% == 0 (\r\n" +
-                    "    start /b \"\" dotnet run --no-build\r\n" +
-                    ") else (\r\n" +
-                    "    echo Build failed during restart! >buildError.log\r\n" +
-                    ")\r\n";
-                
+                string batchContent =
+                    "@echo off\r\n"
+                    + "timeout /t 1 /nobreak >nul\r\n"
+                    + $"cd /d \"{projectDirectory}\"\r\n"
+                    + "dotnet build >nul 2>&1\r\n"
+                    + "if %ERRORLEVEL% == 0 (\r\n"
+                    + "    start /b \"\" dotnet run --no-build\r\n"
+                    + ") else (\r\n"
+                    + "    echo Build failed during restart! >buildError.log\r\n"
+                    + ")\r\n";
+
                 File.WriteAllText(batchFilePath, batchContent);
-                
+
                 // Start the batch file in a new process
                 System.Diagnostics.Process process = new System.Diagnostics.Process();
                 process.StartInfo.FileName = "cmd.exe";
@@ -411,20 +472,24 @@ namespace iTextDesignerWithGUI.Forms
                 process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                 process.StartInfo.CreateNoWindow = true;
                 process.Start();
-                
+
                 // Exit the current application
                 Application.Exit();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error restarting application: {ex.Message}", "Restart Error", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                
+                MessageBox.Show(
+                    $"Error restarting application: {ex.Message}",
+                    "Restart Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+
                 // If we can't restart, just close this form
                 this.Close();
             }
         }
-        
+
         /// <summary>
         /// Handler for the cancel button click event
         /// </summary>
@@ -443,28 +508,28 @@ namespace iTextDesignerWithGUI.Forms
         /// Internal name of the template
         /// </summary>
         public string Name { get; set; }
-        
+
         /// <summary>
         /// Display name of the template
         /// </summary>
         public string DisplayName { get; set; }
-        
+
         /// <summary>
         /// Path to the template file
         /// </summary>
         public string TemplatePath { get; set; }
-        
+
         /// <summary>
         /// Path to the JSON data file
         /// </summary>
         public string JsonDataPath { get; set; }
-        
+
         /// <summary>
         /// Path to the models directory
         /// </summary>
         public string ModelsPath { get; set; }
     }
-    
+
     /// <summary>
     /// Simple progress form to show deletion progress
     /// </summary>
@@ -472,7 +537,7 @@ namespace iTextDesignerWithGUI.Forms
     {
         private Label statusLabel;
         private ProgressBar progressBar;
-        
+
         public ProgressForm(string title, string initialStatus)
         {
             this.Text = title;
@@ -483,37 +548,37 @@ namespace iTextDesignerWithGUI.Forms
             this.MinimizeBox = false;
             this.ControlBox = false;
             this.BackColor = Color.White;
-            
+
             var container = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
                 RowCount = 2,
                 ColumnCount = 1,
-                Padding = new Padding(20)
+                Padding = new Padding(20),
             };
-            
+
             statusLabel = new Label
             {
                 Text = initialStatus,
                 Dock = DockStyle.Fill,
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular),
-                AutoSize = true
+                AutoSize = true,
             };
             container.Controls.Add(statusLabel, 0, 0);
-            
+
             progressBar = new ProgressBar
             {
                 Minimum = 0,
                 Maximum = 100,
                 Value = 0,
                 Dock = DockStyle.Fill,
-                Height = 25
+                Height = 25,
             };
             container.Controls.Add(progressBar, 0, 1);
-            
+
             this.Controls.Add(container);
         }
-        
+
         public void SetProgress(int percentage, string status)
         {
             if (InvokeRequired)
@@ -521,7 +586,7 @@ namespace iTextDesignerWithGUI.Forms
                 Invoke(new Action(() => SetProgress(percentage, status)));
                 return;
             }
-            
+
             progressBar.Value = percentage;
             statusLabel.Text = status;
             Application.DoEvents();

@@ -1,50 +1,32 @@
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using iTextDesignerWithGUI.Models;
-using iTextDesignerWithGUI.Models.TestRazorDataModels;
-using iTextDesignerWithGUI.Services;
-using System.Linq;
-using Microsoft.Win32;
-using System.Drawing;
-using System.Threading.Tasks;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.InteropServices;
+using iTextDesignerWithGUI.Models;
+using iTextDesignerWithGUI.Services;
+using Microsoft.Win32;
 
 namespace iTextDesignerWithGUI.Forms
 {
-    // Static class for string extensions
-    public static class StringExtensions
-    {
-        // Helper method to add spaces between camel case words
-        public static string SplitCamelCase(this string str)
-        {
-            return System.Text.RegularExpressions.Regex.Replace(
-                str,
-                "([A-Z])",
-                " $1",
-                System.Text.RegularExpressions.RegexOptions.Compiled).Trim();
-        }
-    }
 
     public partial class MainForm : Form
     {
         // Add Win32 API declarations
         [DllImport("user32.dll", SetLastError = true)]
         private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-        
+
         [DllImport("user32.dll", SetLastError = true)]
-        private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
-        
+        private static extern bool SetWindowPos(
+            IntPtr hWnd,
+            IntPtr hWndInsertAfter,
+            int X,
+            int Y,
+            int cx,
+            int cy,
+            uint uFlags
+        );
+
         private const uint SWP_NOSIZE = 0x0001;
         private const uint SWP_NOZORDER = 0x0004;
         private const int EDGE_WINDOW_OFFSET = 20; // Pixels to offset Edge window from MainForm
-
-        // Add new declaration for single-instance management
-        [DllImport("user32.dll")]
-        private static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
-        private const int WM_CLOSE = 0x0010;
 
         private readonly IAssessment _assessment;
         private readonly JsonManager _jsonManager;
@@ -63,7 +45,7 @@ namespace iTextDesignerWithGUI.Forms
         private const string CloseEdgeOnChangeKey = "CloseEdgeOnChange";
         private static bool _isReloading = false; // Add static flag to prevent multiple reloads
         private static bool _isClosing = false; // Add static flag to prevent recursive closing during reload
-        
+
         // Constant for Task.Delay duration in milliseconds
         private const int TASK_DELAY_MS = 1;
 
@@ -76,7 +58,7 @@ namespace iTextDesignerWithGUI.Forms
         {
             InitializeComponent();
             _currentTypeWrapper = typeWrapper;
-            
+
             if (typeWrapper.IsBuiltIn && !string.IsNullOrEmpty(typeWrapper.BuiltInType))
             {
                 // No need to store the enum value separately, it's in the wrapper
@@ -85,64 +67,38 @@ namespace iTextDesignerWithGUI.Forms
             {
                 // For custom types, no need for a default enum value
             }
-            
+
             _assessment = typeWrapper.GetAssessment();
             _jsonManager = new JsonManager(_assessment.JsonDataPath, _currentTypeWrapper);
             _pdfGenerator = new PdfGeneratorService();
-            
+
             // Initialize the directory service
             _directoryService = new ProjectDirectoryService();
-            
+
             // Initialize secondary form
             _secondaryForm = new SecondaryForm(this);
-            
+
             // Initialize template watcher with the ProjectDirectoryService
             _templateWatcher = new TemplateWatcherService(
                 () => ReloadTemplates_Click(this, EventArgs.Empty),
-                this);
-            
+                this
+            );
+
             // Don't start watching yet - this will be controlled by the checkbox preference later
-            
+
             _closeEdgeOnChange = LoadCloseEdgePreference();
-            
+
             // Update the window title to show the selected assessment type
             this.Text = $"iText Designer - {_assessment.DisplayName}";
-            
+
             // Load the saved window position
             LoadWindowPosition();
-            
+
             // Initialize the status label
             InitializeStatusLabel();
-            
+
             // Initialize the form asynchronously
             InitializeAsync();
-        }
-
-        public MainForm() 
-            : this(GetDefaultAssessmentTypeWrapper())
-        {
-        }
-
-        private static AssessmentTypeWrapper GetDefaultAssessmentTypeWrapper()
-        {
-            // Load assessment types from JSON
-            var jsonLoader = AssessmentTypeJsonLoader.Instance;
-            var jsonTypes = jsonLoader.LoadAssessmentTypes();
-            
-            // Use the first type in the JSON file as the default
-            if (jsonTypes.Count > 0)
-            {
-                return AssessmentTypeWrapper.FromJsonDefinition(jsonTypes[0]);
-            }
-            
-            // Fallback to using the constants if no JSON types are available
-            return AssessmentTypeWrapper.FromJsonDefinition(new AssessmentTypeJsonDefinition
-            {
-                Name = AssessmentTypeConstants.OralCare,
-                DisplayName = "Oral Care",
-                CshtmlTemplateDirectory = "Templates/HealthAndWellness/AssessmentTemplate.html",
-                JsonDataLocationDirectory = "ReferenceDataJsons/HealthAndWellness/OralCareReferenceData.json"
-            });
         }
 
         private void LoadWindowPosition()
@@ -156,11 +112,13 @@ namespace iTextDesignerWithGUI.Forms
                     try
                     {
                         string[] positionData = File.ReadAllText(tempPositionFile).Split(',');
-                        if (positionData.Length >= 4 && 
-                            int.TryParse(positionData[0], out int x) &&
-                            int.TryParse(positionData[1], out int y) &&
-                            int.TryParse(positionData[2], out int width) &&
-                            int.TryParse(positionData[3], out int height))
+                        if (
+                            positionData.Length >= 4
+                            && int.TryParse(positionData[0], out int x)
+                            && int.TryParse(positionData[1], out int y)
+                            && int.TryParse(positionData[2], out int width)
+                            && int.TryParse(positionData[3], out int height)
+                        )
                         {
                             // Ensure the window will be visible on the screen
                             var screen = Screen.FromPoint(new Point(x, y));
@@ -169,13 +127,23 @@ namespace iTextDesignerWithGUI.Forms
                                 this.StartPosition = FormStartPosition.Manual;
                                 this.Size = new Size(width, height);
                                 this.Location = new Point(
-                                    Math.Max(screen.WorkingArea.X, Math.Min(x, screen.WorkingArea.Right - this.Width)),
-                                    Math.Max(screen.WorkingArea.Y, Math.Min(y, screen.WorkingArea.Bottom - this.Height))
+                                    Math.Max(
+                                        screen.WorkingArea.X,
+                                        Math.Min(x, screen.WorkingArea.Right - this.Width)
+                                    ),
+                                    Math.Max(
+                                        screen.WorkingArea.Y,
+                                        Math.Min(y, screen.WorkingArea.Bottom - this.Height)
+                                    )
                                 );
-                                
+
                                 // Delete the temp file after using it
-                                try { File.Delete(tempPositionFile); } catch { }
-                                
+                                try
+                                {
+                                    File.Delete(tempPositionFile);
+                                }
+                                catch { }
+
                                 return;
                             }
                         }
@@ -186,7 +154,7 @@ namespace iTextDesignerWithGUI.Forms
                         // Fall back to registry settings if temp file fails
                     }
                 }
-                
+
                 // Fall back to registry settings if no temp file
                 using (var key = Registry.CurrentUser.OpenSubKey(RegistryPath))
                 {
@@ -203,15 +171,21 @@ namespace iTextDesignerWithGUI.Forms
                             {
                                 this.StartPosition = FormStartPosition.Manual;
                                 this.Location = new Point(
-                                    Math.Max(screen.WorkingArea.X, Math.Min(x.Value, screen.WorkingArea.Right - this.Width)),
-                                    Math.Max(screen.WorkingArea.Y, Math.Min(y.Value, screen.WorkingArea.Bottom - this.Height))
+                                    Math.Max(
+                                        screen.WorkingArea.X,
+                                        Math.Min(x.Value, screen.WorkingArea.Right - this.Width)
+                                    ),
+                                    Math.Max(
+                                        screen.WorkingArea.Y,
+                                        Math.Min(y.Value, screen.WorkingArea.Bottom - this.Height)
+                                    )
                                 );
                                 return;
                             }
                         }
                     }
                 }
-                
+
                 // If we couldn't restore a position, use the default
                 this.StartPosition = FormStartPosition.CenterScreen;
             }
@@ -272,7 +246,11 @@ namespace iTextDesignerWithGUI.Forms
                 {
                     if (key != null)
                     {
-                        key.SetValue(AutoSavingEnabledKey, enabled ? 1 : 0, RegistryValueKind.DWord);
+                        key.SetValue(
+                            AutoSavingEnabledKey,
+                            enabled ? 1 : 0,
+                            RegistryValueKind.DWord
+                        );
                     }
                 }
             }
@@ -313,7 +291,11 @@ namespace iTextDesignerWithGUI.Forms
                 {
                     if (key != null)
                     {
-                        key.SetValue(CloseEdgeOnChangeKey, enabled ? 1 : 0, RegistryValueKind.DWord);
+                        key.SetValue(
+                            CloseEdgeOnChangeKey,
+                            enabled ? 1 : 0,
+                            RegistryValueKind.DWord
+                        );
                     }
                 }
             }
@@ -329,7 +311,7 @@ namespace iTextDesignerWithGUI.Forms
             {
                 // Save the window position before closing
                 SaveWindowPosition();
-                
+
                 // Ensure secondary form is closed and disposed
                 if (_secondaryForm != null && !_secondaryForm.IsDisposed)
                 {
@@ -374,15 +356,6 @@ namespace iTextDesignerWithGUI.Forms
             }
         }
 
-        private void OnTemplateChanged(AssessmentTypeWrapper typeWrapper)
-        {
-            _currentTypeWrapper = typeWrapper;
-            var newAssessment = typeWrapper.GetAssessment();
-            _referenceData = null;
-            dataGridView.DataSource = null;
-            InitializeAsync();
-        }
-
         private async void InitializeAsync()
         {
             try
@@ -396,16 +369,20 @@ namespace iTextDesignerWithGUI.Forms
                 Button backButton = new Button
                 {
                     Text = "Back to Selection",
-                    Dock = DockStyle.None,  // Changed from Bottom to None for side-by-side layout
+                    Dock = DockStyle.None, // Changed from Bottom to None for side-by-side layout
                     Height = 40,
                     Width = 150,
                     Margin = new Padding(10),
                     Padding = new Padding(5),
                     FlatStyle = FlatStyle.Flat,
-                    BackColor = System.Drawing.Color.FromArgb(0, 123, 255),  // Bootstrap primary blue
+                    BackColor = System.Drawing.Color.FromArgb(0, 123, 255), // Bootstrap primary blue
                     ForeColor = System.Drawing.Color.White,
-                    Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular),
-                    Cursor = Cursors.Hand
+                    Font = new System.Drawing.Font(
+                        "Segoe UI",
+                        9F,
+                        System.Drawing.FontStyle.Regular
+                    ),
+                    Cursor = Cursors.Hand,
                 };
                 backButton.Click += BackToSelection_Click;
 
@@ -415,9 +392,13 @@ namespace iTextDesignerWithGUI.Forms
                     Text = "Automatic Saving",
                     AutoSize = true,
                     Margin = new Padding(10),
-                    Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular),
+                    Font = new System.Drawing.Font(
+                        "Segoe UI",
+                        9F,
+                        System.Drawing.FontStyle.Regular
+                    ),
                     Cursor = Cursors.Hand,
-                    Checked = LoadAutoSavingPreference()  // Load saved preference
+                    Checked = LoadAutoSavingPreference(), // Load saved preference
                 };
 
                 // Add Close Edge on change checkbox
@@ -426,9 +407,13 @@ namespace iTextDesignerWithGUI.Forms
                     Text = "Close Edge on change",
                     AutoSize = true,
                     Margin = new Padding(10),
-                    Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular),
+                    Font = new System.Drawing.Font(
+                        "Segoe UI",
+                        9F,
+                        System.Drawing.FontStyle.Regular
+                    ),
                     Cursor = Cursors.Hand,
-                    Checked = LoadCloseEdgePreference()
+                    Checked = LoadCloseEdgePreference(),
                 };
 
                 closeEdgeCheckbox.CheckedChanged += (sender, e) =>
@@ -447,11 +432,15 @@ namespace iTextDesignerWithGUI.Forms
                     Margin = new Padding(10),
                     Padding = new Padding(5),
                     FlatStyle = FlatStyle.Flat,
-                    BackColor = System.Drawing.Color.FromArgb(40, 167, 69),  // Bootstrap success green
+                    BackColor = System.Drawing.Color.FromArgb(40, 167, 69), // Bootstrap success green
                     ForeColor = System.Drawing.Color.White,
-                    Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular),
+                    Font = new System.Drawing.Font(
+                        "Segoe UI",
+                        9F,
+                        System.Drawing.FontStyle.Regular
+                    ),
                     Cursor = Cursors.Hand,
-                    Enabled = !LoadAutoSavingPreference()  // Enable if auto-saving is disabled
+                    Enabled = !LoadAutoSavingPreference(), // Enable if auto-saving is disabled
                 };
 
                 // Add event handler for checkbox state change
@@ -459,10 +448,11 @@ namespace iTextDesignerWithGUI.Forms
                 {
                     reloadButton.Enabled = !autoSaveCheckbox.Checked;
                     // Update button appearance when disabled
-                    reloadButton.BackColor = autoSaveCheckbox.Checked ? 
-                        System.Drawing.Color.FromArgb(108, 117, 125) : // Bootstrap gray for disabled
-                        System.Drawing.Color.FromArgb(40, 167, 69);    // Bootstrap success green for enabled
-                    
+                    reloadButton.BackColor = autoSaveCheckbox.Checked
+                        ? System.Drawing.Color.FromArgb(108, 117, 125)
+                        : // Bootstrap gray for disabled
+                        System.Drawing.Color.FromArgb(40, 167, 69); // Bootstrap success green for enabled
+
                     // Control the template watcher service
                     if (autoSaveCheckbox.Checked)
                     {
@@ -488,7 +478,9 @@ namespace iTextDesignerWithGUI.Forms
                 else
                 {
                     _templateWatcher.StopWatching();
-                    Debug.WriteLine("Template watcher service explicitly stopped on form initialization");
+                    Debug.WriteLine(
+                        "Template watcher service explicitly stopped on form initialization"
+                    );
                 }
 
                 reloadButton.Click += ReloadTemplates_Click;
@@ -500,10 +492,10 @@ namespace iTextDesignerWithGUI.Forms
                     Height = 120,
                     Padding = new Padding(10),
                     ColumnCount = 3,
-                    RowCount = 3
+                    RowCount = 3,
                 };
 
-                // Configure columns: Left spacing (auto) | Back button | Reload button 
+                // Configure columns: Left spacing (auto) | Back button | Reload button
                 buttonPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F)); // Left spacing
                 buttonPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize)); // Back button
                 buttonPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize)); // Reload button
@@ -522,7 +514,7 @@ namespace iTextDesignerWithGUI.Forms
                     Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold),
                     ForeColor = System.Drawing.Color.FromArgb(40, 167, 69), // Bootstrap success green
                     Visible = false,
-                    Dock = DockStyle.Fill
+                    Dock = DockStyle.Fill,
                 };
 
                 // Add controls to the panel
@@ -536,20 +528,25 @@ namespace iTextDesignerWithGUI.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    $"Error loading data: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
         }
 
         private void PopulateDataGrid()
         {
             var data = new List<object>();
-            
+
             // Create numbered entries for each item in the reference data
             for (int i = 0; i < _referenceData.Count; i++)
             {
                 data.Add(new { Entry = $"Entry {i + 1}" });
             }
-            
+
             dataGridView.DataSource = data;
         }
 
@@ -557,7 +554,7 @@ namespace iTextDesignerWithGUI.Forms
         {
             // Clear any existing columns first
             dataGridView.Columns.Clear();
-            
+
             // Basic grid settings
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
@@ -565,7 +562,7 @@ namespace iTextDesignerWithGUI.Forms
             this.dataGridView.MultiSelect = false;
             this.dataGridView.ReadOnly = true;
             this.dataGridView.AutoGenerateColumns = false;
-            this.dataGridView.RowHeadersVisible = false;  // Remove the empty first column
+            this.dataGridView.RowHeadersVisible = false; // Remove the empty first column
             this.dataGridView.AllowUserToAddRows = false; // Remove empty row at bottom
             this.dataGridView.BorderStyle = BorderStyle.None;
             this.dataGridView.BackgroundColor = System.Drawing.SystemColors.Window;
@@ -575,7 +572,7 @@ namespace iTextDesignerWithGUI.Forms
             {
                 HeaderText = "Entry",
                 DataPropertyName = "Entry",
-                FillWeight = 70
+                FillWeight = 70,
             };
             dataGridView.Columns.Add(entryColumn);
 
@@ -587,7 +584,7 @@ namespace iTextDesignerWithGUI.Forms
                 Name = "GeneratePdf",
                 UseColumnTextForButtonValue = true,
                 FillWeight = 30,
-                MinimumWidth = 120
+                MinimumWidth = 120,
             };
             dataGridView.Columns.Add(generatePdfColumn);
 
@@ -599,7 +596,7 @@ namespace iTextDesignerWithGUI.Forms
             if (e.RowIndex >= 0 && e.ColumnIndex == dataGridView.Columns["GeneratePdf"].Index)
             {
                 _lastSelectedRow = e.RowIndex;
-                
+
                 // Save the selected row index to registry
                 try
                 {
@@ -621,10 +618,10 @@ namespace iTextDesignerWithGUI.Forms
                 {
                     // Temporarily disable the template watcher to prevent unwanted reloads
                     _templateWatcher?.StopWatching();
-                    
+
                     // Use a simple "Entry X" naming scheme instead of extracting names from different data types
                     string name = $"Entry {e.RowIndex + 1}";
-                    
+
                     // Show the secondary form with the current item's data
                     _secondaryForm.UpdateData(item);
                     _secondaryForm.Show();
@@ -640,7 +637,7 @@ namespace iTextDesignerWithGUI.Forms
                         .Replace(" ", "_")
                         .Replace("/", "_")
                         .Replace("\\", "_");
-                    
+
                     _currentPdfPath = Path.Combine(Path.GetTempPath(), fileName);
                     File.WriteAllBytes(_currentPdfPath, pdfBytes);
                     Debug.WriteLine($"PDF saved to: {_currentPdfPath}");
@@ -648,7 +645,7 @@ namespace iTextDesignerWithGUI.Forms
                     // Start Edge and store the process
                     var startInfo = new ProcessStartInfo(_currentPdfPath)
                     {
-                        UseShellExecute = true
+                        UseShellExecute = true,
                     };
                     _currentEdgeProcess = Process.Start(startInfo);
 
@@ -656,12 +653,23 @@ namespace iTextDesignerWithGUI.Forms
                     if (_currentEdgeProcess != null)
                     {
                         await Task.Delay(500); // Give Edge time to open
-                        var edgeWindow = FindWindow(null, Path.GetFileName(_currentPdfPath) + " - Microsoft Edge");
+                        var edgeWindow = FindWindow(
+                            null,
+                            Path.GetFileName(_currentPdfPath) + " - Microsoft Edge"
+                        );
                         if (edgeWindow != IntPtr.Zero)
                         {
                             var x = this.Location.X + this.Width + EDGE_WINDOW_OFFSET;
                             var y = this.Location.Y;
-                            SetWindowPos(edgeWindow, IntPtr.Zero, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+                            SetWindowPos(
+                                edgeWindow,
+                                IntPtr.Zero,
+                                x,
+                                y,
+                                0,
+                                0,
+                                SWP_NOSIZE | SWP_NOZORDER
+                            );
                         }
                     }
                 }
@@ -674,7 +682,7 @@ namespace iTextDesignerWithGUI.Forms
                     var errorMessage = new System.Text.StringBuilder();
                     errorMessage.AppendLine("PDF Generation Error:");
                     errorMessage.AppendLine(ex.Message);
-                    
+
                     if (ex.InnerException != null)
                     {
                         errorMessage.AppendLine("\nDetailed Error:");
@@ -682,7 +690,10 @@ namespace iTextDesignerWithGUI.Forms
                     }
 
                     // Show the custom error form
-                    var errorForm = new CustomErrorForm(errorMessage.ToString(), _secondaryForm.GetCurrentTemplatePath());
+                    var errorForm = new CustomErrorForm(
+                        errorMessage.ToString(),
+                        _secondaryForm.GetCurrentTemplatePath()
+                    );
                     errorForm.FormClosed += (s, args) =>
                     {
                         // Reset the reload state when the error form is closed by the user
@@ -712,7 +723,7 @@ namespace iTextDesignerWithGUI.Forms
         {
             this.dataGridView = new System.Windows.Forms.DataGridView();
             this.SuspendLayout();
-            
+
             // MainForm
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -724,11 +735,12 @@ namespace iTextDesignerWithGUI.Forms
 
         private void BackToSelection_Click(object sender, EventArgs e)
         {
-            if (_isReloading || _isClosing) return;
-            
+            if (_isReloading || _isClosing)
+                return;
+
             // Stop the template watcher before navigating back to selection
             _templateWatcher?.StopWatching();
-            
+
             // Ensure SecondaryForm is properly disposed to prevent cached data
             if (_secondaryForm != null && !_secondaryForm.IsDisposed)
             {
@@ -739,14 +751,14 @@ namespace iTextDesignerWithGUI.Forms
                 _secondaryForm.Dispose();
                 _secondaryForm = null;
             }
-            
+
             // Close any open Edge windows
             CloseEdgeWindows();
-            
+
             // Create and show the AssessmentTypeSelector form
             var selector = new AssessmentTypeSelector();
             this.Hide(); // Hide this form instead of closing it immediately
-            
+
             try
             {
                 // Show the selector as a dialog
@@ -754,12 +766,12 @@ namespace iTextDesignerWithGUI.Forms
                 {
                     // Save window position
                     SaveWindowPosition();
-                    
+
                     // If user selected an assessment type, create a new MainForm with it
                     var newForm = new MainForm(selector.SelectedTypeWrapper);
-                    newForm.FormClosed += (s, args) => 
+                    newForm.FormClosed += (s, args) =>
                     {
-                        // Only close this form when the new one is closed 
+                        // Only close this form when the new one is closed
                         _isClosing = true;
                         this.Close();
                     };
@@ -770,7 +782,7 @@ namespace iTextDesignerWithGUI.Forms
                     // If user cancelled, just show this form again and restart the watcher
                     this.Show();
                     _templateWatcher?.StartWatching();
-                    
+
                     // Re-initialize the secondary form if needed
                     if (_secondaryForm == null)
                     {
@@ -787,7 +799,8 @@ namespace iTextDesignerWithGUI.Forms
 
         private async void ReloadTemplates_Click(object sender, EventArgs e)
         {
-            if (_isReloading || _isClosing) return;
+            if (_isReloading || _isClosing)
+                return;
             _isReloading = true;
 
             try
@@ -813,7 +826,10 @@ namespace iTextDesignerWithGUI.Forms
                 string tempPositionFile = Path.Combine(Path.GetTempPath(), "AppPosition.txt");
                 try
                 {
-                    File.WriteAllText(tempPositionFile, $"{this.Location.X},{this.Location.Y},{this.Width},{this.Height}");
+                    File.WriteAllText(
+                        tempPositionFile,
+                        $"{this.Location.X},{this.Location.Y},{this.Width},{this.Height}"
+                    );
                 }
                 catch (Exception ex)
                 {
@@ -821,13 +837,17 @@ namespace iTextDesignerWithGUI.Forms
                 }
 
                 // Save the last selected row too, if any, to preserve data grid state
-                try 
+                try
                 {
                     using (var key = Registry.CurrentUser.CreateSubKey(RegistryPath))
                     {
                         if (key != null && _lastSelectedRow.HasValue)
                         {
-                            key.SetValue(LastSelectedRowKey, _lastSelectedRow.Value, RegistryValueKind.DWord);
+                            key.SetValue(
+                                LastSelectedRowKey,
+                                _lastSelectedRow.Value,
+                                RegistryValueKind.DWord
+                            );
                         }
                     }
                 }
@@ -843,12 +863,15 @@ namespace iTextDesignerWithGUI.Forms
 
                 // Get the project directory using the directory service
                 var projectDir = _directoryService.GetRootDirectory();
-                var projectPath = Directory.GetFiles(projectDir, "*.csproj", SearchOption.TopDirectoryOnly)
+                var projectPath = Directory
+                    .GetFiles(projectDir, "*.csproj", SearchOption.TopDirectoryOnly)
                     .FirstOrDefault();
-                
+
                 if (string.IsNullOrEmpty(projectPath))
                 {
-                    throw new FileNotFoundException($"Could not find .csproj file in the project directory: {projectDir}");
+                    throw new FileNotFoundException(
+                        $"Could not find .csproj file in the project directory: {projectDir}"
+                    );
                 }
 
                 // Wait for parallel tasks to complete
@@ -868,16 +891,24 @@ namespace iTextDesignerWithGUI.Forms
                         RedirectStandardOutput = true,
                         RedirectStandardError = true,
                         UseShellExecute = false,
-                        CreateNoWindow = true
-                    }
+                        CreateNoWindow = true,
+                    },
                 };
 
                 var output = new System.Text.StringBuilder();
                 var error = new System.Text.StringBuilder();
 
                 // Capture output and error streams
-                buildProcess.OutputDataReceived += (s, args) => { if (args.Data != null) output.AppendLine(args.Data); };
-                buildProcess.ErrorDataReceived += (s, args) => { if (args.Data != null) error.AppendLine(args.Data); };
+                buildProcess.OutputDataReceived += (s, args) =>
+                {
+                    if (args.Data != null)
+                        output.AppendLine(args.Data);
+                };
+                buildProcess.ErrorDataReceived += (s, args) =>
+                {
+                    if (args.Data != null)
+                        error.AppendLine(args.Data);
+                };
 
                 // Start the build process
                 buildProcess.Start();
@@ -893,20 +924,24 @@ namespace iTextDesignerWithGUI.Forms
 
                     // Format the error message to combine both output and error streams
                     var errorMessage = new System.Text.StringBuilder();
-                    if (output.Length > 0) 
+                    if (output.Length > 0)
                     {
                         errorMessage.AppendLine("Build Output:");
                         errorMessage.AppendLine(output.ToString());
                     }
                     if (error.Length > 0)
                     {
-                        if (output.Length > 0) errorMessage.AppendLine("\n");
+                        if (output.Length > 0)
+                            errorMessage.AppendLine("\n");
                         errorMessage.AppendLine("Compilation Errors:");
                         errorMessage.AppendLine(error.ToString());
                     }
 
                     // Show the custom error form
-                    var errorForm = new CustomErrorForm(errorMessage.ToString(), _secondaryForm?.GetCurrentTemplatePath() ?? "");
+                    var errorForm = new CustomErrorForm(
+                        errorMessage.ToString(),
+                        _secondaryForm?.GetCurrentTemplatePath() ?? ""
+                    );
                     errorForm.FormClosed += (s, args) =>
                     {
                         // Reset the reload state when the error form is closed by the user
@@ -925,14 +960,14 @@ namespace iTextDesignerWithGUI.Forms
 
                 // Hide this form while showing the new one
                 this.Hide();
-                
+
                 // Create and show the new form with the same assessment type
                 var newForm = new MainForm(_currentTypeWrapper);
-                newForm.FormClosed += (s, args) => 
+                newForm.FormClosed += (s, args) =>
                 {
                     // Only close this form when the new one is closed
                     _isClosing = true;
-                    this.Close(); 
+                    this.Close();
                 };
                 newForm.Show();
 
@@ -977,12 +1012,15 @@ namespace iTextDesignerWithGUI.Forms
                                 {
                                     // Give the form a moment to fully initialize
                                     await Task.Delay(100);
-                                    
+
                                     var cellEventArgs = new DataGridViewCellEventArgs(
                                         newForm.dataGridView.Columns["GeneratePdf"].Index,
                                         lastRowIndex.Value
                                     );
-                                    newForm.dataGridView_CellContentClick(newForm.dataGridView, cellEventArgs);
+                                    newForm.dataGridView_CellContentClick(
+                                        newForm.dataGridView,
+                                        cellEventArgs
+                                    );
                                 }
                             }
                         }
@@ -996,21 +1034,25 @@ namespace iTextDesignerWithGUI.Forms
             }
             catch (Exception ex)
             {
-                var errorForm = new CustomErrorForm(ex.Message, _secondaryForm?.GetCurrentTemplatePath() ?? "");
+                var errorForm = new CustomErrorForm(
+                    ex.Message,
+                    _secondaryForm?.GetCurrentTemplatePath() ?? ""
+                );
                 errorForm.FormClosed += (s, args) =>
                 {
                     // Reset the reload state when the error form is closed by the user
                     ResetReloadState();
                 };
                 errorForm.ShowDialog(this);
-                
+
                 _statusLabel.Text = "Error during reload!";
                 _statusLabel.ForeColor = Color.FromArgb(220, 53, 69);
                 _statusLabel.Visible = true;
                 Debug.WriteLine($"Error during template reload: {ex.Message}");
-                
+
                 // Wait a bit and then hide the status label
-                Task.Run(async () => {
+                Task.Run(async () =>
+                {
                     await Task.Delay(TASK_DELAY_MS);
                     if (this.InvokeRequired)
                     {
@@ -1030,7 +1072,8 @@ namespace iTextDesignerWithGUI.Forms
 
         private void CloseEdgeWindows()
         {
-            if (!_closeEdgeOnChange) return;
+            if (!_closeEdgeOnChange)
+                return;
 
             try
             {
@@ -1074,29 +1117,11 @@ namespace iTextDesignerWithGUI.Forms
                 Height = 22,
                 TextAlign = ContentAlignment.MiddleLeft,
                 BorderStyle = BorderStyle.Fixed3D,
-                Text = "Ready"
+                Text = "Ready",
             };
             this.Controls.Add(_statusLabel);
         }
 
-        /// <summary>
-        /// Closes the Edge browser process if the setting is enabled
-        /// </summary>
-        private void CloseEdgeIfNeeded()
-        {
-            if (_closeEdgeOnChange && _currentEdgeProcess != null && !_currentEdgeProcess.HasExited)
-            {
-                try
-                {
-                    _currentEdgeProcess.Kill();
-                    _currentEdgeProcess = null;
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Error closing Edge: {ex.Message}");
-                }
-            }
-        }
 
         /// <summary>
         /// Stops the template watcher service and returns whether it was enabled
@@ -1130,7 +1155,7 @@ namespace iTextDesignerWithGUI.Forms
         public static void ResetReloadState()
         {
             _isReloading = false;
-            
+
             // Check if there are any open error forms and close them
             var openErrorForms = Application.OpenForms.OfType<CustomErrorForm>().ToList();
             foreach (var errorForm in openErrorForms)
