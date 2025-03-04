@@ -1,10 +1,7 @@
-using System;
-using System.IO;
-using System.Windows.Forms;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Collections.Generic;
+
 
 namespace iTextDesignerWithGUI.Services
 {
@@ -21,7 +18,8 @@ namespace iTextDesignerWithGUI.Services
         /// <param name="directoryService">Service for managing project directories</param>
         public CshtmlGenerationService(ProjectDirectoryService directoryService)
         {
-            _directoryService = directoryService ?? throw new ArgumentNullException(nameof(directoryService));
+            _directoryService =
+                directoryService ?? throw new ArgumentNullException(nameof(directoryService));
             Debug.WriteLine($"CshtmlGenerationService initialized");
         }
 
@@ -36,52 +34,64 @@ namespace iTextDesignerWithGUI.Services
             try
             {
                 // Construct the target directory path using the directory service
-                string targetDirectory = _directoryService.EnsureDirectoryExists(Path.Combine("Templates", templateType));
-                
+                string targetDirectory = _directoryService.EnsureDirectoryExists(
+                    Path.Combine("Templates", templateType)
+                );
+
                 // Append "Template" to the file name
                 string templateFileName = $"{fileName}Template";
-                
+
                 // Construct the target file path
                 string targetFilePath = Path.Combine(targetDirectory, $"{templateFileName}.cshtml");
-                
+
                 Debug.WriteLine($"Generating Razor (cshtml) file at: {targetFilePath}");
-                
+
                 // Generate a basic Razor content
                 string cshtmlContent = GenerateBasicCshtmlContent(fileName, templateType);
-                
+
                 // Write the Razor content to the file
                 File.WriteAllText(targetFilePath, cshtmlContent);
-                
+
                 Debug.WriteLine($"Successfully generated Razor (cshtml) file: {targetFilePath}");
-                
+
                 // Generate the corresponding JSON file
                 bool jsonGenerated = GenerateJsonReferenceFile(fileName, templateType);
                 if (!jsonGenerated)
                 {
-                    Debug.WriteLine("Warning: Generated cshtml file, but failed to generate JSON reference file");
+                    Debug.WriteLine(
+                        "Warning: Generated cshtml file, but failed to generate JSON reference file"
+                    );
                 }
-                
+
                 // Generate the corresponding model files
                 bool modelsGenerated = GenerateModelFiles(fileName, templateType);
                 if (!modelsGenerated)
                 {
-                    Debug.WriteLine("Warning: Generated cshtml and JSON files, but failed to generate model files");
+                    Debug.WriteLine(
+                        "Warning: Generated cshtml and JSON files, but failed to generate model files"
+                    );
                 }
-                
+
                 // Add the new assessment type to the assessmentTypes.json file
                 bool assessmentTypeAdded = AddAssessmentTypeToJson(fileName, templateType);
                 if (!assessmentTypeAdded)
                 {
-                    Debug.WriteLine("Warning: Generated files successfully, but failed to update assessmentTypes.json");
+                    Debug.WriteLine(
+                        "Warning: Generated files successfully, but failed to update assessmentTypes.json"
+                    );
                 }
-                
+
                 return true;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error generating Razor (cshtml) file: {ex.Message}");
-                MessageBox.Show($"Error generating Razor (cshtml) file: {ex.Message}", "Generation Error", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    $"Error generating Razor (cshtml) file: {ex.Message}",
+                    "Generation Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
                 return false;
             }
         }
@@ -97,25 +107,39 @@ namespace iTextDesignerWithGUI.Services
             try
             {
                 // Construct the target directory path
-                string targetDirectory = _directoryService.EnsureDirectoryExists(Path.Combine("Models", templateType, $"{fileName}Models"));
-                
+                string targetDirectory = _directoryService.EnsureDirectoryExists(
+                    Path.Combine("Models", templateType, $"{fileName}Models")
+                );
+
                 // Generate the assessment model file
-                bool assessmentGenerated = GenerateAssessmentModelFile(fileName, templateType, targetDirectory);
-                
+                bool assessmentGenerated = GenerateAssessmentModelFile(
+                    fileName,
+                    templateType,
+                    targetDirectory
+                );
+
                 // Generate the data instance model file
-                bool dataInstanceGenerated = GenerateDataInstanceModelFile(fileName, templateType, targetDirectory);
-                
+                bool dataInstanceGenerated = GenerateDataInstanceModelFile(
+                    fileName,
+                    templateType,
+                    targetDirectory
+                );
+
                 return assessmentGenerated && dataInstanceGenerated;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error generating model files: {ex.Message}");
-                MessageBox.Show($"Error generating model files: {ex.Message}", "Generation Error", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    $"Error generating model files: {ex.Message}",
+                    "Generation Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
                 return false;
             }
         }
-        
+
         /// <summary>
         /// Generates the assessment model file
         /// </summary>
@@ -123,17 +147,22 @@ namespace iTextDesignerWithGUI.Services
         /// <param name="templateType">Type of template (e.g., "HealthAndWellness")</param>
         /// <param name="targetDirectory">Target directory to save the model file</param>
         /// <returns>True if generation was successful, false otherwise</returns>
-        private bool GenerateAssessmentModelFile(string fileName, string templateType, string targetDirectory)
+        private bool GenerateAssessmentModelFile(
+            string fileName,
+            string templateType,
+            string targetDirectory
+        )
         {
             try
             {
                 // Construct the target file path
                 string targetFilePath = Path.Combine(targetDirectory, $"{fileName}Assessment.cs");
-                
+
                 Debug.WriteLine($"Generating Assessment model file at: {targetFilePath}");
-                
+
                 // Generate the assessment model content
-                string assessmentContent = $@"namespace iTextDesignerWithGUI.Models
+                string assessmentContent =
+                    $@"namespace iTextDesignerWithGUI.Models
 {{
     /// <summary>
     /// Implementation of IAssessment for {fileName} assessments
@@ -146,10 +175,10 @@ namespace iTextDesignerWithGUI.Services
     }}
 }}
 ";
-                
+
                 // Write the assessment model content to the file
                 File.WriteAllText(targetFilePath, assessmentContent);
-                
+
                 Debug.WriteLine($"Successfully generated Assessment model file: {targetFilePath}");
                 return true;
             }
@@ -159,7 +188,7 @@ namespace iTextDesignerWithGUI.Services
                 return false;
             }
         }
-        
+
         /// <summary>
         /// Generates the data instance model file based on the JSON structure
         /// </summary>
@@ -167,17 +196,22 @@ namespace iTextDesignerWithGUI.Services
         /// <param name="templateType">Type of template (e.g., "HealthAndWellness")</param>
         /// <param name="targetDirectory">Target directory to save the model file</param>
         /// <returns>True if generation was successful, false otherwise</returns>
-        private bool GenerateDataInstanceModelFile(string fileName, string templateType, string targetDirectory)
+        private bool GenerateDataInstanceModelFile(
+            string fileName,
+            string templateType,
+            string targetDirectory
+        )
         {
             try
             {
                 // Construct the target file path
                 string targetFilePath = Path.Combine(targetDirectory, $"{fileName}Instance.cs");
-                
+
                 Debug.WriteLine($"Generating Data Instance model file at: {targetFilePath}");
-                
+
                 // Generate the data instance model content based on our JSON structure
-                string dataInstanceContent = $@"using System;
+                string dataInstanceContent =
+                    $@"using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -238,11 +272,13 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
     }}
 }}
 ";
-                
+
                 // Write the data instance model content to the file
                 File.WriteAllText(targetFilePath, dataInstanceContent);
-                
-                Debug.WriteLine($"Successfully generated Data Instance model file: {targetFilePath}");
+
+                Debug.WriteLine(
+                    $"Successfully generated Data Instance model file: {targetFilePath}"
+                );
                 return true;
             }
             catch (Exception ex)
@@ -263,30 +299,36 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
             try
             {
                 // Construct the target directory path
-                string targetDirectory = _directoryService.EnsureDirectoryExists(Path.Combine("ReferenceDataJsons", templateType));
-                
+                string targetDirectory = _directoryService.EnsureDirectoryExists(
+                    Path.Combine("ReferenceDataJsons", templateType)
+                );
+
                 // Append "Data" to the file name
                 string jsonFileName = $"{fileName}Data";
-                
+
                 // Construct the target file path
                 string targetFilePath = Path.Combine(targetDirectory, $"{jsonFileName}.json");
-                
+
                 Debug.WriteLine($"Generating JSON reference file at: {targetFilePath}");
-                
+
                 // Generate a basic JSON content
                 string jsonContent = GenerateBasicJsonContent(fileName);
-                
+
                 // Write the JSON content to the file
                 File.WriteAllText(targetFilePath, jsonContent);
-                
+
                 Debug.WriteLine($"Successfully generated JSON reference file: {targetFilePath}");
                 return true;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error generating JSON reference file: {ex.Message}");
-                MessageBox.Show($"Error generating JSON reference file: {ex.Message}", "Generation Error", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    $"Error generating JSON reference file: {ex.Message}",
+                    "Generation Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
                 return false;
             }
         }
@@ -301,14 +343,26 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
         {
             // Get root directory for instructions
             string rootDirectory = _directoryService.GetRootDirectory();
-            
+
             // Generate specific folder paths based on the fileName and templateType
-            string referenceDataJsonFolder = Path.Combine(rootDirectory, "ReferenceDataJsons", templateType);
-            string referenceDataJsonFile = Path.Combine(referenceDataJsonFolder, $"{fileName}Data.json");
-            
-            string modelsFolder = Path.Combine(rootDirectory, "Models", templateType, $"{fileName}Models");
+            string referenceDataJsonFolder = Path.Combine(
+                rootDirectory,
+                "ReferenceDataJsons",
+                templateType
+            );
+            string referenceDataJsonFile = Path.Combine(
+                referenceDataJsonFolder,
+                $"{fileName}Data.json"
+            );
+
+            string modelsFolder = Path.Combine(
+                rootDirectory,
+                "Models",
+                templateType,
+                $"{fileName}Models"
+            );
             string modelInstanceFile = Path.Combine(modelsFolder, $"{fileName}Instance.cs");
-            
+
             string templatesFolder = Path.Combine(rootDirectory, "Templates", templateType);
             string templateFile = Path.Combine(templatesFolder, $"{fileName}Template.cshtml");
 
@@ -388,7 +442,7 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
 </body>
 </html>";
         }
-        
+
         /// <summary>
         /// Generates basic JSON content for a new file
         /// </summary>
@@ -408,7 +462,7 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
                         name = $"{fileName} Sample 1",
                         description = $"Primary sample data for {fileName}",
                         created_at = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssZ"),
-                        is_active = true
+                        is_active = true,
                     },
                     properties = new
                     {
@@ -423,15 +477,15 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
                                     {
                                         name = "Field1",
                                         type = "text",
-                                        value = "Sample value 1"
+                                        value = "Sample value 1",
                                     },
                                     new
                                     {
                                         name = "Field2",
                                         type = "number",
-                                        value = 42
-                                    }
-                                }
+                                        value = 42,
+                                    },
+                                },
                             },
                             new
                             {
@@ -442,20 +496,19 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
                                     {
                                         name = "Field3",
                                         type = "checkbox",
-                                        value = true
+                                        value = true,
                                     },
                                     new
                                     {
                                         name = "Field4",
                                         type = "date",
-                                        value = DateTime.Now.ToString("yyyy-MM-dd")
-                                    }
-                                }
-                            }
-                        }
-                    }
+                                        value = DateTime.Now.ToString("yyyy-MM-dd"),
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
-                
                 // Example data set 2
                 new
                 {
@@ -465,7 +518,7 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
                         name = $"{fileName} Sample 2",
                         description = $"Secondary sample data for {fileName}",
                         created_at = DateTime.Now.AddDays(-7).ToString("yyyy-MM-ddTHH:mm:ssZ"),
-                        is_active = true
+                        is_active = true,
                     },
                     properties = new
                     {
@@ -480,21 +533,21 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
                                     {
                                         name = "FullName",
                                         type = "text",
-                                        value = "Jane Smith"
+                                        value = "Jane Smith",
                                     },
                                     new
                                     {
                                         name = "Age",
                                         type = "number",
-                                        value = 35
+                                        value = 35,
                                     },
                                     new
                                     {
                                         name = "Email",
                                         type = "email",
-                                        value = "jane.smith@example.com"
-                                    }
-                                }
+                                        value = "jane.smith@example.com",
+                                    },
+                                },
                             },
                             new
                             {
@@ -505,20 +558,19 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
                                     {
                                         name = "ReceiveNotifications",
                                         type = "checkbox",
-                                        value = false
+                                        value = false,
                                     },
                                     new
                                     {
                                         name = "Theme",
                                         type = "select",
-                                        value = "Dark"
-                                    }
-                                }
-                            }
-                        }
-                    }
+                                        value = "Dark",
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
-                
                 // Example data set 3
                 new
                 {
@@ -528,7 +580,7 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
                         name = $"{fileName} Sample 3",
                         description = $"Tertiary sample data for {fileName}",
                         created_at = DateTime.Now.AddDays(-14).ToString("yyyy-MM-ddTHH:mm:ssZ"),
-                        is_active = false
+                        is_active = false,
                     },
                     properties = new
                     {
@@ -543,27 +595,27 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
                                     {
                                         name = "ProductName",
                                         type = "text",
-                                        value = "Super Widget Pro"
+                                        value = "Super Widget Pro",
                                     },
                                     new
                                     {
                                         name = "SKU",
                                         type = "text",
-                                        value = "WDG-1234-PRO"
+                                        value = "WDG-1234-PRO",
                                     },
                                     new
                                     {
                                         name = "Price",
                                         type = "currency",
-                                        value = 199.99
+                                        value = 199.99,
                                     },
                                     new
                                     {
                                         name = "InStock",
                                         type = "checkbox",
-                                        value = true
-                                    }
-                                }
+                                        value = true,
+                                    },
+                                },
                             },
                             new
                             {
@@ -574,34 +626,34 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
                                     {
                                         name = "Weight",
                                         type = "number",
-                                        value = 2.5
+                                        value = 2.5,
                                     },
                                     new
                                     {
                                         name = "Dimensions",
                                         type = "text",
-                                        value = "10 x 8 x 3 inches"
+                                        value = "10 x 8 x 3 inches",
                                     },
                                     new
                                     {
                                         name = "ShippingMethod",
                                         type = "select",
-                                        value = "Express"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                                        value = "Express",
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
             };
-            
+
             // Serialize the object to JSON with proper formatting
-            return JsonSerializer.Serialize(sampleData, new JsonSerializerOptions 
-            { 
-                WriteIndented = true
-            });
+            return JsonSerializer.Serialize(
+                sampleData,
+                new JsonSerializerOptions { WriteIndented = true }
+            );
         }
-        
+
         /// <summary>
         /// Adds a new assessment type to the assessmentTypes.json file
         /// </summary>
@@ -613,90 +665,134 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
             try
             {
                 // Construct the path to the assessmentTypes.json file
-                string assessmentTypesJsonPath = Path.Combine(_directoryService.GetDirectory("PersistentDataJSON"), "assessmentTypes.json");
-                
-                Debug.WriteLine($"Updating assessment types JSON file at: {assessmentTypesJsonPath}");
-                
+                string assessmentTypesJsonPath = Path.Combine(
+                    _directoryService.GetDirectory("PersistentDataJSON"),
+                    "assessmentTypes.json"
+                );
+
+                Debug.WriteLine(
+                    $"Updating assessment types JSON file at: {assessmentTypesJsonPath}"
+                );
+
                 // Read the existing JSON file
                 string jsonContent = File.ReadAllText(assessmentTypesJsonPath);
-                
+
                 // Parse the JSON document to preserve the exact structure
                 using (JsonDocument document = JsonDocument.Parse(jsonContent))
                 {
                     // Create a new JSON document with the same structure
                     using (MemoryStream ms = new MemoryStream())
                     {
-                        using (Utf8JsonWriter writer = new Utf8JsonWriter(ms, new JsonWriterOptions { Indented = true }))
+                        using (
+                            Utf8JsonWriter writer = new Utf8JsonWriter(
+                                ms,
+                                new JsonWriterOptions { Indented = true }
+                            )
+                        )
                         {
                             writer.WriteStartObject();
-                            
+
                             // Start writing the assessmentTypes array
                             writer.WritePropertyName("assessmentTypes");
                             writer.WriteStartArray();
-                            
+
                             // Copy all existing assessment types
                             bool assessmentTypeExists = false;
-                            if (document.RootElement.TryGetProperty("assessmentTypes", out JsonElement assessmentTypes))
+                            if (
+                                document.RootElement.TryGetProperty(
+                                    "assessmentTypes",
+                                    out JsonElement assessmentTypes
+                                )
+                            )
                             {
-                                foreach (JsonElement assessmentType in assessmentTypes.EnumerateArray())
+                                foreach (
+                                    JsonElement assessmentType in assessmentTypes.EnumerateArray()
+                                )
                                 {
                                     // Check if this assessment type already exists
-                                    if (assessmentType.TryGetProperty("name", out JsonElement nameElement) &&
-                                        string.Equals(nameElement.GetString(), fileName, StringComparison.OrdinalIgnoreCase))
+                                    if (
+                                        assessmentType.TryGetProperty(
+                                            "name",
+                                            out JsonElement nameElement
+                                        )
+                                        && string.Equals(
+                                            nameElement.GetString(),
+                                            fileName,
+                                            StringComparison.OrdinalIgnoreCase
+                                        )
+                                    )
                                     {
                                         assessmentTypeExists = true;
                                         // Skip this element as we'll add an updated version
                                         continue;
                                     }
-                                    
+
                                     // Copy the existing assessment type as-is
                                     assessmentType.WriteTo(writer);
                                 }
                             }
-                            
+
                             // If the assessment type doesn't exist, add it
                             if (!assessmentTypeExists)
                             {
                                 // Create paths for the new assessment type
-                                string assessmentTypeDirectory = $"Models/{templateType}/{fileName}Models/{fileName}Assessment.cs";
-                                
+                                string assessmentTypeDirectory =
+                                    $"Models/{templateType}/{fileName}Models/{fileName}Assessment.cs";
+
                                 // Use consistent naming convention: [Name]Instance.cs instead of [Name]DataInstance.cs
-                                string assessmentDataInstanceDirectory = $"Models/{templateType}/{fileName}Models/{fileName}Instance.cs";
-                                
-                                string cshtmlTemplateDirectory = $"Templates/{templateType}/{fileName}Template.cshtml";
-                                string jsonDataLocationDirectory = $"ReferenceDataJsons/{templateType}/{fileName}Data.json";
-                                
+                                string assessmentDataInstanceDirectory =
+                                    $"Models/{templateType}/{fileName}Models/{fileName}Instance.cs";
+
+                                string cshtmlTemplateDirectory =
+                                    $"Templates/{templateType}/{fileName}Template.cshtml";
+                                string jsonDataLocationDirectory =
+                                    $"ReferenceDataJsons/{templateType}/{fileName}Data.json";
+
                                 // Write the new assessment type
                                 writer.WriteStartObject();
                                 writer.WriteString("name", fileName);
                                 writer.WriteString("displayName", fileName);
-                                writer.WriteString("assessmentTypeDirectory", assessmentTypeDirectory);
-                                writer.WriteString("assessmentDataInstanceDirectory", assessmentDataInstanceDirectory);
-                                writer.WriteString("cshtmlTemplateDirectory", cshtmlTemplateDirectory);
-                                writer.WriteString("jsonDataLocationDirectory", jsonDataLocationDirectory);
+                                writer.WriteString(
+                                    "assessmentTypeDirectory",
+                                    assessmentTypeDirectory
+                                );
+                                writer.WriteString(
+                                    "assessmentDataInstanceDirectory",
+                                    assessmentDataInstanceDirectory
+                                );
+                                writer.WriteString(
+                                    "cshtmlTemplateDirectory",
+                                    cshtmlTemplateDirectory
+                                );
+                                writer.WriteString(
+                                    "jsonDataLocationDirectory",
+                                    jsonDataLocationDirectory
+                                );
                                 writer.WriteEndObject();
                             }
-                            
+
                             // End the assessmentTypes array
                             writer.WriteEndArray();
-                            
+
                             // End the root object
                             writer.WriteEndObject();
                         }
-                        
+
                         // Get the JSON as a string
                         ms.Position = 0;
                         using (StreamReader reader = new StreamReader(ms))
                         {
                             string updatedJsonContent = reader.ReadToEnd();
-                            
+
                             // Write the updated JSON back to the file
                             File.WriteAllText(assessmentTypesJsonPath, updatedJsonContent);
                         }
                     }
                 }
-                
-                Debug.WriteLine($"Successfully added assessment type '{fileName}' to the JSON file");
+
+                Debug.WriteLine(
+                    $"Successfully added assessment type '{fileName}' to the JSON file"
+                );
                 return true;
             }
             catch (Exception ex)
@@ -705,59 +801,7 @@ namespace iTextDesignerWithGUI.Models.{fileName}Models
                 return false;
             }
         }
-        
-        /// <summary>
-        /// Private class to match the structure of the assessmentTypes.json file
-        /// </summary>
-        private class AssessmentTypesJson
-        {
-            /// <summary>
-            /// List of assessment type definitions
-            /// </summary>
-            [JsonPropertyName("assessmentTypes")]
-            public List<AssessmentTypeJson> AssessmentTypes { get; set; } = new List<AssessmentTypeJson>();
-        }
-        
-        /// <summary>
-        /// Private class to match the structure of an assessment type in the JSON file
-        /// </summary>
-        private class AssessmentTypeJson
-        {
-            /// <summary>
-            /// Name of the assessment type
-            /// </summary>
-            [JsonPropertyName("name")]
-            public string Name { get; set; } = string.Empty;
-            
-            /// <summary>
-            /// Display name for the assessment type
-            /// </summary>
-            [JsonPropertyName("displayName")]
-            public string DisplayName { get; set; } = string.Empty;
-            
-            /// <summary>
-            /// Path to the assessment type model class
-            /// </summary>
-            [JsonPropertyName("assessmentTypeDirectory")]
-            public string AssessmentTypeDirectory { get; set; } = string.Empty;
-            
-            /// <summary>
-            /// Path to the data instance model class
-            /// </summary>
-            [JsonPropertyName("assessmentDataInstanceDirectory")]
-            public string AssessmentDataInstanceDirectory { get; set; } = string.Empty;
-            
-            /// <summary>
-            /// Path to the template file for this assessment type
-            /// </summary>
-            [JsonPropertyName("cshtmlTemplateDirectory")]
-            public string CshtmlTemplateDirectory { get; set; } = string.Empty;
-            
-            /// <summary>
-            /// Path to the JSON data file for this assessment type
-            /// </summary>
-            [JsonPropertyName("jsonDataLocationDirectory")]
-            public string JsonDataLocationDirectory { get; set; } = string.Empty;
-        }
+
+
     }
 }

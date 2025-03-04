@@ -47,6 +47,14 @@
       "assessmentDataInstanceDirectory": "Models/ORKids/ORKidsDelegAssessmentModels/ORKidsDelegAssessmentInstance.cs",
       "cshtmlTemplateDirectory": "Templates/ORKids/ORKidsDelegAssessmentTemplate.cshtml",
       "jsonDataLocationDirectory": "ReferenceDataJsons/ORKids/ORKidsDelegAssessmentData.json"
+    },
+    {
+      "name": "TesterG",
+      "displayName": "TesterG",
+      "assessmentTypeDirectory": "Models/ORKids/TesterGModels/TesterGAssessment.cs",
+      "assessmentDataInstanceDirectory": "Models/ORKids/TesterGModels/TesterGInstance.cs",
+      "cshtmlTemplateDirectory": "Templates/ORKids/TesterGTemplate.cshtml",
+      "jsonDataLocationDirectory": "ReferenceDataJsons/ORKids/TesterGData.json"
     }
   ]
 }

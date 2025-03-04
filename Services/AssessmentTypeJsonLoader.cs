@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace iTextDesignerWithGUI.Services
 {
@@ -31,12 +27,13 @@ namespace iTextDesignerWithGUI.Services
                         {
                             // Use ProjectDirectoryService to get the project root directory
                             var directoryService = new ProjectDirectoryService();
-                            
+
                             // Create the path to the assessmentTypes.json file
                             string jsonFilePath = Path.Combine(
                                 directoryService.GetDirectory("PersistentDataJSON"),
-                                "assessmentTypes.json");
-                                
+                                "assessmentTypes.json"
+                            );
+
                             _instance = new AssessmentTypeJsonLoader(jsonFilePath);
                         }
                     }
@@ -69,32 +66,24 @@ namespace iTextDesignerWithGUI.Services
             try
             {
                 string jsonContent = File.ReadAllText(_jsonFilePath);
-                var options = new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                };
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
-                var result = JsonSerializer.Deserialize<AssessmentTypeJsonContainer>(jsonContent, options);
+                var result = JsonSerializer.Deserialize<AssessmentTypeJsonContainer>(
+                    jsonContent,
+                    options
+                );
                 _cachedTypes = result?.AssessmentTypes ?? new List<AssessmentTypeJsonDefinition>();
                 return _cachedTypes;
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error loading assessment types from JSON: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine(
+                    $"Error loading assessment types from JSON: {ex.Message}"
+                );
                 return new List<AssessmentTypeJsonDefinition>();
             }
         }
 
-        /// <summary>
-        /// Gets an assessment type definition by name
-        /// </summary>
-        /// <param name="typeName">Name of the assessment type</param>
-        /// <returns>Assessment type definition or null if not found</returns>
-        public AssessmentTypeJsonDefinition GetAssessmentTypeByName(string typeName)
-        {
-            var types = LoadAssessmentTypes();
-            return types.Find(t => string.Equals(t.Name, typeName, StringComparison.OrdinalIgnoreCase));
-        }
     }
 
     /// <summary>
@@ -105,7 +94,8 @@ namespace iTextDesignerWithGUI.Services
         /// <summary>
         /// List of assessment type definitions
         /// </summary>
-        public List<AssessmentTypeJsonDefinition> AssessmentTypes { get; set; } = new List<AssessmentTypeJsonDefinition>();
+        public List<AssessmentTypeJsonDefinition> AssessmentTypes { get; set; } =
+            new List<AssessmentTypeJsonDefinition>();
     }
 
     /// <summary>
