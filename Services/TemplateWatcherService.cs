@@ -16,6 +16,8 @@ namespace iTextDesignerWithGUI.Services
         private const int COOLDOWN_PERIOD = 5000; // 5 second cooldown
         private bool _isInCooldown;
         private const int PRE_PROCESS_DELAY = 1000; // 1 second delay before processing changes
+        private bool _isInitialized = false; // Flag to track if the service has been properly initialized
+        private bool _isWatching = false; // Flag to track if watching is currently enabled
 
         /// <summary>
         /// Initializes a new instance of the TemplateWatcherService class.
@@ -30,6 +32,7 @@ namespace iTextDesignerWithGUI.Services
             _watchers = new List<FileSystemWatcher>();
             _isInCooldown = false;
             _isDisposed = false;  // Explicitly initialize this field
+            _isWatching = false;  // Initialize watching state to false
 
             string templatesPath = _directoryService.GetDirectory("Templates");
             Debug.WriteLine($"Initializing TemplateWatcherService for path: {templatesPath}");
@@ -55,38 +58,90 @@ namespace iTextDesignerWithGUI.Services
                         | NotifyFilters.CreationTime
                         | NotifyFilters.Attributes,
                     Filter = fileType,
-                    EnableRaisingEvents = false, // Start disabled
+                    EnableRaisingEvents = false, // Always start disabled, will be controlled by StartWatching/StopWatching
                     IncludeSubdirectories = true // Enable monitoring of subdirectories
                 };
 
+                // Event handlers will be attached in StartWatching method
+                _watchers.Add(watcher);
+            }
+            
+            // Mark as initialized with watchers disabled by default
+            _isInitialized = true;
+            Debug.WriteLine("TemplateWatcherService initialized with watchers disabled by default");
+        }
+
+
+        /// <summary>
+        /// Starts watching for template file changes
+        /// </summary>
+        public void StartWatching()
+        {
+            if (!_isInitialized)
+            {
+                Debug.WriteLine("Warning: Attempting to start template watchers before initialization");
+                return;
+            }
+            
+            if (_isWatching)
+            {
+                Debug.WriteLine("Template watchers already running, ignoring StartWatching call");
+                return;
+            }
+            
+            Debug.WriteLine("Starting template watchers");
+            
+            foreach (var watcher in _watchers)
+            {
                 // Attach event handlers
                 watcher.Changed += OnTemplateFileChanged;
                 watcher.Created += OnTemplateFileChanged;
                 watcher.Deleted += OnTemplateFileChanged;
                 watcher.Renamed += OnTemplateFileRenamed;
                 watcher.Error += OnWatcherError;
-
-                _watchers.Add(watcher);
-            }
-        }
-
-
-        public void StartWatching()
-        {
-            Debug.WriteLine("Starting template watchers");
-            foreach (var watcher in _watchers)
-            {
+                
+                // Enable events after attaching handlers
                 watcher.EnableRaisingEvents = true;
             }
+            
+            _isWatching = true;
+            Debug.WriteLine("Template watchers started successfully");
         }
 
+        /// <summary>
+        /// Stops watching for template file changes
+        /// </summary>
         public void StopWatching()
         {
+            if (!_isInitialized)
+            {
+                Debug.WriteLine("Warning: Attempting to stop template watchers before initialization");
+                return;
+            }
+            
+            if (!_isWatching)
+            {
+                Debug.WriteLine("Template watchers already stopped, ignoring StopWatching call");
+                return;
+            }
+            
             Debug.WriteLine("Stopping template watchers");
+            
             foreach (var watcher in _watchers)
             {
+                // First disable events
                 watcher.EnableRaisingEvents = false;
+                
+                // Then detach event handlers
+                watcher.Changed -= OnTemplateFileChanged;
+                watcher.Created -= OnTemplateFileChanged;
+                watcher.Deleted -= OnTemplateFileChanged;
+                watcher.Renamed -= OnTemplateFileRenamed;
+                watcher.Error -= OnWatcherError;
             }
+            
+            _isWatching = false;
+            Debug.WriteLine("Template watchers stopped successfully");
         }
 
         /// <summary>
@@ -95,11 +150,18 @@ namespace iTextDesignerWithGUI.Services
         /// <returns>True if any watchers are enabled, false otherwise</returns>
         public bool IsWatching()
         {
-            return _watchers.Any(w => w.EnableRaisingEvents);
+            return _isWatching;
         }
 
         private async void OnTemplateFileChanged(object sender, FileSystemEventArgs e)
         {
+            // First check if watching is enabled
+            if (!_isWatching || !_watchers.Any(w => w.EnableRaisingEvents))
+            {
+                Debug.WriteLine($"File change detected but watching is disabled, ignoring: {e.ChangeType} - {e.FullPath}");
+                return;
+            }
+            
             Debug.WriteLine($"File change detected: {e.ChangeType} - {e.FullPath}");
             
             if (_isInCooldown)
@@ -110,6 +172,13 @@ namespace iTextDesignerWithGUI.Services
 
             // Add a short delay to allow file operations to complete
             await Task.Delay(PRE_PROCESS_DELAY);
+            
+            // Double-check that watching is still enabled before proceeding
+            if (!_isWatching || !_watchers.Any(w => w.EnableRaisingEvents))
+            {
+                Debug.WriteLine("Watching was disabled during delay, ignoring change");
+                return;
+            }
             
             if (_uiControl.InvokeRequired)
             {
@@ -123,6 +192,13 @@ namespace iTextDesignerWithGUI.Services
 
         private void HandleFileChange()
         {
+            // Extra safety check - don't process if watching is disabled
+            if (!_isWatching)
+            {
+                Debug.WriteLine("HandleFileChange called while watching is disabled, ignoring");
+                return;
+            }
+            
             // Check if there are any open CustomErrorForms before proceeding
             var activeErrorForms = Application.OpenForms.OfType<Forms.CustomErrorForm>().ToList();
             if (activeErrorForms.Any())
@@ -147,12 +223,26 @@ namespace iTextDesignerWithGUI.Services
 
         private void OnTemplateFileRenamed(object sender, RenamedEventArgs e)
         {
+            // First check if watching is enabled
+            if (!_isWatching || !_watchers.Any(w => w.EnableRaisingEvents))
+            {
+                Debug.WriteLine($"File rename detected but watching is disabled, ignoring: {e.OldFullPath} -> {e.FullPath}");
+                return;
+            }
+            
             Debug.WriteLine($"File renamed: {e.OldFullPath} -> {e.FullPath}");
             OnTemplateFileChanged(sender, e);
         }
 
         private void OnWatcherError(object sender, ErrorEventArgs e)
         {
+            // Only show error if we're actually watching
+            if (!_isWatching)
+            {
+                Debug.WriteLine($"Watcher error occurred while disabled, ignoring: {e.GetException()}");
+                return;
+            }
+            
             Debug.WriteLine($"Watcher error: {e.GetException()}");
             MessageBox.Show($"Error watching templates: {e.GetException().Message}", "Template Watcher Error",
                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -170,9 +260,12 @@ namespace iTextDesignerWithGUI.Services
             if (_isDisposed) return;
 
             Debug.WriteLine("Disposing TemplateWatcherService");
+            
+            // Make sure to stop watching and detach all event handlers
+            StopWatching();
+            
             foreach (var watcher in _watchers)
             {
-                watcher.EnableRaisingEvents = false;
                 watcher.Dispose();
             }
             _cooldownTimer.Dispose();

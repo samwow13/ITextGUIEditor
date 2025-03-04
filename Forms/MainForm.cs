@@ -84,7 +84,8 @@ namespace iTextDesignerWithGUI.Forms
                 this
             );
 
-            // Don't start watching yet - this will be controlled by the checkbox preference later
+            // Explicitly ensure watcher is stopped at creation (initialization will happen in InitializeAsync)
+            _templateWatcher.StopWatching();
 
             _closeEdgeOnChange = LoadCloseEdgePreference();
 
@@ -226,14 +227,17 @@ namespace iTextDesignerWithGUI.Forms
                         var value = key.GetValue(AutoSavingEnabledKey);
                         if (value != null)
                         {
-                            return Convert.ToBoolean(value);
+                            bool result = Convert.ToBoolean(value);
+                            Debug.WriteLine($"Registry AutoSavingEnabled value found: {result}");
+                            return result;
                         }
                     }
                 }
+                Debug.WriteLine("No AutoSavingEnabled registry value found, returning default (false)");
             }
-            catch
+            catch (Exception ex)
             {
-                Debug.WriteLine("Error loading auto-saving preference");
+                Debug.WriteLine($"Error loading auto-saving preference: {ex.Message}");
             }
             return false; // Default to disabled if not found or error
         }
@@ -398,8 +402,12 @@ namespace iTextDesignerWithGUI.Forms
                         System.Drawing.FontStyle.Regular
                     ),
                     Cursor = Cursors.Hand,
-                    Checked = LoadAutoSavingPreference(), // Load saved preference
                 };
+
+                // Explicitly load the auto-saving preference and set checkbox state
+                bool autoSavePreference = LoadAutoSavingPreference();
+                Debug.WriteLine($"Loading auto-save preference: {autoSavePreference}");
+                autoSaveCheckbox.Checked = autoSavePreference;
 
                 // Add Close Edge on change checkbox
                 CheckBox closeEdgeCheckbox = new CheckBox
@@ -440,7 +448,7 @@ namespace iTextDesignerWithGUI.Forms
                         System.Drawing.FontStyle.Regular
                     ),
                     Cursor = Cursors.Hand,
-                    Enabled = !LoadAutoSavingPreference(), // Enable if auto-saving is disabled
+                    Enabled = !autoSavePreference, // Enable if auto-saving is disabled
                 };
 
                 // Add event handler for checkbox state change
@@ -470,13 +478,15 @@ namespace iTextDesignerWithGUI.Forms
                 };
 
                 // Initialize template watcher based on saved preference
-                if (autoSaveCheckbox.Checked)
+                if (autoSavePreference)
                 {
+                    Debug.WriteLine("Template watcher initialization: checkbox is CHECKED, starting watcher");
                     _templateWatcher.StartWatching();
                     Debug.WriteLine("Template watcher service started on form initialization");
                 }
                 else
                 {
+                    Debug.WriteLine("Template watcher initialization: checkbox is UNCHECKED, stopping watcher");
                     _templateWatcher.StopWatching();
                     Debug.WriteLine(
                         "Template watcher service explicitly stopped on form initialization"
@@ -616,6 +626,10 @@ namespace iTextDesignerWithGUI.Forms
                 var item = _referenceData[e.RowIndex];
                 try
                 {
+                    // Store the current watching state
+                    bool wasWatchingEnabled = _templateWatcher?.IsWatching() ?? false;
+                    Debug.WriteLine($"Before PDF generation - Watcher state: {(wasWatchingEnabled ? "ENABLED" : "DISABLED")}");
+                    
                     // Temporarily disable the template watcher to prevent unwanted reloads
                     _templateWatcher?.StopWatching();
 
@@ -703,14 +717,27 @@ namespace iTextDesignerWithGUI.Forms
                 }
                 finally
                 {
-                    // Re-enable the template watcher after a delay
+                    // Re-enable the template watcher after a delay ONLY if it was previously enabled
                     Task.Run(async () =>
                     {
                         // Wait 3 seconds before re-enabling to avoid picking up changes from the PDF generation
                         await Task.Delay(3000);
                         if (!_isReloading) // Only restart if we're not already reloading
                         {
-                            _templateWatcher?.StartWatching();
+                            // Check if auto-save is enabled using the existing preference
+                            bool autoSaveEnabled = LoadAutoSavingPreference();
+                            Debug.WriteLine($"After PDF generation - Auto save preference: {autoSaveEnabled}, restoring watcher state");
+                            
+                            // Only restart the watcher if auto-save is enabled
+                            if (autoSaveEnabled)
+                            {
+                                _templateWatcher?.StartWatching();
+                                Debug.WriteLine("Template watcher restarted after PDF generation");
+                            }
+                            else
+                            {
+                                Debug.WriteLine("Template watcher kept disabled after PDF generation (auto-save is off)");
+                            }
                         }
                     });
                 }
