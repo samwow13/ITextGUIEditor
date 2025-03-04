@@ -1,8 +1,4 @@
-using System;
-using System.Drawing;
-using System.Windows.Forms;
 using System.Text.Json;
-using System.Collections.Generic;
 using iTextDesignerWithGUI.Models;
 using iTextDesignerWithGUI.Services;
 
@@ -259,12 +255,5 @@ namespace iTextDesignerWithGUI.Controls
             }
         }
 
-        /// <summary>
-        /// Gets a dictionary of all items and their checked states
-        /// </summary>
-        public Dictionary<string, bool> GetCheckStates()
-        {
-            return new Dictionary<string, bool>(_checkStates);
-        }
     }
 }
