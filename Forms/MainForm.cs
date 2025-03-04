@@ -41,6 +41,11 @@ namespace iTextDesignerWithGUI.Forms
         private const uint SWP_NOZORDER = 0x0004;
         private const int EDGE_WINDOW_OFFSET = 20; // Pixels to offset Edge window from MainForm
 
+        // Add new declaration for single-instance management
+        [DllImport("user32.dll")]
+        private static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+        private const int WM_CLOSE = 0x0010;
+
         private readonly IAssessment _assessment;
         private readonly JsonManager _jsonManager;
         private readonly PdfGeneratorService _pdfGenerator;
@@ -57,6 +62,7 @@ namespace iTextDesignerWithGUI.Forms
         private const string AutoSavingEnabledKey = "AutoSavingEnabled";
         private const string CloseEdgeOnChangeKey = "CloseEdgeOnChange";
         private static bool _isReloading = false; // Add static flag to prevent multiple reloads
+        private static bool _isClosing = false; // Add static flag to prevent recursive closing during reload
         
         // Constant for Task.Delay duration in milliseconds
         private const int TASK_DELAY_MS = 1;
@@ -317,7 +323,7 @@ namespace iTextDesignerWithGUI.Forms
             }
         }
 
-        protected void OnFormClosing(FormClosingEventArgs e)
+        protected override void OnFormClosing(FormClosingEventArgs e)
         {
             try
             {
@@ -353,7 +359,7 @@ namespace iTextDesignerWithGUI.Forms
             }
         }
 
-        protected void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             try
             {
@@ -676,10 +682,13 @@ namespace iTextDesignerWithGUI.Forms
                     }
 
                     // Show the custom error form
-                    using (var errorForm = new CustomErrorForm(errorMessage.ToString()))
+                    var errorForm = new CustomErrorForm(errorMessage.ToString(), _secondaryForm.GetCurrentTemplatePath());
+                    errorForm.FormClosed += (s, args) =>
                     {
-                        errorForm.ShowDialog(this);
-                    }
+                        // Reset the reload state when the error form is closed by the user
+                        ResetReloadState();
+                    };
+                    errorForm.ShowDialog(this); // Use ShowDialog to ensure it's modal
                 }
                 finally
                 {
@@ -715,32 +724,70 @@ namespace iTextDesignerWithGUI.Forms
 
         private void BackToSelection_Click(object sender, EventArgs e)
         {
+            if (_isReloading || _isClosing) return;
+            
             // Stop the template watcher before navigating back to selection
             _templateWatcher?.StopWatching();
+            
+            // Ensure SecondaryForm is properly disposed to prevent cached data
+            if (_secondaryForm != null && !_secondaryForm.IsDisposed)
+            {
+                if (_secondaryForm.Visible)
+                {
+                    _secondaryForm.Close();
+                }
+                _secondaryForm.Dispose();
+                _secondaryForm = null;
+            }
+            
+            // Close any open Edge windows
+            CloseEdgeWindows();
             
             // Create and show the AssessmentTypeSelector form
             var selector = new AssessmentTypeSelector();
             this.Hide(); // Hide this form instead of closing it immediately
             
-            // Show the selector as a dialog
-            if (selector.ShowDialog() == DialogResult.OK && !selector.WasCancelled)
+            try
             {
-                // If user selected an assessment type, create a new MainForm with it
-                var newForm = new MainForm(selector.SelectedTypeWrapper);
-                newForm.FormClosed += (s, args) => this.Close(); // Close this form when the new one is closed
-                newForm.Show();
+                // Show the selector as a dialog
+                if (selector.ShowDialog() == DialogResult.OK && !selector.WasCancelled)
+                {
+                    // Save window position
+                    SaveWindowPosition();
+                    
+                    // If user selected an assessment type, create a new MainForm with it
+                    var newForm = new MainForm(selector.SelectedTypeWrapper);
+                    newForm.FormClosed += (s, args) => 
+                    {
+                        // Only close this form when the new one is closed 
+                        _isClosing = true;
+                        this.Close();
+                    };
+                    newForm.Show();
+                }
+                else
+                {
+                    // If user cancelled, just show this form again and restart the watcher
+                    this.Show();
+                    _templateWatcher?.StartWatching();
+                    
+                    // Re-initialize the secondary form if needed
+                    if (_secondaryForm == null)
+                    {
+                        _secondaryForm = new SecondaryForm(this);
+                    }
+                }
             }
-            else
+            catch (Exception ex)
             {
-                // If user cancelled, just show this form again and restart the watcher
+                Debug.WriteLine($"Error in BackToSelection_Click: {ex.Message}");
                 this.Show();
-                _templateWatcher?.StartWatching();
             }
         }
 
         private async void ReloadTemplates_Click(object sender, EventArgs e)
         {
-            if (_isReloading) return;
+            if (_isReloading || _isClosing) return;
             _isReloading = true;
 
             try
@@ -760,6 +807,33 @@ namespace iTextDesignerWithGUI.Forms
                     _secondaryForm.Close();
                     _secondaryForm.Dispose();
                     _secondaryForm = null; // Clear the reference
+                }
+
+                // Create and store temporary position file
+                string tempPositionFile = Path.Combine(Path.GetTempPath(), "AppPosition.txt");
+                try
+                {
+                    File.WriteAllText(tempPositionFile, $"{this.Location.X},{this.Location.Y},{this.Width},{this.Height}");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error writing position to temp file: {ex.Message}");
+                }
+
+                // Save the last selected row too, if any, to preserve data grid state
+                try 
+                {
+                    using (var key = Registry.CurrentUser.CreateSubKey(RegistryPath))
+                    {
+                        if (key != null && _lastSelectedRow.HasValue)
+                        {
+                            key.SetValue(LastSelectedRowKey, _lastSelectedRow.Value, RegistryValueKind.DWord);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error saving last selected row: {ex.Message}");
                 }
 
                 // Show the building message
@@ -832,10 +906,13 @@ namespace iTextDesignerWithGUI.Forms
                     }
 
                     // Show the custom error form
-                    using (var errorForm = new CustomErrorForm(errorMessage.ToString()))
+                    var errorForm = new CustomErrorForm(errorMessage.ToString(), _secondaryForm?.GetCurrentTemplatePath() ?? "");
+                    errorForm.FormClosed += (s, args) =>
                     {
-                        errorForm.ShowDialog(this);
-                    }
+                        // Reset the reload state when the error form is closed by the user
+                        ResetReloadState();
+                    };
+                    errorForm.ShowDialog(this); // Use ShowDialog to ensure it's modal
 
                     await Task.Delay(TASK_DELAY_MS);
                     _statusLabel.Visible = false;
@@ -851,7 +928,12 @@ namespace iTextDesignerWithGUI.Forms
                 
                 // Create and show the new form with the same assessment type
                 var newForm = new MainForm(_currentTypeWrapper);
-                newForm.FormClosed += (s, args) => this.Close();
+                newForm.FormClosed += (s, args) => 
+                {
+                    // Only close this form when the new one is closed
+                    _isClosing = true;
+                    this.Close(); 
+                };
                 newForm.Show();
 
                 // Allow reloading again immediately
@@ -914,15 +996,31 @@ namespace iTextDesignerWithGUI.Forms
             }
             catch (Exception ex)
             {
-                using (var errorForm = new CustomErrorForm(ex.Message))
+                var errorForm = new CustomErrorForm(ex.Message, _secondaryForm?.GetCurrentTemplatePath() ?? "");
+                errorForm.FormClosed += (s, args) =>
                 {
-                    errorForm.ShowDialog(this);
-                }
+                    // Reset the reload state when the error form is closed by the user
+                    ResetReloadState();
+                };
+                errorForm.ShowDialog(this);
+                
                 _statusLabel.Text = "Error during reload!";
-                _statusLabel.ForeColor = System.Drawing.Color.FromArgb(220, 53, 69);
+                _statusLabel.ForeColor = Color.FromArgb(220, 53, 69);
                 _statusLabel.Visible = true;
-                await Task.Delay(TASK_DELAY_MS);
-                _statusLabel.Visible = false;
+                Debug.WriteLine($"Error during template reload: {ex.Message}");
+                
+                // Wait a bit and then hide the status label
+                Task.Run(async () => {
+                    await Task.Delay(TASK_DELAY_MS);
+                    if (this.InvokeRequired)
+                    {
+                        this.BeginInvoke(new Action(() => _statusLabel.Visible = false));
+                    }
+                    else
+                    {
+                        _statusLabel.Visible = false;
+                    }
+                });
             }
             finally
             {
@@ -1024,6 +1122,32 @@ namespace iTextDesignerWithGUI.Forms
         public void RestartTemplateWatcher()
         {
             _templateWatcher?.StartWatching();
+        }
+
+        /// <summary>
+        /// Resets the reload state to allow template reloading to proceed
+        /// </summary>
+        public static void ResetReloadState()
+        {
+            _isReloading = false;
+            
+            // Check if there are any open error forms and close them
+            var openErrorForms = Application.OpenForms.OfType<CustomErrorForm>().ToList();
+            foreach (var errorForm in openErrorForms)
+            {
+                try
+                {
+                    if (!errorForm.IsDisposed && errorForm.Visible)
+                    {
+                        Debug.WriteLine("Closing open error form during reload state reset");
+                        errorForm.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error closing CustomErrorForm: {ex.Message}");
+                }
+            }
         }
     }
 }

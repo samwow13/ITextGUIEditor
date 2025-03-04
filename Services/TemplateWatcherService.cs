@@ -183,7 +183,21 @@ namespace iTextDesignerWithGUI.Services
 
         private void HandleFileChange()
         {
-            // Trigger the change immediately
+            // Check if there are any open CustomErrorForms before proceeding
+            var activeErrorForms = Application.OpenForms.OfType<Forms.CustomErrorForm>().ToList();
+            if (activeErrorForms.Any())
+            {
+                Debug.WriteLine("Template change detected but error form(s) are open. Bringing to front instead of reloading.");
+                // Bring the error form to front to remind the user to close it first
+                foreach (var errorForm in activeErrorForms)
+                {
+                    errorForm.BringToFront();
+                    errorForm.Flash(); // If we add a Flash method to the CustomErrorForm
+                }
+                return;
+            }
+
+            // Trigger the change immediately if no error forms are open
             _onTemplateChanged?.Invoke();
 
             // Enter cooldown period

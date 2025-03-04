@@ -1241,5 +1241,52 @@ namespace iTextDesignerWithGUI.Forms
                 _promptListBox.SelectedItem = promptName;
             }
         }
+
+        /// <summary>
+        /// Gets the path of the currently selected template file for error reporting
+        /// </summary>
+        /// <returns>The absolute path to the current template file</returns>
+        public string GetCurrentTemplatePath()
+        {
+            try
+            {
+                // Early exit if no data is loaded
+                if (_currentData == null)
+                {
+                    return string.Empty;
+                }
+
+                // Use ProjectDirectoryService to find root directory
+                var projectDirService = new ProjectDirectoryService();
+
+                // Get the current assessment type from the data object
+                string currentAssessmentType = _currentData.GetType().Name.Replace("Instance", "");
+
+                // Load the assessment types from JSON
+                string assessmentTypesPath = projectDirService.GetFilePath("PersistentDataJSON/assessmentTypes.json");
+                string assessmentTypesJson = File.ReadAllText(assessmentTypesPath);
+                var assessmentTypesDoc = JsonDocument.Parse(assessmentTypesJson);
+                var assessmentTypes = assessmentTypesDoc.RootElement.GetProperty("assessmentTypes");
+
+                // Find the matching assessment type entry
+                foreach (var assessment in assessmentTypes.EnumerateArray())
+                {
+                    string name = assessment.GetProperty("name").GetString();
+                    if (name == currentAssessmentType)
+                    {
+                        // Get template path from the matching assessment
+                        string templateRelativePath = assessment.GetProperty("cshtmlTemplateDirectory").GetString();
+                        string templateFullPath = projectDirService.GetFilePath(templateRelativePath);
+                        return templateFullPath;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error getting template path: {ex.Message}");
+            }
+
+            return string.Empty;
+        }
     }
 }

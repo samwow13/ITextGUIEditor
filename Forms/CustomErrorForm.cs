@@ -4,12 +4,15 @@ using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Text;
+using System.IO;
+using iTextDesignerWithGUI.Forms;
 
 namespace iTextDesignerWithGUI.Forms
 {
     public class CustomErrorForm : Form
     {
         private readonly string _errorMessage;
+        private readonly string _templatePath; // Added field to store template path
         private System.Windows.Forms.Timer _animationTimer;
         private float _unicornX = -50;
         private float _catX;
@@ -23,9 +26,20 @@ namespace iTextDesignerWithGUI.Forms
         private string _currentBattleSound = "";
         private TextBox _errorTextBox; // Added field to access the error text box
 
-        public CustomErrorForm(string errorMessage)
+        public CustomErrorForm(string errorMessage) : this(errorMessage, string.Empty)
+        {
+            // Calls the main constructor with an empty template path
+        }
+
+        /// <summary>
+        /// Creates a new error form with information about the template that caused the error
+        /// </summary>
+        /// <param name="errorMessage">The error message to display</param>
+        /// <param name="templatePath">Path to the template file that caused the error</param>
+        public CustomErrorForm(string errorMessage, string templatePath)
         {
             _errorMessage = errorMessage;
+            _templatePath = templatePath;
             InitializeComponents();
             SetupAnimation();
         }
@@ -183,6 +197,10 @@ namespace iTextDesignerWithGUI.Forms
             okButton.Click += (s, e) => 
             {
                 _animationTimer.Stop();
+                
+                // Reset the reload state in MainForm to ensure error handling is reset
+                MainForm.ResetReloadState();
+                
                 this.Close();
             };
             
@@ -339,13 +357,31 @@ namespace iTextDesignerWithGUI.Forms
             }
         }
 
-        private string FormatErrorMessage(string message)
+        /// <summary>
+        /// Formats the error message with additional information about the template path
+        /// </summary>
+        private string FormatErrorMessage(string errorMessage)
         {
-            var formattedMessage = message.Replace("[", "\n[")
-                                        .Replace(") error", ")\n❌ Error")
-                                        .Replace(") warning", ")\n⚠️ Warning");
-
-            return $"🎨 Here's what happened:\n\n{formattedMessage}\n\n✨ Don't worry! The unicorn and kitty are working on it! 🌟";
+            StringBuilder formattedMessage = new StringBuilder();
+            
+            // Add template information if it exists
+            if (!string.IsNullOrEmpty(_templatePath))
+            {
+                formattedMessage.AppendLine($"🔍 Template: {_templatePath}");
+                formattedMessage.AppendLine();
+            }
+            
+            // Format error text to be more readable
+            var formattedErrorText = errorMessage.Replace("[", "\n[")
+                                      .Replace(") error", ")\n❌ Error")
+                                      .Replace(") warning", ")\n⚠️ Warning");
+            
+            formattedMessage.AppendLine("📝 Error Details:");
+            formattedMessage.AppendLine(formattedErrorText);
+            
+            formattedMessage.AppendLine("\n✨ Don't worry! The unicorn and kitty are working on it! 🌟");
+            
+            return formattedMessage.ToString();
         }
 
         private void CopyErrorDetailsToClipboard()
@@ -372,16 +408,78 @@ namespace iTextDesignerWithGUI.Forms
                 clipboardContent.AppendLine("```");
                 clipboardContent.AppendLine();
                 
+                // Add the template file content if available
+                if (!string.IsNullOrEmpty(_templatePath) && File.Exists(_templatePath))
+                {
+                    try
+                    {
+                        string templateContent = File.ReadAllText(_templatePath);
+                        string fileName = Path.GetFileName(_templatePath);
+                        
+                        clipboardContent.AppendLine($"## TEMPLATE FILE: {fileName}");
+                        clipboardContent.AppendLine("```html");
+                        clipboardContent.AppendLine(templateContent);
+                        clipboardContent.AppendLine("```");
+                        clipboardContent.AppendLine();
+                    }
+                    catch (Exception ex)
+                    {
+                        // If we can't read the template file, add an error message
+                        clipboardContent.AppendLine("## TEMPLATE FILE");
+                        clipboardContent.AppendLine($"Could not read template file: {_templatePath}");
+                        clipboardContent.AppendLine($"Error: {ex.Message}");
+                        clipboardContent.AppendLine();
+                    }
+                }
+                
                 // Copy to clipboard
                 Clipboard.SetText(clipboardContent.ToString());
                 
-                MessageBox.Show("Error details copied to clipboard successfully!", "Copy Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Error details and template file copied to clipboard successfully!", "Copy Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"An error occurred while copying: {ex.Message}", 
                     "Copy Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        /// <summary>
+        /// Flashes the form to get the user's attention
+        /// </summary>
+        public void Flash()
+        {
+            // Store the original background color
+            var originalBackColor = this.BackColor;
+            
+            // Create a timer for the flashing effect
+            var flashTimer = new System.Windows.Forms.Timer();
+            flashTimer.Interval = 100; // 100ms intervals
+            
+            int flashCount = 0;
+            const int MaxFlashes = 5;
+            
+            // Toggle between original color and attention color
+            flashTimer.Tick += (s, e) => 
+            {
+                flashCount++;
+                if (flashCount > MaxFlashes * 2)
+                {
+                    // Stop after the specified number of flashes
+                    flashTimer.Stop();
+                    flashTimer.Dispose();
+                    this.BackColor = originalBackColor;
+                    return;
+                }
+                
+                // Toggle the background color
+                this.BackColor = flashCount % 2 == 0 
+                    ? originalBackColor 
+                    : Color.FromArgb(255, 255, 200); // Light yellow flash
+            };
+            
+            // Start the flash timer
+            flashTimer.Start();
         }
     }
 }

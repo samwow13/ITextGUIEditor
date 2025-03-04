@@ -17,7 +17,7 @@
       "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellness/RegisteredNurseTaskDelegAndAssignData.json"
     },
     {
-      "name": "TestRazorDataInstance",
+      "name": "TestRazorData",
       "displayName": "Test Razor Data Instance",
       "assessmentTypeDirectory": "Models/HealthAndWellness/TestRazorDataModels/TestRazorDataAssessment.cs",
       "assessmentDataInstanceDirectory": "Models/HealthAndWellness/TestRazorDataModels/TestRazorDataInstance.cs",
