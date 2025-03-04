@@ -1,0 +1,9 @@
+{
+  "DocumentId": "TestRazorDataInstance_E7273A22264D7936",
+  "DocumentType": "TestRazorDataInstance",
+  "CheckStates": {
+    "Preferences.Notifications.Email": true,
+    "Preferences.Notifications.Sms": true
+  },
+  "LastModified": "2025-03-04T09:47:45.5898768-08:00"
+}

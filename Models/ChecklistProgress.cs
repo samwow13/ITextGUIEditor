@@ -78,31 +78,5 @@ namespace iTextDesignerWithGUI.Models
             var jsonString = File.ReadAllText(filePath);
             return JsonSerializer.Deserialize<ChecklistProgress>(jsonString);
         }
-
-        /// <summary>
-        /// Gets all saved progress files
-        /// </summary>
-        public List<ChecklistProgress> GetAllProgress()
-        {
-            var result = new List<ChecklistProgress>();
-            var files = Directory.GetFiles(_storageDirectory, $"*{FILE_EXTENSION}");
-            
-            foreach (var file in files)
-            {
-                try
-                {
-                    var jsonString = File.ReadAllText(file);
-                    var progress = JsonSerializer.Deserialize<ChecklistProgress>(jsonString);
-                    result.Add(progress);
-                }
-                catch (Exception)
-                {
-                    // Skip invalid files
-                    continue;
-                }
-            }
-
-            return result;
-        }
     }
 }
