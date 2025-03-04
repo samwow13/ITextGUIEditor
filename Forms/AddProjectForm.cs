@@ -17,6 +17,7 @@ namespace iTextDesignerWithGUI.Forms
         private TextBox projectNameTextBox;
         private Label pathPreviewLabel;
         private Label statusLabel;
+        private Button saveButton;
 
         public AddProjectForm()
         {
@@ -148,7 +149,7 @@ namespace iTextDesignerWithGUI.Forms
             };
 
             // Create Save button
-            var saveButton = new Button
+            saveButton = new Button
             {
                 Text = "Save",
                 DialogResult = DialogResult.OK,
@@ -196,6 +197,18 @@ namespace iTextDesignerWithGUI.Forms
             // Update the path preview label with the entered project name
             string projectName = projectNameTextBox.Text.Trim();
             pathPreviewLabel.Text = $"Templates/{projectName}";
+
+            // Update save button text when user starts typing
+            if (!string.IsNullOrWhiteSpace(projectName))
+            {
+                saveButton.Text = "Save and Restart";
+                saveButton.Size = new Size(150, 40); // Adjust size to fit the longer text
+            }
+            else
+            {
+                saveButton.Text = "Save";
+                saveButton.Size = new Size(120, 40); // Reset to original size
+            }
         }
 
         /// <summary>
@@ -205,7 +218,7 @@ namespace iTextDesignerWithGUI.Forms
         {
             // Validate input
             string projectName = projectNameTextBox.Text.Trim();
-            
+
             if (string.IsNullOrWhiteSpace(projectName))
             {
                 UpdateStatus("Please enter a project name", isSuccess: false);
@@ -235,9 +248,9 @@ namespace iTextDesignerWithGUI.Forms
                     PropertyNameCaseInsensitive = true,
                     WriteIndented = true
                 };
-                
+
                 var data = JsonSerializer.Deserialize<ProjectDirectoriesData>(jsonContent, options);
-                
+
                 if (data?.ProjectDirectories == null)
                 {
                     data = new ProjectDirectoriesData
@@ -277,12 +290,72 @@ namespace iTextDesignerWithGUI.Forms
                 UpdateStatus($"Project '{projectName}' has been added successfully", isSuccess: true);
                 MessageBox.Show($"Project '{projectName}' has been added successfully. The directory has been created at '{projectPath}'.", 
                     "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Check if we should restart the application (if user typed something)
+                if (saveButton.Text == "Save and Restart")
+                {
+                    RestartApplication();
+                }
             }
             catch (Exception ex)
             {
                 UpdateStatus("Error adding project", isSuccess: false);
                 MessageBox.Show($"Error adding project: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.DialogResult = DialogResult.None;
+            }
+        }
+
+        /// <summary>
+        /// Restarts the application to apply changes
+        /// </summary>
+        private void RestartApplication()
+        {
+            try 
+            {
+                // Get the current project directory
+                string projectDirectory = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\.."));
+
+                // Save the current window position
+                var mainForm = Application.OpenForms[0]; // Get the main form (index 0)
+                string positionFile = Path.Combine(Path.GetTempPath(), "AppPosition.txt");
+                File.WriteAllText(positionFile, $"{mainForm.Location.X},{mainForm.Location.Y},{mainForm.Width},{mainForm.Height}");
+
+                // Create a batch file that will rebuild and restart the application
+                string batchFilePath = Path.Combine(Path.GetTempPath(), "RestartApplication.bat");
+
+                // Write commands to the batch file
+                // Wait 1 second for the current process to close, then rebuild and run the application silently
+                string batchContent = 
+                    "@echo off\r\n" +
+                    "timeout /t 1 /nobreak >nul\r\n" +
+                    $"cd /d \"{projectDirectory}\"\r\n" +
+                    "dotnet build >nul 2>&1\r\n" +
+                    "if %ERRORLEVEL% == 0 (\r\n" +
+                    "    start /b \"\" dotnet run --no-build\r\n" +
+                    ") else (\r\n" +
+                    "    echo Build failed during restart! >buildError.log\r\n" +
+                    ")\r\n";
+
+                File.WriteAllText(batchFilePath, batchContent);
+
+                // Start the batch file in a new process
+                System.Diagnostics.Process process = new System.Diagnostics.Process();
+                process.StartInfo.FileName = "cmd.exe";
+                process.StartInfo.Arguments = $"/c \"{batchFilePath}\"";
+                process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                process.StartInfo.CreateNoWindow = true;
+                process.Start();
+
+                // Exit the current application
+                Application.Exit();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error restarting application: {ex.Message}", "Restart Error", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                // If we can't restart, just exit
+                Application.Exit();
             }
         }
 
