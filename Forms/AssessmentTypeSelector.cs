@@ -1,9 +1,4 @@
-using System;
-using System.Drawing;
-using System.Windows.Forms;
 using iTextDesignerWithGUI.Models;
-using System.Collections.Generic;
-using System.Linq;
 using iTextDesignerWithGUI.Services;
 using Microsoft.Win32;
 using System.Diagnostics;
