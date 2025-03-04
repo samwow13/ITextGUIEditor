@@ -1,10 +1,4 @@
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.IO;
 using iTextDesignerWithGUI.Services;
-using iTextDesignerWithGUI.Forms;
-using System.Linq;
 
 namespace iTextDesignerWithGUI.Forms
 {
@@ -21,7 +15,7 @@ namespace iTextDesignerWithGUI.Forms
 
         public string PDFName { get; private set; }
         public string TemplatePath { get; private set; }
-        
+
         /// <summary>
         /// Constructor for the PDF generation confirmation modal
         /// </summary>
@@ -32,10 +26,10 @@ namespace iTextDesignerWithGUI.Forms
             PDFName = pdfName;
             TemplatePath = templatePath;
             InitializeComponent();
-            
+
             // Add event handler for confirm button
             confirmButton.Click += ConfirmButton_Click;
-            
+
             // Check if the assessment type name already exists
             CheckIfNameExists();
         }
@@ -49,14 +43,15 @@ namespace iTextDesignerWithGUI.Forms
             {
                 // Get the AssessmentTypeJsonLoader instance
                 var assessmentTypeLoader = AssessmentTypeJsonLoader.Instance;
-                
+
                 // Load all assessment types
                 var assessmentTypes = assessmentTypeLoader.LoadAssessmentTypes(true);
-                
+
                 // Check if the name already exists
-                var existingType = assessmentTypes.FirstOrDefault(t => 
-                    string.Equals(t.Name, PDFName, StringComparison.OrdinalIgnoreCase));
-                    
+                var existingType = assessmentTypes.FirstOrDefault(t =>
+                    string.Equals(t.Name, PDFName, StringComparison.OrdinalIgnoreCase)
+                );
+
                 if (existingType != null)
                 {
                     // Name already exists, show warning and disable confirm button
@@ -100,9 +95,9 @@ namespace iTextDesignerWithGUI.Forms
                 Height = 60,
                 Margin = new Padding(0),
                 Padding = new Padding(10, 10, 10, 10),
-                BackColor = SystemColors.Control
+                BackColor = SystemColors.Control,
             };
-            
+
             // Configure button panel columns
             buttonPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             buttonPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
@@ -122,9 +117,9 @@ namespace iTextDesignerWithGUI.Forms
                 FlatStyle = FlatStyle.Standard,
                 Size = buttonSize,
                 Anchor = AnchorStyles.Right,
-                Height = buttonSize.Height
+                Height = buttonSize.Height,
             };
-            
+
             // Generate button (right side)
             confirmButton = new Button
             {
@@ -137,7 +132,7 @@ namespace iTextDesignerWithGUI.Forms
                 FlatStyle = FlatStyle.Standard,
                 Size = buttonSize,
                 Anchor = AnchorStyles.Left,
-                Height = buttonSize.Height
+                Height = buttonSize.Height,
             };
 
             // Add buttons to panel with proper alignment
@@ -146,19 +141,19 @@ namespace iTextDesignerWithGUI.Forms
                 Dock = DockStyle.Fill,
                 FlowDirection = FlowDirection.RightToLeft,
                 Padding = new Padding(0),
-                Margin = new Padding(0)
+                Margin = new Padding(0),
             };
             cancelContainer.Controls.Add(cancelButton);
-            
+
             var confirmContainer = new FlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
                 FlowDirection = FlowDirection.LeftToRight,
                 Padding = new Padding(0),
-                Margin = new Padding(0)
+                Margin = new Padding(0),
             };
             confirmContainer.Controls.Add(confirmButton);
-            
+
             buttonPanel.Controls.Add(cancelContainer, 0, 0);
             buttonPanel.Controls.Add(confirmContainer, 1, 0);
 
@@ -170,13 +165,13 @@ namespace iTextDesignerWithGUI.Forms
                 ColumnCount = 1,
                 Padding = new Padding(20),
             };
-            
+
             // Add rows with adjusted sizing
-            contentPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));  // Header row
-            contentPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));  // Warning row
+            contentPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize)); // Header row
+            contentPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize)); // Warning row
             contentPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 1)); // Divider (thin line)
             contentPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100)); // Info panel (takes remaining space)
-            
+
             // Icon and Message Panel (first row)
             var messagePanel = new TableLayoutPanel
             {
@@ -184,23 +179,23 @@ namespace iTextDesignerWithGUI.Forms
                 RowCount = 1,
                 ColumnCount = 2,
                 Margin = new Padding(0, 0, 0, 10), // Slightly increased bottom margin
-                AutoSize = true
+                AutoSize = true,
             };
-            
+
             // Configure columns for the message panel
             messagePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40)); // Fixed width for icon
             messagePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            
+
             // Add warning icon
             var iconLabel = new Label
             {
                 Image = SystemIcons.Question.ToBitmap(),
                 Size = new Size(32, 32),
                 Margin = new Padding(0, 0, 8, 0),
-                Anchor = AnchorStyles.Left | AnchorStyles.Top
+                Anchor = AnchorStyles.Left | AnchorStyles.Top,
             };
             messagePanel.Controls.Add(iconLabel, 0, 0);
-            
+
             // Header label with confirmation message
             var headerLabel = new Label
             {
@@ -208,10 +203,10 @@ namespace iTextDesignerWithGUI.Forms
                 Font = new Font("Segoe UI", 12F, FontStyle.Bold),
                 AutoSize = true,
                 Margin = new Padding(0),
-                Anchor = AnchorStyles.Left | AnchorStyles.Top
+                Anchor = AnchorStyles.Left | AnchorStyles.Top,
             };
             messagePanel.Controls.Add(headerLabel, 1, 0);
-            
+
             contentPanel.Controls.Add(messagePanel, 0, 0);
 
             // Warning label for duplicate name
@@ -227,7 +222,7 @@ namespace iTextDesignerWithGUI.Forms
                 MinimumSize = new Size(540, 30), // Set minimum height to ensure visibility
                 Height = 30, // Set initial height
                 TextAlign = ContentAlignment.MiddleLeft,
-                Visible = false // Hidden by default, will be made visible when needed
+                Visible = false, // Hidden by default, will be made visible when needed
             };
             contentPanel.Controls.Add(warningLabel, 0, 1);
 
@@ -237,7 +232,7 @@ namespace iTextDesignerWithGUI.Forms
                 Height = 1,
                 Dock = DockStyle.Fill,
                 BackColor = Color.LightGray,
-                Margin = new Padding(0, 0, 0, 10) // Increased bottom margin
+                Margin = new Padding(0, 0, 0, 10), // Increased bottom margin
             };
             contentPanel.Controls.Add(divider, 0, 2);
 
@@ -247,7 +242,7 @@ namespace iTextDesignerWithGUI.Forms
                 Dock = DockStyle.Fill,
                 RowCount = 2,
                 ColumnCount = 2,
-                Margin = new Padding(0, 5, 0, 0) // Added top margin for spacing after divider
+                Margin = new Padding(0, 5, 0, 0), // Added top margin for spacing after divider
             };
 
             // Configure info panel columns
@@ -260,7 +255,7 @@ namespace iTextDesignerWithGUI.Forms
                 Text = "PDF Name:",
                 Font = new Font("Segoe UI", 10F, FontStyle.Bold),
                 AutoSize = true,
-                Margin = new Padding(0, 5, 0, 5)
+                Margin = new Padding(0, 5, 0, 5),
             };
             infoPanel.Controls.Add(pdfNameHeaderLabel, 0, 0);
 
@@ -269,7 +264,7 @@ namespace iTextDesignerWithGUI.Forms
                 Text = PDFName,
                 Font = new Font("Segoe UI", 10F, FontStyle.Regular),
                 AutoSize = true,
-                Margin = new Padding(0, 5, 0, 5)
+                Margin = new Padding(0, 5, 0, 5),
             };
             infoPanel.Controls.Add(pdfNameLabel, 1, 0);
 
@@ -279,7 +274,7 @@ namespace iTextDesignerWithGUI.Forms
                 Text = "Template Dir:",
                 Font = new Font("Segoe UI", 10F, FontStyle.Bold),
                 AutoSize = true,
-                Margin = new Padding(0, 5, 0, 5)
+                Margin = new Padding(0, 5, 0, 5),
             };
             infoPanel.Controls.Add(templateDirHeaderLabel, 0, 1);
 
@@ -290,20 +285,20 @@ namespace iTextDesignerWithGUI.Forms
                 AutoSize = true,
                 Margin = new Padding(0, 5, 0, 5),
                 MaximumSize = new Size(320, 0),
-                AutoEllipsis = false
+                AutoEllipsis = false,
             };
             infoPanel.Controls.Add(templateDirLabel, 1, 1);
 
             contentPanel.Controls.Add(infoPanel, 0, 3);
-            
+
             // Add both panels to the form
             this.Controls.Add(contentPanel);
             this.Controls.Add(buttonPanel);
-            
+
             this.AcceptButton = confirmButton;
             this.CancelButton = cancelButton;
         }
-        
+
         /// <summary>
         /// Event handler for the confirm button click
         /// </summary>
@@ -316,15 +311,15 @@ namespace iTextDesignerWithGUI.Forms
                 // Extract the template type from the template path
                 // Template path has format like "Templates\HealthAndWellness"
                 string templateType = Path.GetFileName(TemplatePath);
-                
+
                 // Create the project directory service and CSHTML generation service
                 var directoryService = new ProjectDirectoryService();
                 var cshtmlService = new CshtmlGenerationService(directoryService);
-                
+
                 // Close this dialog
                 this.DialogResult = DialogResult.OK;
                 this.Close();
-                
+
                 // Show the progress form
                 using (var progressForm = new FileGenerationProgressForm())
                 {
@@ -333,17 +328,21 @@ namespace iTextDesignerWithGUI.Forms
                         // Generate the CSHTML file
                         cshtmlService.GenerateCshtmlFile(PDFName, templateType);
                     });
-                    
+
                     progressForm.ShowDialog();
-                    
+
                     // We don't continue execution after this point
                     // since the application will exit when the close button is clicked
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error during file generation: {ex.Message}", 
-                    "Generation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    $"Error during file generation: {ex.Message}",
+                    "Generation Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
         }
     }

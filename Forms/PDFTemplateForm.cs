@@ -1,10 +1,4 @@
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.IO;
 using System.Text.Json;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace iTextDesignerWithGUI.Forms
 {
@@ -26,33 +20,45 @@ namespace iTextDesignerWithGUI.Forms
         {
             try
             {
-                string projectRoot = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\.."));
-                string jsonPath = Path.Combine(projectRoot, "PersistentDataJSON", "pdfCreationData.json");
+                string projectRoot = Path.GetFullPath(
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..")
+                );
+                string jsonPath = Path.Combine(
+                    projectRoot,
+                    "PersistentDataJSON",
+                    "pdfCreationData.json"
+                );
 
                 if (!File.Exists(jsonPath))
                 {
-                    MessageBox.Show("Could not find the project directories configuration file.", "Configuration Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        "Could not find the project directories configuration file.",
+                        "Configuration Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
                     return;
                 }
 
                 string jsonContent = File.ReadAllText(jsonPath);
-                var options = new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                };
-                
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
                 var data = JsonSerializer.Deserialize<ProjectDirectoriesData>(jsonContent, options);
-                
+
                 if (data?.ProjectDirectories != null && data.ProjectDirectories.Any())
                 {
                     projectNameComboBox.Items.Clear();
-                    projectNameComboBox.Items.AddRange(data.ProjectDirectories.Select(d => d.Name).ToArray());
+                    projectNameComboBox.Items.AddRange(
+                        data.ProjectDirectories.Select(d => d.Name).ToArray()
+                    );
                     if (projectNameComboBox.Items.Count > 0)
                     {
                         projectNameComboBox.SelectedIndex = 0;
                     }
                     projectDirectoryComboBox.Items.Clear();
-                    projectDirectoryComboBox.Items.AddRange(data.ProjectDirectories.Select(d => d.Name).ToArray());
+                    projectDirectoryComboBox.Items.AddRange(
+                        data.ProjectDirectories.Select(d => d.Name).ToArray()
+                    );
                     if (projectDirectoryComboBox.Items.Count > 0)
                     {
                         projectDirectoryComboBox.SelectedIndex = 0;
@@ -60,12 +66,22 @@ namespace iTextDesignerWithGUI.Forms
                 }
                 else
                 {
-                    MessageBox.Show("No project directories found in the configuration file.", "Configuration Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(
+                        "No project directories found in the configuration file.",
+                        "Configuration Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading project directories: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    $"Error loading project directories: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
         }
 
@@ -96,7 +112,7 @@ namespace iTextDesignerWithGUI.Forms
             mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             mainContainer.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            mainContainer.RowStyles.Add(new RowStyle(SizeType.Absolute, 60));  
+            mainContainer.RowStyles.Add(new RowStyle(SizeType.Absolute, 60));
 
             // Project name label
             var projectNameLabel = new Label
@@ -104,7 +120,7 @@ namespace iTextDesignerWithGUI.Forms
                 Text = "Select project:",
                 Font = new Font("Segoe UI", 10F, FontStyle.Regular),
                 AutoSize = true,
-                Margin = new Padding(0, 0, 0, 10)
+                Margin = new Padding(0, 0, 0, 10),
             };
             mainContainer.Controls.Add(projectNameLabel, 0, 0);
 
@@ -115,7 +131,7 @@ namespace iTextDesignerWithGUI.Forms
                 DropDownStyle = ComboBoxStyle.DropDownList,
                 Margin = new Padding(0, 0, 0, 20),
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular),
-                Height = 25
+                Height = 25,
             };
             projectNameComboBox.SelectedIndexChanged += ProjectNameComboBox_SelectedIndexChanged;
             mainContainer.Controls.Add(projectNameComboBox, 0, 1);
@@ -126,7 +142,7 @@ namespace iTextDesignerWithGUI.Forms
                 Text = "Select project directory:",
                 Font = new Font("Segoe UI", 10F, FontStyle.Regular),
                 AutoSize = true,
-                Margin = new Padding(0, 0, 0, 10)
+                Margin = new Padding(0, 0, 0, 10),
             };
             mainContainer.Controls.Add(directoryLabel, 0, 2);
 
@@ -137,7 +153,7 @@ namespace iTextDesignerWithGUI.Forms
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular),
                 Margin = new Padding(0, 0, 0, 20),
                 DropDownStyle = ComboBoxStyle.DropDownList,
-                Height = 25
+                Height = 25,
             };
             mainContainer.Controls.Add(projectDirectoryComboBox, 0, 3);
 
@@ -147,7 +163,7 @@ namespace iTextDesignerWithGUI.Forms
                 Text = "Enter template name:",
                 Font = new Font("Segoe UI", 10F, FontStyle.Regular),
                 AutoSize = true,
-                Margin = new Padding(0, 0, 0, 10)
+                Margin = new Padding(0, 0, 0, 10),
             };
             mainContainer.Controls.Add(templateLabel, 0, 4);
 
@@ -157,7 +173,7 @@ namespace iTextDesignerWithGUI.Forms
                 Dock = DockStyle.Fill,
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular),
                 Margin = new Padding(0, 0, 0, 20),
-                Height = 25
+                Height = 25,
             };
             mainContainer.Controls.Add(textBox, 0, 5);
 
@@ -168,7 +184,7 @@ namespace iTextDesignerWithGUI.Forms
                 FlowDirection = FlowDirection.RightToLeft,
                 AutoSize = true,
                 Margin = new Padding(0, 10, 0, 0),
-                Height = 40
+                Height = 40,
             };
 
             // Button base style
@@ -189,7 +205,7 @@ namespace iTextDesignerWithGUI.Forms
                 FlatStyle = FlatStyle.Flat,
                 Size = buttonSize,
                 Margin = buttonMargin,
-                Height = buttonSize.Height
+                Height = buttonSize.Height,
             };
             okButton.FlatAppearance.BorderSize = 0;
 
@@ -203,7 +219,7 @@ namespace iTextDesignerWithGUI.Forms
                 BackColor = Color.White,
                 Size = buttonSize,
                 Margin = buttonMargin,
-                Height = buttonSize.Height
+                Height = buttonSize.Height,
             };
             cancelButton.FlatAppearance.BorderColor = Color.FromArgb(0, 120, 212);
             cancelButton.FlatAppearance.BorderSize = 1;
@@ -254,7 +270,12 @@ namespace iTextDesignerWithGUI.Forms
                 // Validate input
                 if (string.IsNullOrWhiteSpace(templateName))
                 {
-                    MessageBox.Show("Please enter a template name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(
+                        "Please enter a template name.",
+                        "Validation Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
                     return;
                 }
 
@@ -262,7 +283,12 @@ namespace iTextDesignerWithGUI.Forms
                 string selectedProject = projectNameComboBox.SelectedItem?.ToString();
                 if (string.IsNullOrWhiteSpace(selectedProject))
                 {
-                    MessageBox.Show("Please select a project.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(
+                        "Please select a project.",
+                        "Validation Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
                     return;
                 }
 
@@ -270,7 +296,12 @@ namespace iTextDesignerWithGUI.Forms
                 string selectedDirectory = projectDirectoryComboBox.SelectedItem?.ToString();
                 if (string.IsNullOrWhiteSpace(selectedDirectory))
                 {
-                    MessageBox.Show("Please select a project directory.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(
+                        "Please select a project directory.",
+                        "Validation Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
                     return;
                 }
 
@@ -284,7 +315,12 @@ namespace iTextDesignerWithGUI.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error creating template: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    $"Error creating template: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
         }
 
@@ -294,24 +330,32 @@ namespace iTextDesignerWithGUI.Forms
             if (projectNameComboBox.SelectedIndex >= 0)
             {
                 string selectedProject = projectNameComboBox.SelectedItem.ToString();
-                
+
                 try
                 {
                     // Get the project data from JSON
-                    string projectRoot = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\.."));
-                    string jsonPath = Path.Combine(projectRoot, "PersistentDataJSON", "pdfCreationData.json");
+                    string projectRoot = Path.GetFullPath(
+                        Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..")
+                    );
+                    string jsonPath = Path.Combine(
+                        projectRoot,
+                        "PersistentDataJSON",
+                        "pdfCreationData.json"
+                    );
                     string jsonContent = File.ReadAllText(jsonPath);
-                    
-                    var options = new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    };
-                    
-                    var data = JsonSerializer.Deserialize<ProjectDirectoriesData>(jsonContent, options);
-                    
+
+                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
+                    var data = JsonSerializer.Deserialize<ProjectDirectoriesData>(
+                        jsonContent,
+                        options
+                    );
+
                     // Find the selected project
-                    var project = data?.ProjectDirectories?.FirstOrDefault(p => p.Name == selectedProject);
-                    
+                    var project = data?.ProjectDirectories?.FirstOrDefault(p =>
+                        p.Name == selectedProject
+                    );
+
                     if (project != null)
                     {
                         // Update the projectDirectoryComboBox with the selected project
@@ -319,14 +363,19 @@ namespace iTextDesignerWithGUI.Forms
                         {
                             projectDirectoryComboBox.SelectedItem = project.Name;
                         }
-                        
+
                         // Store the selected project
                         ProjectDirectory = project.Name;
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error updating project selection: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        $"Error updating project selection: {ex.Message}",
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
                 }
             }
         }
@@ -348,6 +397,7 @@ namespace iTextDesignerWithGUI.Forms
 
     public class ProjectDirectoriesData
     {
-        public List<ProjectDirectory> ProjectDirectories { get; set; } = new List<ProjectDirectory>();
+        public List<ProjectDirectory> ProjectDirectories { get; set; } =
+            new List<ProjectDirectory>();
     }
 }

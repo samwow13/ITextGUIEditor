@@ -1,19 +1,9 @@
-using System;
-using System.Drawing;
-using System.Windows.Forms;
+using System.Diagnostics;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Text.RegularExpressions;
-using System.Reflection;
-using System.Collections.Generic;
-using iTextDesignerWithGUI.Models;
-using iTextDesignerWithGUI.Models.TestRazorDataModels;
 using iTextDesignerWithGUI.Controls;
-using System.IO;
-using System.Text;
-using System.Linq;
 using iTextDesignerWithGUI.Services;
-using System.Diagnostics;
 using Microsoft.Win32;
 
 namespace iTextDesignerWithGUI.Forms
@@ -28,48 +18,47 @@ namespace iTextDesignerWithGUI.Forms
         {
             [JsonPropertyName("name")]
             public string Name { get; set; }
-            
+
             [JsonPropertyName("prompts")]
             public List<PromptItem> Prompts { get; set; }
         }
-        
+
         private class PromptItem
         {
             [JsonPropertyName("name")]
             public string Name { get; set; }
-            
+
             [JsonPropertyName("prompt")]
             public string Prompt { get; set; }
         }
-        
+
         private class PromptBuilderJson
         {
             [JsonPropertyName("categories")]
             public List<PromptCategory> Categories { get; set; }
         }
-        
+
         private readonly MainForm _parentForm;
         private TabControl _tabControl;
         private TabPage _jsonViewTab;
-        private TabPage _powerToolsTab;  // New tab for Power Tools
-        private Label _instructionLabel;  // Label for general instructions
-        private ToolTip _toolTip;  // ToolTip for displaying hover information
+        private TabPage _powerToolsTab; // New tab for Power Tools
+        private ToolTip _toolTip; // ToolTip for displaying hover information
         private JsonChecklistControl _jsonChecklistControl;
         private object _currentData;
-        
+
         // Checkbox controls for the context builder
         private CheckBox _cssCheckBox;
         private CheckBox _templateCheckBox;
         private CheckBox _modelCheckBox;
         private CheckBox _jsonCheckBox;
-        
+
         // Prompt Builder UI components
         private ComboBox _promptCategoryComboBox;
         private ListBox _promptListBox;
         private string _selectedPrompt = "";
         private Label _promptBuilderLabel;
         private TextBox _promptPreviewTextBox;
-        
+
         // Registry keys for saving preferences
         private const string RegistryPath = @"Software\ITextGUIDesigner\SecondaryForm";
         private const string CssCheckboxKey = "CssCheckboxEnabled";
@@ -126,7 +115,9 @@ namespace iTextDesignerWithGUI.Forms
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Error creating display data: {ex.Message}");
+                    System.Diagnostics.Debug.WriteLine(
+                        $"Error creating display data: {ex.Message}"
+                    );
                     // Fall back to using the original data object
                 }
 
@@ -147,36 +138,30 @@ namespace iTextDesignerWithGUI.Forms
             ShowInTaskbar = false;
 
             // Initialize tab control
-            _tabControl = new TabControl
-            {
-                Dock = DockStyle.Fill
-            };
+            _tabControl = new TabControl { Dock = DockStyle.Fill };
 
             // Initialize tooltip
             _toolTip = new ToolTip();
-            _toolTip.AutoPopDelay = 10000;  // Show the tooltip for 10 seconds
-            _toolTip.InitialDelay = 500;    // Wait half a second before showing the tooltip
-            _toolTip.ReshowDelay = 200;     // Delay before showing the tooltip again if moved to another control
+            _toolTip.AutoPopDelay = 10000; // Show the tooltip for 10 seconds
+            _toolTip.InitialDelay = 500; // Wait half a second before showing the tooltip
+            _toolTip.ReshowDelay = 200; // Delay before showing the tooltip again if moved to another control
 
             // JSON View Tab
             _jsonViewTab = new TabPage("JSON View");
-            _jsonChecklistControl = new JsonChecklistControl
-            {
-                Dock = DockStyle.Fill
-            };
+            _jsonChecklistControl = new JsonChecklistControl { Dock = DockStyle.Fill };
             _jsonViewTab.Controls.Add(_jsonChecklistControl);
 
             // Power Tools Tab
             _powerToolsTab = new TabPage("Power Tools");
-            
+
             // Create a panel to organize controls in the Power Tools tab
             Panel powerToolsPanel = new Panel
             {
                 Dock = DockStyle.Fill,
                 Padding = new Padding(10),
-                AutoScroll = true // Add scrolling for many controls
+                AutoScroll = true, // Add scrolling for many controls
             };
-            
+
             // Create heading for the Prompt Builder section
             _promptBuilderLabel = new Label
             {
@@ -184,9 +169,9 @@ namespace iTextDesignerWithGUI.Forms
                 Location = new Point(20, 20),
                 Size = new Size(240, 24),
                 Font = new Font("Segoe UI", 12F, FontStyle.Bold),
-                ForeColor = Color.DarkSlateBlue
+                ForeColor = Color.DarkSlateBlue,
             };
-            
+
             // Create a "New Prompt" button next to the heading
             Button newPromptButton = new Button
             {
@@ -195,58 +180,58 @@ namespace iTextDesignerWithGUI.Forms
                 Size = new Size(105, 24),
                 BackColor = Color.FromArgb(230, 240, 255),
                 ForeColor = Color.DarkBlue,
-                Font = new Font("Segoe UI", 9F, FontStyle.Bold)
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
             };
             newPromptButton.Click += NewPromptButton_Click;
             _toolTip.SetToolTip(newPromptButton, "Create a new prompt or edit existing prompts");
-            
+
             // Create the category ComboBox
             _promptCategoryComboBox = new ComboBox
             {
                 Location = new Point(20, 50),
                 Size = new Size(350, 24),
-                DropDownStyle = ComboBoxStyle.DropDownList
+                DropDownStyle = ComboBoxStyle.DropDownList,
             };
             _promptCategoryComboBox.SelectedIndexChanged += PromptCategory_SelectedIndexChanged;
-            
+
             // Create the prompt ListBox
             _promptListBox = new ListBox
             {
                 Location = new Point(20, 80),
                 Size = new Size(350, 100),
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular),
-                ScrollAlwaysVisible = true
+                ScrollAlwaysVisible = true,
             };
             _promptListBox.SelectedIndexChanged += PromptListBox_SelectedIndexChanged;
             _promptListBox.DoubleClick += (s, e) => EditSelectedPrompt();
-            
+
             // Add context menu to the prompt ListBox for editing
             ContextMenuStrip promptContextMenu = new ContextMenuStrip();
             ToolStripMenuItem editMenuItem = new ToolStripMenuItem("Edit");
             editMenuItem.Click += (s, e) => EditSelectedPrompt();
             promptContextMenu.Items.Add(editMenuItem);
-            
+
             // Add duplicate option to the context menu
             ToolStripMenuItem duplicateMenuItem = new ToolStripMenuItem("Duplicate");
             duplicateMenuItem.Click += (s, e) => DuplicateSelectedPrompt();
             promptContextMenu.Items.Add(duplicateMenuItem);
-            
+
             // Add delete option to the context menu
             ToolStripMenuItem deleteMenuItem = new ToolStripMenuItem("Delete");
             deleteMenuItem.Click += (s, e) => DeleteSelectedPrompt();
             promptContextMenu.Items.Add(deleteMenuItem);
-            
+
             _promptListBox.ContextMenuStrip = promptContextMenu;
-            
+
             // Add a label for the prompt preview
             Label promptPreviewLabel = new Label
             {
                 Text = "Prompt Preview:",
                 Location = new Point(20, 190),
                 Size = new Size(120, 20),
-                Font = new Font("Segoe UI", 9F, FontStyle.Regular)
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
             };
-            
+
             // Create a text box to preview the selected prompt
             _promptPreviewTextBox = new TextBox
             {
@@ -256,9 +241,9 @@ namespace iTextDesignerWithGUI.Forms
                 Multiline = true,
                 ReadOnly = false,
                 ScrollBars = ScrollBars.Vertical,
-                BorderStyle = BorderStyle.FixedSingle
+                BorderStyle = BorderStyle.FixedSingle,
             };
-            
+
             // Create a save button for saving edited prompt text
             Button savePromptButton = new Button
             {
@@ -267,71 +252,84 @@ namespace iTextDesignerWithGUI.Forms
                 Size = new Size(120, 30),
                 BackColor = Color.FromArgb(230, 240, 255),
                 ForeColor = Color.DarkBlue,
-                Font = new Font("Segoe UI", 9F, FontStyle.Bold)
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
             };
             savePromptButton.Click += SavePromptButton_Click;
-            _toolTip.SetToolTip(savePromptButton, "Save the edited prompt text to the promptBuilder.json file");
-            
+            _toolTip.SetToolTip(
+                savePromptButton,
+                "Save the edited prompt text to the promptBuilder.json file"
+            );
+
             // Create a heading for the LLM Context Builder section
             Label llmContextBuilderLabel = new Label
             {
                 Text = "LLM Context Builder",
                 Location = new Point(20, 345),
-                Size = new Size(375, 24),  
+                Size = new Size(375, 24),
                 Font = new Font("Segoe UI", 12F, FontStyle.Bold),
-                ForeColor = Color.DarkSlateBlue
+                ForeColor = Color.DarkSlateBlue,
             };
-            
+
             // Description label for the new section
             Label descriptionLabel = new Label
             {
                 Text = "Select items to include in the context for Large\r\nLanguage Models:",
                 Location = new Point(20, 375),
-                Size = new Size(450, 40), 
-                Font = new Font("Segoe UI", 9F, FontStyle.Regular)
+                Size = new Size(450, 40),
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
             };
-            
+
             // Create checkboxes for selecting content to copy
             _cssCheckBox = new CheckBox
             {
                 Text = "Global Styles CSS",
                 Location = new Point(30, 425),
-                Size = new Size(250, 24),  
-                Checked = LoadCheckboxState(CssCheckboxKey, true) // Load saved state with default true
+                Size = new Size(250, 24),
+                Checked = LoadCheckboxState(CssCheckboxKey, true), // Load saved state with default true
             };
             _toolTip.SetToolTip(_cssCheckBox, "Include globalStyles.css in the context");
-            _cssCheckBox.CheckedChanged += (s, e) => SaveCheckboxState(CssCheckboxKey, _cssCheckBox.Checked);
-            
+            _cssCheckBox.CheckedChanged += (s, e) =>
+                SaveCheckboxState(CssCheckboxKey, _cssCheckBox.Checked);
+
             _templateCheckBox = new CheckBox
             {
                 Text = "Current CSHTML Template",
                 Location = new Point(30, 455),
-                Size = new Size(250, 24),  
-                Checked = LoadCheckboxState(TemplateCheckboxKey, true) // Load saved state with default true
+                Size = new Size(250, 24),
+                Checked = LoadCheckboxState(TemplateCheckboxKey, true), // Load saved state with default true
             };
-            _toolTip.SetToolTip(_templateCheckBox, "Include the current CSHTML template in the context");
-            _templateCheckBox.CheckedChanged += (s, e) => SaveCheckboxState(TemplateCheckboxKey, _templateCheckBox.Checked);
-            
+            _toolTip.SetToolTip(
+                _templateCheckBox,
+                "Include the current CSHTML template in the context"
+            );
+            _templateCheckBox.CheckedChanged += (s, e) =>
+                SaveCheckboxState(TemplateCheckboxKey, _templateCheckBox.Checked);
+
             _modelCheckBox = new CheckBox
             {
                 Text = "Current Model Instance",
                 Location = new Point(30, 485),
-                Size = new Size(250, 24),  
-                Checked = LoadCheckboxState(ModelCheckboxKey, true) // Load saved state with default true
+                Size = new Size(250, 24),
+                Checked = LoadCheckboxState(ModelCheckboxKey, true), // Load saved state with default true
             };
-            _toolTip.SetToolTip(_modelCheckBox, "Include the current model instance file in the context");
-            _modelCheckBox.CheckedChanged += (s, e) => SaveCheckboxState(ModelCheckboxKey, _modelCheckBox.Checked);
-            
+            _toolTip.SetToolTip(
+                _modelCheckBox,
+                "Include the current model instance file in the context"
+            );
+            _modelCheckBox.CheckedChanged += (s, e) =>
+                SaveCheckboxState(ModelCheckboxKey, _modelCheckBox.Checked);
+
             _jsonCheckBox = new CheckBox
             {
                 Text = "Current JSON Data",
                 Location = new Point(30, 515),
-                Size = new Size(250, 24),  
-                Checked = LoadCheckboxState(JsonCheckboxKey, true) // Load saved state with default true
+                Size = new Size(250, 24),
+                Checked = LoadCheckboxState(JsonCheckboxKey, true), // Load saved state with default true
             };
             _toolTip.SetToolTip(_jsonCheckBox, "Include the current JSON data file in the context");
-            _jsonCheckBox.CheckedChanged += (s, e) => SaveCheckboxState(JsonCheckboxKey, _jsonCheckBox.Checked);
-            
+            _jsonCheckBox.CheckedChanged += (s, e) =>
+                SaveCheckboxState(JsonCheckboxKey, _jsonCheckBox.Checked);
+
             // Create button to copy combined prompt and context
             Button buildCopyContextButton = new Button
             {
@@ -340,14 +338,23 @@ namespace iTextDesignerWithGUI.Forms
                 Location = new Point(30, 555),
                 BackColor = Color.FromArgb(230, 240, 255),
                 ForeColor = Color.DarkBlue,
-                Font = new Font("Segoe UI", 10F, FontStyle.Bold)
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
             };
-            buildCopyContextButton.Click += (s, e) => BuildAndCopyContext(_cssCheckBox.Checked, _templateCheckBox.Checked, _modelCheckBox.Checked, _jsonCheckBox.Checked);
-            _toolTip.SetToolTip(buildCopyContextButton, "Build and copy the context items and selected prompt to the clipboard");
-            
+            buildCopyContextButton.Click += (s, e) =>
+                BuildAndCopyContext(
+                    _cssCheckBox.Checked,
+                    _templateCheckBox.Checked,
+                    _modelCheckBox.Checked,
+                    _jsonCheckBox.Checked
+                );
+            _toolTip.SetToolTip(
+                buildCopyContextButton,
+                "Build and copy the context items and selected prompt to the clipboard"
+            );
+
             // Load prompts from the JSON file
             LoadPromptsFromJson();
-            
+
             // Add controls to the panel
             powerToolsPanel.Controls.Add(_promptBuilderLabel);
             powerToolsPanel.Controls.Add(newPromptButton);
@@ -363,19 +370,20 @@ namespace iTextDesignerWithGUI.Forms
             powerToolsPanel.Controls.Add(_modelCheckBox);
             powerToolsPanel.Controls.Add(_jsonCheckBox);
             powerToolsPanel.Controls.Add(buildCopyContextButton);
-            
+
             // Add panel to the Power Tools tab
             _powerToolsTab.Controls.Add(powerToolsPanel);
 
             // Add tabs to tab control
             _tabControl.TabPages.Add(_jsonViewTab);
-            _tabControl.TabPages.Add(_powerToolsTab);  // Add the Power Tools tab
-            
+            _tabControl.TabPages.Add(_powerToolsTab); // Add the Power Tools tab
+
             // Set the selected tab based on saved preference
             _tabControl.SelectedIndex = LoadSelectedTabIndex();
-            
+
             // Add event handler to save the selected tab when it changes
-            _tabControl.SelectedIndexChanged += (s, e) => SaveSelectedTabIndex(_tabControl.SelectedIndex);
+            _tabControl.SelectedIndexChanged += (s, e) =>
+                SaveSelectedTabIndex(_tabControl.SelectedIndex);
 
             // Add tab control to form
             Controls.Add(_tabControl);
@@ -394,13 +402,11 @@ namespace iTextDesignerWithGUI.Forms
 
             // Position directly below parent form
             Point parentLocation = _parentForm.Location;
-            this.Location = new Point(
-                parentLocation.X,
-                parentLocation.Y + _parentForm.Height
-            );
+            this.Location = new Point(parentLocation.X, parentLocation.Y + _parentForm.Height);
 
             // Handle parent form moving
-            _parentForm.LocationChanged += (s, e) => {
+            _parentForm.LocationChanged += (s, e) =>
+            {
                 this.Location = new Point(
                     _parentForm.Location.X,
                     _parentForm.Location.Y + _parentForm.Height
@@ -408,9 +414,10 @@ namespace iTextDesignerWithGUI.Forms
             };
 
             // Handle parent form resizing
-            _parentForm.SizeChanged += (s, e) => {
+            _parentForm.SizeChanged += (s, e) =>
+            {
                 this.Width = _parentForm.Width;
-                
+
                 // Resize doesn't need to do anything with the divider panel anymore
                 // since we've removed it from the UI
             };
@@ -419,7 +426,12 @@ namespace iTextDesignerWithGUI.Forms
         /// <summary>
         /// Builds context from selected files and copies to clipboard based on user's checkbox selections
         /// </summary>
-        private void BuildAndCopyContext(bool includeCss, bool includeTemplate, bool includeModel, bool includeJsonData)
+        private void BuildAndCopyContext(
+            bool includeCss,
+            bool includeTemplate,
+            bool includeModel,
+            bool includeJsonData
+        )
         {
             // Store a reference to the parent form's TemplateWatcherService
             var mainForm = _parentForm as MainForm;
@@ -436,7 +448,12 @@ namespace iTextDesignerWithGUI.Forms
 
                 if (_currentData == null)
                 {
-                    MessageBox.Show("No assessment data is currently loaded.", "No Data", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(
+                        "No assessment data is currently loaded.",
+                        "No Data",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
                     return;
                 }
 
@@ -448,7 +465,9 @@ namespace iTextDesignerWithGUI.Forms
                 string currentAssessmentType = _currentData.GetType().Name.Replace("Instance", "");
 
                 // Load the assessment types from JSON
-                string assessmentTypesPath = projectDirService.GetFilePath("PersistentDataJSON/assessmentTypes.json");
+                string assessmentTypesPath = projectDirService.GetFilePath(
+                    "PersistentDataJSON/assessmentTypes.json"
+                );
                 string assessmentTypesJson = File.ReadAllText(assessmentTypesPath);
                 var assessmentTypesDoc = JsonDocument.Parse(assessmentTypesJson);
                 var assessmentTypes = assessmentTypesDoc.RootElement.GetProperty("assessmentTypes");
@@ -467,43 +486,67 @@ namespace iTextDesignerWithGUI.Forms
 
                 if (matchingAssessment == null)
                 {
-                    MessageBox.Show($"Could not find assessment type '{currentAssessmentType}' in assessmentTypes.json", 
-                        "Assessment Type Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        $"Could not find assessment type '{currentAssessmentType}' in assessmentTypes.json",
+                        "Assessment Type Not Found",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
                     return;
                 }
 
                 // Get paths from the matching assessment
                 string modelPath = projectDirService.GetFilePath(
-                    matchingAssessment.Value.GetProperty("assessmentDataInstanceDirectory").GetString());
-                
+                    matchingAssessment
+                        .Value.GetProperty("assessmentDataInstanceDirectory")
+                        .GetString()
+                );
+
                 string templatePath = projectDirService.GetFilePath(
-                    matchingAssessment.Value.GetProperty("cshtmlTemplateDirectory").GetString());
-                
+                    matchingAssessment.Value.GetProperty("cshtmlTemplateDirectory").GetString()
+                );
+
                 // Get the reference JSON data path
                 string jsonDataPath = projectDirService.GetFilePath(
-                    matchingAssessment.Value.GetProperty("jsonDataLocationDirectory").GetString());
+                    matchingAssessment.Value.GetProperty("jsonDataLocationDirectory").GetString()
+                );
 
                 // Global CSS is always in the same location
                 string cssPath = projectDirService.GetFilePath("Templates/globalStyles.css");
 
                 // Check if required files exist based on user selections
                 bool filesExist = true;
-                
+
                 if (includeModel && !File.Exists(modelPath))
                 {
-                    MessageBox.Show($"Model file not found: {modelPath}", "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        $"Model file not found: {modelPath}",
+                        "File Not Found",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
                     filesExist = false;
                 }
-                
+
                 if (includeTemplate && !File.Exists(templatePath))
                 {
-                    MessageBox.Show($"Template file not found: {templatePath}", "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        $"Template file not found: {templatePath}",
+                        "File Not Found",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
                     filesExist = false;
                 }
-                
+
                 if (includeCss && !File.Exists(cssPath))
                 {
-                    MessageBox.Show($"CSS file not found: {cssPath}", "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        $"CSS file not found: {cssPath}",
+                        "File Not Found",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
                     filesExist = false;
                 }
 
@@ -530,18 +573,21 @@ namespace iTextDesignerWithGUI.Forms
 
                 // Create the clipboard content
                 StringBuilder clipboardContent = new StringBuilder();
-                
+
                 // Add a header to explain the context
                 clipboardContent.AppendLine("# LLM Context Builder Output");
-                clipboardContent.AppendLine("The following files are provided as context for working with this assessment template:");
+                clipboardContent.AppendLine(
+                    "The following files are provided as context for working with this assessment template:"
+                );
                 clipboardContent.AppendLine();
-                
+
                 // Add the selected prompt if one exists
                 if (!string.IsNullOrEmpty(_selectedPrompt))
                 {
-                    string categoryName = _promptCategoryComboBox.SelectedItem?.ToString() ?? "Unknown Category";
+                    string categoryName =
+                        _promptCategoryComboBox.SelectedItem?.ToString() ?? "Unknown Category";
                     string promptName = _promptListBox.SelectedItem?.ToString() ?? "Unknown Prompt";
-                    
+
                     clipboardContent.AppendLine("## SELECTED PROMPT");
                     clipboardContent.AppendLine($"Category: {categoryName}");
                     clipboardContent.AppendLine($"Prompt: {promptName}");
@@ -550,7 +596,7 @@ namespace iTextDesignerWithGUI.Forms
                     clipboardContent.AppendLine("```");
                     clipboardContent.AppendLine();
                 }
-                
+
                 if (includeModel)
                 {
                     clipboardContent.AppendLine("## MODEL FILE: " + Path.GetFileName(modelPath));
@@ -559,7 +605,7 @@ namespace iTextDesignerWithGUI.Forms
                     clipboardContent.AppendLine("```");
                     clipboardContent.AppendLine();
                 }
-                
+
                 if (includeCss)
                 {
                     clipboardContent.AppendLine("## GLOBAL CSS: globalStyles.css");
@@ -568,7 +614,7 @@ namespace iTextDesignerWithGUI.Forms
                     clipboardContent.AppendLine("```");
                     clipboardContent.AppendLine();
                 }
-                
+
                 if (includeTemplate)
                 {
                     clipboardContent.AppendLine("## TEMPLATE: " + Path.GetFileName(templatePath));
@@ -577,10 +623,12 @@ namespace iTextDesignerWithGUI.Forms
                     clipboardContent.AppendLine("```");
                     clipboardContent.AppendLine();
                 }
-                
+
                 if (includeJsonData && File.Exists(jsonDataPath))
                 {
-                    clipboardContent.AppendLine("## REFERENCE JSON DATA: " + Path.GetFileName(jsonDataPath));
+                    clipboardContent.AppendLine(
+                        "## REFERENCE JSON DATA: " + Path.GetFileName(jsonDataPath)
+                    );
                     clipboardContent.AppendLine("```json");
                     clipboardContent.AppendLine(jsonDataContent);
                     clipboardContent.AppendLine("```");
@@ -589,13 +637,22 @@ namespace iTextDesignerWithGUI.Forms
 
                 // Copy to clipboard
                 Clipboard.SetText(clipboardContent.ToString());
-                
-                MessageBox.Show("Selected files copied to clipboard successfully!", "Context Builder Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                MessageBox.Show(
+                    "Selected files copied to clipboard successfully!",
+                    "Context Builder Success",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred: {ex.Message}\n\n{ex.StackTrace}", 
-                    "Context Builder Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    $"An error occurred: {ex.Message}\n\n{ex.StackTrace}",
+                    "Context Builder Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
             finally
             {
@@ -634,10 +691,10 @@ namespace iTextDesignerWithGUI.Forms
             {
                 Debug.WriteLine($"Error loading checkbox state: {ex.Message}");
             }
-            
+
             return defaultValue;
         }
-        
+
         /// <summary>
         /// Loads prompts from the promptBuilder.json file and populates the UI components
         /// </summary>
@@ -648,18 +705,20 @@ namespace iTextDesignerWithGUI.Forms
                 // Save the current selections
                 string currentCategoryName = _promptCategoryComboBox.SelectedItem as string;
                 string currentPromptName = _promptListBox.SelectedItem as string;
-                
+
                 // Get path to promptBuilder.json
                 var projectDirService = new ProjectDirectoryService();
-                string promptBuilderPath = projectDirService.GetFilePath("PersistentDataJSON/promptBuilder.json");
-                
+                string promptBuilderPath = projectDirService.GetFilePath(
+                    "PersistentDataJSON/promptBuilder.json"
+                );
+
                 // Read and deserialize the JSON file
                 string jsonContent = File.ReadAllText(promptBuilderPath);
                 var promptBuilder = JsonSerializer.Deserialize<PromptBuilderJson>(jsonContent);
-                
+
                 // Clear the category ComboBox
                 _promptCategoryComboBox.Items.Clear();
-                
+
                 // Populate the category ComboBox
                 if (promptBuilder != null && promptBuilder.Categories != null)
                 {
@@ -668,18 +727,18 @@ namespace iTextDesignerWithGUI.Forms
                         _promptCategoryComboBox.Items.Add(category.Name);
                     }
                 }
-                
+
                 // Restore the selected category or select the first one
                 int categoryIndex = -1;
                 if (!string.IsNullOrEmpty(currentCategoryName))
                 {
                     categoryIndex = _promptCategoryComboBox.Items.IndexOf(currentCategoryName);
                 }
-                
+
                 if (categoryIndex >= 0)
                 {
                     _promptCategoryComboBox.SelectedIndex = categoryIndex;
-                    
+
                     // Since selecting the category clears the prompts list, we need to find the selected prompt again
                     if (!string.IsNullOrEmpty(currentPromptName))
                     {
@@ -707,7 +766,12 @@ namespace iTextDesignerWithGUI.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading promptBuilder.json: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    $"Error loading promptBuilder.json: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
         }
 
@@ -799,38 +863,44 @@ namespace iTextDesignerWithGUI.Forms
             {
                 // Clear the prompts list first
                 _promptListBox.Items.Clear();
-                
+
                 if (_promptCategoryComboBox.SelectedItem == null)
                     return;
-                    
+
                 string selectedCategory = _promptCategoryComboBox.SelectedItem.ToString();
-                
+
                 // Save the selected category
                 SaveSelectedCategory(selectedCategory);
-                
+
                 // Load the JSON file again to get the prompts for this category
                 var projectDirService = new ProjectDirectoryService();
-                string promptBuilderPath = projectDirService.GetFilePath("PersistentDataJSON/promptBuilder.json");
+                string promptBuilderPath = projectDirService.GetFilePath(
+                    "PersistentDataJSON/promptBuilder.json"
+                );
                 string jsonContent = File.ReadAllText(promptBuilderPath);
                 var promptBuilder = JsonSerializer.Deserialize<PromptBuilderJson>(jsonContent);
-                
+
                 if (promptBuilder == null || promptBuilder.Categories == null)
                     return;
-                    
+
                 // Find the selected category
-                var category = promptBuilder.Categories.FirstOrDefault(c => c.Name == selectedCategory);
+                var category = promptBuilder.Categories.FirstOrDefault(c =>
+                    c.Name == selectedCategory
+                );
                 if (category == null || category.Prompts == null)
                     return;
-                    
+
                 // Add the prompts to the ListBox
                 foreach (var prompt in category.Prompts)
                 {
                     _promptListBox.Items.Add(prompt.Name);
                 }
-                
+
                 // Load the previously selected prompt for this category, if any
                 string savedPrompt = LoadSelectedPrompt();
-                if (!string.IsNullOrEmpty(savedPrompt) && _promptListBox.Items.Contains(savedPrompt))
+                if (
+                    !string.IsNullOrEmpty(savedPrompt) && _promptListBox.Items.Contains(savedPrompt)
+                )
                 {
                     _promptListBox.SelectedItem = savedPrompt;
                 }
@@ -845,7 +915,7 @@ namespace iTextDesignerWithGUI.Forms
                 Debug.WriteLine($"Error loading prompts for category: {ex.Message}");
             }
         }
-        
+
         /// <summary>
         /// Event handler for when a new prompt is selected in the ListBox
         /// </summary>
@@ -853,35 +923,42 @@ namespace iTextDesignerWithGUI.Forms
         {
             try
             {
-                if (_promptListBox.SelectedItem == null || _promptCategoryComboBox.SelectedItem == null)
+                if (
+                    _promptListBox.SelectedItem == null
+                    || _promptCategoryComboBox.SelectedItem == null
+                )
                     return;
-                
+
                 string selectedCategory = _promptCategoryComboBox.SelectedItem.ToString();
                 string selectedPromptName = _promptListBox.SelectedItem.ToString();
-                
+
                 // Save the selected prompt
                 SaveSelectedPrompt(selectedPromptName);
-                
+
                 // Get the prompt text from the JSON file
                 var projectDirService = new ProjectDirectoryService();
-                string promptBuilderPath = projectDirService.GetFilePath("PersistentDataJSON/promptBuilder.json");
+                string promptBuilderPath = projectDirService.GetFilePath(
+                    "PersistentDataJSON/promptBuilder.json"
+                );
                 string jsonContent = File.ReadAllText(promptBuilderPath);
                 var promptBuilder = JsonSerializer.Deserialize<PromptBuilderJson>(jsonContent);
-                
+
                 if (promptBuilder == null || promptBuilder.Categories == null)
                     return;
-                    
-                var category = promptBuilder.Categories.FirstOrDefault(c => c.Name == selectedCategory);
+
+                var category = promptBuilder.Categories.FirstOrDefault(c =>
+                    c.Name == selectedCategory
+                );
                 if (category == null || category.Prompts == null)
                     return;
-                    
+
                 var prompt = category.Prompts.FirstOrDefault(p => p.Name == selectedPromptName);
                 if (prompt == null)
                     return;
-                    
+
                 // Store the selected prompt text
                 _selectedPrompt = prompt.Prompt;
-                
+
                 // Update the preview text box
                 _promptPreviewTextBox.Text = _selectedPrompt;
             }
@@ -892,7 +969,7 @@ namespace iTextDesignerWithGUI.Forms
                 _promptPreviewTextBox.Text = "";
             }
         }
-        
+
         /// <summary>
         /// Save the selected prompt category to the registry
         /// </summary>
@@ -910,7 +987,7 @@ namespace iTextDesignerWithGUI.Forms
                 Debug.WriteLine($"Error saving selected category: {ex.Message}");
             }
         }
-        
+
         /// <summary>
         /// Load the selected prompt category from the registry
         /// </summary>
@@ -930,10 +1007,10 @@ namespace iTextDesignerWithGUI.Forms
             {
                 Debug.WriteLine($"Error loading selected category: {ex.Message}");
             }
-            
+
             return "";
         }
-        
+
         /// <summary>
         /// Save the selected prompt to the registry
         /// </summary>
@@ -951,7 +1028,7 @@ namespace iTextDesignerWithGUI.Forms
                 Debug.WriteLine($"Error saving selected prompt: {ex.Message}");
             }
         }
-        
+
         /// <summary>
         /// Load the selected prompt from the registry
         /// </summary>
@@ -971,7 +1048,7 @@ namespace iTextDesignerWithGUI.Forms
             {
                 Debug.WriteLine($"Error loading selected prompt: {ex.Message}");
             }
-            
+
             return "";
         }
 
@@ -983,84 +1060,119 @@ namespace iTextDesignerWithGUI.Forms
             try
             {
                 // Check if a prompt is selected
-                if (_promptListBox.SelectedItem == null || _promptCategoryComboBox.SelectedItem == null)
+                if (
+                    _promptListBox.SelectedItem == null
+                    || _promptCategoryComboBox.SelectedItem == null
+                )
                 {
-                    MessageBox.Show("Please select a prompt category and prompt before saving.", 
-                        "No Prompt Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(
+                        "Please select a prompt category and prompt before saving.",
+                        "No Prompt Selected",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
                     return;
                 }
-                
+
                 string selectedCategory = _promptCategoryComboBox.SelectedItem.ToString();
                 string selectedPromptName = _promptListBox.SelectedItem.ToString();
                 string editedPromptText = _promptPreviewTextBox.Text;
-                
+
                 // If prompt is empty, ask user for confirmation
                 if (string.IsNullOrWhiteSpace(editedPromptText))
                 {
-                    var result = MessageBox.Show("Are you sure you want to save an empty prompt?", 
-                        "Empty Prompt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    var result = MessageBox.Show(
+                        "Are you sure you want to save an empty prompt?",
+                        "Empty Prompt",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question
+                    );
                     if (result == DialogResult.No)
                     {
                         return;
                     }
                 }
-                
+
                 // Get path to promptBuilder.json
                 var projectDirService = new ProjectDirectoryService();
-                string promptBuilderPath = projectDirService.GetFilePath("PersistentDataJSON/promptBuilder.json");
-                
+                string promptBuilderPath = projectDirService.GetFilePath(
+                    "PersistentDataJSON/promptBuilder.json"
+                );
+
                 // Read and parse the JSON file
                 string jsonContent = File.ReadAllText(promptBuilderPath);
                 var promptBuilder = JsonSerializer.Deserialize<PromptBuilderJson>(jsonContent);
-                
+
                 if (promptBuilder == null || promptBuilder.Categories == null)
                 {
-                    MessageBox.Show("Error loading promptBuilder.json: Invalid file format.",
-                        "JSON Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        "Error loading promptBuilder.json: Invalid file format.",
+                        "JSON Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
                     return;
                 }
-                
+
                 // Find the selected category
-                var category = promptBuilder.Categories.FirstOrDefault(c => c.Name == selectedCategory);
+                var category = promptBuilder.Categories.FirstOrDefault(c =>
+                    c.Name == selectedCategory
+                );
                 if (category == null || category.Prompts == null)
                 {
-                    MessageBox.Show($"Category '{selectedCategory}' not found in promptBuilder.json.",
-                        "Category Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        $"Category '{selectedCategory}' not found in promptBuilder.json.",
+                        "Category Not Found",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
                     return;
                 }
-                
+
                 // Find the selected prompt
                 var prompt = category.Prompts.FirstOrDefault(p => p.Name == selectedPromptName);
                 if (prompt == null)
                 {
-                    MessageBox.Show($"Prompt '{selectedPromptName}' not found in category '{selectedCategory}'.",
-                        "Prompt Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        $"Prompt '{selectedPromptName}' not found in category '{selectedCategory}'.",
+                        "Prompt Not Found",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
                     return;
                 }
-                
+
                 // Update the prompt text
                 prompt.Prompt = editedPromptText;
-                
+
                 // Save the updated JSON back to the file
                 var options = new JsonSerializerOptions
                 {
                     WriteIndented = true,
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 };
-                
+
                 string updatedJson = JsonSerializer.Serialize(promptBuilder, options);
                 File.WriteAllText(promptBuilderPath, updatedJson);
-                
+
                 // Update the _selectedPrompt variable to match the saved text
                 _selectedPrompt = editedPromptText;
-                
-                MessageBox.Show($"Prompt '{selectedPromptName}' saved successfully!",
-                    "Prompt Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                MessageBox.Show(
+                    $"Prompt '{selectedPromptName}' saved successfully!",
+                    "Prompt Saved",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error saving prompt: {ex.Message}",
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    $"Error saving prompt: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
         }
 
@@ -1071,17 +1183,22 @@ namespace iTextDesignerWithGUI.Forms
             {
                 // Show the form as a dialog
                 var result = promptEditorForm.ShowDialog();
-                
+
                 // If the user saved changes, reload the prompts
                 if (result == DialogResult.OK)
                 {
                     LoadPromptsFromJson();
-                    
+
                     // Select the newly created prompt
-                    if (!string.IsNullOrEmpty(promptEditorForm.EditedCategoryName) && 
-                        !string.IsNullOrEmpty(promptEditorForm.EditedPromptName))
+                    if (
+                        !string.IsNullOrEmpty(promptEditorForm.EditedCategoryName)
+                        && !string.IsNullOrEmpty(promptEditorForm.EditedPromptName)
+                    )
                     {
-                        SelectPrompt(promptEditorForm.EditedCategoryName, promptEditorForm.EditedPromptName);
+                        SelectPrompt(
+                            promptEditorForm.EditedCategoryName,
+                            promptEditorForm.EditedPromptName
+                        );
                     }
                 }
             }
@@ -1092,29 +1209,39 @@ namespace iTextDesignerWithGUI.Forms
             // Get the selected category and prompt
             if (_promptCategoryComboBox.SelectedItem == null || _promptListBox.SelectedItem == null)
             {
-                MessageBox.Show("Please select a prompt to edit.", "No Prompt Selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(
+                    "Please select a prompt to edit.",
+                    "No Prompt Selected",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
                 return;
             }
-            
+
             string categoryName = _promptCategoryComboBox.SelectedItem.ToString();
             string promptName = _promptListBox.SelectedItem.ToString();
-            
+
             // Create the prompt editor form in edit mode
             using (var promptEditorForm = new PromptEditorForm(categoryName, promptName))
             {
                 // Show the form as a dialog
                 var result = promptEditorForm.ShowDialog();
-                
+
                 // If the user saved changes, reload the prompts
                 if (result == DialogResult.OK)
                 {
                     LoadPromptsFromJson();
-                    
+
                     // Select the edited prompt
-                    if (!string.IsNullOrEmpty(promptEditorForm.EditedCategoryName) && 
-                        !string.IsNullOrEmpty(promptEditorForm.EditedPromptName))
+                    if (
+                        !string.IsNullOrEmpty(promptEditorForm.EditedCategoryName)
+                        && !string.IsNullOrEmpty(promptEditorForm.EditedPromptName)
+                    )
                     {
-                        SelectPrompt(promptEditorForm.EditedCategoryName, promptEditorForm.EditedPromptName);
+                        SelectPrompt(
+                            promptEditorForm.EditedCategoryName,
+                            promptEditorForm.EditedPromptName
+                        );
                     }
                 }
             }
@@ -1125,29 +1252,39 @@ namespace iTextDesignerWithGUI.Forms
             // Get the selected category and prompt
             if (_promptCategoryComboBox.SelectedItem == null || _promptListBox.SelectedItem == null)
             {
-                MessageBox.Show("Please select a prompt to duplicate.", "No Prompt Selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(
+                    "Please select a prompt to duplicate.",
+                    "No Prompt Selected",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
                 return;
             }
-            
+
             string categoryName = _promptCategoryComboBox.SelectedItem.ToString();
             string promptName = _promptListBox.SelectedItem.ToString();
-            
+
             // Create the prompt editor form in duplicate mode
             using (var promptEditorForm = new PromptEditorForm(categoryName, promptName, true))
             {
                 // Show the form as a dialog
                 var result = promptEditorForm.ShowDialog();
-                
+
                 // If the user saved changes, reload the prompts
                 if (result == DialogResult.OK)
                 {
                     LoadPromptsFromJson();
-                    
+
                     // Select the new duplicated prompt
-                    if (!string.IsNullOrEmpty(promptEditorForm.EditedCategoryName) && 
-                        !string.IsNullOrEmpty(promptEditorForm.EditedPromptName))
+                    if (
+                        !string.IsNullOrEmpty(promptEditorForm.EditedCategoryName)
+                        && !string.IsNullOrEmpty(promptEditorForm.EditedPromptName)
+                    )
                     {
-                        SelectPrompt(promptEditorForm.EditedCategoryName, promptEditorForm.EditedPromptName);
+                        SelectPrompt(
+                            promptEditorForm.EditedCategoryName,
+                            promptEditorForm.EditedPromptName
+                        );
                     }
                 }
             }
@@ -1158,45 +1295,64 @@ namespace iTextDesignerWithGUI.Forms
             // Get the selected category and prompt
             if (_promptCategoryComboBox.SelectedItem == null || _promptListBox.SelectedItem == null)
             {
-                MessageBox.Show("Please select a prompt to delete.", "No Prompt Selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(
+                    "Please select a prompt to delete.",
+                    "No Prompt Selected",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
                 return;
             }
-            
+
             string categoryName = _promptCategoryComboBox.SelectedItem.ToString();
             string promptName = _promptListBox.SelectedItem.ToString();
-            
+
             // Confirm deletion
-            var result = MessageBox.Show($"Are you sure you want to delete prompt '{promptName}'?", 
-                "Delete Prompt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var result = MessageBox.Show(
+                $"Are you sure you want to delete prompt '{promptName}'?",
+                "Delete Prompt",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
             if (result != DialogResult.Yes)
             {
                 return;
             }
-            
+
             // Get path to promptBuilder.json
             var projectDirService = new ProjectDirectoryService();
-            string promptBuilderPath = projectDirService.GetFilePath("PersistentDataJSON/promptBuilder.json");
-            
+            string promptBuilderPath = projectDirService.GetFilePath(
+                "PersistentDataJSON/promptBuilder.json"
+            );
+
             // Read and parse the JSON file
             string jsonContent = File.ReadAllText(promptBuilderPath);
             var promptBuilder = JsonSerializer.Deserialize<PromptBuilderJson>(jsonContent);
-            
+
             if (promptBuilder == null || promptBuilder.Categories == null)
             {
-                MessageBox.Show("Error loading promptBuilder.json: Invalid file format.",
-                    "JSON Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Error loading promptBuilder.json: Invalid file format.",
+                    "JSON Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
                 return;
             }
-            
+
             // Find the selected category
             var category = promptBuilder.Categories.FirstOrDefault(c => c.Name == categoryName);
             if (category == null || category.Prompts == null)
             {
-                MessageBox.Show($"Category '{categoryName}' not found in promptBuilder.json.",
-                    "Category Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    $"Category '{categoryName}' not found in promptBuilder.json.",
+                    "Category Not Found",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
                 return;
             }
-            
+
             // Find and remove the selected prompt
             var promptIndex = category.Prompts.FindIndex(p => p.Name == promptName);
             if (promptIndex != -1)
@@ -1205,26 +1361,34 @@ namespace iTextDesignerWithGUI.Forms
             }
             else
             {
-                MessageBox.Show($"Prompt '{promptName}' not found in category '{categoryName}'.",
-                    "Prompt Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    $"Prompt '{promptName}' not found in category '{categoryName}'.",
+                    "Prompt Not Found",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
                 return;
             }
-            
+
             // Save the updated JSON back to the file
             var options = new JsonSerializerOptions
             {
                 WriteIndented = true,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             };
-            
+
             string updatedJson = JsonSerializer.Serialize(promptBuilder, options);
             File.WriteAllText(promptBuilderPath, updatedJson);
-            
+
             // Reload the prompts
             LoadPromptsFromJson();
-            
-            MessageBox.Show($"Prompt '{promptName}' deleted successfully!",
-                "Prompt Deleted", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            MessageBox.Show(
+                $"Prompt '{promptName}' deleted successfully!",
+                "Prompt Deleted",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
         }
 
         private void SelectPrompt(string categoryName, string promptName)
@@ -1234,7 +1398,7 @@ namespace iTextDesignerWithGUI.Forms
             {
                 _promptCategoryComboBox.SelectedItem = categoryName;
             }
-            
+
             // Select the prompt
             if (_promptListBox.Items.Contains(promptName))
             {
@@ -1263,7 +1427,9 @@ namespace iTextDesignerWithGUI.Forms
                 string currentAssessmentType = _currentData.GetType().Name.Replace("Instance", "");
 
                 // Load the assessment types from JSON
-                string assessmentTypesPath = projectDirService.GetFilePath("PersistentDataJSON/assessmentTypes.json");
+                string assessmentTypesPath = projectDirService.GetFilePath(
+                    "PersistentDataJSON/assessmentTypes.json"
+                );
                 string assessmentTypesJson = File.ReadAllText(assessmentTypesPath);
                 var assessmentTypesDoc = JsonDocument.Parse(assessmentTypesJson);
                 var assessmentTypes = assessmentTypesDoc.RootElement.GetProperty("assessmentTypes");
@@ -1275,8 +1441,12 @@ namespace iTextDesignerWithGUI.Forms
                     if (name == currentAssessmentType)
                     {
                         // Get template path from the matching assessment
-                        string templateRelativePath = assessment.GetProperty("cshtmlTemplateDirectory").GetString();
-                        string templateFullPath = projectDirService.GetFilePath(templateRelativePath);
+                        string templateRelativePath = assessment
+                            .GetProperty("cshtmlTemplateDirectory")
+                            .GetString();
+                        string templateFullPath = projectDirService.GetFilePath(
+                            templateRelativePath
+                        );
                         return templateFullPath;
                     }
                 }
