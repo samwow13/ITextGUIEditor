@@ -1,13 +1,5 @@
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.IO;
 using iTextDesignerWithGUI.Models;
 using System.Text.Json;
-using System.Collections.Generic;
-using System.Linq;
-using iTextDesignerWithGUI.Forms;
-using iTextDesignerWithGUI.Services;
 
 namespace iTextDesignerWithGUI.Forms
 {
@@ -449,50 +441,6 @@ namespace iTextDesignerWithGUI.Forms
                 UpdateStatus("Error preparing PDF generation", isSuccess: false);
                 MessageBox.Show($"Error preparing PDF generation: {ex.Message}", 
                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void SaveButton_Click(object sender, EventArgs e)
-        {
-            // Validate input
-            if (projectNameComboBox.SelectedIndex < 0)
-            {
-                MessageBox.Show("Please select a project.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                this.DialogResult = DialogResult.None;
-                return;
-            }
-            
-            if (string.IsNullOrWhiteSpace(displayNameTextBox.Text))
-            {
-                MessageBox.Show("Please enter a display name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                this.DialogResult = DialogResult.None;
-                return;
-            }
-
-            // Get the selected project name
-            string projectName = projectNameComboBox.SelectedItem.ToString();
-
-            // Create and save the custom assessment type
-            var customType = new CustomAssessmentType(
-                displayNameTextBox.Text.Trim(),
-                "",
-                ""
-            );
-            
-            // You could store the project name with the custom type if needed
-            // For now, just log it
-            Console.WriteLine($"Creating assessment type for project: {projectName}");
-
-            if (CustomAssessmentTypeManager.AddCustomType(customType))
-            {
-                MessageBox.Show($"Custom assessment type '{customType.DisplayName}' has been added successfully for project '{projectName}'.", 
-                    "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show("Failed to add custom assessment type. A type with this name may already exist.",
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                this.DialogResult = DialogResult.None;
             }
         }
 
