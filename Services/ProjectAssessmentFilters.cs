@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using iTextDesignerWithGUI.Models;
 
 namespace iTextDesignerWithGUI.Services
@@ -17,8 +14,9 @@ namespace iTextDesignerWithGUI.Services
         /// <param name="projectName">Project name to filter by</param>
         /// <returns>Filtered list of assessment types</returns>
         public static List<AssessmentTypeWrapper> FilterByProject(
-            List<AssessmentTypeWrapper> assessmentTypes, 
-            string projectName)
+            List<AssessmentTypeWrapper> assessmentTypes,
+            string projectName
+        )
         {
             if (assessmentTypes == null)
             {
@@ -30,9 +28,7 @@ namespace iTextDesignerWithGUI.Services
                 return assessmentTypes; // Return all if no project is specified
             }
 
-            return assessmentTypes
-                .Where(at => BelongsToProject(at, projectName))
-                .ToList();
+            return assessmentTypes.Where(at => BelongsToProject(at, projectName)).ToList();
         }
 
         /// <summary>
@@ -41,7 +37,10 @@ namespace iTextDesignerWithGUI.Services
         /// <param name="assessmentType">The assessment type to check</param>
         /// <param name="projectName">Project name to check against</param>
         /// <returns>True if the assessment type belongs to the project</returns>
-        private static bool BelongsToProject(AssessmentTypeWrapper assessmentType, string projectName)
+        private static bool BelongsToProject(
+            AssessmentTypeWrapper assessmentType,
+            string projectName
+        )
         {
             // Check if any inputs are null
             if (assessmentType == null || string.IsNullOrEmpty(projectName))
@@ -66,9 +65,18 @@ namespace iTextDesignerWithGUI.Services
 
             // Check if the project name appears in the directory path
             // Try different patterns that might be present in the paths
-            return assessmentTypeDirectory.Contains($"Models/{projectName}/", StringComparison.OrdinalIgnoreCase) ||
-                   assessmentTypeDirectory.Contains($"Templates/{projectName}/", StringComparison.OrdinalIgnoreCase) ||
-                   assessmentTypeDirectory.Contains($"/{projectName}/", StringComparison.OrdinalIgnoreCase);
+            return assessmentTypeDirectory.Contains(
+                    $"Models/{projectName}/",
+                    StringComparison.OrdinalIgnoreCase
+                )
+                || assessmentTypeDirectory.Contains(
+                    $"Templates/{projectName}/",
+                    StringComparison.OrdinalIgnoreCase
+                )
+                || assessmentTypeDirectory.Contains(
+                    $"/{projectName}/",
+                    StringComparison.OrdinalIgnoreCase
+                );
         }
     }
 }

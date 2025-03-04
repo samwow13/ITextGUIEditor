@@ -1,10 +1,4 @@
-using System;
-using System.IO;
-using System.Windows.Forms;
 using System.Diagnostics;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq; // Added this line
 
 namespace iTextDesignerWithGUI.Services
 {
@@ -76,60 +70,6 @@ namespace iTextDesignerWithGUI.Services
             }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the TemplateWatcherService class.
-        /// </summary>
-        /// <param name="templatesPath">Path to the Templates directory</param>
-        /// <param name="onTemplateChanged">Action to execute when a template file changes</param>
-        /// <param name="uiControl">Control to use for invoking UI operations</param>
-        public TemplateWatcherService(string templatesPath, Action onTemplateChanged, Control uiControl)
-        {
-            if (string.IsNullOrEmpty(templatesPath))
-                throw new ArgumentNullException(nameof(templatesPath));
-
-            _onTemplateChanged = onTemplateChanged ?? throw new ArgumentNullException(nameof(onTemplateChanged));
-            _uiControl = uiControl ?? throw new ArgumentNullException(nameof(uiControl));
-            _watchers = new List<FileSystemWatcher>();
-            _isInCooldown = false;
-            _isDisposed = false;  // Explicitly initialize this field
-
-            Debug.WriteLine($"Initializing TemplateWatcherService for path: {templatesPath}");
-
-            // Initialize the cooldown timer
-            _cooldownTimer = new System.Windows.Forms.Timer();
-            _cooldownTimer.Interval = COOLDOWN_PERIOD;
-            _cooldownTimer.Enabled = false;
-            _cooldownTimer.Tick += OnCooldownComplete;
-
-            // Create watchers for different file types
-            string[] fileTypes = new[] { "*.html", "*.cshtml", "*.css" };
-            foreach (var fileType in fileTypes)
-            {
-                var watcher = new FileSystemWatcher
-                {
-                    Path = templatesPath,
-                    NotifyFilter = NotifyFilters.LastWrite 
-                        | NotifyFilters.FileName 
-                        | NotifyFilters.DirectoryName 
-                        | NotifyFilters.Size 
-                        | NotifyFilters.LastAccess
-                        | NotifyFilters.CreationTime
-                        | NotifyFilters.Attributes,
-                    Filter = fileType,
-                    EnableRaisingEvents = false, // Start disabled
-                    IncludeSubdirectories = true // Enable monitoring of subdirectories
-                };
-
-                // Attach event handlers
-                watcher.Changed += OnTemplateFileChanged;
-                watcher.Created += OnTemplateFileChanged;
-                watcher.Deleted += OnTemplateFileChanged;
-                watcher.Renamed += OnTemplateFileRenamed;
-                watcher.Error += OnWatcherError;
-
-                _watchers.Add(watcher);
-            }
-        }
 
         public void StartWatching()
         {

@@ -1,21 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
-using iText.Layout;
-using iText.Layout.Element;
-using RazorLight;
-using RazorLight.Razor;
-using iTextDesignerWithGUI.Services.HelperMethods;
 using iText.Html2pdf;
 using iText.Kernel.Pdf;
 using iTextDesignerWithGUI.Models;
-using iTextDesignerWithGUI.Models.TestRazorDataModels;
-using System.IO;
-using System.Reflection;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Linq;
+using iTextDesignerWithGUI.Services.HelperMethods;
+using RazorLight;
+using RazorLight.Razor;
 
 namespace iTextDesignerWithGUI.Services
 {
@@ -34,7 +24,14 @@ namespace iTextDesignerWithGUI.Services
         /// <returns>RazorLight project item containing the template content</returns>
         public override Task<RazorLightProjectItem> GetItemAsync(string templateKey)
         {
-            return Task.FromResult<RazorLightProjectItem>(new TextSourceRazorProjectItem(templateKey, _templates.TryGetValue(templateKey, out string template) ? template : string.Empty));
+            return Task.FromResult<RazorLightProjectItem>(
+                new TextSourceRazorProjectItem(
+                    templateKey,
+                    _templates.TryGetValue(templateKey, out string template)
+                        ? template
+                        : string.Empty
+                )
+            );
         }
 
         /// <summary>
@@ -44,7 +41,9 @@ namespace iTextDesignerWithGUI.Services
         /// <returns>Empty list of RazorLight project items (no imports are used in this implementation)</returns>
         public override Task<IEnumerable<RazorLightProjectItem>> GetImportsAsync(string templateKey)
         {
-            return Task.FromResult<IEnumerable<RazorLightProjectItem>>(Array.Empty<RazorLightProjectItem>());
+            return Task.FromResult<IEnumerable<RazorLightProjectItem>>(
+                Array.Empty<RazorLightProjectItem>()
+            );
         }
 
         /// <summary>
@@ -78,7 +77,7 @@ namespace iTextDesignerWithGUI.Services
             {
                 // Initialize the directory service
                 _directoryService = new ProjectDirectoryService();
-                
+
                 // Use the temp directory for temporary files
                 var tempDir = Path.Combine(Path.GetTempPath(), "iTextDesigner");
                 if (!Directory.Exists(tempDir))
@@ -86,9 +85,11 @@ namespace iTextDesignerWithGUI.Services
                     Directory.CreateDirectory(tempDir);
                 }
                 _tempPdfPath = Path.Combine(tempDir, "temp_assessment.pdf");
-                
+
                 // Use the directory service to get the path to global styles
-                _globalStylesPath = _directoryService.GetFilePath(Path.Combine("Templates", "globalStyles.css"));
+                _globalStylesPath = _directoryService.GetFilePath(
+                    Path.Combine("Templates", "globalStyles.css")
+                );
 
                 // Initialize RazorLight engine
                 _project = new RazorLightInMemoryProject();
@@ -125,11 +126,14 @@ namespace iTextDesignerWithGUI.Services
                 }
 
                 var cssContent = File.ReadAllText(_globalStylesPath);
-                
+
                 // Find the closing head tag
                 const string headEndTag = "</head>";
-                var headEndIndex = htmlContent.IndexOf(headEndTag, StringComparison.OrdinalIgnoreCase);
-                
+                var headEndIndex = htmlContent.IndexOf(
+                    headEndTag,
+                    StringComparison.OrdinalIgnoreCase
+                );
+
                 if (headEndIndex == -1)
                 {
                     Trace.WriteLine("No </head> tag found in HTML content");
@@ -163,39 +167,47 @@ namespace iTextDesignerWithGUI.Services
             {
                 // Find all img tags with src attributes
                 var imgPattern = @"<img[^>]*src\s*=\s*[""']([^""']*)[""'][^>]*>";
-                return Regex.Replace(htmlContent, imgPattern, match =>
-                {
-                    var imgTag = match.Value;
-                    var srcPath = match.Groups[1].Value;
-
-                    // Remove leading '/' or './' if present
-                    srcPath = srcPath.TrimStart('/', '.');
-                    
-                    // Construct full path
-                    var fullPath = Path.Combine(basePath, srcPath);
-                    
-                    if (File.Exists(fullPath))
+                return Regex.Replace(
+                    htmlContent,
+                    imgPattern,
+                    match =>
                     {
-                        try
+                        var imgTag = match.Value;
+                        var srcPath = match.Groups[1].Value;
+
+                        // Remove leading '/' or './' if present
+                        srcPath = srcPath.TrimStart('/', '.');
+
+                        // Construct full path
+                        var fullPath = Path.Combine(basePath, srcPath);
+
+                        if (File.Exists(fullPath))
                         {
-                            // Read image and convert to base64
-                            var imageBytes = File.ReadAllBytes(fullPath);
-                            var base64String = Convert.ToBase64String(imageBytes);
-                            var mimeType = "image/" + Path.GetExtension(fullPath).TrimStart('.').ToLower();
-                            
-                            // Replace src with data URI
-                            return imgTag.Replace(match.Groups[1].Value, $"data:{mimeType};base64,{base64String}");
+                            try
+                            {
+                                // Read image and convert to base64
+                                var imageBytes = File.ReadAllBytes(fullPath);
+                                var base64String = Convert.ToBase64String(imageBytes);
+                                var mimeType =
+                                    "image/" + Path.GetExtension(fullPath).TrimStart('.').ToLower();
+
+                                // Replace src with data URI
+                                return imgTag.Replace(
+                                    match.Groups[1].Value,
+                                    $"data:{mimeType};base64,{base64String}"
+                                );
+                            }
+                            catch (Exception ex)
+                            {
+                                Trace.WriteLine($"Error processing image {fullPath}: {ex}");
+                                return imgTag; // Keep original tag if processing fails
+                            }
                         }
-                        catch (Exception ex)
-                        {
-                            Trace.WriteLine($"Error processing image {fullPath}: {ex}");
-                            return imgTag; // Keep original tag if processing fails
-                        }
+
+                        Trace.WriteLine($"Image not found: {fullPath}");
+                        return imgTag; // Keep original tag if file not found
                     }
-                    
-                    Trace.WriteLine($"Image not found: {fullPath}");
-                    return imgTag; // Keep original tag if file not found
-                });
+                );
             }
             catch (Exception ex)
             {
@@ -219,19 +231,27 @@ namespace iTextDesignerWithGUI.Services
         /// <summary>
         /// Processes a Razor template using the RazorLight engine.
         /// </summary>
-        private string ProcessRazorTemplate(string templatePath, string templateFileName, object data)
+        private string ProcessRazorTemplate(
+            string templatePath,
+            string templateFileName,
+            object data
+        )
         {
             return Task.Run(async () =>
             {
                 var key = Path.GetFileNameWithoutExtension(templateFileName);
                 var template = await File.ReadAllTextAsync(templatePath);
-                
+
                 // Add template to the project
                 _project.AddTemplate(key, template);
 
                 try
                 {
-                    var renderedHtml = await _razorEngine.CompileRenderStringAsync(key, template, data);
+                    var renderedHtml = await _razorEngine.CompileRenderStringAsync(
+                        key,
+                        template,
+                        data
+                    );
                     return InjectGlobalStyles(renderedHtml);
                 }
                 catch (Exception ex)
@@ -249,7 +269,7 @@ namespace iTextDesignerWithGUI.Services
         {
             var templateContent = File.ReadAllText(templatePath);
             templateContent = InjectGlobalStyles(templateContent);
-            
+
             return ProcessDataModel(templateContent, data);
         }
 
@@ -260,45 +280,55 @@ namespace iTextDesignerWithGUI.Services
         {
             // Get the type name of the data object
             string typeName = data.GetType().Name;
-            
+
             // Check if this is a Razor template by looking up the assessment type in the JSON file
             var assessmentTypeJsonLoader = AssessmentTypeJsonLoader.Instance;
             var assessmentTypes = assessmentTypeJsonLoader.LoadAssessmentTypes();
-            
+
             // Extract the base name without "DataInstance" suffix if present
             string baseTypeName = typeName;
             if (typeName.EndsWith("DataInstance"))
             {
                 baseTypeName = typeName.Substring(0, typeName.Length - "DataInstance".Length);
             }
-            
+
             // Look for matching assessment type in the JSON definitions
-            var matchingAssessmentType = assessmentTypes.FirstOrDefault(at => 
-                string.Equals(at.Name, baseTypeName, StringComparison.OrdinalIgnoreCase) ||
-                (at.AssessmentDataInstanceDirectory != null && 
-                 at.AssessmentDataInstanceDirectory.Contains(typeName)));
-                
+            var matchingAssessmentType = assessmentTypes.FirstOrDefault(at =>
+                string.Equals(at.Name, baseTypeName, StringComparison.OrdinalIgnoreCase)
+                || (
+                    at.AssessmentDataInstanceDirectory != null
+                    && at.AssessmentDataInstanceDirectory.Contains(typeName)
+                )
+            );
+
             // If this is a Razor template (has a .cshtml extension in the template directory)
-            if (matchingAssessmentType != null && 
-                matchingAssessmentType.CshtmlTemplateDirectory != null && 
-                matchingAssessmentType.CshtmlTemplateDirectory.EndsWith(".cshtml", StringComparison.OrdinalIgnoreCase))
+            if (
+                matchingAssessmentType != null
+                && matchingAssessmentType.CshtmlTemplateDirectory != null
+                && matchingAssessmentType.CshtmlTemplateDirectory.EndsWith(
+                    ".cshtml",
+                    StringComparison.OrdinalIgnoreCase
+                )
+            )
             {
                 return templateContent; // Razor templates handle data binding internally
             }
-            
+
             // For other types, try to use reflection to call the appropriate ReplacePlaceholders method
             try
             {
                 // Get the ReplacePlaceholders method that takes this specific data type
-                var method = typeof(HTMLTemplateMethods).GetMethod("ReplacePlaceholders", 
-                    new[] { typeof(string), data.GetType() });
-                
+                var method = typeof(HTMLTemplateMethods).GetMethod(
+                    "ReplacePlaceholders",
+                    new[] { typeof(string), data.GetType() }
+                );
+
                 if (method != null)
                 {
                     // Invoke the method with the template and data
                     return (string)method.Invoke(null, new[] { templateContent, data });
                 }
-                
+
                 // If no specific method exists, try to use a generic approach with reflection
                 // This allows for dynamic handling of any data type without hard-coded switch cases
                 return ReplaceTemplateValuesWithReflection(templateContent, data);
@@ -306,10 +336,13 @@ namespace iTextDesignerWithGUI.Services
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error processing data model: {ex.Message}");
-                throw new ArgumentException($"Error processing data type {typeName}: {ex.Message}", ex);
+                throw new ArgumentException(
+                    $"Error processing data type {typeName}: {ex.Message}",
+                    ex
+                );
             }
         }
-        
+
         /// <summary>
         /// Uses reflection to replace placeholders in the template with values from any data object
         /// </summary>
@@ -317,27 +350,27 @@ namespace iTextDesignerWithGUI.Services
         {
             if (data == null || string.IsNullOrEmpty(template))
                 return template;
-                
+
             string result = template;
-            
+
             // Get all properties of the data object
             var properties = data.GetType().GetProperties();
-            
+
             foreach (var prop in properties)
             {
                 string placeholder = $"{{{{{prop.Name}}}}}";
-                
+
                 if (result.Contains(placeholder))
                 {
                     // Get the property value
                     var value = prop.GetValue(data);
                     string valueStr = value?.ToString() ?? string.Empty;
-                    
+
                     // Replace the placeholder with the value
                     result = result.Replace(placeholder, valueStr);
                 }
             }
-            
+
             return result;
         }
 
@@ -350,7 +383,7 @@ namespace iTextDesignerWithGUI.Services
             var writer = new PdfWriter(stream);
             var pdf = new PdfDocument(writer);
             var converterProperties = new ConverterProperties();
-            
+
             // Set both the base URI and working directory for iText to resolve relative paths
             var templateDir = Path.Combine(exePath, "Templates");
             converterProperties.SetBaseUri(templateDir);
@@ -375,15 +408,17 @@ namespace iTextDesignerWithGUI.Services
                 _lastUsedTemplate = templateFileName;
 
                 // Use the directory service to get the path to the template
-                var templatePath = _directoryService.GetFilePath(Path.Combine("Templates", templateFileName));
-                
+                var templatePath = _directoryService.GetFilePath(
+                    Path.Combine("Templates", templateFileName)
+                );
+
                 if (!File.Exists(templatePath))
                 {
                     throw new FileNotFoundException($"Template file not found: {templatePath}");
                 }
-                
+
                 Trace.WriteLine($"Using template: {templatePath}");
-                
+
                 // Get the templates directory for image processing
                 var templatesPath = _directoryService.GetDirectory("Templates");
 
@@ -394,7 +429,11 @@ namespace iTextDesignerWithGUI.Services
                 templateContent = ProcessImagePaths(templateContent, templatesPath);
 
                 // Convert the processed content to PDF
-                return ConvertToPdf(templateContent, templatePath, _directoryService.GetExecutablePath());
+                return ConvertToPdf(
+                    templateContent,
+                    templatePath,
+                    _directoryService.GetExecutablePath()
+                );
             }
             catch (Exception ex)
             {
@@ -418,11 +457,14 @@ namespace iTextDesignerWithGUI.Services
 
             // Get the template file name from the JSON definition if available
             string templateFileName;
-            if (assessmentType.JsonDefinition != null && !string.IsNullOrEmpty(assessmentType.JsonDefinition.CshtmlTemplateDirectory))
+            if (
+                assessmentType.JsonDefinition != null
+                && !string.IsNullOrEmpty(assessmentType.JsonDefinition.CshtmlTemplateDirectory)
+            )
             {
                 // Extract the file name from the full path in the JSON definition
                 templateFileName = assessmentType.JsonDefinition.CshtmlTemplateDirectory;
-                
+
                 // If the path includes directory separators, extract just the file name
                 if (templateFileName.Contains("/") || templateFileName.Contains("\\"))
                 {

@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Text.Json;
 
 namespace iTextDesignerWithGUI.Services
@@ -30,12 +27,13 @@ namespace iTextDesignerWithGUI.Services
                         {
                             // Use ProjectDirectoryService to get the project root directory
                             var directoryService = new ProjectDirectoryService();
-                            
+
                             // Create the path to the pdfCreationData.json file
                             string jsonFilePath = Path.Combine(
                                 directoryService.GetDirectory("PersistentDataJSON"),
-                                "pdfCreationData.json");
-                                
+                                "pdfCreationData.json"
+                            );
+
                             _instance = new ProjectDirectoryLoader(jsonFilePath);
                         }
                     }
@@ -69,7 +67,9 @@ namespace iTextDesignerWithGUI.Services
             {
                 if (!File.Exists(_jsonFilePath))
                 {
-                    System.Diagnostics.Debug.WriteLine($"Project directories JSON file not found at: {_jsonFilePath}");
+                    System.Diagnostics.Debug.WriteLine(
+                        $"Project directories JSON file not found at: {_jsonFilePath}"
+                    );
                     return new List<ProjectDirectoryDefinition>();
                 }
 
@@ -80,42 +80,57 @@ namespace iTextDesignerWithGUI.Services
                     return new List<ProjectDirectoryDefinition>();
                 }
 
-                System.Diagnostics.Debug.WriteLine($"Loading project directories from: {_jsonFilePath}");
+                System.Diagnostics.Debug.WriteLine(
+                    $"Loading project directories from: {_jsonFilePath}"
+                );
                 System.Diagnostics.Debug.WriteLine($"JSON Content: {jsonContent}");
 
                 var options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
                     AllowTrailingCommas = true,
-                    ReadCommentHandling = JsonCommentHandling.Skip
+                    ReadCommentHandling = JsonCommentHandling.Skip,
                 };
 
-                var result = JsonSerializer.Deserialize<ProjectDirectoryContainer>(jsonContent, options);
-                
+                var result = JsonSerializer.Deserialize<ProjectDirectoryContainer>(
+                    jsonContent,
+                    options
+                );
+
                 if (result == null)
                 {
-                    System.Diagnostics.Debug.WriteLine("Failed to deserialize project directories JSON (null result)");
+                    System.Diagnostics.Debug.WriteLine(
+                        "Failed to deserialize project directories JSON (null result)"
+                    );
                     return new List<ProjectDirectoryDefinition>();
                 }
-                
+
                 if (result.ProjectDirectories == null)
                 {
-                    System.Diagnostics.Debug.WriteLine("ProjectDirectories list is null in deserialized JSON");
+                    System.Diagnostics.Debug.WriteLine(
+                        "ProjectDirectories list is null in deserialized JSON"
+                    );
                     return new List<ProjectDirectoryDefinition>();
                 }
 
                 _cachedDirectories = result.ProjectDirectories;
-                System.Diagnostics.Debug.WriteLine($"Successfully loaded {_cachedDirectories.Count} project directories");
+                System.Diagnostics.Debug.WriteLine(
+                    $"Successfully loaded {_cachedDirectories.Count} project directories"
+                );
                 return _cachedDirectories;
             }
             catch (JsonException jsonEx)
             {
-                System.Diagnostics.Debug.WriteLine($"JSON error loading project directories: {jsonEx.Message}");
+                System.Diagnostics.Debug.WriteLine(
+                    $"JSON error loading project directories: {jsonEx.Message}"
+                );
                 return new List<ProjectDirectoryDefinition>();
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error loading project directories from JSON: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine(
+                    $"Error loading project directories from JSON: {ex.Message}"
+                );
                 return new List<ProjectDirectoryDefinition>();
             }
         }
@@ -128,7 +143,9 @@ namespace iTextDesignerWithGUI.Services
         public ProjectDirectoryDefinition GetProjectDirectoryByName(string projectName)
         {
             var directories = LoadProjectDirectories();
-            return directories.Find(d => string.Equals(d.Name, projectName, StringComparison.OrdinalIgnoreCase));
+            return directories.Find(d =>
+                string.Equals(d.Name, projectName, StringComparison.OrdinalIgnoreCase)
+            );
         }
     }
 
@@ -141,7 +158,8 @@ namespace iTextDesignerWithGUI.Services
         /// List of project directory definitions
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("projectDirectories")]
-        public List<ProjectDirectoryDefinition> ProjectDirectories { get; set; } = new List<ProjectDirectoryDefinition>();
+        public List<ProjectDirectoryDefinition> ProjectDirectories { get; set; } =
+            new List<ProjectDirectoryDefinition>();
     }
 
     /// <summary>
