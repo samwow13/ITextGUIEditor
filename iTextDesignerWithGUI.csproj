@@ -5,7 +5,8 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
+    <NoWarn>$(NoWarn);CS8632;CS4014</NoWarn>
     <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
 
