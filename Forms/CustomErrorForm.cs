@@ -3,9 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.IO;
 using System.Text;
-using iTextDesignerWithGUI.Services;
 
 namespace iTextDesignerWithGUI.Forms
 {
@@ -354,20 +352,6 @@ namespace iTextDesignerWithGUI.Forms
         {
             try
             {
-                // Use ProjectDirectoryService to find root directory
-                var projectDirService2 = new ProjectDirectoryService();
-                
-                // Try to extract file path from error message
-                string errorMessage = _errorMessage;
-                string cshtmlPath = ExtractCshtmlPathFromError(errorMessage);
-                string cshtmlContent = "// Could not find associated CSHTML file";
-                
-                // If we found a cshtml path, try to read the file
-                if (!string.IsNullOrEmpty(cshtmlPath) && File.Exists(cshtmlPath))
-                {
-                    cshtmlContent = File.ReadAllText(cshtmlPath);
-                }
-                
                 // Create the clipboard content
                 StringBuilder clipboardContent = new StringBuilder();
                 
@@ -384,19 +368,9 @@ namespace iTextDesignerWithGUI.Forms
                 // Add the error message
                 clipboardContent.AppendLine("## ERROR MESSAGE");
                 clipboardContent.AppendLine("```");
-                clipboardContent.AppendLine(errorMessage);
+                clipboardContent.AppendLine(_errorMessage);
                 clipboardContent.AppendLine("```");
                 clipboardContent.AppendLine();
-                
-                // Add the associated CSHTML file if found
-                if (!string.IsNullOrEmpty(cshtmlPath) && File.Exists(cshtmlPath))
-                {
-                    clipboardContent.AppendLine("## ASSOCIATED TEMPLATE: " + Path.GetFileName(cshtmlPath));
-                    clipboardContent.AppendLine("```html");
-                    clipboardContent.AppendLine(cshtmlContent);
-                    clipboardContent.AppendLine("```");
-                    clipboardContent.AppendLine();
-                }
                 
                 // Copy to clipboard
                 Clipboard.SetText(clipboardContent.ToString());
@@ -407,75 +381,6 @@ namespace iTextDesignerWithGUI.Forms
             {
                 MessageBox.Show($"An error occurred while copying: {ex.Message}", 
                     "Copy Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        
-        /// <summary>
-        /// Attempts to extract a CSHTML file path from an error message
-        /// </summary>
-        private string ExtractCshtmlPathFromError(string errorMessage)
-        {
-            try
-            {
-                // Common patterns for error messages involving CSHTML files
-                string[] lines = errorMessage.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-                
-                foreach (string line in lines)
-                {
-                    // Look for paths with .cshtml extension
-                    int cshtmlIndex = line.IndexOf(".cshtml", StringComparison.OrdinalIgnoreCase);
-                    if (cshtmlIndex > 0)
-                    {
-                        // Try to extract the path
-                        int startIndex = line.LastIndexOf('\\', cshtmlIndex);
-                        if (startIndex >= 0)
-                        {
-                            // Look for the beginning of the path
-                            while (startIndex > 0 && line[startIndex - 1] != ' ' && line[startIndex - 1] != '"' && line[startIndex - 1] != '\'')
-                            {
-                                startIndex--;
-                            }
-
-                            int endIndex = line.IndexOf('\'', cshtmlIndex);
-                            if (endIndex < 0) endIndex = line.IndexOf('"', cshtmlIndex);
-                            if (endIndex < 0) endIndex = line.IndexOf(' ', cshtmlIndex);
-                            if (endIndex < 0) endIndex = line.Length;
-
-                            string potentialPath = line.Substring(startIndex, endIndex - startIndex);
-                            
-                            // Check if this looks like a valid path
-                            if (potentialPath.EndsWith(".cshtml", StringComparison.OrdinalIgnoreCase))
-                            {
-                                // If it's a relative path, try to resolve it
-                                if (!Path.IsPathRooted(potentialPath))
-                                {
-                                    var projectDirService3 = new ProjectDirectoryService();
-                                    string rootPath3 = projectDirService3.GetRootDirectory();
-                                    potentialPath = Path.Combine(rootPath3, potentialPath.TrimStart('\\', '/'));
-                                }
-                                
-                                // Check if the file exists
-                                if (File.Exists(potentialPath))
-                                {
-                                    return potentialPath;
-                                }
-                            }
-                        }
-                    }
-                }
-                
-                // If we couldn't find a path in the error message, try to get the currently active template
-                var projectDirService4 = new ProjectDirectoryService();
-                string rootPath4 = projectDirService4.GetRootDirectory();
-                string[] cshtmlFiles = Directory.GetFiles(Path.Combine(rootPath4, "Templates"), "*.cshtml", SearchOption.AllDirectories);
-                
-                // Return the first found cshtml file if any
-                return cshtmlFiles.Length > 0 ? cshtmlFiles[0] : string.Empty;
-            }
-            catch
-            {
-                // Silently fail and return empty string if any error occurs
-                return string.Empty;
             }
         }
     }

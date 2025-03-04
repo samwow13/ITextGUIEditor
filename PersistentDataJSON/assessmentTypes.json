@@ -39,6 +39,14 @@
       "assessmentDataInstanceDirectory": "Models/HealthAndWellnessProduction/TestProdModels/TestProdInstance.cs",
       "cshtmlTemplateDirectory": "Templates/HealthAndWellnessProduction/TestProdTemplate.cshtml",
       "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellnessProduction/TestProdData.json"
+    },
+    {
+      "name": "ORKidsDelegAssessment",
+      "displayName": "ORKidsDelegAssessment",
+      "assessmentTypeDirectory": "Models/ORKids/ORKidsDelegAssessmentModels/ORKidsDelegAssessmentAssessment.cs",
+      "assessmentDataInstanceDirectory": "Models/ORKids/ORKidsDelegAssessmentModels/ORKidsDelegAssessmentInstance.cs",
+      "cshtmlTemplateDirectory": "Templates/ORKids/ORKidsDelegAssessmentTemplate.cshtml",
+      "jsonDataLocationDirectory": "ReferenceDataJsons/ORKids/ORKidsDelegAssessmentData.json"
     }
   ]
 }

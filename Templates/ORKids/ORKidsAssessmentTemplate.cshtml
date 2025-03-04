@@ -1,0 +1,93 @@
+@model iTextDesignerWithGUI.Models.ORKidsAssessmentModels.ORKidsAssessmentInstance
+@using System
+@using System.Linq
+@using System.Collections.Generic
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORKids Assessment</title>
+    <link href="globalStyles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header with Title and Graphic -->
+        <header>
+            <div class="title">@Modelz.Model.Name</div>
+            <div class="graphic">
+                <!-- Placeholder for graphic image -->
+                <img src="path/to/logo.png" alt="Logo" />
+            </div>
+        </header>
+
+        <!-- Introduction Section -->
+        <div class="intro-text">
+            <p>@Model.Model.Description</p>
+            <p>
+                Created on: 
+                @(System.DateTime.TryParse(Model.Model.CreatedAt, out System.DateTime createdDate) 
+                    ? createdDate.ToString("MM/dd/yyyy") 
+                    : "Invalid Date")
+            </p>
+            <p>Active: @(Model.Model.IsActive == true ? "Yes" : "No")</p>
+        </div>
+
+        <!-- Dynamic Sections -->
+        <div class="content">
+            @if(Model.Properties?.Sections != null && Model.Properties.Sections.Any())
+            {
+                foreach(var sec in Model.Properties.Sections)
+                {
+                    <h2>@sec.Title</h2>
+                    <table class="section-table">
+                        <thead>
+                            <tr>
+                                <th>Field Name</th>
+                                <th>Type</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if(sec.Fields != null && sec.Fields.Any())
+                            {
+                                foreach(var field in sec.Fields)
+                                {
+                                    <tr>
+                                        <td>@field.Name</td>
+                                        <td>@field.Type</td>
+                                        <td>
+                                            @if(field.Type.Equals("date", StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                @(System.DateTime.TryParse(System.Convert.ToString(field.Value), out System.DateTime dateVal) 
+                                                    ? dateVal.ToString("MM/dd/yyyy") 
+                                                    : "Invalid Date")
+                                            }
+                                            else if(field.Type.Equals("checkbox", StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                @(bool.TryParse(System.Convert.ToString(field.Value), out bool boolVal) && boolVal 
+                                                    ? "Yes" 
+                                                    : "No")
+                                            }
+                                            else
+                                            {
+                                                @field.Value
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                }
+            }
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>Generated on: @(System.DateTime.Now.ToString("MM/dd/yyyy"))</p>
+        </footer>
+    </div>
+</body>
+</html>
