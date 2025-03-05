@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace iTextDesignerWithGUI.Models.ORKidsDelegAssessmentModels
+namespace iTextDesignerWithGUI.Models.HotlineKevinAssessmentModels
 {
-    public class ORKidsDelegAssessmentInstance
+    public class HotlineKevinAssessmentInstance
     {
         [JsonProperty("model")]
         public ModelData Model { get; set; }

@@ -33,28 +33,12 @@
       "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellness/OralHealthRazerData.json"
     },
     {
-      "name": "TestProd",
-      "displayName": "TestProd",
-      "assessmentTypeDirectory": "Models/HealthAndWellnessProduction/TestProdModels/TestProdAssessment.cs",
-      "assessmentDataInstanceDirectory": "Models/HealthAndWellnessProduction/TestProdModels/TestProdInstance.cs",
-      "cshtmlTemplateDirectory": "Templates/HealthAndWellnessProduction/TestProdTemplate.cshtml",
-      "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellnessProduction/TestProdData.json"
-    },
-    {
-      "name": "ORKidsDelegAssessment",
-      "displayName": "ORKidsDelegAssessment",
-      "assessmentTypeDirectory": "Models/ORKids/ORKidsDelegAssessmentModels/ORKidsDelegAssessmentAssessment.cs",
-      "assessmentDataInstanceDirectory": "Models/ORKids/ORKidsDelegAssessmentModels/ORKidsDelegAssessmentInstance.cs",
-      "cshtmlTemplateDirectory": "Templates/ORKids/ORKidsDelegAssessmentTemplate.cshtml",
-      "jsonDataLocationDirectory": "ReferenceDataJsons/ORKids/ORKidsDelegAssessmentData.json"
-    },
-    {
-      "name": "TesterG",
-      "displayName": "TesterG",
-      "assessmentTypeDirectory": "Models/ORKids/TesterGModels/TesterGAssessment.cs",
-      "assessmentDataInstanceDirectory": "Models/ORKids/TesterGModels/TesterGInstance.cs",
-      "cshtmlTemplateDirectory": "Templates/ORKids/TesterGTemplate.cshtml",
-      "jsonDataLocationDirectory": "ReferenceDataJsons/ORKids/TesterGData.json"
+      "name": "HotlineKevinAssessment",
+      "displayName": "HotlineKevinAssessment",
+      "assessmentTypeDirectory": "Models/Hotline/HotlineKevinAssessmentModels/HotlineKevinAssessmentAssessment.cs",
+      "assessmentDataInstanceDirectory": "Models/Hotline/HotlineKevinAssessmentModels/HotlineKevinAssessmentInstance.cs",
+      "cshtmlTemplateDirectory": "Templates/Hotline/HotlineKevinAssessmentTemplate.cshtml",
+      "jsonDataLocationDirectory": "ReferenceDataJsons/Hotline/HotlineKevinAssessmentData.json"
     }
   ]
 }

@@ -19,11 +19,6 @@
       "Name": "RFI",
       "Path": "Templates/RFI",
       "Forms": []
-    },
-    {
-      "Name": "HealthAndWellnessProduction",
-      "Path": "Templates/HealthAndWellnessProduction",
-      "Forms": []
     }
   ]
 }

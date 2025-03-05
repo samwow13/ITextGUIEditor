@@ -74,6 +74,10 @@
         {
           "name": "Custom CSS Implementation",
           "prompt": "Enhance this .cshtml file with custom CSS styling based on these design guidelines:\n\n- Primary color: #3a5998\n- Secondary color: #8b9dc3\n- Font: \u0027Open Sans\u0027, sans-serif\n- Section spacing: 24px margins\n- Border radius: 8px for containers\n- Box shadows for card elements\n\nImplement the styling either inline or in a style block, maintaining all existing functionality. Return the complete .cshtml file with the styling applied."
+        },
+        {
+          "name": "Apply Global styles",
+          "prompt": "Do a quick review of all global styles and apply them to my current template."
         }
       ]
     },
