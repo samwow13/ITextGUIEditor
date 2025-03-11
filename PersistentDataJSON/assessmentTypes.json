@@ -33,12 +33,12 @@
       "jsonDataLocationDirectory": "ReferenceDataJsons/HealthAndWellness/OralHealthRazerData.json"
     },
     {
-      "name": "HotlineKevinAssessment",
-      "displayName": "HotlineKevinAssessment",
-      "assessmentTypeDirectory": "Models/Hotline/HotlineKevinAssessmentModels/HotlineKevinAssessmentAssessment.cs",
-      "assessmentDataInstanceDirectory": "Models/Hotline/HotlineKevinAssessmentModels/HotlineKevinAssessmentInstance.cs",
-      "cshtmlTemplateDirectory": "Templates/Hotline/HotlineKevinAssessmentTemplate.cshtml",
-      "jsonDataLocationDirectory": "ReferenceDataJsons/Hotline/HotlineKevinAssessmentData.json"
+      "name": "HotlineAssessment1",
+      "displayName": "HotlineAssessment1",
+      "assessmentTypeDirectory": "Models/Hotline/HotlineAssessment1Models/HotlineAssessment1Assessment.cs",
+      "assessmentDataInstanceDirectory": "Models/Hotline/HotlineAssessment1Models/HotlineAssessment1Instance.cs",
+      "cshtmlTemplateDirectory": "Templates/Hotline/HotlineAssessment1Template.cshtml",
+      "jsonDataLocationDirectory": "ReferenceDataJsons/Hotline/HotlineAssessment1Data.json"
     }
   ]
 }

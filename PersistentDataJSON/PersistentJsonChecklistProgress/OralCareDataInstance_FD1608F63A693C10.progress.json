@@ -5,7 +5,10 @@
     "ChildInfo.recent_or_upcoming_dental_appts": true,
     "RiskFactors.mother_active_decay": true,
     "RiskFactors.mother_no_dentist": true,
-    "SelfManagementGoals.regular_dental_visits": true
+    "SelfManagementGoals.regular_dental_visits": true,
+    "ChildInfo.assessment_date": true,
+    "RiskFactors.special_health_care_needs": true,
+    "RiskFactors.frequent_snacking": true
   },
-  "LastModified": "2025-02-28T08:11:25.4363705-08:00"
+  "LastModified": "2025-03-09T15:10:52.2320141-07:00"
 }

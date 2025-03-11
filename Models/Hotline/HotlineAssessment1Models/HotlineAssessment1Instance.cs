@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace iTextDesignerWithGUI.Models.HotlineKevinAssessmentModels
+namespace iTextDesignerWithGUI.Models.HotlineAssessment1Models
 {
-    public class HotlineKevinAssessmentInstance
+    public class HotlineAssessment1Instance
     {
         [JsonProperty("model")]
         public ModelData Model { get; set; }
@@ -17,16 +15,16 @@ namespace iTextDesignerWithGUI.Models.HotlineKevinAssessmentModels
     {
         [JsonProperty("id")]
         public int Id { get; set; }
-        
+
         [JsonProperty("name")]
         public string Name { get; set; }
-        
+
         [JsonProperty("description")]
         public string Description { get; set; }
-        
+
         [JsonProperty("created_at")]
         public string CreatedAt { get; set; }
-        
+
         [JsonProperty("is_active")]
         public bool IsActive { get; set; }
     }
@@ -41,7 +39,7 @@ namespace iTextDesignerWithGUI.Models.HotlineKevinAssessmentModels
     {
         [JsonProperty("title")]
         public string Title { get; set; }
-        
+
         [JsonProperty("fields")]
         public List<Field> Fields { get; set; }
     }
@@ -50,10 +48,10 @@ namespace iTextDesignerWithGUI.Models.HotlineKevinAssessmentModels
     {
         [JsonProperty("name")]
         public string Name { get; set; }
-        
+
         [JsonProperty("type")]
         public string Type { get; set; }
-        
+
         [JsonProperty("value")]
         public object Value { get; set; }
     }
